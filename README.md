@@ -23,7 +23,7 @@
 ![缩放功能](/img/zoom.gif)
 > 如何使用
 
-- 引用
+- 引用(一直连不上jitpack，没发布成功，暂时不能用)
 
 > * Step 1. 添加 JitPack repository 到你的build文件
 
