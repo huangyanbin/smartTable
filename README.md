@@ -141,7 +141,7 @@ dependencies {
      17. 固定顶部  ```setFixedXSequence```
      18. 固定列标题  ```setFixedTitle ```
      19. 固定第一列 ```setFixedFirstColumn```
-     20. 固定```setFixedCountRow```
+     20. 固定统计行```setFixedCountRow```
 
 
 

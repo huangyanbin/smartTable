@@ -141,7 +141,7 @@ dependencies {
  17. fixed top ```setFixedXSequence```
  18. fixed column headings ```setFixedTitle.
  19. fixing the first column ```setFixedFirstColumn```
- 20. fixed ```setFixedCountRow```
+ 20. fixed statistics row```setFixedCountRow```
 
 
 
