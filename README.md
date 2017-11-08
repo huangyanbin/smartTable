@@ -23,7 +23,7 @@
 ![缩放功能](/img/zoom.gif)
 > 如何使用
 
-- 引用(一直连不上jitpack，没发布成功，暂时不能用)
+- 引用
 
 > * Step 1. 添加 JitPack repository 到你的build文件
 
@@ -40,7 +40,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.0'
+	        compile 'com.github.huangyanbin:SmartTable:1.1'
 	}
 ```
 
