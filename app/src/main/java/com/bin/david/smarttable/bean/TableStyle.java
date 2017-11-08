@@ -10,7 +10,8 @@ public enum TableStyle {
   FIXED_Y_AXIS("固定左侧"),
   FIXED_TITLE("固定标题"),
   FIXED_FIRST_COLUMN("固定第一列"),
-  FIXED_COUNT_ROW("固定统计行");
+  FIXED_COUNT_ROW("固定统计行"),
+  ZOOM("是否缩放");
 
 
 

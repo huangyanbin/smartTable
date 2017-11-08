@@ -22,13 +22,14 @@ public class AnnotationModeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
-        table = findViewById(R.id.table);
-        List<UserData> testData = new ArrayList<>();
+       
+        List<UserData> list = new ArrayList<>();
         for(int i = 0;i <100; i++) {
-            testData.add(new UserData("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
-            testData.add(new UserData("li", 23, System.currentTimeMillis(),false,null));
+            list.add(new UserData("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
+            list.add(new UserData("li", 23, System.currentTimeMillis(),false,null));
         }
-        table.setData(testData);
+        table = findViewById(R.id.table);
+        table.setData(list);
     }
     public void onClick(View view) {
         Intent intent = new Intent(this,ParseModeActivity.class);

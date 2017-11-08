@@ -256,7 +256,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         tip.setColorFilter(Color.parseColor("#FA8072"));
         tip.setAlpha(0.8f);
         table.getProvider().setTip(tip);
-        table.setZoom(true,3);
+
         table.setOnColumnClickListener(new OnColumnClickListener() {
             @Override
             public void onClick(ColumnInfo columnInfo) {
@@ -308,6 +308,9 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                         case FIXED_COUNT_ROW:
                             fixedCountRow(item);
                             break;
+                        case ZOOM:
+                            zoom(item);
+                            break;
 
                     }
                 }
@@ -321,6 +324,21 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         items.add(TableStyle.FIXED_FIRST_COLUMN);
         items.add(TableStyle.FIXED_COUNT_ROW);
         chartDialog.show(this, true, items);
+    }
+
+    private void zoom(TableStyle item) {
+        quickChartDialog.showDialog(this, item, new String[]{"缩放", "不缩放"}, new QuickChartDialog.OnCheckChangeAdapter() {
+
+            @Override
+            public void onItemClick(String s, int position) {
+                if (position == 0) {
+                    table.setZoom(true,3);
+                } else if (position == 1) {
+                    table.setZoom(false,3);
+                }
+                table.invalidate();
+            }
+        });
     }
 
     private void fixedXAxis(TableStyle c) {

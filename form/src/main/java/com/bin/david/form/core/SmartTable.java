@@ -162,7 +162,6 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
     public void setSortColumn(Column column,boolean isReverse){
         if(tableData != null&& column !=null){
             column.setReverseSort(isReverse);
-
             tableData.setSortColumn(column);
             setTableData(tableData);
             invalidate();
