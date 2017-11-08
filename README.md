@@ -23,7 +23,7 @@
 ![缩放功能](/img/zoom.gif)
 > 如何使用
 
-- 引用
+- 引用(一直连不上jitpack，没发布成功，暂时不能用)
 
 > * Step 1. 添加 JitPack repository 到你的build文件
 
@@ -60,6 +60,7 @@ dependencies {
 
 ```
 @SmartTable(name="表名")
+
 ```
 
 > *  在你需要显示的字段增加注解
@@ -67,6 +68,8 @@ dependencies {
 ```
 // id为该字段所在表格排序位置
  @SmartColumn(id =1,name = "列名")
+ //如果需要查询到该成员变量里面去，通过设置type实现
+ @SmartColumn(type = ColumnType.Child)
 ```
 > * 设置表格数据
 
@@ -85,6 +88,8 @@ dependencies {
    Column<Integer> column2 = new Column<>("年龄", "age");
    Column<Long> column3 = new Column<>("更新时间", "time");
     Column<String> column4 = new Column<>("头像", "portrait");
+    //如果是多层，可以通过.来实现多级查询
+      Column<String> column5 = new Column<>("班级", "class.className");
    //组合列
   Column totalColumn1 = new Column("组合列名",column1,column2);
 
