@@ -31,21 +31,31 @@ public class TableMeasurer<T> {
         return tableInfo;
     }
 
+    public int getHeadHeight(TableData<T> tableData){
+        TableInfo tableInfo = tableData.getTableInfo();
+        return tableInfo.getTopHeight()+tableInfo.getTableTitleHeight()
+                +tableInfo.getTitleHeight()*tableInfo.getMaxLevel();
+    }
+
     public void measureTableTitle(TableData<T> tableData,ITableTitle tableTitle,Rect showRect){
+        TableInfo tableInfo = tableData.getTableInfo();
+        Rect tableRect = tableInfo.getTableRect();
         if(isReMeasure) {
             isReMeasure = false;
-            float percent = tableTitle.getPercent();
-            TableInfo tableInfo = tableData.getTableInfo();
-            Rect tableRect = tableInfo.getTableRect();
+            int size = tableTitle.getSize();
+            tableInfo.setTableTitleHeight(size);
             if (tableTitle.getDirection() == IComponent.TOP ||
                     tableTitle.getDirection() == IComponent.BOTTOM) {
-                int height = (int) (showRect.height() * percent);
+                int height = size;
                 tableRect.bottom += height;
-
+                reSetShowRect(showRect,tableRect);
             } else {
-                int width = (int) (showRect.width() * percent);
+                int width = size;
                 tableRect.right += width;
+                reSetShowRect(showRect,tableRect);
             }
+        }else {
+            reSetShowRect(showRect,tableRect);
         }
 
     }

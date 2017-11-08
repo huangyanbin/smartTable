@@ -21,6 +21,7 @@
         <activity android:name=".AnnotationModeActivity"/>
         <activity android:name=".NetHttpActivity"/>
         <activity android:name=".ParseModeActivity"/>
+        <activity android:name=".TableListActivity"/>
     </application>
 
 </manifest>

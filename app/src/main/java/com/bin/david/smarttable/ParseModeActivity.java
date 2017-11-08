@@ -58,7 +58,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
         quickChartDialog = new QuickChartDialog();
-        FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
+        FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
         table = findViewById(R.id.table);
         final List<UserData> testData = new ArrayList<>();
         Random random = new Random();
@@ -323,6 +323,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         items.add(TableStyle.FIXED_TITLE);
         items.add(TableStyle.FIXED_FIRST_COLUMN);
         items.add(TableStyle.FIXED_COUNT_ROW);
+        items.add(TableStyle.ZOOM);
         chartDialog.show(this, true, items);
     }
 

@@ -84,10 +84,9 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
         if(tableData != null) {
             Rect rect = tableData.getTableInfo().getTableRect();
             if(rect != null) {
-                tableRect.set(rect.left, rect.top, rect.right, rect.bottom);
-                measurer.reSetShowRect(showRect,tableRect);
                 measurer.measureTableTitle(tableData,tableTitle,showRect);
-                Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect);
+                tableRect.set(rect);
+                Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,measurer.getHeadHeight(tableData));
                 tableTitle.computeRect(scaleRect,showRect,config);
                 tableTitle.draw(canvas,showRect, tableData.getTableName(), config);
                 config.getGridStyle().fillPaint(paint);
@@ -189,6 +188,7 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
 
         matrixHelper.setMaxZoom(maxScale);
         matrixHelper.setCanZoom(zoom);
+        invalidate();
 
     }
 }

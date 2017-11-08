@@ -39,6 +39,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     private boolean isScale; //是否正在缩放
     private Rect originalRect; //原始大小
     private Rect zoomRect;
+    private Rect showRect;
     private float mDownX, mDownY;
     private int pointMode; //屏幕的手指点个数
     private Scroller scroller;
@@ -53,6 +54,9 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         scroller = new Scroller(context);
+        zoomRect = new Rect();
+        showRect = new Rect();
+        originalRect = new Rect();
     }
 
     /**
@@ -74,9 +78,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
      */
     @Override
     public void onDisallowInterceptEvent(View view, MotionEvent event) {
-        if (!isCanZoom) {
-            return;
-        }
+
         ViewParent parent = view.getParent();
         if (zoomRect == null || originalRect == null) {
             parent.requestDisallowInterceptTouchEvent(false);
@@ -130,20 +132,20 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     }
 
     private boolean toRectLeft() {
-        return translateX <= -(zoomRect.width() - originalRect.width()) / 2;
+        return translateX <= 0;
     }
 
     private boolean toRectRight() {
-        return translateX >= (zoomRect.width() - originalRect.width()) / 2;
+        return translateX >= zoomRect.width() -showRect.width();
     }
 
     private boolean toRectBottom() {
-
-        return translateY >= (zoomRect.height() - originalRect.height()) / 2;
+        int height = zoomRect.height() -showRect.height();
+        return translateY>= height;
     }
 
     private boolean toRectTop() {
-        return translateY <= -(zoomRect.height() - originalRect.height()) / 2;
+        return translateY <= 0;
     }
 
     public void notifyViewChanged(){
@@ -322,26 +324,27 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         translateY = (int) (translateY * factor);
     }
 
+    private Rect scaleRect = new Rect();
     /**
      * 获取图片内容的缩放大小
      *
      * @return 缩放后内容的大小
      */
-    public Rect getZoomProviderRect(Rect showRect,Rect providerRect) {
-        originalRect = providerRect;
-        Rect scaleRect = new Rect();
+    public Rect getZoomProviderRect(Rect showRect,Rect providerRect,int offsetTop) {
+
+        originalRect.set(showRect);
+        originalRect.top +=offsetTop;
+         this.showRect.set(showRect);
         int showWidth = showRect.width();
         int showHeight = showRect.height();
         int oldw = providerRect.width();
         int oldh = providerRect.height();
         int newWidth = (int) (oldw * zoom);
         int newHeight = (int) (oldh * zoom);
-        int offsetTranslateX = (newWidth - oldw) / 2;
-        int offsetTranslateY = (newHeight - oldh) / 2;
         int minTranslateX = 0;
-        int maxTranslateX = offsetTranslateX+ oldw-showWidth;
+        int maxTranslateX =  newWidth-showWidth;
         int minTranslateY = 0;
-        int maxTranslateY = offsetTranslateY+ oldh-showHeight;
+        int maxTranslateY = newHeight-showHeight;
 
         int offsetX = 0;
         int offsetY =0;
@@ -365,7 +368,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         scaleRect.right = providerRect.right + offsetX - translateX;
         scaleRect.top = providerRect.top - offsetY - translateY;
         scaleRect.bottom = providerRect.bottom + offsetY - translateY;
-        zoomRect = scaleRect;
+        zoomRect.set(scaleRect);
         return scaleRect;
 
     }
@@ -389,6 +392,9 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
 
     public void setCanZoom(boolean canZoom) {
         isCanZoom = canZoom;
+        if(!isCanZoom){
+            zoom = 1;
+        }
     }
 
     public int getMaxZoom() {

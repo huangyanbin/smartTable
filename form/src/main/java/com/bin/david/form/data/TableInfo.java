@@ -10,6 +10,7 @@ public class TableInfo {
 
     private int topHeight;
     private int titleHeight;
+    private int tableTitleHeight;
     private int yAxisWidth;
     private int countHeight;
     private Rect tableRect;
@@ -98,5 +99,13 @@ public class TableInfo {
 
     public void setyAxisWidth(int yAxisWidth) {
         this.yAxisWidth = yAxisWidth;
+    }
+
+    public int getTableTitleHeight() {
+        return tableTitleHeight;
+    }
+
+    public void setTableTitleHeight(int tableTitleHeight) {
+        this.tableTitleHeight = tableTitleHeight;
     }
 }

@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(ParseModeActivity.class,"解析模式"));
         items.add(new MainItem(AnnotationModeActivity.class,"注解模式"));
         items.add(new MainItem(NetHttpActivity.class,"网络模式"));
+        items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
         itemAdapter = new ItemAdapter(items);
         recyclerView.setAdapter(itemAdapter);
         itemAdapter.openLoadAnimation();

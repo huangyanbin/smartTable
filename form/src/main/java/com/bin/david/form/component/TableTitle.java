@@ -13,18 +13,13 @@ import com.bin.david.form.utils.DrawUtils;
  * 绘制标题
  */
 
-public class TableTitle extends PercentComponent<String> implements ITableTitle {
+public class TableTitle implements ITableTitle {
 
-    private static final float MAX_PERCENT =0.4f;
+    private int size = 100;
+    private Rect rect = new Rect();
+    protected int direction;
 
 
-    @Override
-    public void setPercent(float percent) {
-        if(percent > MAX_PERCENT){
-            percent = MAX_PERCENT;
-        }
-        super.setPercent(percent);
-    }
 
     @Override
     public void draw(Canvas canvas,Rect showRect, String tableName, TableConfig config){
@@ -50,5 +45,60 @@ public class TableTitle extends PercentComponent<String> implements ITableTitle 
         }
     }
 
+    @Override
+    public void computeRect(Rect scaleRect,Rect showRect,TableConfig config) {
+        rect.left = showRect.left;
+        rect.right = showRect.right;
+        rect.top = showRect.top;
+        rect.bottom = showRect.bottom;
+        int h =  size;
+        int w =size;
+        switch (direction){
+            case TOP:
+                rect.bottom = rect.top+h;
+                scaleRect.top +=h;
+                showRect.top +=h;
+                break;
+            case LEFT:
+                rect.right = rect.left + w;
+                scaleRect.left +=w;
+                showRect.left +=w;
+                break;
+            case RIGHT:
+                rect.left = rect.right -w;
+                scaleRect.right -= w;
+                showRect.right -=w;
+                break;
+            case BOTTOM:
+                rect.top = rect.bottom -h;
+                scaleRect.bottom -= h;
+                showRect.bottom -=h;
+                break;
+        }
+    }
 
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public Rect getRect() {
+        return rect;
+    }
+
+    public void setRect(Rect rect) {
+        this.rect = rect;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 }

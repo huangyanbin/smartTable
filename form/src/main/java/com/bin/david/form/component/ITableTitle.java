@@ -9,9 +9,9 @@ import com.bin.david.form.data.style.FontStyle;
 
 public interface ITableTitle extends IComponent<String> {
 
-    float getPercent();
+    int getSize();
 
-    void setPercent(float percent);
+    void setSize(int size);
 
 
     int getDirection();
