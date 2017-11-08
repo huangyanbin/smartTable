@@ -17,9 +17,9 @@
 
 > 视频展示
 
-![基本功能](/img/table)
+![基本功能](/img/table.gif)
 
-![缩放功能](/img/zoom)
+![缩放功能](/img/zoom.gif)
 > 如何使用
 
 - 引用

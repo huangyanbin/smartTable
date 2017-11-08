@@ -17,9 +17,9 @@
 
 > video display
 
-![Base function](/img/table)
+![Base function](/img/table.gif)
 
-![zoom function](/img/zoom)
+![zoom function](/img/zoom.gif)
 > How Use
 
 - Quote
