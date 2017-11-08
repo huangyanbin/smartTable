@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_white_bg"
+    android:orientation="vertical">
+    <TextView
+        android:text="图表展示"
+        android:layout_width="match_parent"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:textColor="#555555"
+        android:background="@drawable/dialog_window_bg"
+        android:paddingLeft="11dp"
+        android:layout_height="50dp" />
+    <View
+        style="@style/Divider.Line.Vertical"/>
+    <com.daivd.chart.core.LineChart
+
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"/>
+</LinearLayout>

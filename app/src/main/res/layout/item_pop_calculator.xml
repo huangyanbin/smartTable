@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_height="50dp">
+    <TextView
+        android:id="@+id/tv_indicator_title"
+        android:layout_width="match_parent"
+        android:textSize="14sp"
+        android:gravity="start|center_vertical"
+        android:layout_marginLeft="15dp"
+        android:textColor="#333333"
+        android:layout_height="50dp" />
+    <CheckBox
+        android:id="@+id/cb_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        style="@style/CustomCheckBoxTheme"
+        android:clickable="false"
+        android:layout_gravity="center_vertical|end"/>
+    <View
+        android:layout_gravity="bottom"
+      style="@style/Divider.Line.Vertical"/>
+</FrameLayout>

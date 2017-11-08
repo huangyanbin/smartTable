@@ -1,0 +1,75 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <!--分割线-->
+    <style name="Divider">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:background">#dcdcdc</item>
+    </style>
+
+    <style name="Divider.Line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="Divider.Line.Vertical">
+        <item name="android:layout_height">1px</item>
+    </style>
+
+    <style name="Divider.Line.Horizontal">
+        <item name="android:layout_width">1px</item>
+    </style>
+    <!-- Dialog弹框样式 -->
+    <style name="base_dialog_style" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <!-- 边框 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
+        <!-- 无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 模糊 -->
+    </style>
+
+    <!-- Dialog弹框样式 -->
+    <style name="top_dialog_style" parent="base_dialog_style">
+
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <!-- 模糊 -->
+    </style>
+
+
+    <!-- 底部Dialog弹框动画 -->
+    <style name="bottom_dialog_animation">
+        <item name="@android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="@android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+
+    <!-- 顶部Dialog弹框动画 -->
+    <style name="top_dialog_animation">
+        <item name="@android:windowEnterAnimation">@anim/slide_in_top</item>
+        <item name="@android:windowExitAnimation">@anim/slide_out_top</item>
+    </style>
+    <!-- center Dialog弹框动画 -->
+    <style name="center_dialog_animation">
+        <item name="@android:windowEnterAnimation">@anim/modal_in</item>
+        <item name="@android:windowExitAnimation">@anim/modal_out</item>
+    </style>
+    <!--checkbox样式-->
+    <style name="CustomCheckBoxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_btn_drawable</item>
+    </style>
+
+</resources>

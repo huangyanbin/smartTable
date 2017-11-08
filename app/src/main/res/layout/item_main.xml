@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_chart_name"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        android:layout_height="50dp" />
+    <View
+       style="@style/Divider.Line.Vertical"/>
+</LinearLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="titleBg">#f2f2f2</color>
+    <color name="cal_sign_color">#ee5b4f</color>
+    <color name="cal_buckle_color">#d4d4d4</color>
+    <color name="cal_safe_color">#b7d961</color>
+    <color name="cal_buckle_text_color">#949494</color>
+    <color name="drak_calendar_text_color">#222222</color>
+    <color name="base_black_title_color">#222222</color>
+
+    <color name="arc1">#099bfb</color>
+    <color name="arc2">#37d547</color>
+    <color name="arc3">#f86669</color>
+    <color name="arc_text">#999999</color>
+    <color name="arc_line">#cfcfcf</color>
+    <color name="selectColor">#f96767</color>
+    <color name="arc_bg">#f0f0f0</color>
+    <color name="arc_inteval">#E8e8e8</color>
+    <color name="arc_temp">#333333</color>
+
+    <color name="arc21">#fc843b</color>
+    <color name="arc22">#37d547</color>
+    <color name="arc23">#079df9</color>
+    <color name="white">#FFFFFF</color> <!--白色 -->
+    <color name="windows_bg">#f6f6f6</color>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+
+    android:layout_height="match_parent"
+    tools:context="com.bin.david.smarttable.ParseModeActivity">
+
+   <com.bin.david.form.core.SmartTable
+       android:id="@+id/table"
+       android:layout_weight="1"
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+
+      />
+
+   <Button
+       android:id="@+id/btn2"
+       android:layout_width="wrap_content"
+       android:paddingLeft="10dp"
+       android:paddingRight="10dp"
+       android:layout_marginTop="10dp"
+       android:layout_marginBottom="10dp"
+       android:background="@drawable/dialog_btn_bg"
+       android:text="表格配置"
+       android:onClick="onClick"
+       android:clickable="true"
+       android:textColor="#fff"
+       android:layout_height="45dp" />
+
+
+</LinearLayout>
