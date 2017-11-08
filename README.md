@@ -2,6 +2,7 @@
 
 ###### 一款android自动生成表格框架
 * [English README](/README.en.md/)
+* [apk下载地址](/img/smartTable.apk)
 > 功能介绍
 1.  快速配置自动生成表格；
 2.  自动计算表格宽高；

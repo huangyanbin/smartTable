@@ -2,6 +2,7 @@
 
 ###### A Android automatically generated table framework
 * [中文 README](/README.md/)
+* [apk download](/img/smartTable.apk)
 > function introduction
 1. fast configuration automatic generation of tables;
 2. automatic calculation table width;
