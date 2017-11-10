@@ -59,7 +59,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_table);
         quickChartDialog = new QuickChartDialog();
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
-        table = findViewById(R.id.table);
+        table = (SmartTable<UserData>) findViewById(R.id.table);
         final List<UserData> testData = new ArrayList<>();
         Random random = new Random();
         for(int i = 0;i <500; i++) {
@@ -428,7 +428,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
      */
     private void showChartDialog(String tableName,List<String> chartYDataList,List<Integer> list ){
         View chartView = View.inflate(this,R.layout.dialog_chart,null);
-        LineChart lineChart = chartView.findViewById(R.id.lineChart);
+        LineChart lineChart = (LineChart) chartView.findViewById(R.id.lineChart);
         lineChart.setLineModel(LineChart.CURVE_MODEL);
         Resources res = getResources();
         com.daivd.chart.data.style.FontStyle.setDefaultTextSpSize(this,12);

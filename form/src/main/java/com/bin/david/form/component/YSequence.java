@@ -22,14 +22,12 @@ public class YSequence<T> implements IComponent<TableData<T>> {
 
     private Rect rect;
     private int width;
-    private Path path;
     private int clipWidth;
     private Rect scaleRect;
     private ISequenceFormat format;
 
     public YSequence() {
         rect = new Rect();
-        path = new Path();
     }
 
     @Override
@@ -67,7 +65,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         DrawUtils.fillBackground(canvas, showLeft,isFixTop ?(showRect.top+info.getTopHeight()):showRect.top,
                 showRect.left,showRect.bottom,config.getYSequenceBackgroundColor(),config.getPaint());
         int num = 0;
-        drawVerticalGrid(canvas,showRect,config);
+        //drawVerticalGrid(canvas,showRect,config);
 
 
         int tempTop= top;
@@ -83,10 +81,10 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             }
             tempTop = showRect.top + clipHeight;
         }
-        path.rewind();
+     /*   path.rewind();
         path.moveTo(rect.left,tempTop);
         path.lineTo(rect.right,tempTop);
-        canvas.drawPath(path,config.getPaint());
+        canvas.drawPath(path,config.getPaint());*/
         for(int i = 0; i <info.getMaxLevel(); i++){
             num++;
             int bottom = tempTop+info.getTitleHeight();
@@ -133,7 +131,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         canvas.restore();
 
     }
-    private void drawVerticalGrid(Canvas canvas,Rect showRect,TableConfig config){
+/*    private void drawVerticalGrid(Canvas canvas,Rect showRect,TableConfig config){
         Paint paint =  config.getPaint();
         config.getGridStyle().fillPaint(paint);
         path.rewind();
@@ -144,15 +142,16 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         path.moveTo(rect.right,showRect.top >rect.top?showRect.top :rect.top);
         path.lineTo(rect.right,showRect.bottom <rect.bottom?showRect.bottom :rect.bottom);
         canvas.drawPath(path,paint);
-    }
+    }*/
 
     private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,TableConfig config){
         Paint paint= config.getPaint();
         config.getGridStyle().fillPaint(paint);
-        path.reset();
+        canvas.drawRect(left,top,right,bottom,paint);
+       /* path.reset();
         path.moveTo(left,bottom);
         path.lineTo(right,bottom);
-        canvas.drawPath(path,paint);
+        canvas.drawPath(path,paint);*/
         config.getYSequenceStyle().fillPaint(paint);
         paint.setTextSize(paint.getTextSize()*config.getZoom());
         paint.setTextAlign(Paint.Align.CENTER);

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.bin.david.smarttable.adapter.ItemAdapter;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(AnnotationModeActivity.class,"注解模式"));
         items.add(new MainItem(NetHttpActivity.class,"网络模式"));
         items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
+        items.add(new MainItem(TanTanActivity.class,"探探效果"));
         itemAdapter = new ItemAdapter(items);
         recyclerView.setAdapter(itemAdapter);
         itemAdapter.openLoadAnimation();

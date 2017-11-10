@@ -28,7 +28,7 @@ public class NetHttpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
-        table = findViewById(R.id.table);
+        table = (SmartTable<PM25>) findViewById(R.id.table);
         getData();
 
     }

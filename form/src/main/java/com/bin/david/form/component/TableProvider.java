@@ -42,7 +42,7 @@ public class TableProvider<T> implements TableClickObserver {
     private ITip<Column, ?> tip;
 
     public TableProvider() {
-        path = new Path();
+       path = new Path();
         clickPoint = new PointF(-1, -1);
         orignRect = new Rect();
     }
@@ -174,14 +174,17 @@ public class TableProvider<T> implements TableClickObserver {
                 }
             }
             Paint paint = config.getPaint();
-            path.rewind();
+
+           /* path.rewind();
             path.moveTo(left, top);
             path.lineTo(left, bottom);
             path.lineTo(right, bottom);
             path.lineTo(right, top);
             path.close();
             config.getColumnTitleGridStyle().fillPaint(paint);
-            canvas.drawPath(path, paint);
+            canvas.drawPath(path, paint);*/
+            config.getColumnTitleGridStyle().fillPaint(paint);
+            canvas.drawRect(left,top,right,bottom,paint);
             tableData.getTitleDrawFormat().draw(canvas, info.column, left, top, right, bottom, config);
         }
     }

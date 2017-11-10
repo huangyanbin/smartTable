@@ -28,7 +28,7 @@ public class AnnotationModeActivity extends AppCompatActivity {
             list.add(new UserData("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
             list.add(new UserData("li", 23, System.currentTimeMillis(),false,null));
         }
-        table = findViewById(R.id.table);
+        table = (SmartTable<UserData>) findViewById(R.id.table);
         table.setData(list);
     }
     public void onClick(View view) {

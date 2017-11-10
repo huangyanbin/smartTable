@@ -22,6 +22,7 @@
         <activity android:name=".NetHttpActivity"/>
         <activity android:name=".ParseModeActivity"/>
         <activity android:name=".TableListActivity"/>
+        <activity android:name=".TanTanActivity"/>
     </application>
 
 </manifest>
