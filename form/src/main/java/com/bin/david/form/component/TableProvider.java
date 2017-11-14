@@ -307,7 +307,7 @@ public class TableProvider<T> implements TableClickObserver {
         path.close();
         config.getGridStyle().fillPaint(paint);
         canvas.drawPath(path, paint);
-        config.getColumnTitleStyle().fillPaint(paint);
+        config.getCountStyle().fillPaint(paint);
         paint.setTextSize(paint.getTextSize()*config.getZoom());
         paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(text, (right + left) / 2, DrawUtils.getTextCenterY((bottom + top) / 2, paint), paint);

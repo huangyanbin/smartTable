@@ -17,6 +17,7 @@
 11. support annotation mode.
 
 > video display
+![set table background](/img/bg.png)
 
 ![Base function](/img/table.gif)
 
@@ -40,7 +41,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.0'
+	        compile 'com.github.huangyanbin:SmartTable:1.1'
 	}
 ```
 
