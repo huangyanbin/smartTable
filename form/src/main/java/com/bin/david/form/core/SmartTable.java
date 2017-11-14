@@ -18,6 +18,7 @@ import com.bin.david.form.component.YSequence;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.TableInfo;
+import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.OnTableChangeListener;
 import com.bin.david.form.matrix.MatrixHelper;
@@ -59,6 +60,7 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
         init();
     }
     private void init(){
+        FontStyle.setDefaultTextSize(14);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         showRect = new Rect();
         tableRect = new Rect();
@@ -74,6 +76,7 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
         matrixHelper = new MatrixHelper(getContext());
         matrixHelper.setOnTableChangeListener(this);
         matrixHelper.register(provider);
+
     }
 
 
