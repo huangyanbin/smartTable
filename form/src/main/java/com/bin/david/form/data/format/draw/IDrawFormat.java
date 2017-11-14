@@ -33,7 +33,10 @@ public interface IDrawFormat<T>  {
      * @param right 右
      * @param bottom 底
      * @param position 位置
-     * @param paint 画笔
      */
     void draw(Canvas c,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
+
+    void drawBackground(Canvas c,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
+
+
 }

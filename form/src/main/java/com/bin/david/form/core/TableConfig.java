@@ -2,6 +2,8 @@ package com.bin.david.form.core;
 
 import android.graphics.Paint;
 
+import com.bin.david.form.data.Column;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 
@@ -30,6 +32,17 @@ public class TableConfig {
     private int columnTitleBackgroundColor =INVALID_COLOR;
     private int contentBackgroundColor=INVALID_COLOR;
     private int countBackgroundColor=INVALID_COLOR;
+    private boolean isShowXSequence;
+    private boolean isShowYSequence;
+    /**
+     * 每个格子进行背景格式化
+     */
+    private IBackgroundFormat<Integer> contentBackgroundFormat;
+    /**
+     * 每个标题格子背景格式化
+     */
+    private IBackgroundFormat<Column> columnBackgroundFormat;
+
 
     //固定左侧
     private boolean fixedYSequence = false;
@@ -229,8 +242,9 @@ public class TableConfig {
         return countBackgroundColor;
     }
 
-    public void setCountBackgroundColor(int countBackgroundColor) {
+    public TableConfig setCountBackgroundColor(int countBackgroundColor) {
         this.countBackgroundColor = countBackgroundColor;
+        return this;
     }
 
     public boolean isFixedCountRow() {
@@ -251,6 +265,42 @@ public class TableConfig {
 
     public TableConfig setTableTitleStyle(FontStyle tableTitleStyle) {
         this.tableTitleStyle = tableTitleStyle;
+        return this;
+    }
+
+    public boolean isShowXSequence() {
+        return isShowXSequence;
+    }
+
+    public TableConfig setShowXSequence(boolean showXSequence) {
+        isShowXSequence = showXSequence;
+        return this;
+    }
+
+    public boolean isShowYSequence() {
+        return isShowYSequence;
+    }
+
+    public TableConfig setShowYSequence(boolean showYSequence) {
+        isShowYSequence = showYSequence;
+        return this;
+    }
+
+    public IBackgroundFormat<Integer> getContentBackgroundFormat() {
+        return contentBackgroundFormat;
+    }
+
+    public TableConfig setContentBackgroundFormat(IBackgroundFormat<Integer> contentBackgroundFormat) {
+        this.contentBackgroundFormat = contentBackgroundFormat;
+        return this;
+    }
+
+    public IBackgroundFormat<Column> getColumnBackgroundFormat() {
+        return columnBackgroundFormat;
+    }
+
+    public TableConfig setColumnBackgroundFormat(IBackgroundFormat<Column> columnBackgroundFormat) {
+        this.columnBackgroundFormat = columnBackgroundFormat;
         return this;
     }
 

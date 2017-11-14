@@ -90,15 +90,15 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
                 measurer.measureTableTitle(tableData,tableTitle,showRect);
                 tableRect.set(rect);
                 Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,measurer.getHeadHeight(tableData));
-                tableTitle.computeRect(scaleRect,showRect,config);
-                tableTitle.draw(canvas,showRect, tableData.getTableName(), config);
+                tableTitle.onMeasure(scaleRect,showRect,config);
+                tableTitle.onDraw(canvas,showRect, tableData.getTableName(), config);
                 config.getGridStyle().fillPaint(paint);
                 canvas.drawRect(showRect,paint);
-                yAxis.computeRect(scaleRect,showRect,config);
-                yAxis.draw(canvas,showRect, tableData, config);
-                xAxis.computeRect(scaleRect,showRect,config);
-                xAxis.draw(canvas, showRect,tableData, config);
-                provider.draw(canvas, scaleRect,showRect,tableData, config);
+                yAxis.onMeasure(scaleRect,showRect,config);
+                yAxis.onDraw(canvas,showRect, tableData, config);
+                xAxis.onMeasure(scaleRect,showRect,config);
+                xAxis.onDraw(canvas, showRect,tableData, config);
+                provider.onDraw(canvas, scaleRect,showRect,tableData, config);
             }
         }
 

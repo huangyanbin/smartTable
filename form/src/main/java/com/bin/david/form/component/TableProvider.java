@@ -47,8 +47,8 @@ public class TableProvider<T> implements TableClickObserver {
         orignRect = new Rect();
     }
 
-    public void draw(Canvas canvas, Rect scaleRect, Rect showRect,
-                     TableData<T> tableData, TableConfig config) {
+    public void onDraw(Canvas canvas, Rect scaleRect, Rect showRect,
+                       TableData<T> tableData, TableConfig config) {
         isClickPoint = false;
         clickColumnInfo = null;
         tipColumn = null;
@@ -183,9 +183,10 @@ public class TableProvider<T> implements TableClickObserver {
             path.close();
             config.getColumnTitleGridStyle().fillPaint(paint);
             canvas.drawPath(path, paint);*/
+
+           tableData.getTitleDrawFormat().draw(canvas, info.column, left, top, right, bottom, config);
             config.getColumnTitleGridStyle().fillPaint(paint);
             canvas.drawRect(left,top,right,bottom,paint);
-            tableData.getTitleDrawFormat().draw(canvas, info.column, left, top, right, bottom, config);
         }
     }
 
@@ -304,7 +305,7 @@ public class TableProvider<T> implements TableClickObserver {
         path.lineTo(right, bottom);
         path.lineTo(right, top);
         path.close();
-        config.getColumnTitleGridStyle().fillPaint(paint);
+        config.getGridStyle().fillPaint(paint);
         canvas.drawPath(path, paint);
         config.getColumnTitleStyle().fillPaint(paint);
         paint.setTextSize(paint.getTextSize()*config.getZoom());
@@ -334,4 +335,6 @@ public class TableProvider<T> implements TableClickObserver {
     public void setTip(ITip<Column, ?> tip) {
         this.tip = tip;
     }
+
+
 }

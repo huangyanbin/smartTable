@@ -31,7 +31,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
     }
 
     @Override
-    public void computeRect(Rect scaleRect,Rect showRect,TableConfig config) {
+    public void onMeasure(Rect scaleRect, Rect showRect, TableConfig config) {
         this.scaleRect = scaleRect;
         int scaleWidth = (int) (width*config.getZoom());
         boolean fixed = config.isFixedYSequence();
@@ -51,7 +51,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
     }
 
     @Override
-    public void draw(Canvas canvas,Rect showRect, TableData<T> tableData, TableConfig config) {
+    public void onDraw(Canvas canvas, Rect showRect, TableData<T> tableData, TableConfig config) {
         format = tableData.getYSequenceFormat();
         List<T> tList = tableData.getT();
         int totalSize = tList.size();

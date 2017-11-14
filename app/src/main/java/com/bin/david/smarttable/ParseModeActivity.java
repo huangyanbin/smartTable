@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,12 +15,14 @@ import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.TableData;
+import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.format.draw.TextImageDrawFormat;
 import com.bin.david.form.data.format.tip.MultiLineBubbleTip;
 import com.bin.david.form.data.format.title.TitleImageDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
+import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.OnColumnItemClickListener;
 import com.bin.david.form.utils.DensityUtils;
@@ -272,6 +275,30 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
             }
         });
         table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
+        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<Integer>() {
+            @Override
+            public int getBackGroundColor() {
+                return ContextCompat.getColor(ParseModeActivity.this,R.color.content_bg);
+            }
+            @Override
+            public boolean isDraw(Integer integer) {
+                if(integer%2 == 0){
+                    return true;
+                }
+                return false;
+            }
+        }).setColumnBackgroundFormat(new BaseBackgroundFormat<Column>() {
+            @Override
+            public int getBackGroundColor() {
+                return ContextCompat.getColor(ParseModeActivity.this,R.color.column_bg);
+            }
+
+            @Override
+            public boolean isDraw(Column column) {
+                return true;
+            }
+        }).setColumnTitleGridStyle(new LineStyle().setColor(ContextCompat.getColor(this,R.color.arc_text)))
+                .setColumnTitleStyle(new FontStyle().setTextColor(Color.parseColor("#ffffff")));
         table.setTableData(tableData);
 
     }

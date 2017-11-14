@@ -26,17 +26,15 @@ public interface ITitleDrawFormat {
      * 绘制
      * @param c 画笔
      * @param column 列信息
-     * @param value 值
      * @param left 左
      * @param top 顶
      * @param right 右
      * @param bottom 底
-     * @param paint 画笔
      */
     void draw(Canvas c, Column column,int left, int top, int right, int bottom, TableConfig config);
 
     /**
      * 重写可以绘制背景
      */
-     void drawBackground(Canvas c, int left, int top, int right, int bottom, Paint paint);
+     void drawBackground(Canvas c, Column column, int left, int top, int right, int bottom, TableConfig config);
 }

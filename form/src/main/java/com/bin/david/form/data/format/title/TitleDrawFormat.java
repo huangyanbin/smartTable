@@ -5,6 +5,7 @@ import android.graphics.Paint;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.utils.DrawUtils;
 
 /**
@@ -34,7 +35,7 @@ public class TitleDrawFormat implements ITitleDrawFormat {
     @Override
     public void draw(Canvas c, Column column, int left, int top, int right, int bottom, TableConfig config) {
         Paint paint = config.getPaint();
-        drawBackground(c,left,top,right,bottom,paint);
+        drawBackground(c,column,left,top,right,bottom,config);
         config.getColumnTitleStyle().fillPaint(paint);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(paint.getTextSize()*config.getZoom());
@@ -42,7 +43,12 @@ public class TitleDrawFormat implements ITitleDrawFormat {
     }
 
     @Override
-    public void drawBackground(Canvas c, int left, int top, int right, int bottom, Paint paint) {
-
+    public void drawBackground(Canvas c, Column column, int left, int top, int right, int bottom,  TableConfig config) {
+        IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
+        if(backgroundFormat != null && backgroundFormat.isDraw(column)){
+            backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+        }
     }
+
+
 }

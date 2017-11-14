@@ -1,12 +1,17 @@
 package com.bin.david.smarttable;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.data.Column;
+import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
+import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.PM25;
 import com.google.gson.Gson;
@@ -29,6 +34,32 @@ public class NetHttpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_table);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         table = (SmartTable<PM25>) findViewById(R.id.table);
+
+        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<Integer>() {
+            @Override
+            public int getBackGroundColor() {
+                return ContextCompat.getColor(NetHttpActivity.this,R.color.content_bg);
+            }
+
+            @Override
+            public boolean isDraw(Integer integer) {
+                if(integer%2 == 1){
+                    return true;
+                }
+                return false;
+            }
+        }).setColumnBackgroundFormat(new BaseBackgroundFormat<Column>() {
+            @Override
+            public int getBackGroundColor() {
+                return ContextCompat.getColor(NetHttpActivity.this,R.color.column_bg);
+            }
+
+            @Override
+            public boolean isDraw(Column column) {
+                return true;
+            }
+        }).setColumnTitleGridStyle(new LineStyle().setColor(ContextCompat.getColor(this,R.color.arc_text)))
+                .setColumnTitleStyle(new FontStyle().setTextColor(Color.parseColor("#ffffff")));
         getData();
 
     }
@@ -55,6 +86,7 @@ public class NetHttpActivity extends AppCompatActivity {
                         Type type = new TypeToken<ArrayList<PM25>>() {}.getType();
                         List<PM25> pm25List = gson.fromJson(response,type);
                         table.setData(pm25List);
+
                     }
 
                 });

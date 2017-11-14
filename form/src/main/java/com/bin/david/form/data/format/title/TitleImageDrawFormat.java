@@ -64,6 +64,9 @@ public abstract class TitleImageDrawFormat extends ImageResTitleDrawFormat {
 
     @Override
     public void draw(Canvas c, Column column,  int left, int top, int right, int bottom,TableConfig config) {
+        setDrawBackground(true);
+        drawBackground(c,column,left,top,right,bottom,config);
+        setDrawBackground(false);
         if(getBitmap(column) == null){
             textDrawFormat.draw(c,column,left,top,right,bottom,config);
             return;

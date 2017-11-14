@@ -65,7 +65,9 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
 
     @Override
     public void draw(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
-        Paint paint = config.getPaint();
+        setDrawBg(true);
+        drawBackground(c,t,value,left,top,right,bottom,position,config);
+        setDrawBg(false);
         if(getBitmap(t,value,position) == null){
             textDrawFormat.draw(c,t,value,left,top,right,bottom,position,config);
             return;

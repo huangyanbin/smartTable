@@ -7,6 +7,7 @@ import android.graphics.Rect;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 
 /**
  * Created by huang on 2017/10/30.
@@ -18,6 +19,7 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     private int imageHeight;
     private Rect imgRect;
     private Rect drawRect;
+    private boolean isDrawBg =true;
 
 
 
@@ -55,7 +57,7 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     @Override
     public void draw(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
         Paint paint = config.getPaint();
-        drawBackground(c,left,top,right,bottom,paint);
+        drawBackground(c,t,value,left,top,right,bottom,position,config);
         Bitmap bitmap = getBitmap(t,value,position);
         if(bitmap != null) {
             paint.setStyle(Paint.Style.FILL);
@@ -85,12 +87,22 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
         }
     }
 
-    /**
-     * 重写可以绘制背景
-     */
-    public void drawBackground(Canvas c, int left, int top, int right, int bottom, Paint paint){
-
+    @Override
+    public void drawBackground(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+        IBackgroundFormat<Integer> backgroundFormat = config.getContentBackgroundFormat();
+        if(isDrawBg &&backgroundFormat != null && backgroundFormat.isDraw(position)){
+            backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+        }
     }
+
+    public boolean isDrawBg() {
+        return isDrawBg;
+    }
+
+    public void setDrawBg(boolean drawBg) {
+        isDrawBg = drawBg;
+    }
+
     public int getImageWidth() {
         return imageWidth;
     }

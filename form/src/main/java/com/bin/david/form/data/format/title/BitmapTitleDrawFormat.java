@@ -7,6 +7,7 @@ import android.graphics.Rect;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 
 /**
  * Created by huang on 2017/10/30.
@@ -18,6 +19,7 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
     private int imageHeight;
     private Rect imgRect;
     private Rect drawRect;
+    private boolean isDrawBackground  = true;
 
 
     public BitmapTitleDrawFormat(int imageWidth, int imageHeight) {
@@ -49,7 +51,7 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
     @Override
     public void draw(Canvas c, Column column, int left, int top, int right, int bottom,TableConfig config) {
         Paint paint = config.getPaint();
-        drawBackground(c,left,top,right,bottom,paint);
+        drawBackground(c,column,left,top,right,bottom,config);
         Bitmap bitmap = getBitmap(column);
         if(bitmap != null) {
             paint.setStyle(Paint.Style.FILL);
@@ -79,12 +81,15 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
         }
     }
 
-    /**
-     * 重写可以绘制背景
-     */
-    public void drawBackground(Canvas c, int left, int top, int right, int bottom, Paint paint){
-
+    @Override
+    public void drawBackground(Canvas c, Column column, int left, int top, int right, int bottom, TableConfig config) {
+        IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
+        if(isDrawBackground && backgroundFormat != null && backgroundFormat.isDraw(column)){
+            backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+        }
     }
+
+
     public int getImageWidth() {
         return imageWidth;
     }
@@ -99,5 +104,13 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
 
     public void setImageHeight(int imageHeight) {
         this.imageHeight = imageHeight;
+    }
+
+    public boolean isDrawBackground() {
+        return isDrawBackground;
+    }
+
+    public void setDrawBackground(boolean drawBackground) {
+        isDrawBackground = drawBackground;
     }
 }

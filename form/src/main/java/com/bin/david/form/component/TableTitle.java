@@ -22,7 +22,7 @@ public class TableTitle implements ITableTitle {
 
 
     @Override
-    public void draw(Canvas canvas,Rect showRect, String tableName, TableConfig config){
+    public void onDraw(Canvas canvas, Rect showRect, String tableName, TableConfig config){
         Paint paint = config.getPaint();
         config.getTableTitleStyle().fillPaint(paint);
         Rect rect = getRect();
@@ -46,7 +46,7 @@ public class TableTitle implements ITableTitle {
     }
 
     @Override
-    public void computeRect(Rect scaleRect,Rect showRect,TableConfig config) {
+    public void onMeasure(Rect scaleRect, Rect showRect, TableConfig config) {
         rect.left = showRect.left;
         rect.right = showRect.right;
         rect.top = showRect.top;

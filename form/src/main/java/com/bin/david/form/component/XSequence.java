@@ -29,7 +29,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
     }
 
     @Override
-    public void computeRect(Rect scaleRect,Rect showRect,TableConfig config) {
+    public void onMeasure(Rect scaleRect, Rect showRect, TableConfig config) {
         boolean fixed = config.isFixedXSequence();
         int scaleHeight = (int) (config.getZoom() *height);
         rect.top = fixed ? showRect.top: scaleRect.top;
@@ -50,7 +50,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
     }
 
     @Override
-    public void draw(Canvas canvas,Rect showRect,TableData<T> tableData, TableConfig config) {
+    public void onDraw(Canvas canvas, Rect showRect, TableData<T> tableData, TableConfig config) {
 
         format = tableData.getXSequenceFormat();
         List<Column> columns = tableData.getChildColumns();

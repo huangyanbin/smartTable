@@ -18,14 +18,14 @@ public interface IComponent<T> {
     /**
      * 计算组件Rect
      */
-    void computeRect(Rect scaleRect,Rect showRect,TableConfig config);
+    void onMeasure(Rect scaleRect, Rect showRect, TableConfig config);
 
     /**
      * 绘制组件
      * @param canvas 画布
      * @param  t 数据
      */
-    void draw(Canvas canvas,Rect showRect, T t, TableConfig config);
+    void onDraw(Canvas canvas, Rect showRect, T t, TableConfig config);
 
 
 }

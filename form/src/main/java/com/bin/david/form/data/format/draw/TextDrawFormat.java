@@ -5,6 +5,7 @@ import android.graphics.Paint;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.utils.DrawUtils;
 
 /**
@@ -38,18 +39,21 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
     @Override
     public void draw(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+        drawBackground(c,t,value,left,top,right,bottom,position,config);
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
         paint.setTextSize(paint.getTextSize()*config.getZoom());
-        drawBackground(c,left,top,right,bottom,paint);
         paint.setTextAlign(Paint.Align.CENTER);
         c.drawText(value,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
     }
 
-    /**
-     * 重写可以绘制背景
-     */
-    public void drawBackground(Canvas c, int left, int top, int right, int bottom, Paint paint){
-
+    @Override
+    public void drawBackground(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+        IBackgroundFormat<Integer> backgroundFormat = config.getContentBackgroundFormat();
+        if(backgroundFormat != null && backgroundFormat.isDraw(position)){
+            backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+        }
     }
+
+
 }
