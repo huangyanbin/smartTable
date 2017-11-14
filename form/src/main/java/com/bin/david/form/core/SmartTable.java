@@ -145,9 +145,11 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
 
     @Override
     public void onTableChanged(float scale, float translateX, float translateY) {
-        config.setZoom(scale);
-        tableData.getTableInfo().setZoom(scale);
-        invalidate();
+        if(tableData != null) {
+            config.setZoom(scale);
+            tableData.getTableInfo().setZoom(scale);
+            invalidate();
+        }
     }
 
     public OnColumnClickListener getOnColumnClickListener() {
