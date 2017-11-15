@@ -297,7 +297,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
             public boolean isDraw(Column column) {
                 return true;
             }
-        }).setColumnTitleGridStyle(new LineStyle().setColor(ContextCompat.getColor(this,R.color.arc_text)))
+        }).setColumnTitleGridStyle(new LineStyle().setColor(ContextCompat.getColor(this,R.color.arc_bg)))
                 .setColumnTitleStyle(new FontStyle().setTextColor(Color.parseColor("#ffffff")));
         table.setTableData(tableData);
 

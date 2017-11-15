@@ -226,9 +226,7 @@ public class TableProvider<T> implements TableClickObserver {
             }
             int right = left + width;
             if (left < showRect.right) {
-                config.getGridStyle().fillPaint(paint);
-                drawVerticalGrid(canvas, left, Math.max(scaleRect.top, showRect.top)
-                        , right, showRect.bottom, paint);
+
                 for (int j = 0; j < values.size(); j++) {
                     String value = values.get(j);
                     int bottom = (int) (top + info.getLineHeightArray()[j]*config.getZoom());
@@ -258,6 +256,9 @@ public class TableProvider<T> implements TableClickObserver {
                     }
                     top = bottom;
                 }
+                config.getGridStyle().fillPaint(paint);
+                drawVerticalGrid(canvas, left, Math.max(scaleRect.top, showRect.top)
+                        , right, showRect.bottom, paint);
                 left = tempLeft + width;
             } else {
                 break;
