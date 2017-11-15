@@ -29,7 +29,7 @@ import java.util.List;
 public class MatrixHelper extends Observable<TableClickObserver> implements ITouch, ScaleGestureDetector.OnScaleGestureListener {
 
     private   int MAX_ZOOM = 5;
-    public static final int MIN_ZOOM = 1;
+    private static final int MIN_ZOOM = 1;
     private float zoom = MIN_ZOOM; //缩放比例  不得小于1
     private int translateX; //以左上角为准，X轴位移的距离
     private int translateY;//以左上角为准，y轴位移的距离
@@ -195,44 +195,10 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
                 scroller.fling(0,0,(int)velocityX,(int)velocityY,-50000,50000
                ,-50000,50000);
                 isFling = true;
-                startFilingAnim();
+                startFilingAnim(false);
             }
 
             return true;
-        }
-
-        private Point startPoint = new Point(0, 0);
-        private Point endPoint = new Point();
-        private TimeInterpolator interpolator = new DecelerateInterpolator();
-        private PointEvaluator evaluator= new PointEvaluator();
-        private void startFilingAnim() {
-
-            int scrollX =Math.abs(scroller.getFinalX());
-            int scrollY =Math.abs(scroller.getFinalY());
-            if(scrollX >scrollY){
-                endPoint.set((int)(scroller.getFinalX()*flingRate),0);
-            }else{
-                endPoint.set(0,(int)(scroller.getFinalY()*flingRate));
-            }
-            final ValueAnimator valueAnimator = ValueAnimator.ofObject(evaluator,startPoint,endPoint);
-            valueAnimator.setInterpolator(interpolator);
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    if(isFling) {
-                        Point point = (Point) animation.getAnimatedValue();
-                        //Log.e("huang","point x"+point.x+"point y"+point.y);
-                        translateX = tempTranslateX - point.x;
-                        translateY = tempTranslateY - point.y;
-                        notifyViewChanged();
-                    }else{
-                        animation.cancel();
-                    }
-                }
-            });
-            int duration = (int)(Math.max(scrollX,scrollY)*flingRate)/2;
-            valueAnimator.setDuration(duration>300 ?300:duration);
-            valueAnimator.start();
         }
 
         @Override
@@ -313,6 +279,49 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
 
     }
 
+
+    private Point startPoint = new Point(0, 0);
+    private Point endPoint = new Point();
+    private TimeInterpolator interpolator = new DecelerateInterpolator();
+    private PointEvaluator evaluator= new PointEvaluator();
+
+    /**
+     * 开始飞滚
+     * @param doubleWay 双向飞滚
+     */
+    private void startFilingAnim(boolean doubleWay) {
+
+        int scrollX =Math.abs(scroller.getFinalX());
+        int scrollY =Math.abs(scroller.getFinalY());
+        if(doubleWay){
+            endPoint.set((int) (scroller.getFinalX() * flingRate),
+                    (int) (scroller.getFinalY() * flingRate));
+        }else {
+            if (scrollX > scrollY) {
+                endPoint.set((int) (scroller.getFinalX() * flingRate), 0);
+            } else {
+                endPoint.set(0, (int) (scroller.getFinalY() * flingRate));
+            }
+        }
+        final ValueAnimator valueAnimator = ValueAnimator.ofObject(evaluator,startPoint,endPoint);
+        valueAnimator.setInterpolator(interpolator);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if(isFling) {
+                    Point point = (Point) animation.getAnimatedValue();
+                    translateX = tempTranslateX - point.x;
+                    translateY = tempTranslateY - point.y;
+                    notifyViewChanged();
+                }else{
+                    animation.cancel();
+                }
+            }
+        });
+        int duration = (int)(Math.max(scrollX,scrollY)*flingRate)/2;
+        valueAnimator.setDuration(duration>300 ?300:duration);
+        valueAnimator.start();
+    }
 
     /**
      * 重新计算偏移量
@@ -408,6 +417,19 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         this.MAX_ZOOM = maxZoom;
     }
 
+    /**
+     * 飞滚到原点
+     */
+    public void flingBack(){
+       float tempFlingRate  = flingRate;
+       flingRate = 1;
+       scroller.setFinalX(translateX);
+       scroller.setFinalY(translateY);
+       isFling = true;
+       startFilingAnim(true);
+       flingRate = tempFlingRate;
+    }
+
     public float getZoom() {
         return zoom;
     }
@@ -416,6 +438,10 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         return flingRate;
     }
 
+    /**
+     * 动态设置飞滚的速率
+     * @param flingRate 速率
+     */
     public void setFlingRate(float flingRate) {
         this.flingRate = flingRate;
     }

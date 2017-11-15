@@ -233,5 +233,12 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
         invalidate();
 
     }
+
+    /**
+     * 滚动到原点
+     */
+    public void back(){
+        matrixHelper.flingBack();
+    }
 }
 

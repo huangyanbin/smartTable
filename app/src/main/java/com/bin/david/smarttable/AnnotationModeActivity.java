@@ -20,7 +20,7 @@ public class AnnotationModeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table);
+        setContentView(R.layout.activity_annotation);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
        
         List<UserData> list = new ArrayList<>();
@@ -32,7 +32,6 @@ public class AnnotationModeActivity extends AppCompatActivity {
         table.setData(list);
     }
     public void onClick(View view) {
-        Intent intent = new Intent(this,ParseModeActivity.class);
-        startActivity(intent);
+        table.back();
     }
 }
