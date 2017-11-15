@@ -323,7 +323,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         IBackgroundFormat<Integer> backgroundFormat2 = new BaseBackgroundFormat<Integer>() {
             @Override
             public int getBackGroundColor() {
-                return ContextCompat.getColor(ParseModeActivity.this,R.color.cal_buckle_text_color);
+                return ContextCompat.getColor(ParseModeActivity.this,R.color.arc1);
             }
             @Override
             public boolean isDraw(Integer integer) {

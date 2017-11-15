@@ -22,6 +22,29 @@
 ![Base function](/img/table.gif)
 
 ![zoom function](/img/zoom.gif)
+
+**- Version 1.3**
+
+Setting a single grid background
+
+In the online reference ```html``` > ```table```, find the pattern pretty much, according to this idea, SmartTable added support for different backgrounds on single grid support, there are 5 ```IBackgroundFormat``` style in ```TableConfig```, according to ```boolean isDraw (T T) to determine whether ` ` ` return data to draw the background of ```drawBackground```, the default of drawing the whole background. Of course, you can define your own ```IBackgroundFormat``` using other shapes.
+
+Setting a single grid font
+
+Due to a single grid support > background support, font color is also need to adjust according to the background, so it supports a single lattice font settings, ```int getTextColor ```IBackgroundFormat``` (T T) ', you only need to rewrite it, according to the needs of different color settings.
+
+Paging
+
+"Too much data on the client experience is not good, so the development of paging mode, without using the annotation case, only need to use the ```PageTableData``` page table data instead of tabular data before the ```TableData``` class, the ```setPageSize``` method uses the ```PageTableData``` settings page number. Paging is done.
+If you use annotations, add the ```pageSize``` attribute to the ```@SmartTable``` annotation element, and the setData will return to the ```PageTableData``` object, and you can use it to complete the rest of the settings.
+
+- others
+
+> SmartTable adds the notifyDataChanged method for re parsing the layout of the calculations;
+
+> provide the back method fling to the origin;
+
+> increase the network request picture display example.
 > How Use
 
 - Quote
@@ -41,7 +64,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.1'
+	        compile 'com.github.huangyanbin:SmartTable:1.3'
 	}
 ```
 
