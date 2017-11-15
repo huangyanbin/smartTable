@@ -74,12 +74,12 @@ public class TanTanActivity extends AppCompatActivity{
                         float scalex = 1-TanTanLayoutManager.SCALE*(level-Math.abs(proportion));
                         Log.e("huang","scaleX"+scalex);
                         child.setScaleX(scalex);
-                        child.setTranslationY(TanTanLayoutManager.MAX_TRANY*(level-Math.abs(proportion)));
+                        child.setTranslationY(TanTanLayoutManager.MAX_TRANSLATION_Y *(level-Math.abs(proportion)));
                     }/*else{
                         float scalex = 1-TanTanLayoutManager.SCALE*(level-1-Math.abs(proportion)-Math.abs(proportion));
                         Log.e("huang","level--------"+level+"proportion"+proportion);
                         child.setScaleX(scalex);
-                        child.setTranslationY(TanTanLayoutManager.MAX_TRANY*(level-1-Math.abs(proportion)-Math.abs(proportion)));
+                        child.setTranslationY(TanTanLayoutManager.MAX_TRANSLATION_Y*(level-1-Math.abs(proportion)-Math.abs(proportion)));
                     }*/
                 }
             }

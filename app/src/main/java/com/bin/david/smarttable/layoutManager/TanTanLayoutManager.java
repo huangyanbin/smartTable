@@ -12,7 +12,7 @@ public class TanTanLayoutManager extends LayoutManager {
 
     public static final int MAX_SHOW_COUNT = 4;
     public static final float SCALE = 0.05f;
-    public static final int MAX_TRANY = 20;
+    public static final int MAX_TRANSLATION_Y = 20;
     @Override
     public RecyclerView.LayoutParams generateDefaultLayoutParams() {
 
@@ -43,10 +43,10 @@ public class TanTanLayoutManager extends LayoutManager {
                 child.setTranslationY(0);
             }else if(level < MAX_SHOW_COUNT-1){
                 child.setScaleX(1-SCALE*level);
-                child.setTranslationY(MAX_TRANY*level);
+                child.setTranslationY(MAX_TRANSLATION_Y *level);
             }else{
                 child.setScaleX(1-SCALE*(level-1));
-                child.setTranslationY(MAX_TRANY*(level-1));
+                child.setTranslationY(MAX_TRANSLATION_Y *(level-1));
             }
 
         }
