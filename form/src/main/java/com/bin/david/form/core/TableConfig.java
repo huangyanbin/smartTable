@@ -2,6 +2,7 @@ package com.bin.david.form.core;
 
 import android.graphics.Paint;
 
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
@@ -96,7 +97,7 @@ public class TableConfig {
     /**
      * 格子进行背景格式化
      */
-    private IBackgroundFormat<Integer> contentBackgroundFormat;
+    private IBackgroundFormat<CellInfo> contentBackgroundFormat;
     /**
      * 标题格子背景格式化
      */
@@ -110,7 +111,7 @@ public class TableConfig {
      */
     private IBackgroundFormat<Integer> YSequenceBgFormat;
 
-
+    private IBackgroundFormat<Column> countBgFormat;
     /**
      * 是否固定左侧
      *
@@ -374,11 +375,11 @@ public class TableConfig {
         return this;
     }
 
-    public IBackgroundFormat<Integer> getContentBackgroundFormat() {
+    public IBackgroundFormat<CellInfo> getContentBackgroundFormat() {
         return contentBackgroundFormat;
     }
 
-    public TableConfig setContentBackgroundFormat(IBackgroundFormat<Integer> contentBackgroundFormat) {
+    public TableConfig setContentBackgroundFormat(IBackgroundFormat<CellInfo> contentBackgroundFormat) {
         this.contentBackgroundFormat = contentBackgroundFormat;
         return this;
     }
@@ -407,6 +408,15 @@ public class TableConfig {
 
     public TableConfig setYSequenceBgFormat(IBackgroundFormat<Integer> YSequenceBgFormat) {
         this.YSequenceBgFormat = YSequenceBgFormat;
+        return this;
+    }
+
+    public IBackgroundFormat<Column> getCountBgFormat() {
+        return countBgFormat;
+    }
+
+    public TableConfig setCountBgFormat(IBackgroundFormat<Column> countBgFormat) {
+        this.countBgFormat = countBgFormat;
         return this;
     }
 

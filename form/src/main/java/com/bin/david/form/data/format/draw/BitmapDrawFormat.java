@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
@@ -20,6 +21,7 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     private Rect imgRect;
     private Rect drawRect;
     private boolean isDrawBg =true;
+     CellInfo<T> cellInfo = new CellInfo<>();
 
 
 
@@ -55,9 +57,10 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     protected abstract Bitmap getBitmap(T t,String value, int position);
 
     @Override
-    public void draw(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+    public void draw(Canvas c,Column<T> column, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
         Paint paint = config.getPaint();
-        drawBackground(c,t,value,left,top,right,bottom,position,config);
+        cellInfo.set(column,t,value,position);
+        drawBackground(c,cellInfo,left,top,right,bottom,config);
         Bitmap bitmap = getBitmap(t,value,position);
         if(bitmap != null) {
             paint.setStyle(Paint.Style.FILL);
@@ -88,9 +91,9 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     }
 
     @Override
-    public boolean drawBackground(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
-        IBackgroundFormat<Integer> backgroundFormat = config.getContentBackgroundFormat();
-        if(isDrawBg &&backgroundFormat != null && backgroundFormat.isDraw(position)){
+    public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, int left, int top, int right, int bottom,  TableConfig config) {
+        IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
+        if(isDrawBg &&backgroundFormat != null && backgroundFormat.isDraw(cellInfo)){
             backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
             return true;
         }

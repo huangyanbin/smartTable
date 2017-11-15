@@ -3,6 +3,7 @@ package com.bin.david.form.data.format.draw;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
 
@@ -34,9 +35,9 @@ public interface IDrawFormat<T>  {
      * @param bottom 底
      * @param position 位置
      */
-    void draw(Canvas c,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
+    void draw(Canvas c,Column<T> column,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
 
-    boolean drawBackground(Canvas c,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
+    boolean drawBackground(Canvas c, CellInfo<T> cellInfo, int left, int top, int right, int bottom,  TableConfig config);
 
 
 }

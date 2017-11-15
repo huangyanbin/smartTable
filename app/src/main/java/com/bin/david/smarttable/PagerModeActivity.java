@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.data.PageTableData;
@@ -272,17 +273,14 @@ public class PagerModeActivity extends AppCompatActivity implements View.OnClick
             }
         });
         table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
-        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<Integer>() {
+        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor() {
                 return ContextCompat.getColor(PagerModeActivity.this,R.color.content_bg);
             }
             @Override
-            public boolean isDraw(Integer integer) {
-                if(integer%2 == 0){
-                    return true;
-                }
-                return false;
+            public boolean isDraw(CellInfo cellInfo) {
+               return cellInfo.position%2 ==0;
             }
         });
         tableData.setPageSize(9);

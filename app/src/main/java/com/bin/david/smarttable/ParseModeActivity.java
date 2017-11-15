@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.data.format.IFormat;
@@ -277,17 +278,14 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
             }
         });
         table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
-        IBackgroundFormat<Integer> backgroundFormat = new BaseBackgroundFormat<Integer>() {
+        IBackgroundFormat<CellInfo> backgroundFormat = new BaseBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor() {
                 return ContextCompat.getColor(ParseModeActivity.this,R.color.content_bg);
             }
             @Override
-            public boolean isDraw(Integer integer) {
-                if(integer%2 == 0){
-                    return true;
-                }
-                return false;
+            public boolean isDraw(CellInfo cellInfo) {
+                return cellInfo.position%2 == 0;
             }
 
         };
@@ -306,9 +304,8 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public int getTextColor(Integer integer) {
-               int color =  ContextCompat.getColor(ParseModeActivity.this,R.color.white);
-                Log.e("huang","color"+color);
-                return color;
+
+                return  ContextCompat.getColor(ParseModeActivity.this,R.color.white);
             }
         };
         table.getConfig().setContentBackgroundFormat(backgroundFormat)

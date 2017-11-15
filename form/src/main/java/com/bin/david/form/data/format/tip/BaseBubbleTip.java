@@ -21,7 +21,7 @@ import com.bin.david.form.utils.DensityUtils;
 
 public abstract class BaseBubbleTip<C,S> implements ITip<C,S>{
 
-    public static final int INVALID = -1;
+    public static final int INVALID =0;
     private Rect tipRect;
     private Paint paint;
     private int padding;

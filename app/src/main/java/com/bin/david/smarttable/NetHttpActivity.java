@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
@@ -35,18 +36,15 @@ public class NetHttpActivity extends AppCompatActivity {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         table = (SmartTable<PM25>) findViewById(R.id.table);
 
-        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<Integer>() {
+        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor() {
                 return ContextCompat.getColor(NetHttpActivity.this,R.color.content_bg);
             }
 
             @Override
-            public boolean isDraw(Integer integer) {
-                if(integer%2 == 1){
-                    return true;
-                }
-                return false;
+            public boolean isDraw(CellInfo cellInfo) {
+               return cellInfo.position%2 == 1;
             }
         }).setColumnBackgroundFormat(new BaseBackgroundFormat<Column>() {
             @Override
@@ -56,10 +54,17 @@ public class NetHttpActivity extends AppCompatActivity {
 
             @Override
             public boolean isDraw(Column column) {
-                return true;
+                if("area".equals(column.getFieldName())) {
+                    return true;
+                }
+                return false;
             }
-        }).setColumnTitleGridStyle(new LineStyle().setColor(ContextCompat.getColor(this,R.color.arc_text)))
-                .setColumnTitleStyle(new FontStyle().setTextColor(Color.parseColor("#ffffff")));
+
+            @Override
+            public int getTextColor(Column column) {
+                return  ContextCompat.getColor(NetHttpActivity.this,R.color.white);
+            }
+        });
         getData();
 
     }

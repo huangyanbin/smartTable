@@ -64,32 +64,33 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
     }
 
     @Override
-    public void draw(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+    public void draw(Canvas c,Column<T> column, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
         setDrawBg(true);
-        drawBackground(c,t,value,left,top,right,bottom,position,config);
+        cellInfo.set(column,t,value,position);
+        drawBackground(c,cellInfo,left,top,right,bottom,config);
         setDrawBg(false);
         if(getBitmap(t,value,position) == null){
-            textDrawFormat.draw(c,t,value,left,top,right,bottom,position,config);
+            textDrawFormat.draw(c,column,t,value,left,top,right,bottom,position,config);
             return;
         }
         int imgWidth = (int) (getImageWidth()*config.getZoom());
         int imgHeight = (int) (getImageHeight()*config.getZoom());
         switch (direction){
             case LEFT:
-                textDrawFormat.draw(c,t,value,left+(imgWidth+drawPadding)/2,top,right,bottom,position,config);
-                super.draw(c,t,value,left+horizontalPadding,top,left+horizontalPadding+imgWidth,bottom,position,config);
+                textDrawFormat.draw(c,column,t,value,left+(imgWidth+drawPadding)/2,top,right,bottom,position,config);
+                super.draw(c,column,t,value,left+horizontalPadding,top,left+horizontalPadding+imgWidth,bottom,position,config);
                 break;
             case RIGHT:
-                textDrawFormat.draw(c,t,value,left,top,right-(imgWidth+drawPadding)/2,bottom,position,config);
-                super.draw(c,t,value,right-horizontalPadding-imgWidth,top,right-horizontalPadding,bottom,position,config);
+                textDrawFormat.draw(c,column,t,value,left,top,right-(imgWidth+drawPadding)/2,bottom,position,config);
+                super.draw(c,column,t,value,right-horizontalPadding-imgWidth,top,right-horizontalPadding,bottom,position,config);
                 break;
             case TOP:
-                textDrawFormat.draw(c,t,value,left,top+(imgHeight+drawPadding)/2,right,bottom,position,config);
-                super.draw(c,t,value,left,top+verticalPadding,right,top+verticalPadding+imgHeight,position,config);
+                textDrawFormat.draw(c,column,t,value,left,top+(imgHeight+drawPadding)/2,right,bottom,position,config);
+                super.draw(c,column,t,value,left,top+verticalPadding,right,top+verticalPadding+imgHeight,position,config);
                 break;
             case BOTTOM:
-                textDrawFormat.draw(c,t,value,left,top,right,bottom-(imgHeight+drawPadding)/2,position,config);
-                super.draw(c,t,value,left,bottom-verticalPadding-imgHeight,right,bottom-verticalPadding,position,config);
+                textDrawFormat.draw(c,column,t,value,left,top,right,bottom-(imgHeight+drawPadding)/2,position,config);
+                super.draw(c,column,t,value,left,bottom-verticalPadding-imgHeight,right,bottom-verticalPadding,position,config);
                 break;
 
         }

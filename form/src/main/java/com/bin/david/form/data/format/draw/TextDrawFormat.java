@@ -3,6 +3,7 @@ package com.bin.david.form.data.format.draw;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
@@ -16,6 +17,7 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
     //避免多次计算
     private int height;
+    private CellInfo<T> cellInfo = new CellInfo<>();
 
     @Override
     public int measureWidth(Column<T>column, TableConfig config) {
@@ -38,13 +40,14 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     }
 
     @Override
-    public void draw(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
-        boolean isDrawBg = drawBackground(c,t,value,left,top,right,bottom,position,config);
+    public void draw(Canvas c, Column<T> column,T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+        cellInfo.set(column,t,value,position);
+        boolean isDrawBg = drawBackground(c,cellInfo,left,top,right,bottom,config);
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
-        IBackgroundFormat<Integer> backgroundFormat = config.getContentBackgroundFormat();
-        if(isDrawBg && backgroundFormat.getTextColor(position) != TableConfig.INVALID_COLOR){
-            paint.setColor( backgroundFormat.getTextColor(position));
+        IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
+        if(isDrawBg && backgroundFormat.getTextColor(cellInfo) != TableConfig.INVALID_COLOR){
+            paint.setColor( backgroundFormat.getTextColor(cellInfo));
         }
         paint.setTextSize(paint.getTextSize()*config.getZoom());
         paint.setTextAlign(Paint.Align.CENTER);
@@ -52,9 +55,9 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     }
 
     @Override
-    public boolean drawBackground(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
-        IBackgroundFormat<Integer> backgroundFormat = config.getContentBackgroundFormat();
-        if(backgroundFormat != null && backgroundFormat.isDraw(position)){
+    public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, int left, int top, int right, int bottom,TableConfig config) {
+        IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
+        if(backgroundFormat != null && backgroundFormat.isDraw(cellInfo)){
             backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
             return true;
         }

@@ -12,6 +12,7 @@ import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.TableInfo;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.tip.ITip;
 import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.TableClickObserver;
@@ -101,14 +102,14 @@ public class TableProvider<T> implements TableClickObserver {
                             && firstColumn == column) {
                         isFixedFirstColumn = true;
                         int tempRight = showRect.left + column.getWidth();
-                        drawText(canvas, showRect.left, top, tempRight,
+                        drawCountText(canvas, column,showRect.left, top, tempRight,
                                 bottom, column.getTotalNumString(), config);
                         canvas.save();
                         canvas.clipRect(tempRight, showRect.bottom - countHeight, showRect.right, showRect.bottom);
                         left = right;
                         continue;
                     }
-                    drawText(canvas, left, top, right, bottom, column.getTotalNumString(), config);
+                    drawCountText(canvas, column,left, top, right, bottom, column.getTotalNumString(), config);
                     left = right;
 
                 }
@@ -174,16 +175,6 @@ public class TableProvider<T> implements TableClickObserver {
                 }
             }
             Paint paint = config.getPaint();
-
-           /* path.rewind();
-            path.moveTo(left, top);
-            path.lineTo(left, bottom);
-            path.lineTo(right, bottom);
-            path.lineTo(right, top);
-            path.close();
-            config.getColumnTitleGridStyle().fillPaint(paint);
-            canvas.drawPath(path, paint);*/
-
            tableData.getTitleDrawFormat().draw(canvas, info.column, left, top, right, bottom, config);
             config.getColumnTitleGridStyle().fillPaint(paint);
             canvas.drawRect(left,top,right,bottom,paint);
@@ -244,7 +235,7 @@ public class TableProvider<T> implements TableClickObserver {
                                 isClickPoint = true;
                                 clickPoint.set(-1, -1);
                             }
-                            column.getDrawFormat().draw(canvas, data, value, left, top, right, bottom, j, config);
+                            column.getDrawFormat().draw(canvas,column, data, value, left, top, right, bottom, j, config);
                         }
                     } else {
                         break;
@@ -298,7 +289,7 @@ public class TableProvider<T> implements TableClickObserver {
         }
     }
 
-    private void drawText(Canvas canvas, int left, int top, int right, int bottom, String text, TableConfig config) {
+    private void drawCountText(Canvas canvas,Column column, int left, int top, int right, int bottom, String text, TableConfig config) {
         Paint paint = config.getPaint();
         path.rewind();
         path.moveTo(left, top);
@@ -306,9 +297,20 @@ public class TableProvider<T> implements TableClickObserver {
         path.lineTo(right, bottom);
         path.lineTo(right, top);
         path.close();
+        //绘制背景
+        IBackgroundFormat<Column> backgroundFormat = config.getCountBgFormat();
+        boolean isDrawBg = false;
+        if(backgroundFormat != null&& backgroundFormat.isDraw(column)){
+            backgroundFormat.drawBackground(canvas,left,top,right,bottom,config.getPaint());
+            isDrawBg = true;
+        }
         config.getGridStyle().fillPaint(paint);
         canvas.drawPath(path, paint);
         config.getCountStyle().fillPaint(paint);
+        //字体颜色跟随背景变化
+        if(isDrawBg && backgroundFormat.getTextColor(column) != TableConfig.INVALID_COLOR){
+            paint.setColor(backgroundFormat.getTextColor(column));
+        }
         paint.setTextSize(paint.getTextSize()*config.getZoom());
         paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(text, (right + left) / 2, DrawUtils.getTextCenterY((bottom + top) / 2, paint), paint);
