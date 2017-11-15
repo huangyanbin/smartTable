@@ -20,6 +20,7 @@ public class UserData {
     private ChildData childData;
     @SmartColumn(id=4,name="选择",autoCount = true)
     private boolean isCheck;
+    private String url;
 
     public UserData(String name, int age, long time, boolean isCheck, ChildData childData) {
         this.name = name;
@@ -67,5 +68,13 @@ public class UserData {
 
     public void setChildData(ChildData childData) {
         this.childData = childData;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

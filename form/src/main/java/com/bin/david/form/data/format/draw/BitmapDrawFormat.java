@@ -10,6 +10,8 @@ import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
 
+import java.util.Map;
+
 /**
  * Created by huang on 2017/10/30.
  */

@@ -2,6 +2,7 @@ package com.bin.david.smarttable;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.support.v4.content.ContextCompat;
@@ -20,6 +21,7 @@ import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
+import com.bin.david.form.data.format.draw.BitmapDrawFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.format.draw.TextImageDrawFormat;
 import com.bin.david.form.data.format.tip.MultiLineBubbleTip;
@@ -31,11 +33,17 @@ import com.bin.david.form.listener.OnColumnItemClickListener;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
 import com.bin.david.smarttable.bean.TableStyle;
+import com.bin.david.smarttable.bean.TanBean;
 import com.bin.david.smarttable.bean.UserData;
 import com.bin.david.smarttable.view.BaseCheckDialog;
 import com.bin.david.smarttable.view.BaseDialog;
+import com.bin.david.smarttable.view.GlideCircleTransform;
 import com.bin.david.smarttable.view.QuickChartDialog;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.daivd.chart.component.axis.BaseAxis;
 import com.daivd.chart.component.base.IAxis;
 import com.daivd.chart.component.base.IComponent;
@@ -51,14 +59,19 @@ import com.daivd.chart.provider.component.point.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class ParseModeActivity extends AppCompatActivity implements View.OnClickListener{
 
     private SmartTable<UserData> table;
     private BaseCheckDialog<TableStyle> chartDialog;
     private QuickChartDialog quickChartDialog;
+    private Map<String,Bitmap> map = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,16 +81,38 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         table = (SmartTable<UserData>) findViewById(R.id.table);
         final List<UserData> testData = new ArrayList<>();
         Random random = new Random();
+        List<TanBean> tanBeans = TanBean.initDatas();
+        //测试 从其他地方获取url
+        int urlSize = tanBeans.size();
         for(int i = 0;i <500; i++) {
-            testData.add(new UserData("用户"+i, random.nextInt(70), System.currentTimeMillis()
-                    - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i)));
+            UserData userData = new UserData("用户"+i, random.nextInt(70), System.currentTimeMillis()
+                    - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
+            userData.setUrl(tanBeans.get(i%urlSize).getUrl());
+            testData.add(userData);
         }
 
         final Column<String> nameColumn = new Column<>("姓名", "name");
         nameColumn.setAutoCount(true);
         final Column<Integer> ageColumn = new Column<>("年龄", "age");
         ageColumn.setAutoCount(true);
-        Column<String> column4 = new Column<>("测试多重查询", "childData.child");
+        int imgSize = DensityUtils.dp2px(this,25);
+        final Column<String> avatarColumn = new Column<>("头像", "url", new BitmapDrawFormat<String>(imgSize,imgSize) {
+            @Override
+            protected Bitmap getBitmap(final String s, String value, int position) {
+                if(map.get(s)== null) {
+                    Glide.with(ParseModeActivity.this).asBitmap().load(s)
+                            .apply(bitmapTransform(new CenterCrop())).into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+                            map.put(s, bitmap);
+                            table.invalidate();
+                        }
+                    });
+                }
+                return map.get(s);
+            }
+        });
+       Column < String > column4 = new Column<>("测试多重查询", "childData.child");
         column4.setAutoCount(true);
         final IFormat<Long> format =  new IFormat<Long>() {
             @Override
@@ -187,14 +222,10 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column totalColumn2 = new Column("总项2",nameColumn,ageColumn,timeColumn);
         Column totalColumn = new Column("总项",nameColumn,totalColumn1,totalColumn2,timeColumn);
 
-        final TableData<UserData> tableData = new TableData<>("测试",testData,nameColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
-
+        final TableData<UserData> tableData = new TableData<>("测试",testData,nameColumn,
+                avatarColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
         tableData.setShowCount(true);
-       // ageColumn.setAutoCount(true);
-        //table.getConfig().setYSequenceBackgroundColor(getResources().getColor(R.color.arc1));
-        //table.getConfig().setXSequenceBackgroundColor(getResources().getColor(R.color.arc2));
         table.getConfig().setColumnTitleBackgroundColor(getResources().getColor(R.color.windows_bg));
-        //table.getConfig().setContentBackgroundColor(getResources().getColor(R.color.arc21));
         table.getConfig().setCountBackgroundColor(getResources().getColor(R.color.windows_bg));
         tableData.setTitleDrawFormat(new TitleImageDrawFormat(size,size, TitleImageDrawFormat.RIGHT,10) {
             @Override
