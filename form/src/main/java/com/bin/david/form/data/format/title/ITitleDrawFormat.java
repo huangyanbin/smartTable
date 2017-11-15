@@ -36,5 +36,5 @@ public interface ITitleDrawFormat {
     /**
      * 重写可以绘制背景
      */
-     void drawBackground(Canvas c, Column column, int left, int top, int right, int bottom, TableConfig config);
+     boolean drawBackground(Canvas c, Column column, int left, int top, int right, int bottom, TableConfig config);
 }

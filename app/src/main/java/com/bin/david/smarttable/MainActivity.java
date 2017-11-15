@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import com.bin.david.form.data.PageTableData;
 import com.bin.david.smarttable.adapter.ItemAdapter;
 import com.bin.david.smarttable.bean.MainItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(ParseModeActivity.class,"解析模式"));
         items.add(new MainItem(AnnotationModeActivity.class,"注解模式"));
         items.add(new MainItem(NetHttpActivity.class,"网络模式"));
-        items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
+        items.add(new MainItem(PagerModeActivity.class,"分页模式"));
+       items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
         items.add(new MainItem(TanTanActivity.class,"探探效果"));
         itemAdapter = new ItemAdapter(items);
         recyclerView.setAdapter(itemAdapter);

@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.TableData;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
 import com.bin.david.form.utils.DrawUtils;
 
@@ -90,20 +91,33 @@ public class XSequence<T> implements IComponent<TableData<T>>{
     private int showTextNum(Canvas canvas, Rect showRect, TableConfig config, int left, int i, int right) {
         if(DrawUtils.isMixHorizontalRect(showRect,left,right)) {
             String text = format.format(i+1);
-            draw(canvas, left, rect.top,right, rect.bottom, text, config);
+            draw(canvas, left, rect.top,right, rect.bottom,text,i, config);
         }
         left = right;
         return left;
     }
 
-    private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,TableConfig config){
+    private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,int position,TableConfig config){
         Paint paint= config.getPaint();
         config.getGridStyle().fillPaint(paint);
         canvas.drawRect(left,top,right,bottom,paint);
+        //绘制背景
+        IBackgroundFormat<Integer> backgroundFormat = config.getXSequenceBgFormat();
+        boolean isDrawBg = false;
+        if(backgroundFormat != null&& backgroundFormat.isDraw(position)){
+            backgroundFormat.drawBackground(canvas,left,top,right,bottom,config.getPaint());
+            isDrawBg = true;
+        }
         config.getXSequenceStyle().fillPaint(paint);
+        //字体颜色跟随背景变化
+        if(isDrawBg && backgroundFormat.getTextColor(position) != TableConfig.INVALID_COLOR){
+            paint.setColor(backgroundFormat.getTextColor(position));
+        }
+        //字体缩放
         paint.setTextSize(paint.getTextSize()*config.getZoom());
         paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(text,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
+
     }
 
 

@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.TableInfo;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
 import com.bin.david.form.utils.DrawUtils;
 
@@ -53,8 +54,8 @@ public class YSequence<T> implements IComponent<TableData<T>> {
     @Override
     public void onDraw(Canvas canvas, Rect showRect, TableData<T> tableData, TableConfig config) {
         format = tableData.getYSequenceFormat();
-        List<T> tList = tableData.getT();
-        int totalSize = tList.size();
+        List<T> list = tableData.getT();
+        int totalSize = list.size();
         TableInfo info = tableData.getTableInfo();
         int top = rect.top + info.getTopHeight();
         canvas.save();
@@ -65,9 +66,6 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         DrawUtils.fillBackground(canvas, showLeft,isFixTop ?(showRect.top+info.getTopHeight()):showRect.top,
                 showRect.left,showRect.bottom,config.getYSequenceBackgroundColor(),config.getPaint());
         int num = 0;
-        //drawVerticalGrid(canvas,showRect,config);
-
-
         int tempTop= top;
         boolean isFixedTitle = config.isFixedTitle();
         boolean isFixedCount = config.isFixedCountRow();
@@ -81,16 +79,12 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             }
             tempTop = showRect.top + clipHeight;
         }
-     /*   path.rewind();
-        path.moveTo(rect.left,tempTop);
-        path.lineTo(rect.right,tempTop);
-        canvas.drawPath(path,config.getPaint());*/
         for(int i = 0; i <info.getMaxLevel(); i++){
             num++;
             int bottom = tempTop+info.getTitleHeight();
             if(DrawUtils.isVerticalMixRect(showRect,top,bottom)) {
 
-                draw(canvas, rect.left, tempTop, rect.right, bottom,  format.format(num), config);
+                draw(canvas, rect.left, tempTop, rect.right, bottom,  format.format(num),num,config);
             }
             tempTop = bottom;
             top +=info.getTitleHeight();
@@ -100,7 +94,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             int bottom = showRect.bottom;
             tempBottom = bottom-info.getCountHeight();
             draw(canvas, rect.left, tempBottom,
-                    rect.right, bottom,  format.format(num +totalSize+1), config);
+                    rect.right, bottom,  format.format(num +totalSize+1),num +totalSize+1, config);
         }
         if(isFixedTitle || isFixedCount){
             canvas.save();
@@ -111,7 +105,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             int bottom = (int) (top+info.getLineHeightArray()[i]*config.getZoom());
             if(showRect.bottom >= rect.top) {
                 if (DrawUtils.isVerticalMixRect(showRect, top,  bottom)) {
-                    draw(canvas, rect.left, top, rect.right, bottom, format.format(num), config);
+                    draw(canvas, rect.left, top, rect.right, bottom, format.format(num),num, config);
                 }
             }else{
                 break;
@@ -122,7 +116,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             num++;
             int bottom = top+info.getCountHeight();
             if(DrawUtils.isVerticalMixRect(showRect,top,bottom)) {
-                draw(canvas, rect.left, top, rect.right, bottom, format.format(num), config);
+                draw(canvas, rect.left, top, rect.right, bottom, format.format(num),num, config);
             }
         }
         if(isFixedTitle || isFixedCount){
@@ -131,28 +125,25 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         canvas.restore();
 
     }
-/*    private void drawVerticalGrid(Canvas canvas,Rect showRect,TableConfig config){
-        Paint paint =  config.getPaint();
-        config.getGridStyle().fillPaint(paint);
-        path.rewind();
-        path.moveTo(rect.left,showRect.top >rect.top?showRect.top :rect.top);
-        path.lineTo(rect.left,showRect.bottom <rect.bottom?showRect.bottom :rect.bottom);
-        canvas.drawPath(path,paint);
-        path.rewind();
-        path.moveTo(rect.right,showRect.top >rect.top?showRect.top :rect.top);
-        path.lineTo(rect.right,showRect.bottom <rect.bottom?showRect.bottom :rect.bottom);
-        canvas.drawPath(path,paint);
-    }*/
 
-    private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,TableConfig config){
+
+    private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,int position,TableConfig config){
         Paint paint= config.getPaint();
+        IBackgroundFormat<Integer> backgroundFormat = config.getYSequenceBgFormat();
+        boolean isDrawBg = false;
+        int textColor =TableConfig.INVALID_COLOR;
+        if(backgroundFormat != null&& backgroundFormat.isDraw(position)){
+            backgroundFormat.drawBackground(canvas,left,top,right,bottom,config.getPaint());
+            textColor =  backgroundFormat.getTextColor(position);
+            isDrawBg = true;
+        }
         config.getGridStyle().fillPaint(paint);
         canvas.drawRect(left,top,right,bottom,paint);
-       /* path.reset();
-        path.moveTo(left,bottom);
-        path.lineTo(right,bottom);
-        canvas.drawPath(path,paint);*/
         config.getYSequenceStyle().fillPaint(paint);
+
+        if(isDrawBg && textColor != TableConfig.INVALID_COLOR){
+            paint.setColor(textColor);
+        }
         paint.setTextSize(paint.getTextSize()*config.getZoom());
         paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(text,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);

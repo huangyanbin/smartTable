@@ -14,4 +14,6 @@ public @interface SmartTable {
 
     String name() default "";
     boolean count() default false;
+    int pageSize() default Integer.MAX_VALUE;
+    int currentPage() default 0;
 }

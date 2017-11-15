@@ -15,6 +15,7 @@ import java.util.ArrayList;
  */
 
 public class TableListActivity extends AppCompatActivity {
+
     private RecyclerView recyclerView;
     private TableListAdapter itemAdapter;
     @Override

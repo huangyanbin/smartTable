@@ -88,11 +88,13 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     }
 
     @Override
-    public void drawBackground(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+    public boolean drawBackground(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
         IBackgroundFormat<Integer> backgroundFormat = config.getContentBackgroundFormat();
         if(isDrawBg &&backgroundFormat != null && backgroundFormat.isDraw(position)){
             backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+            return true;
         }
+        return false;
     }
 
     public boolean isDrawBg() {

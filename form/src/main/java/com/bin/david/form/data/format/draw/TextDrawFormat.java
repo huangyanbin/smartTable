@@ -39,20 +39,26 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
     @Override
     public void draw(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
-        drawBackground(c,t,value,left,top,right,bottom,position,config);
+        boolean isDrawBg = drawBackground(c,t,value,left,top,right,bottom,position,config);
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
+        IBackgroundFormat<Integer> backgroundFormat = config.getContentBackgroundFormat();
+        if(isDrawBg && backgroundFormat.getTextColor(position) != TableConfig.INVALID_COLOR){
+            paint.setColor( backgroundFormat.getTextColor(position));
+        }
         paint.setTextSize(paint.getTextSize()*config.getZoom());
         paint.setTextAlign(Paint.Align.CENTER);
         c.drawText(value,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
     }
 
     @Override
-    public void drawBackground(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+    public boolean drawBackground(Canvas c, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
         IBackgroundFormat<Integer> backgroundFormat = config.getContentBackgroundFormat();
         if(backgroundFormat != null && backgroundFormat.isDraw(position)){
             backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+            return true;
         }
+        return false;
     }
 
 

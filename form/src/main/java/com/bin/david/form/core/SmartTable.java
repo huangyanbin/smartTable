@@ -16,6 +16,7 @@ import com.bin.david.form.component.TableTitle;
 import com.bin.david.form.component.XSequence;
 import com.bin.david.form.component.YSequence;
 import com.bin.david.form.data.Column;
+import com.bin.david.form.data.PageTableData;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.data.style.FontStyle;
@@ -59,6 +60,10 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
         super(context, attrs, defStyleAttr);
         init();
     }
+
+    /**
+     * 初始化
+     */
     private void init(){
         FontStyle.setDefaultTextSize(14);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -92,41 +97,73 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
                 Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,measurer.getHeadHeight(tableData));
                 tableTitle.onMeasure(scaleRect,showRect,config);
                 tableTitle.onDraw(canvas,showRect, tableData.getTableName(), config);
-                config.getGridStyle().fillPaint(paint);
-                canvas.drawRect(showRect,paint);
-                yAxis.onMeasure(scaleRect,showRect,config);
-                yAxis.onDraw(canvas,showRect, tableData, config);
-                xAxis.onMeasure(scaleRect,showRect,config);
-                xAxis.onDraw(canvas, showRect,tableData, config);
-                provider.onDraw(canvas, scaleRect,showRect,tableData, config);
+                drawGridBackground(canvas);
+                if(config.isShowYSequence()) {
+                    yAxis.onMeasure(scaleRect, showRect, config);
+                    yAxis.onDraw(canvas, showRect, tableData, config);
+                }
+                if(config.isShowXSequence()) {
+                    xAxis.onMeasure(scaleRect, showRect, config);
+                    xAxis.onDraw(canvas, showRect, tableData, config);
+
+                }
+                provider.onDraw(canvas, scaleRect, showRect, tableData, config);
             }
         }
 
+    }
+
+    /**
+     * 绘制网格背景
+     * @param canvas
+     */
+    private void drawGridBackground(Canvas canvas) {
+        config.getGridStyle().fillPaint(paint);
+        canvas.drawRect(showRect,paint);
     }
 
     public TableConfig getConfig() {
         return config;
     }
 
-    public void setData(List<T> data){
+    /**
+     * 设置解析数据
+     * @param data 表格数据
+     */
+    public PageTableData<T> setData(List<T> data){
         if(annotationParser == null){
             annotationParser = new AnnotationParser<>();
         }
-        TableData<T> tableData = annotationParser.parse(data);
+        PageTableData<T> tableData = annotationParser.parse(data);
         if(tableData != null) {
             setTableData(tableData);
         }
+        return tableData;
     }
 
 
+
+    /**
+     * 设置表格数据
+     * @param tableData
+     */
     public void setTableData(TableData<T> tableData){
         this.tableData = tableData;
-        config.setPaint(paint);
-        parser.parse(tableData,config);
-        TableInfo info = measurer.measure(tableData,config);
-        xAxis.setHeight(info.getTopHeight());
-        yAxis.setWidth(info.getyAxisWidth());
-        invalidate();
+        notifyDataChanged();
+    }
+
+    /**
+     * 通知更新
+     */
+    public void notifyDataChanged(){
+        if(tableData != null) {
+            config.setPaint(paint);
+            parser.parse(tableData, config);
+            TableInfo info = measurer.measure(tableData, config);
+            xAxis.setHeight(info.getTopHeight());
+            yAxis.setWidth(info.getyAxisWidth());
+            invalidate();
+        }
     }
 
     /**

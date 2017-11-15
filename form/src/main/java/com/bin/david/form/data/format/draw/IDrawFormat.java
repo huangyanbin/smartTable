@@ -36,7 +36,7 @@ public interface IDrawFormat<T>  {
      */
     void draw(Canvas c,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
 
-    void drawBackground(Canvas c,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
+    boolean drawBackground(Canvas c,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
 
 
 }

@@ -8,10 +8,24 @@ import android.graphics.Paint;
  */
 
 public interface IBackgroundFormat<T> {
-
+    /**
+     * 绘制背景
+     */
     void drawBackground(Canvas canvas, int left, int top, int right, int bottom, Paint paint);
 
+    /**
+     * 获取背景颜色
+     */
     int getBackGroundColor();
 
+    /**
+     * 是否绘制
+     */
     boolean isDraw(T t);
+
+    /**
+     *当背景颜色改变字体也需要跟随变化
+     */
+    int getTextColor(T t);
+
 }

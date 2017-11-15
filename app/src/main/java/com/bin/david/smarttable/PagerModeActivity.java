@@ -4,20 +4,19 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
-import com.bin.david.form.data.format.IFormat;
+import com.bin.david.form.data.PageTableData;
 import com.bin.david.form.data.TableData;
+import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.format.draw.TextImageDrawFormat;
@@ -34,7 +33,6 @@ import com.bin.david.smarttable.bean.UserData;
 import com.bin.david.smarttable.view.BaseCheckDialog;
 import com.bin.david.smarttable.view.BaseDialog;
 import com.bin.david.smarttable.view.QuickChartDialog;
-
 import com.daivd.chart.component.axis.BaseAxis;
 import com.daivd.chart.component.base.IAxis;
 import com.daivd.chart.component.base.IComponent;
@@ -48,20 +46,20 @@ import com.daivd.chart.provider.component.mark.BubbleMarkView;
 import com.daivd.chart.provider.component.point.Point;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-public class ParseModeActivity extends AppCompatActivity implements View.OnClickListener{
+public class PagerModeActivity extends AppCompatActivity implements View.OnClickListener{
 
     private SmartTable<UserData> table;
     private BaseCheckDialog<TableStyle> chartDialog;
     private QuickChartDialog quickChartDialog;
+    private PageTableData<UserData> tableData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table);
+        setContentView(R.layout.activity_pager);
         quickChartDialog = new QuickChartDialog();
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
         table = (SmartTable<UserData>) findViewById(R.id.table);
@@ -115,7 +113,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column5 = new Column<>("勾选1", "isCheck", new ImageResDrawFormat<Boolean>(size,size) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return PagerModeActivity.this;
             }
 
             @Override
@@ -129,7 +127,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column6 = new Column<>("勾选2", "isCheck", new TextImageDrawFormat<Boolean>(size,size, TextImageDrawFormat.LEFT,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return PagerModeActivity.this;
             }
 
             @Override
@@ -143,7 +141,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column7 = new Column<>("勾选3", "isCheck", new TextImageDrawFormat<Boolean>(size,size, TextImageDrawFormat.RIGHT,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return PagerModeActivity.this;
             }
 
             @Override
@@ -157,7 +155,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column8 = new Column<>("勾选4", "isCheck", new TextImageDrawFormat<Boolean>(size,size, TextImageDrawFormat.TOP,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return PagerModeActivity.this;
             }
 
             @Override
@@ -171,7 +169,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column9 = new Column<>("勾选5", "isCheck", new TextImageDrawFormat<Boolean>(size,size, TextImageDrawFormat.BOTTOM,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return PagerModeActivity.this;
             }
 
             @Override
@@ -186,19 +184,13 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column totalColumn2 = new Column("总项2",nameColumn,ageColumn,timeColumn);
         Column totalColumn = new Column("总项",nameColumn,totalColumn1,totalColumn2,timeColumn);
 
-        final TableData<UserData> tableData = new TableData<>("测试",testData,nameColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
+       tableData = new PageTableData<>("测试",testData,nameColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
 
-        tableData.setShowCount(true);
-       // ageColumn.setAutoCount(true);
-        //table.getConfig().setYSequenceBackgroundColor(getResources().getColor(R.color.arc1));
-        //table.getConfig().setXSequenceBackgroundColor(getResources().getColor(R.color.arc2));
-        table.getConfig().setColumnTitleBackgroundColor(getResources().getColor(R.color.windows_bg));
-        //table.getConfig().setContentBackgroundColor(getResources().getColor(R.color.arc21));
-        table.getConfig().setCountBackgroundColor(getResources().getColor(R.color.windows_bg));
+
         tableData.setTitleDrawFormat(new TitleImageDrawFormat(size,size, TitleImageDrawFormat.RIGHT,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return PagerModeActivity.this;
             }
 
             @Override
@@ -236,9 +228,12 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         ageColumn.setOnColumnItemClickListener(new OnColumnItemClickListener<Integer>() {
             @Override
             public void onClick(Column<Integer> column, String value, Integer integer, int position) {
-                Toast.makeText(ParseModeActivity.this,"点击了"+value,Toast.LENGTH_SHORT).show();
+                Toast.makeText(PagerModeActivity.this,"点击了"+value,Toast.LENGTH_SHORT).show();
             }
         });
+        tableData.setShowCount(true);
+        table.getConfig().setCountBackgroundColor(getResources().getColor(R.color.windows_bg))
+                .setShowXSequence(false).setShowYSequence(false);
         FontStyle fontStyle = new FontStyle();
         fontStyle.setTextColor(getResources().getColor(android.R.color.white));
         MultiLineBubbleTip<Column> tip = new MultiLineBubbleTip<Column>(this,R.mipmap.round_rect,R.mipmap.triangle,fontStyle) {
@@ -273,14 +268,14 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                         table.setSortColumn(columnInfo.column, !columnInfo.column.isReverseSort());
                     }
                 }
-                Toast.makeText(ParseModeActivity.this,"点击了"+columnInfo.column.getColumnName(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(PagerModeActivity.this,"点击了"+columnInfo.column.getColumnName(),Toast.LENGTH_SHORT).show();
             }
         });
         table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
-        IBackgroundFormat<Integer> backgroundFormat = new BaseBackgroundFormat<Integer>() {
+        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<Integer>() {
             @Override
             public int getBackGroundColor() {
-                return ContextCompat.getColor(ParseModeActivity.this,R.color.content_bg);
+                return ContextCompat.getColor(PagerModeActivity.this,R.color.content_bg);
             }
             @Override
             public boolean isDraw(Integer integer) {
@@ -289,177 +284,29 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                 }
                 return false;
             }
-
-        };
-        IBackgroundFormat<Integer> backgroundFormat2 = new BaseBackgroundFormat<Integer>() {
-            @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(ParseModeActivity.this,R.color.cal_buckle_text_color);
-            }
-            @Override
-            public boolean isDraw(Integer integer) {
-                if(integer%2 == 0){
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public int getTextColor(Integer integer) {
-               int color =  ContextCompat.getColor(ParseModeActivity.this,R.color.white);
-                Log.e("huang","color"+color);
-                return color;
-            }
-        };
-        table.getConfig().setContentBackgroundFormat(backgroundFormat)
-                .setYSequenceBgFormat(backgroundFormat2);
+        });
+        tableData.setPageSize(9);
         table.setTableData(tableData);
 
     }
 
     @Override
     public void onClick(View view) {
-        changedStyle();
-    }
-
-    private void changedStyle() {
-
-        if (chartDialog == null) {
-            chartDialog = new BaseCheckDialog<>("表格设置", new BaseCheckDialog.OnCheckChangeListener<TableStyle>() {
-                @Override
-                public String getItemText(TableStyle chartStyle) {
-                    return chartStyle.value;
-                }
-
-                @Override
-                public void onItemClick(TableStyle item, int position) {
-                    switch (item) {
-                        case FIXED_TITLE:
-                            fixedTitle(item);
-                            break;
-                        case FIXED_X_AXIS:
-                            fixedXAxis(item);
-                            break;
-                        case FIXED_Y_AXIS:
-                           fixedYAxis(item);
-                            break;
-                        case FIXED_FIRST_COLUMN:
-                            fixedFirstColumn(item);
-                            break;
-                        case FIXED_COUNT_ROW:
-                            fixedCountRow(item);
-                            break;
-                        case ZOOM:
-                            zoom(item);
-                            break;
-
-                    }
-                }
-            });
+        switch (view.getId()){
+            case R.id.left:
+                tableData.setCurrentPage(tableData.getCurrentPage()-1);
+                table.notifyDataChanged();
+                break;
+            case R.id.right:
+                tableData.setCurrentPage(tableData.getCurrentPage()+1);
+                table.notifyDataChanged();
+                break;
         }
-        ArrayList<TableStyle> items = new ArrayList<>();
 
-        items.add(TableStyle.FIXED_X_AXIS);
-        items.add(TableStyle.FIXED_Y_AXIS);
-        items.add(TableStyle.FIXED_TITLE);
-        items.add(TableStyle.FIXED_FIRST_COLUMN);
-        items.add(TableStyle.FIXED_COUNT_ROW);
-        items.add(TableStyle.ZOOM);
-        chartDialog.show(this, true, items);
+
     }
 
-    private void zoom(TableStyle item) {
-        quickChartDialog.showDialog(this, item, new String[]{"缩放", "不缩放"}, new QuickChartDialog.OnCheckChangeAdapter() {
 
-            @Override
-            public void onItemClick(String s, int position) {
-                if (position == 0) {
-                    table.setZoom(true,3);
-                } else if (position == 1) {
-                    table.setZoom(false,3);
-                }
-                table.invalidate();
-            }
-        });
-    }
-
-    private void fixedXAxis(TableStyle c) {
-
-        quickChartDialog.showDialog(this, c, new String[]{"固定", "不固定"}, new QuickChartDialog.OnCheckChangeAdapter() {
-
-            @Override
-            public void onItemClick(String s, int position) {
-                if (position == 0) {
-                   table.getConfig().setFixedXSequence(true);
-                } else if (position == 1) {
-                    table.getConfig().setFixedXSequence(false);
-                }
-               table.invalidate();
-            }
-        });
-    }
-
-    private void fixedYAxis(TableStyle c) {
-
-        quickChartDialog.showDialog(this, c, new String[]{"固定", "不固定"}, new QuickChartDialog.OnCheckChangeAdapter() {
-
-            @Override
-            public void onItemClick(String s, int position) {
-                if (position == 0) {
-                    table.getConfig().setFixedYSequence(true);
-                } else if (position == 1) {
-                    table.getConfig().setFixedYSequence(false);
-                }
-                table.invalidate();
-            }
-        });
-    }
-    private void fixedTitle(TableStyle c) {
-
-        quickChartDialog.showDialog(this, c, new String[]{"固定", "不固定"}, new QuickChartDialog.OnCheckChangeAdapter() {
-
-            @Override
-            public void onItemClick(String s, int position) {
-                if (position == 0) {
-                    table.getConfig().setFixedTitle(true);
-                } else if (position == 1) {
-                    table.getConfig().setFixedTitle(false);
-                }
-                table.invalidate();
-            }
-        });
-    }
-
-    private void fixedFirstColumn(TableStyle c) {
-
-        quickChartDialog.showDialog(this, c, new String[]{"固定", "不固定"}, new QuickChartDialog.OnCheckChangeAdapter() {
-
-            @Override
-            public void onItemClick(String s, int position) {
-                if (position == 0) {
-                    table.getConfig().setFixedFirstColumn(true);
-                } else if (position == 1) {
-                    table.getConfig().setFixedFirstColumn(false);
-                }
-                table.invalidate();
-            }
-        });
-    }
-    private void fixedCountRow(TableStyle c) {
-
-        quickChartDialog.showDialog(this, c, new String[]{"固定", "不固定"}, new QuickChartDialog.OnCheckChangeAdapter() {
-
-            @Override
-            public void onItemClick(String s, int position) {
-                if (position == 0) {
-                    table.getConfig().setFixedCountRow(true);
-                } else if (position == 1) {
-                    table.getConfig().setFixedCountRow(false);
-                }
-                table.invalidate();
-            }
-        });
-    }
 
     /**
      * 测试是否可以兼容之前smartChart

@@ -35,19 +35,25 @@ public class TitleDrawFormat implements ITitleDrawFormat {
     @Override
     public void draw(Canvas c, Column column, int left, int top, int right, int bottom, TableConfig config) {
         Paint paint = config.getPaint();
-        drawBackground(c,column,left,top,right,bottom,config);
+        boolean isDrawBg =drawBackground(c,column,left,top,right,bottom,config);
         config.getColumnTitleStyle().fillPaint(paint);
+        IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
+        if(isDrawBg && backgroundFormat.getTextColor(column) != TableConfig.INVALID_COLOR){
+            paint.setColor(backgroundFormat.getTextColor(column));
+        }
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(paint.getTextSize()*config.getZoom());
         c.drawText(column.getColumnName(),(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
     }
 
     @Override
-    public void drawBackground(Canvas c, Column column, int left, int top, int right, int bottom,  TableConfig config) {
+    public boolean drawBackground(Canvas c, Column column, int left, int top, int right, int bottom,  TableConfig config) {
         IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
         if(backgroundFormat != null && backgroundFormat.isDraw(column)){
             backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+            return true;
         }
+        return false;
     }
 
 

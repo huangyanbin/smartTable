@@ -32,6 +32,10 @@ public class TableData<T> {
         this(tableName,t,columns,null);
     }
 
+    public TableData(String tableName,List<T> t, Column... columns) {
+        this(tableName,t,Arrays.asList(columns));
+    }
+
     public TableData(String tableName,List<T> t,List<Column> columns,ITitleDrawFormat titleDrawFormat) {
         this.tableName = tableName;
         this.columns = columns;
@@ -42,9 +46,7 @@ public class TableData<T> {
         this.titleDrawFormat = titleDrawFormat == null?new TitleDrawFormat() :titleDrawFormat;
     }
 
-    public TableData(String tableName,List<T> t, Column... columns) {
-        this(tableName,t,Arrays.asList(columns));
-    }
+
     public String getTableName() {
         return tableName;
     }
@@ -67,6 +69,7 @@ public class TableData<T> {
 
     public void setT(List<T> t) {
         this.t = t;
+        tableInfo.setLineSize(t.size());
     }
 
 

@@ -85,8 +85,11 @@ public class TableMeasurer<T> {
      */
     private int getTableHeight(TableData<T> tableData,TableConfig config){
         Paint paint = config.getPaint();
-        int topHeight = DrawUtils.getTextHeight(config.getXSequenceStyle(),paint)
-                +2*config.getVerticalPadding();
+        int topHeight = 0;
+        if(config.isShowXSequence()) {
+             topHeight = DrawUtils.getTextHeight(config.getXSequenceStyle(), paint)
+                    + 2 * config.getVerticalPadding();
+        }
         int titleHeight = tableData.getTitleDrawFormat().measureHeight(config);
         TableInfo tableInfo = tableData.getTableInfo();
         tableInfo.setTitleHeight(titleHeight);
@@ -129,10 +132,12 @@ public class TableMeasurer<T> {
         }
         config.getYSequenceStyle().fillPaint(paint);
         int totalSize = tableData.getT().size();
-        int yAxisWidth = (int) paint.measureText(tableData.getYSequenceFormat().format(totalSize)
-                +2*config.getHorizontalPadding());
-        tableData.getTableInfo().setyAxisWidth(yAxisWidth);
-        totalWidth+=yAxisWidth;
+        if(config.isShowYSequence()) {
+            int yAxisWidth = (int) paint.measureText(tableData.getYSequenceFormat().format(totalSize)
+                    + 2 * config.getHorizontalPadding());
+            tableData.getTableInfo().setyAxisWidth(yAxisWidth);
+            totalWidth+=yAxisWidth;
+        }
         return totalWidth;
     }
 

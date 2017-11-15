@@ -1,6 +1,7 @@
 package com.bin.david.form.annotation;
 
 import com.bin.david.form.data.Column;
+import com.bin.david.form.data.PageTableData;
 import com.bin.david.form.data.TableData;
 
 import java.lang.annotation.Annotation;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class AnnotationParser<T> {
 
 
-    public TableData<T> parse(List<T> dataList){
+    public PageTableData<T> parse(List<T> dataList){
         if(dataList!= null && dataList.size() >0) {
             T firstData = dataList.get(0);
             if(firstData != null) {
@@ -28,7 +29,9 @@ public class AnnotationParser<T> {
                 if(tableAnnotation != null){
                     SmartTable table = (SmartTable) tableAnnotation;
                     List<Column> columns = new ArrayList<>();
-                    TableData<T> tableData = new TableData<>(table.name(),dataList,columns);
+                    PageTableData<T> tableData = new PageTableData<>(table.name(),dataList,columns);
+                    tableData.setCurrentPage(table.currentPage());
+                    tableData.setPageSize(table.pageSize());
                     tableData.setShowCount(table.count());
                     FieldGenericHandler genericHandler = new FieldGenericHandler();
                     Map<String,Column> parentMap = new HashMap<>();

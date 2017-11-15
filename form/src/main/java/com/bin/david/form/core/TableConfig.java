@@ -12,48 +12,136 @@ import com.bin.david.form.data.style.LineStyle;
  */
 
 public class TableConfig {
-
-    public static final FontStyle defaultFontStyle = new FontStyle();
-    public static final LineStyle defaultGridStyle = new LineStyle();
-    public static final int INVALID_COLOR = -1;
-    private FontStyle contentStyle;
-    private FontStyle YSequenceStyle;
-    private FontStyle XSequenceStyle;
-    private FontStyle columnTitleStyle;
-    private FontStyle tableTitleStyle;
-    private FontStyle countStyle; //总和
-    private LineStyle columnTitleGridStyle;
-    private LineStyle gridStyle;
-    private int verticalPadding = 10;
-    private int horizontalPadding= 40;
-    private int YSequenceBackgroundColor=INVALID_COLOR;
-
-    private int XSequenceBackgroundColor =INVALID_COLOR;
-    private int columnTitleBackgroundColor =INVALID_COLOR;
-    private int contentBackgroundColor=INVALID_COLOR;
-    private int countBackgroundColor=INVALID_COLOR;
-    private boolean isShowXSequence;
-    private boolean isShowYSequence;
     /**
-     * 每个格子进行背景格式化
+     * 默认字体样式
+     */
+    private static final FontStyle defaultFontStyle = new FontStyle();
+    /**
+     * 默认网格样式
+     */
+    private static final LineStyle defaultGridStyle = new LineStyle();
+    /**
+     * 无效值
+     */
+    public static final int INVALID_COLOR = 0;
+    /**
+     * 内容字体样式
+     */
+    private FontStyle contentStyle;
+    /**
+     * 左侧序号列字体样式
+     */
+    private FontStyle YSequenceStyle;
+    /**
+     * 顶部序号列字体样式
+     */
+    private FontStyle XSequenceStyle;
+    /**
+     * 列标题字体样式
+     */
+    private FontStyle columnTitleStyle;
+    /**
+     * 表格标题字体样式
+     */
+    private FontStyle tableTitleStyle;
+    /**
+     * 统计行字体样式
+     */
+    private FontStyle countStyle; //总和
+    /**
+     * 列标题网格样式
+     */
+    private LineStyle columnTitleGridStyle;
+    /**
+     * 表格网格
+     */
+    private LineStyle gridStyle;
+    /**
+     * 上下padding(为了表格的美观，暂只支持统一的padding)
+     */
+    private int verticalPadding = 10;
+    /**
+     * 左右padding(为了表格的美观，暂只支持统一的padding)
+     */
+    private int horizontalPadding= 40;
+    /**
+     * 左侧序号列背景
+     */
+    private int YSequenceBackgroundColor=INVALID_COLOR;
+    /**
+     * 顶部序号列背景
+     */
+    private int XSequenceBackgroundColor =INVALID_COLOR;
+    /**
+     * 组标题背景
+     */
+    private int columnTitleBackgroundColor =INVALID_COLOR;
+    /**
+     * 内容背景
+     */
+    private int contentBackgroundColor=INVALID_COLOR;
+    /**
+     * 统计行背景
+     */
+    private int countBackgroundColor=INVALID_COLOR;
+
+    /**
+     * 是否显示顶部序号列
+     */
+    private boolean isShowXSequence = true;
+    /**
+     * 是否显示左侧序号列
+     */
+    private boolean isShowYSequence = true;
+    /**
+     * 格子进行背景格式化
      */
     private IBackgroundFormat<Integer> contentBackgroundFormat;
     /**
-     * 每个标题格子背景格式化
+     * 标题格子背景格式化
      */
     private IBackgroundFormat<Column> columnBackgroundFormat;
+    /**
+     * 顶部序号背景格式化
+     */
+    private IBackgroundFormat<Integer> XSequenceBgFormat;
+    /**
+     * 左序号背景格式化
+     */
+    private IBackgroundFormat<Integer> YSequenceBgFormat;
 
 
-    //固定左侧
+    /**
+     * 是否固定左侧
+     *
+     */
     private boolean fixedYSequence = false;
-    //固定顶部
+    /**
+     * 固定顶部
+     *
+     */
     private boolean fixedXSequence = false;
-    //固定标题
+    /**
+     * 固定标题
+     *
+     */
     private boolean fixedTitle = true;
-    //固定第一列
+    /**
+     * 固定第一列
+     *
+     */
     private boolean fixedFirstColumn = true;
+    /**
+     * 是否固定统计行
+     */
     private boolean fixedCountRow = true;
+    /**
+     * 画笔
+     */
     private Paint paint;
+    /**
+     * 缩放值
+     */
     private  float zoom = 1;
 
     public FontStyle getContentStyle() {
@@ -301,6 +389,24 @@ public class TableConfig {
 
     public TableConfig setColumnBackgroundFormat(IBackgroundFormat<Column> columnBackgroundFormat) {
         this.columnBackgroundFormat = columnBackgroundFormat;
+        return this;
+    }
+
+    public IBackgroundFormat<Integer> getXSequenceBgFormat() {
+        return XSequenceBgFormat;
+    }
+
+    public TableConfig setXSequenceBgFormat(IBackgroundFormat<Integer> XSequenceBgFormat) {
+        this.XSequenceBgFormat = XSequenceBgFormat;
+        return this;
+    }
+
+    public IBackgroundFormat<Integer> getYSequenceBgFormat() {
+        return YSequenceBgFormat;
+    }
+
+    public TableConfig setYSequenceBgFormat(IBackgroundFormat<Integer> YSequenceBgFormat) {
+        this.YSequenceBgFormat = YSequenceBgFormat;
         return this;
     }
 
