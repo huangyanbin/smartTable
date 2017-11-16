@@ -67,6 +67,7 @@ public abstract class TitleImageDrawFormat extends ImageResTitleDrawFormat {
         setDrawBackground(true);
         drawBackground(c,column,left,top,right,bottom,config);
         setDrawBackground(false);
+        textDrawFormat.setDrawBg(false);
         if(getBitmap(column) == null){
             textDrawFormat.draw(c,column,left,top,right,bottom,config);
             return;

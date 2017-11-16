@@ -69,6 +69,7 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
         cellInfo.set(column,t,value,position);
         drawBackground(c,cellInfo,left,top,right,bottom,config);
         setDrawBg(false);
+        textDrawFormat.setDrawBg(false);
         if(getBitmap(t,value,position) == null){
             textDrawFormat.draw(c,column,t,value,left,top,right,bottom,position,config);
             return;

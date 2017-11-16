@@ -14,6 +14,7 @@ import com.bin.david.form.utils.DrawUtils;
 
 public class TitleDrawFormat implements ITitleDrawFormat {
 
+    private boolean isDrawBg;
 
     @Override
     public int measureWidth(Column column, TableConfig config) {
@@ -49,12 +50,18 @@ public class TitleDrawFormat implements ITitleDrawFormat {
     @Override
     public boolean drawBackground(Canvas c, Column column, int left, int top, int right, int bottom,  TableConfig config) {
         IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
-        if(backgroundFormat != null && backgroundFormat.isDraw(column)){
+        if(isDrawBg && backgroundFormat != null && backgroundFormat.isDraw(column)){
             backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
             return true;
         }
         return false;
     }
 
+    public boolean isDrawBg() {
+        return isDrawBg;
+    }
 
+    public void setDrawBg(boolean drawBg) {
+        isDrawBg = drawBg;
+    }
 }

@@ -88,8 +88,10 @@ public class TableProvider<T> implements TableClickObserver {
             int countHeight = tableData.getTableInfo().getCountHeight();
             int top = bottom - countHeight;
             int backgroundColor = config.getCountBackgroundColor();
-            DrawUtils.fillBackground(canvas, left, top, showRect.right,
-                    bottom, backgroundColor, config.getPaint());
+            if(backgroundColor != TableConfig.INVALID_COLOR) {
+                DrawUtils.fillBackground(canvas, left, top, showRect.right,
+                        bottom, backgroundColor, config.getPaint());
+            }
             if (DrawUtils.isVerticalMixRect(showRect, top, bottom)) {
                 List<Column> columns = tableData.getChildColumns();
                 int columnSize = columns.size();
@@ -291,12 +293,12 @@ public class TableProvider<T> implements TableClickObserver {
 
     private void drawCountText(Canvas canvas,Column column, int left, int top, int right, int bottom, String text, TableConfig config) {
         Paint paint = config.getPaint();
-        path.rewind();
+       /* path.rewind();
         path.moveTo(left, top);
         path.lineTo(left, bottom);
         path.lineTo(right, bottom);
         path.lineTo(right, top);
-        path.close();
+        path.close();*/
         //绘制背景
         IBackgroundFormat<Column> backgroundFormat = config.getCountBgFormat();
         boolean isDrawBg = false;
@@ -305,7 +307,7 @@ public class TableProvider<T> implements TableClickObserver {
             isDrawBg = true;
         }
         config.getGridStyle().fillPaint(paint);
-        canvas.drawPath(path, paint);
+        canvas.drawRect(left,top,right,bottom, paint);
         config.getCountStyle().fillPaint(paint);
         //字体颜色跟随背景变化
         if(isDrawBg && backgroundFormat.getTextColor(column) != TableConfig.INVALID_COLOR){

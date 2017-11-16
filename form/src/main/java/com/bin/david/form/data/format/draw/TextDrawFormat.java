@@ -18,6 +18,7 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     //避免多次计算
     private int height;
     private CellInfo<T> cellInfo = new CellInfo<>();
+    private boolean isDrawBg =true;
 
     @Override
     public int measureWidth(Column<T>column, TableConfig config) {
@@ -57,12 +58,18 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     @Override
     public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, int left, int top, int right, int bottom,TableConfig config) {
         IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
-        if(backgroundFormat != null && backgroundFormat.isDraw(cellInfo)){
+        if(isDrawBg && backgroundFormat != null && backgroundFormat.isDraw(cellInfo)){
             backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
             return true;
         }
         return false;
     }
 
+    public boolean isDrawBg() {
+        return isDrawBg;
+    }
 
+    public void setDrawBg(boolean drawBg) {
+        isDrawBg = drawBg;
+    }
 }
