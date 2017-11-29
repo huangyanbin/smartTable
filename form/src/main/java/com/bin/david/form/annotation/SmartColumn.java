@@ -34,6 +34,7 @@ public @interface SmartColumn {
     ColumnType type() default ColumnType.Own;
 
     boolean autoCount() default false;
+    boolean fixed() default false;
 
 
 }

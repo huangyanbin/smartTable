@@ -41,7 +41,7 @@ public class Column<T> implements Comparable<Column> {
     private List<T> datas;
 
     private List<String> values;
-
+    private boolean isFixed;
     private int maxValueLength = -1; //最长的长度
     private String longestValue = ""; //最长的值
     private int width;
@@ -406,5 +406,13 @@ public class Column<T> implements Comparable<Column> {
 
     public void setOnColumnItemClickListener(OnColumnItemClickListener<T> onColumnItemClickListener) {
         this.onColumnItemClickListener = onColumnItemClickListener;
+    }
+
+    public boolean isFixed() {
+        return isFixed;
+    }
+
+    public void setFixed(boolean fixed) {
+        isFixed = fixed;
     }
 }

@@ -2,8 +2,10 @@ package com.bin.david.form.data;
 
 import com.bin.david.form.data.format.title.ITitleDrawFormat;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,7 +56,6 @@ public class PageTableData<T> extends TableData<T> {
                 pageData.add(totalData.get(i));
             }
         }
-
         setT(pageData);
     }
 

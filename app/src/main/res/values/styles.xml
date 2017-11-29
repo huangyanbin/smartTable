@@ -71,5 +71,12 @@
     <style name="CustomCheckBoxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/checkbox_btn_drawable</item>
     </style>
-
+    <style name="dateStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/base_black_title_color</item>
+    </style>
 </resources>

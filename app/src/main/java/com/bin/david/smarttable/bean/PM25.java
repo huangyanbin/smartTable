@@ -29,13 +29,13 @@ public class PM25 {
     private int pm10;
     @SmartColumn(parent = "PM",id =2,name="PM10 24小时")
     private int pm10_24h;
-    @SmartColumn(id=4,name = "地址")
+    @SmartColumn(id=4,name = "地址",fixed = true)
     private String position_name;
     @SmartColumn(id=6,name="首要污染物")
     private Object primary_pollutant;
-    @SmartColumn(id=5,name = "空气质量")
+    @SmartColumn(id=5,name = "空气质量",fixed = true)
     private String quality;
-    @SmartColumn(id=3,name = "坐标代码")
+    @SmartColumn(id=3,name = "坐标代码",fixed = true)
     private String station_code;
     @SmartColumn(id=3,name = "更新时间")
     private String time_point;

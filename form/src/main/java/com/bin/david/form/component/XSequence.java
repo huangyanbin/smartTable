@@ -24,9 +24,11 @@ public class XSequence<T> implements IComponent<TableData<T>>{
     private int height;
     private int clipHeight;
     private ISequenceFormat format;
+    private Rect clipRect;
 
     public XSequence() {
         this.rect = new Rect();
+        clipRect = new Rect();
     }
 
     @Override
@@ -65,16 +67,26 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         //测试
         //config.getPaint().setColor(Color.BLACK);
         //canvas.drawRect(showRect.left,clipTop,showRect.right,clipTop+rect.height(),config.getPaint());
+        clipRect.set(showRect);
+        boolean isPerColumnFixed = false;
+        int clipCount = 0;
         for(int i = 0;i < columnSize;i++){
             Column column = columns.get(i);
             int width = (int) (column.getWidth()*config.getZoom());
             int right = left + width;
-            if(config.isFixedFirstColumn() && i ==0){
-                showTextNum(canvas, showRect, config, showRect.left, 0, showRect.left+width);
-                left +=width;
-                canvas.save();
-                canvas.clipRect(showRect.left+width,rect.top,showRect.right,rect.bottom);
-                continue;
+            if(column.isFixed()){
+                if(left < clipRect.left) {
+                    isPerColumnFixed = true;
+                    showTextNum(canvas, showRect, config, clipRect.left, i, clipRect.left + width);
+                    clipRect.left += width;
+                    left += width;
+                    continue;
+                }
+            }else if(isPerColumnFixed){
+                    isPerColumnFixed = false;
+                    clipCount++;
+                    canvas.save();
+                    canvas.clipRect(clipRect.left,rect.top,showRect.right,rect.bottom);
             }
             if(showRect.right >= left) {
                 left = showTextNum(canvas, showRect, config, left, i, right);
@@ -82,7 +94,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
                 break;
             }
         }
-        if(config.isFixedFirstColumn()){
+        for(int i = 0;i < clipCount;i++){
             canvas.restore();
         }
         canvas.restore();

@@ -1,0 +1,24 @@
+<resources>
+
+
+
+    <!-- calendar -->
+    <dimen name="bar_margin">15dp</dimen>
+    <dimen name="calendar_day_margin_top">13dp</dimen>
+    <dimen name="calendar_per_view_height">24dp</dimen>
+    <dimen name="calendar_tip_height">27dp</dimen>
+    <dimen name="calendar_item_margin_right">15dp</dimen>
+    <dimen name="calendar_item_margin_left">13dp</dimen>
+    <dimen name="calendar_item_text_margin_left">7dp</dimen>
+    <dimen name="calendar_item_padding">11dp</dimen>
+    <dimen name="calendar_item_height">43dp</dimen>
+    <dimen name="calendar_item_text_margin_right">18dp</dimen>
+    <dimen name="calendar_switch_btn_width">54dp</dimen>
+    <dimen name="calendar_switch_btn_height">27dp</dimen>
+    <dimen name="calendar_inval">6dp</dimen>
+    <dimen name="calendar_small_circle">8dp</dimen>
+    <dimen name="calendar_view_height">40dp</dimen>
+
+
+
+</resources>

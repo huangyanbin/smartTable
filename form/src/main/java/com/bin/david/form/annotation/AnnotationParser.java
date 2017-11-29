@@ -17,7 +17,7 @@ import java.util.Map;
  * 注解解析
  */
 
-public class AnnotationParser<T> {
+public class AnnotationParser<T>  {
 
 
     public PageTableData<T> parse(List<T> dataList){
@@ -66,6 +66,7 @@ public class AnnotationParser<T> {
                    Column<?> column = genericHandler.getGenericColumn(fieldClass, name, fieldName);
                    column.setId(id);
                    column.setAutoCount(isAutoCount);
+                   column.setFixed(smartColumn.fixed());
                    if (!parent.equals("")) {
                        Column parentColumn = parentMap.get(parent);
                        if (parentColumn == null) {
@@ -93,6 +94,4 @@ public class AnnotationParser<T> {
 
         }
     }
-
-
 }

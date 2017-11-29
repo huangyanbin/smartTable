@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CalendarView">
+        <attr name="baseTextColor" format="color"/>
+        <attr name="baseTextSize" format="dimension"/>
+        <attr name="rowHeight" format="dimension"/>
+    </declare-styleable>
+
+</resources>

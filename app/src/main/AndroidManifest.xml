@@ -24,6 +24,9 @@
         <activity android:name=".TableListActivity"/>
         <activity android:name=".TanTanActivity"/>
         <activity android:name=".PagerModeActivity"/>
+        <activity android:name=".CalendarMonthActivity"/>
+        <activity android:name=".CalendarWeekActivity"/>
+        <activity android:name=".ManyActivity"/>
     </application>
 
 </manifest>

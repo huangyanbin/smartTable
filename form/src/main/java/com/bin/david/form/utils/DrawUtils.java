@@ -20,6 +20,11 @@ public class DrawUtils {
         return (int) (fontMetrics.descent - fontMetrics.ascent);
     }
 
+    public static int getTextHeight(Paint paint){
+        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+        return (int) (fontMetrics.descent - fontMetrics.ascent);
+    }
+
     public static float getTextCenterY(int centerY,Paint paint){
        return centerY-((paint.descent() + paint.ascent()) / 2);
     }

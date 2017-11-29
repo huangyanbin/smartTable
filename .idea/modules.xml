@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/calendar/calendar.iml" filepath="$PROJECT_DIR$/calendar/calendar.iml" />
       <module fileurl="file://$PROJECT_DIR$/form/form.iml" filepath="$PROJECT_DIR$/form/form.iml" />
       <module fileurl="file://$PROJECT_DIR$/smartTable.iml" filepath="$PROJECT_DIR$/smartTable.iml" />
     </modules>

@@ -41,11 +41,13 @@ public class TableProvider<T> implements TableClickObserver {
     private OnColumnClickListener onColumnClickListener;
     private TableData<T> tableData;
     private ITip<Column, ?> tip;
+    private Rect clipRect;
 
     public TableProvider() {
        path = new Path();
         clickPoint = new PointF(-1, -1);
         orignRect = new Rect();
+        clipRect = new Rect();
     }
 
     public void onDraw(Canvas canvas, Rect scaleRect, Rect showRect,
@@ -95,29 +97,39 @@ public class TableProvider<T> implements TableClickObserver {
             if (DrawUtils.isVerticalMixRect(showRect, top, bottom)) {
                 List<Column> columns = tableData.getChildColumns();
                 int columnSize = columns.size();
-                Column firstColumn = tableData.getChildColumns().get(0);
-                boolean isFixedFirstColumn = false;
+                //Column firstColumn = tableData.getChildColumns().get(0);
+                //boolean isFixedFirstColumn = false;
+                boolean isPerColumnFixed = false;
+                clipRect.set(showRect);
+                int clipCount = 0;
                 for (int i = 0; i < columnSize; i++) {
                     Column column = columns.get(i);
-                    right = (int) (left + column.getWidth()*config.getZoom());
-                    if (config.isFixedFirstColumn() && !isFixedFirstColumn
-                            && firstColumn == column) {
-                        isFixedFirstColumn = true;
-                        int tempRight = showRect.left + column.getWidth();
-                        drawCountText(canvas, column,showRect.left, top, tempRight,
-                                bottom, column.getTotalNumString(), config);
-                        canvas.save();
-                        canvas.clipRect(tempRight, showRect.bottom - countHeight, showRect.right, showRect.bottom);
-                        left = right;
-                        continue;
-                    }
-                    drawCountText(canvas, column,left, top, right, bottom, column.getTotalNumString(), config);
-                    left = right;
+                    int tempLeft = left;
 
+                    int width = (int) (column.getWidth()*config.getZoom());
+                    if(column.isFixed()){
+                        if(left < clipRect.left) {
+                            left = clipRect.left;
+                            clipRect.left += width;
+                            isPerColumnFixed = true;
+                        }
+                    }else if(isPerColumnFixed){
+                        canvas.save();
+                        clipCount++;
+                        canvas.clipRect(clipRect.left, showRect.bottom - countHeight,
+                                showRect.right, showRect.bottom);
+                    }
+                    drawCountText(canvas, column,left, top, left+width,
+                            bottom, column.getTotalNumString(), config);
+                    left = tempLeft;
+                    left +=width;
                 }
-                if (config.isFixedFirstColumn()) {
+                for(int i = 0;i < clipCount;i++){
                     canvas.restore();
                 }
+               /* if (config.isFixedFirstColumn()) {
+                    canvas.restore();
+                }*/
             }
         }
     }
@@ -129,26 +141,33 @@ public class TableProvider<T> implements TableClickObserver {
         int clipHeight = config.isFixedTitle() ? titleHeight : Math.max(0, titleHeight - dis);
         DrawUtils.fillBackground(canvas, showRect.left, showRect.top, showRect.right,
                 showRect.top + clipHeight, config.getColumnTitleBackgroundColor(), config.getPaint());
-
+        clipRect.set(showRect);
         List<ColumnInfo> columnInfoList = tableData.getColumnInfos();
-        Column firstColumn = tableData.getChildColumns().get(0);
-        boolean isFixedFirstColumn = false;
+       // Column firstColumn = tableData.getChildColumns().get(0);
+        //boolean isFixedFirstColumn = false;
         float zoom = config.getZoom();
+        boolean isPerColumnFixed = false;
+        int clipCount = 0;
         for (ColumnInfo info : columnInfoList) {
-            if (config.isFixedFirstColumn() && !isFixedFirstColumn
-                    && firstColumn == info.column) {
-                isFixedFirstColumn = true;
-                int left = (int) (info.left*zoom + showRect.left);
-                fillColumnTitle(canvas, info, left);
-                canvas.save();
-                canvas.clipRect(left + info.width*zoom, showRect.top, showRect.right,
-                        showRect.top + clipHeight);
-                continue;
-            }
             int left = (int) (info.left*zoom + scaleRect.left);
+            if (info.column.isFixed()) {
+                if(left < clipRect.left) {
+                    left = clipRect.left;
+                    fillColumnTitle(canvas, info, left);
+                    clipRect.left += info.width * zoom;
+                    isPerColumnFixed = true;
+                    continue;
+                }
+            }else if(isPerColumnFixed){
+                canvas.save();
+                canvas.clipRect(clipRect.left, showRect.top, showRect.right,
+                        showRect.top + clipHeight);
+                isPerColumnFixed = false;
+                clipCount++;
+            }
             fillColumnTitle(canvas, info, left);
         }
-        if (config.isFixedFirstColumn()) {
+        for(int i = 0;i < clipCount;i++){
             canvas.restore();
         }
         if (config.isFixedTitle()) {
@@ -189,10 +208,10 @@ public class TableProvider<T> implements TableClickObserver {
         int left = scaleRect.left;
         Paint paint = config.getPaint();
         List<Column> columns = tableData.getChildColumns();
-        boolean isFixedFirst = config.isFixedFirstColumn();
+        //boolean isFixedFirst = config.isFixedFirstColumn();
+        clipRect.set(showRect);
         TableInfo info = tableData.getTableInfo();
         int columnSize = columns.size();
-        int firstWidth = 0;
         int dis = config.isFixedCountRow() ? info.getCountHeight()
                 : showRect.bottom + info.getCountHeight() - scaleRect.bottom;
         int fillBgBottom = showRect.bottom - Math.max(dis, 0);
@@ -202,24 +221,29 @@ public class TableProvider<T> implements TableClickObserver {
             canvas.save();
             canvas.clipRect(showRect.left, showRect.top, showRect.right, showRect.bottom - info.getCountHeight());
         }
+        boolean isPerFixed = false;
+        int clipCount = 0;
         for (int i = 0; i < columnSize; i++) {
             top = scaleRect.top;
             Column column = columns.get(i);
             int width = (int) (column.getWidth()*config.getZoom());
             List<String> values = column.getValues();
             int tempLeft = left;
-            if (i == 0 && isFixedFirst) {
-                left = showRect.left;
-                firstWidth = width;
-            }
-            if (i == 1 && isFixedFirst) {
+            if (column.isFixed()) {
+                isPerFixed = false;
+                if(tempLeft < clipRect.left){
+                    left = clipRect.left;
+                    clipRect.left +=width;
+                    isPerFixed = true;
+                }
+            }else if(isPerFixed){
                 canvas.save();
-                showRect.left += firstWidth;
-                canvas.clipRect(showRect);
+                canvas.clipRect(clipRect);
+                isPerFixed = false;
+               clipCount++;
             }
             int right = left + width;
             if (left < showRect.right) {
-
                 for (int j = 0; j < values.size(); j++) {
                     String value = values.get(j);
                     int bottom = (int) (top + info.getLineHeightArray()[j]*config.getZoom());
@@ -257,7 +281,7 @@ public class TableProvider<T> implements TableClickObserver {
                 break;
             }
         }
-        if (columnSize > 1 && isFixedFirst) {
+        for(int i = 0;i < clipCount;i++){
             canvas.restore();
         }
         if (config.isFixedCountRow()) {

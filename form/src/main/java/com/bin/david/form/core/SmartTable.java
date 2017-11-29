@@ -36,12 +36,13 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
     private XSequence<T> xAxis;
     private YSequence<T> yAxis;
     private ITableTitle tableTitle;
+    private TableProvider<T> provider;
     private Rect showRect;
     private Rect tableRect;
     private TableConfig config;
     private TableParser<T> parser;
     private TableData<T> tableData;
-    private TableProvider<T> provider;
+
     private TableMeasurer<T> measurer;
     private AnnotationParser<T> annotationParser;
     protected Paint paint;

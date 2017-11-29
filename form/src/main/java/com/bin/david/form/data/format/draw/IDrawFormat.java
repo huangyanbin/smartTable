@@ -24,17 +24,7 @@ public interface IDrawFormat<T>  {
      */
     int measureHeight(Column<T> column,int position, TableConfig config);
 
-    /**
-     * 绘制
-     * @param c 画笔
-     * @param t 对象
-     * @param value 值
-     * @param left 左
-     * @param top 顶
-     * @param right 右
-     * @param bottom 底
-     * @param position 位置
-     */
+
     void draw(Canvas c,Column<T> column,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
 
     boolean drawBackground(Canvas c, CellInfo<T> cellInfo, int left, int top, int right, int bottom,  TableConfig config);
