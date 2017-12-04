@@ -128,7 +128,7 @@ public class TableConfig {
      */
     private boolean fixedTitle = true;
     /**
-     * 固定第一列
+     * 固定第一列 （作废）
      *
      */
     private boolean fixedFirstColumn = true;

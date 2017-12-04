@@ -148,21 +148,23 @@ public class TableMeasurer<T> {
         for(int i = 0;i < columnList.size();i++){
             int top = 0;
             Column column = columnList.get(i);
-            ColumnInfo columnInfo = getColumnInfo(tableData,column,left,top,maxLevel);
+            ColumnInfo columnInfo = getColumnInfo(tableData,column,null,left,top,maxLevel);
             left += columnInfo.width;
         }
     }
 
-    public ColumnInfo getColumnInfo(TableData<T> tableData,Column column,int left,int top,int overLevel){
+    public ColumnInfo getColumnInfo(TableData<T> tableData,Column column,ColumnInfo parent,int left,int top,int overLevel){
         TableInfo tableInfo = tableData.getTableInfo();
         ColumnInfo columnInfo = new ColumnInfo();
         columnInfo.value = column.getColumnName();
         columnInfo.column = column;
+        columnInfo.setParent(parent);
         tableData.getColumnInfos().add(columnInfo);
         if(!column.isParent()){
             columnInfo.width = column.getWidth();
             columnInfo.top = top;
             columnInfo.height = tableInfo.getTitleHeight()*overLevel;
+            tableData.getChildColumnInfos().add(columnInfo);
             columnInfo.left = left;
             return columnInfo;
         }else{
@@ -178,7 +180,7 @@ public class TableMeasurer<T> {
             int width =0;
             for(int i= 0;i < size;i++){
                 Column child = children.get(i);
-                ColumnInfo childInfo = getColumnInfo(tableData,child,left,top,overLevel);
+                ColumnInfo childInfo = getColumnInfo(tableData,child,columnInfo,left,top,overLevel);
                 width+=childInfo.width;
                 left += childInfo.width;
             }

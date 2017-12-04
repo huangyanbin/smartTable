@@ -22,6 +22,7 @@ public class TableData<T> {
     private List<Column> childColumns;
     private TableInfo tableInfo = new TableInfo();
     private List<ColumnInfo> columnInfos;
+    private List<ColumnInfo> childColumnInfos;
     private Column sortColumn;
     private boolean showCount; //显示统计
     private ITitleDrawFormat titleDrawFormat;
@@ -43,6 +44,7 @@ public class TableData<T> {
         tableInfo.setLineSize(t.size());
         childColumns = new ArrayList<>();
         columnInfos = new ArrayList<>();
+        childColumnInfos = new ArrayList<>();
         this.titleDrawFormat = titleDrawFormat == null?new TitleDrawFormat() :titleDrawFormat;
     }
 
@@ -87,6 +89,14 @@ public class TableData<T> {
 
     public List<ColumnInfo> getColumnInfos() {
         return columnInfos;
+    }
+
+    public List<ColumnInfo> getChildColumnInfos() {
+        return childColumnInfos;
+    }
+
+    public void setChildColumnInfos(List<ColumnInfo> childColumnInfos) {
+        this.childColumnInfos = childColumnInfos;
     }
 
     public void setColumnInfos(List<ColumnInfo> columnInfos) {

@@ -32,6 +32,8 @@ public class Column<T> implements Comparable<Column> {
      */
     private List<Column> children;
 
+    private Column parent;
+
     private IFormat<T> format;
     private IDrawFormat<T> drawFormat;
 
@@ -408,6 +410,8 @@ public class Column<T> implements Comparable<Column> {
         this.onColumnItemClickListener = onColumnItemClickListener;
     }
 
+
+
     public boolean isFixed() {
         return isFixed;
     }
@@ -415,4 +419,6 @@ public class Column<T> implements Comparable<Column> {
     public void setFixed(boolean fixed) {
         isFixed = fixed;
     }
+
+
 }

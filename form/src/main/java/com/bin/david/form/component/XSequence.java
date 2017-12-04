@@ -6,6 +6,7 @@ import android.graphics.Rect;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
@@ -64,17 +65,15 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         canvas.clipRect(showRect.left,showTop,showRect.right, showRect.top);
         DrawUtils.fillBackground(canvas, showRect.left, showTop, showRect.right, showRect.top,
                 config.getXSequenceBackgroundColor(),config.getPaint());
-        //测试
-        //config.getPaint().setColor(Color.BLACK);
-        //canvas.drawRect(showRect.left,clipTop,showRect.right,clipTop+rect.height(),config.getPaint());
         clipRect.set(showRect);
         boolean isPerColumnFixed = false;
         int clipCount = 0;
+        List<ColumnInfo> childColumnInfos = tableData.getChildColumnInfos();
         for(int i = 0;i < columnSize;i++){
             Column column = columns.get(i);
             int width = (int) (column.getWidth()*config.getZoom());
             int right = left + width;
-            if(column.isFixed()){
+            if(childColumnInfos.get(i).getTopParent().column.isFixed()){
                 if(left < clipRect.left) {
                     isPerColumnFixed = true;
                     showTextNum(canvas, showRect, config, clipRect.left, i, clipRect.left + width);

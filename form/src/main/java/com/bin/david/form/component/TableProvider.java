@@ -85,7 +85,6 @@ public class TableProvider<T> implements TableClickObserver {
         if (tableData.isShowCount()) {
 
             int left = scaleRect.left;
-            int right;
             int bottom = config.isFixedCountRow() ? showRect.bottom : scaleRect.bottom;
             int countHeight = tableData.getTableInfo().getCountHeight();
             int top = bottom - countHeight;
@@ -94,6 +93,7 @@ public class TableProvider<T> implements TableClickObserver {
                 DrawUtils.fillBackground(canvas, left, top, showRect.right,
                         bottom, backgroundColor, config.getPaint());
             }
+            List<ColumnInfo> childColumnInfos = tableData.getChildColumnInfos();
             if (DrawUtils.isVerticalMixRect(showRect, top, bottom)) {
                 List<Column> columns = tableData.getChildColumns();
                 int columnSize = columns.size();
@@ -107,7 +107,7 @@ public class TableProvider<T> implements TableClickObserver {
                     int tempLeft = left;
 
                     int width = (int) (column.getWidth()*config.getZoom());
-                    if(column.isFixed()){
+                    if(childColumnInfos.get(i).getTopParent().column.isFixed()){
                         if(left < clipRect.left) {
                             left = clipRect.left;
                             clipRect.left += width;
@@ -143,21 +143,26 @@ public class TableProvider<T> implements TableClickObserver {
                 showRect.top + clipHeight, config.getColumnTitleBackgroundColor(), config.getPaint());
         clipRect.set(showRect);
         List<ColumnInfo> columnInfoList = tableData.getColumnInfos();
-       // Column firstColumn = tableData.getChildColumns().get(0);
-        //boolean isFixedFirstColumn = false;
         float zoom = config.getZoom();
         boolean isPerColumnFixed = false;
         int clipCount = 0;
+        ColumnInfo parentColumnInfo = null;
         for (ColumnInfo info : columnInfoList) {
             int left = (int) (info.left*zoom + scaleRect.left);
-            if (info.column.isFixed()) {
-                if(left < clipRect.left) {
+            //根据top ==0是根部，根据最根部的Title判断是否需要固定
+            if (info.top == 0 && info.column.isFixed()) {
+                if (left < clipRect.left) {
+                    parentColumnInfo = info;
                     left = clipRect.left;
                     fillColumnTitle(canvas, info, left);
                     clipRect.left += info.width * zoom;
                     isPerColumnFixed = true;
                     continue;
                 }
+                //根部需要固定，同时固定所有子类
+            }else if(isPerColumnFixed && info.top != 0){
+                    left = (int) (clipRect.left - info.width * zoom);
+                    left += (info.left -parentColumnInfo.left);
             }else if(isPerColumnFixed){
                 canvas.save();
                 canvas.clipRect(clipRect.left, showRect.top, showRect.right,
@@ -208,7 +213,6 @@ public class TableProvider<T> implements TableClickObserver {
         int left = scaleRect.left;
         Paint paint = config.getPaint();
         List<Column> columns = tableData.getChildColumns();
-        //boolean isFixedFirst = config.isFixedFirstColumn();
         clipRect.set(showRect);
         TableInfo info = tableData.getTableInfo();
         int columnSize = columns.size();
@@ -221,6 +225,7 @@ public class TableProvider<T> implements TableClickObserver {
             canvas.save();
             canvas.clipRect(showRect.left, showRect.top, showRect.right, showRect.bottom - info.getCountHeight());
         }
+        List<ColumnInfo> childColumnInfo = tableData.getChildColumnInfos();
         boolean isPerFixed = false;
         int clipCount = 0;
         for (int i = 0; i < columnSize; i++) {
@@ -229,7 +234,9 @@ public class TableProvider<T> implements TableClickObserver {
             int width = (int) (column.getWidth()*config.getZoom());
             List<String> values = column.getValues();
             int tempLeft = left;
-            if (column.isFixed()) {
+            //根据根部标题是否固定
+            Column topColumn = childColumnInfo.get(i).getTopParent().column;
+            if (topColumn.isFixed()) {
                 isPerFixed = false;
                 if(tempLeft < clipRect.left){
                     left = clipRect.left;

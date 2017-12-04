@@ -37,7 +37,7 @@ public class PM25 {
     private String quality;
     @SmartColumn(id=3,name = "坐标代码",fixed = true)
     private String station_code;
-    @SmartColumn(id=3,name = "更新时间")
+    @SmartColumn(id=7,name = "更新时间")
     private String time_point;
 
     public int getAqi() {
