@@ -21,7 +21,10 @@
 ![基本功能](/img/table.gif)
 
 ![缩放功能](/img/zoom.gif)
+**- 1.4版本**
 
+- 删除设置固定第一列setFixedFirstColumn方法，column的setFixed(boolean fixed)来固定任意列。
+- 支持首尾动态添加数据SmartTable.addData(List<T> t,boolean isFoot)来实现添加数据.实现增量解析数据和计算表格大小，效率更高。
 
 **- 1.3版本**
 
@@ -173,7 +176,7 @@ dependencies {
      16. 固定左侧 ```setFixedYSequence```
      17. 固定顶部  ```setFixedXSequence```
      18. 固定列标题  ```setFixedTitle ```
-     19. 固定第一列 ```setFixedFirstColumn```
+     19. 固定第一列 ```setFixedFirstColumn``` //1.4版本取消了
      20. 固定统计行```setFixedCountRow```
 
 
