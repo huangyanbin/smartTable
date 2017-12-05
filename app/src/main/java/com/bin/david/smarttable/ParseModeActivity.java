@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -72,6 +73,24 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
     private BaseCheckDialog<TableStyle> chartDialog;
     private QuickChartDialog quickChartDialog;
     private Map<String,Bitmap> map = new HashMap<>();
+        private Handler mHandler = new Handler();
+    private boolean isFrist = true;
+    private Runnable AddDataRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Random random = new Random();
+            List<TanBean> tanBeans = TanBean.initDatas();
+            final List<UserData> testData = new ArrayList<>();
+            for(int i = 0;i <5; i++) {
+                int urlSize = tanBeans.size();
+                UserData userData = new UserData("用户"+i, random.nextInt(70), System.currentTimeMillis()
+                        - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
+                userData.setUrl(tanBeans.get(i%urlSize).getUrl());
+                testData.add(userData);
+                table.addData(testData,true);
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +103,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         List<TanBean> tanBeans = TanBean.initDatas();
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
-        for(int i = 0;i <500; i++) {
+        for(int i = 0;i <50; i++) {
             UserData userData = new UserData("用户"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             userData.setUrl(tanBeans.get(i%urlSize).getUrl());

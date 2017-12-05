@@ -430,6 +430,23 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
        flingRate = tempFlingRate;
     }
 
+    /**
+     * 飞滚到最后点
+     */
+    public void flingEnd(Rect showRect,Rect providerRect){
+        int showHeight = showRect.height();
+        int oldh = providerRect.height();
+        int newHeight = (int) (oldh * zoom);
+        int maxTranslateY = newHeight-showHeight;
+        float tempFlingRate  = flingRate;
+        flingRate = 1;
+        scroller.setFinalY(-maxTranslateY-300);
+        //scroller.setFinalX(translateX);
+        isFling = true;
+        startFilingAnim(true);
+        flingRate = tempFlingRate;
+    }
+
     public float getZoom() {
         return zoom;
     }

@@ -1,5 +1,7 @@
 package com.bin.david.form.data;
 
+import android.util.Log;
+
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.count.DecimalCountFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
@@ -167,7 +169,7 @@ public class Column<T> implements Comparable<Column> {
         if (field != null) {
             Object child = o;
             if (fieldNames.length == 0 || fieldNames.length == 1) {
-                return getFieldValue(field, o);
+                return getFieldValue(field, o,true);
             }
             for (int i = 0; i < fieldNames.length; i++) {
                 if (child == null) {
@@ -179,7 +181,7 @@ public class Column<T> implements Comparable<Column> {
                     return null;
                 }
                 if (i == fieldNames.length - 1) {
-                    return getFieldValue(childField, child);
+                    return getFieldValue(childField, child,true);
                 } else {
                     field.setAccessible(true);
                     child = field.get(child);
@@ -203,7 +205,10 @@ public class Column<T> implements Comparable<Column> {
         if(countFormat != null){
             countFormat.clearCount();
         }
-        if (objects != null && objects.size() > 0) {
+        if(datas.size() == objects.size()){
+            return;
+        }
+        if (objects.size() > 0) {
             int[] lineHeightArray = tableInfo.getLineHeightArray();
             Object firstObject = objects.get(0);
             Class clazz = firstObject.getClass();
@@ -216,33 +221,30 @@ public class Column<T> implements Comparable<Column> {
                     Object o = objects.get(k);
                     Object child = o;
                     if (o == null) {
-                        datas.add(null);
-                        values.add("");
+                        addData(null,"",true);
                         setRowHeight(config, lineHeightArray, k,null);
                         continue;
                     }
                     if (fieldNames.length == 0 || fieldNames.length == 1) {
-                        T t = getFieldValue(field, o);
+                        T t = getFieldValue(field, o,true);
                         setRowHeight(config, lineHeightArray, k,t);
                         continue;
                     }
                     for (int i = 0; i < fieldNames.length; i++) {
                         if (child == null) {
-                            datas.add(null);
-                            values.add("");
+                            addData(null,"",true);
                             setRowHeight(config, lineHeightArray, k,null);
                             break;
                         }
                         Class childClazz = child.getClass();
                         Field childField = childClazz.getDeclaredField(fieldNames[i]);
                         if (childField == null) {
-                            datas.add(null);
-                            values.add("");
+                            addData(null,"",true);
                             setRowHeight(config, lineHeightArray, k,null);
                             break;
                         }
                         if (i == fieldNames.length - 1) {
-                            T t = getFieldValue(childField, child);
+                            T t = getFieldValue(childField, child,true);
                             setRowHeight(config, lineHeightArray, k,t);
                         } else {
                             field.setAccessible(true);
@@ -285,16 +287,90 @@ public class Column<T> implements Comparable<Column> {
     }
 
     /**
+     * 填充数据
+     * @param objects 对象列表
+     * @param tableInfo 表格信息
+     * @param config 配置
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+
+    public void addData(List<Object> objects, TableInfo tableInfo, TableConfig config,int startPosition,boolean isFoot) throws NoSuchFieldException, IllegalAccessException {
+        if(objects.size()+ startPosition == datas.size()){
+            return;
+        }
+        if (objects.size() > 0) {
+            int[] lineHeightArray = tableInfo.getLineHeightArray();
+            Object firstObject = objects.get(0);
+            Class clazz = firstObject.getClass();
+            String[] fieldNames = fieldName.split("\\.");
+            String firstFieldName = fieldNames.length == 0 ? fieldName : fieldNames[0];
+            Field field = clazz.getDeclaredField(firstFieldName);
+            if (field != null) {
+                int size = objects.size();
+                for (int k = 0; k < size; k++) {
+                    Object o = objects.get(isFoot ? k:(size-1-k));
+                    Object child = o;
+                    if (o == null) {
+                        addData(null,"",isFoot);
+                        setRowHeight(config, lineHeightArray, k+startPosition,null);
+                        continue;
+                    }
+                    if (fieldNames.length == 0 || fieldNames.length == 1) {
+                        T t = getFieldValue(field, o,isFoot);
+                        setRowHeight(config, lineHeightArray, k+startPosition,t);
+                        continue;
+                    }
+                    for (int i = 0; i < fieldNames.length; i++) {
+                        if (child == null) {
+                            addData(null,"",isFoot);
+                            setRowHeight(config, lineHeightArray, k+startPosition,null);
+                            break;
+                        }
+                        Class childClazz = child.getClass();
+                        Field childField = childClazz.getDeclaredField(fieldNames[i]);
+                        if (childField == null) {
+                            addData(null,"",isFoot);
+                            setRowHeight(config, lineHeightArray, k+startPosition,null);
+                            break;
+                        }
+                        if (i == fieldNames.length - 1) {
+                            T t = getFieldValue(childField, child,isFoot);
+                            setRowHeight(config, lineHeightArray, k+startPosition,t);
+                        } else {
+                            field.setAccessible(true);
+                            child = field.get(child);
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void addData(T t,String value,boolean isFoot){
+        if(isFoot) {
+            datas.add(t);
+            values.add(value);
+        }else {
+            datas.add(0,t);
+            values.add(0,value);
+        }
+    }
+
+
+    /**
      * 反射得到值
      *
      * @param field 成员变量
      * @param o     对象
      * @throws IllegalAccessException
      */
-    private T getFieldValue(Field field, Object o) throws IllegalAccessException {
+    private T getFieldValue(Field field, Object o,boolean isFoot) throws IllegalAccessException {
         field.setAccessible(true);
         T t = (T) field.get(o);
-        datas.add(t);
+
+
         String value;
         if (format != null) {
             value = format.format(t);
@@ -304,8 +380,7 @@ public class Column<T> implements Comparable<Column> {
         if (value.length() > maxValueLength) {
             maxValueLength = value.length();
             longestValue = value;
-        }
-        values.add(value);
+        } addData(t,value,isFoot);
         return t;
     }
 

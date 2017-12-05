@@ -235,6 +235,21 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
 
     }
 
+    public void addData(List<T> t,boolean isFoot){
+        if(t != null && t.size() >0) {
+            int size = tableData.getT().size();
+            parser.addData(tableData, t,isFoot,config);
+            measurer.addTableHeight(tableData, size);
+        }
+        invalidate();
+    }
+
+    /**
+     * 滚动到原点
+     */
+    public void end(){
+        matrixHelper.flingEnd(showRect,tableRect);
+    }
     /**
      * 滚动到原点
      */

@@ -73,7 +73,20 @@ public class TableMeasurer<T> {
             showRect.right = tableRect.right;
         }
     }
+    /**
+     * 添加table高度
+     * @param tableData
+     * @return
+     */
+    public void addTableHeight(TableData<T> tableData,int startPosition){
+        TableInfo tableInfo = tableData.getTableInfo();
+        Rect tableRect = tableInfo.getTableRect();
+        int[] lineArray = tableInfo.getLineHeightArray();
+        for(int i = startPosition;i<lineArray.length;i++){
 
+           tableRect.bottom+= lineArray[i];
+        }
+    }
 
 
 

@@ -46,6 +46,32 @@ public class TableParser<T> {
        return tableData.getColumns();
     }
 
+    /**
+     * 添加数据
+     */
+    public void addData(TableData<T> tableData, List<T> addData,boolean isFoot, TableConfig config){
+
+        try {
+            int size = tableData.getT().size();
+            if(isFoot) {
+                tableData.getT().addAll(addData);
+            }else{
+                tableData.getT().addAll(0,addData);
+            }
+            TableInfo tableInfo =  tableData.getTableInfo();
+            tableInfo.addLine(addData.size());
+            for (Column column : tableData.getChildColumns()) {
+                column.addData(addData,tableInfo,config,size,isFoot);
+            }
+        }catch (NoSuchFieldException e){
+            throw new TableException(
+                    "NoSuchFieldException :Please check whether field name is correct!");
+        }catch (IllegalAccessException e){
+            throw new TableException(
+                    "IllegalAccessException :Please make sure that access objects are allowed!");
+        }
+    }
+
 
     /**
      * 排序

@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
@@ -251,6 +252,7 @@ public class TableProvider<T> implements TableClickObserver {
             }
             int right = left + width;
             if (left < showRect.right) {
+                Log.e("li","value"+values.size()+"info.getLineHeightArray"+info.getLineHeightArray().length);
                 for (int j = 0; j < values.size(); j++) {
                     String value = values.get(j);
                     int bottom = (int) (top + info.getLineHeightArray()[j]*config.getZoom());

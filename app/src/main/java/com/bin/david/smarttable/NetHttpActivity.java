@@ -3,6 +3,7 @@ package com.bin.david.smarttable;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -29,6 +30,14 @@ import okhttp3.Call;
 public class NetHttpActivity extends AppCompatActivity {
 
     private SmartTable<PM25> table;
+    private Handler mHandler = new Handler();
+    private boolean isFrist = true;
+    private Runnable AddDataRunnable = new Runnable() {
+        @Override
+        public void run() {
+           getData();
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,13 +96,27 @@ public class NetHttpActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+
                         Gson gson = new Gson();
                         Type type = new TypeToken<ArrayList<PM25>>() {}.getType();
                         List<PM25> pm25List = gson.fromJson(response,type);
-                        table.setData(pm25List);
+                        if(isFrist) {
+                            table.setData(pm25List);
+                            isFrist = false;
+                        }else{
+                            table.addData(pm25List,false);
+                            table.back();
+                        }
+                        mHandler.postDelayed(AddDataRunnable,1000);
 
                     }
 
                 });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacks(AddDataRunnable);
     }
 }

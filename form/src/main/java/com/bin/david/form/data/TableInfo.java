@@ -1,6 +1,7 @@
 package com.bin.david.form.data;
 
 import android.graphics.Rect;
+import android.util.Log;
 
 /**
  * Created by huang on 2017/11/1.
@@ -16,7 +17,6 @@ public class TableInfo {
     private Rect tableRect;
     private int maxLevel = 1;
     private int columnSize;
-    private int lineSize;
     private int[] lineHeightArray;
     private float zoom =1;
 
@@ -66,15 +66,20 @@ public class TableInfo {
         return (int) (zoom*yAxisWidth);
     }
 
-    public int getLineSize() {
-        return lineSize;
-    }
 
     public void setLineSize(int lineSize) {
-        this.lineSize = lineSize;
         lineHeightArray = new int[lineSize];
     }
 
+    public void addLine(int count){
+        int size = lineHeightArray.length;
+        int[] tempArray = new int[size+count];
+        //数组复制
+
+        System.arraycopy(lineHeightArray,0,tempArray,0,size);
+        lineHeightArray = tempArray;
+        Log.e("li","lineHeightArray"+lineHeightArray.length);
+    }
     public int getCountHeight() {
         return (int) (zoom*countHeight);
     }
