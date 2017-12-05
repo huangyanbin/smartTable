@@ -18,9 +18,12 @@
 
 > 视频展示
 ![设置背景](/img/bg.png)
+
 ![基本功能](/img/table.gif)
 
 ![缩放功能](/img/zoom.gif)
+
+
 **- 1.4版本**
 
 - 删除设置固定第一列setFixedFirstColumn方法，column的setFixed(boolean fixed)来固定任意列。
