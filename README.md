@@ -28,6 +28,9 @@
 
 - 删除设置固定第一列setFixedFirstColumn方法，column的setFixed(boolean fixed)来固定任意列。
 - 支持首尾动态添加数据SmartTable.addData(List<T> t,boolean isFoot)来实现添加数据.实现增量解析数据和计算表格大小，效率更高。
+- 修复缩放中心偏移问题。
+	
+	
 
 **- 1.3版本**
 
@@ -74,7 +77,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.1'
+	        compile 'com.github.huangyanbin:SmartTable:1.4.1'
 	}
 ```
 
