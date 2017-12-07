@@ -85,7 +85,15 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
 
     }
 
-
+    /**
+     *绘制
+     * 首先通过计算的table大小，计算table title大小
+     * 再通过 matrixHelper getZoomProviderRect计算实现缩放和位移的Rect
+     * 再绘制背景
+     * 绘制XY序号列
+     * 最后绘制内容
+     * @param canvas
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -123,6 +131,11 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
         canvas.drawRect(showRect,paint);
     }
 
+    /**
+     * 获取表格配置
+     * 可以使用TableConfig进行样式的配置，包括颜色，是否固定，开启统计行等
+     * @return 表格配置
+     */
     public TableConfig getConfig() {
         return config;
     }
@@ -175,6 +188,13 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
         return matrixHelper.handlerTouchEvent(event);
     }
 
+    /**
+     * 分发事件
+     * 在这里会去调用MatrixHelper onDisallowInterceptEvent方法
+     * 判断是否阻止parent拦截自己的事件
+     * @param event
+     * @return
+     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         matrixHelper.onDisallowInterceptEvent(this,event);
@@ -182,8 +202,12 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
     }
 
 
-
-
+    /**
+     * 表格移动缩放改变回调
+     * @param scale 缩放值
+     * @param translateX X位移值
+     * @param translateY Y位移值
+     */
     @Override
     public void onTableChanged(float scale, float translateX, float translateY) {
         if(tableData != null) {
@@ -192,15 +216,27 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
             invalidate();
         }
     }
-
+    /**
+     * 获取列点击事件
+     */
     public OnColumnClickListener getOnColumnClickListener() {
         return provider.getOnColumnClickListener();
     }
 
+    /**
+     * 设置列点击事件,实现对列的监听
+     * @param onColumnClickListener 列点击事件
+     */
     public void setOnColumnClickListener(OnColumnClickListener onColumnClickListener) {
         this.provider.setOnColumnClickListener(onColumnClickListener);
     }
 
+    /**
+     * 列排序
+     * 你可以调用这个方法，对所有数据进行排序，排序根据设置的column排序
+     * @param column 列
+     * @param isReverse 是否反序
+     */
     public void setSortColumn(Column column,boolean isReverse){
         if(tableData != null&& column !=null){
             column.setReverseSort(isReverse);
@@ -215,27 +251,68 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
     }
 
 
+    /**
+     * 获取绘制表格内容者
+     * @return 绘制表格内容者
+     */
     public TableProvider<T> getProvider() {
         return provider;
     }
 
+
+    /**
+     * 获取表格数据
+     * TableData是解析数据之后对数据的封装对象，包含table column,rect等信息
+     * @return 表格数据
+     */
     public TableData<T> getTableData() {
         return tableData;
     }
 
-    public boolean isZoom() {
-        return matrixHelper.isCanZoom();
-    }
 
-    public void setZoom(boolean zoom,int maxScale) {
 
-        matrixHelper.setMaxZoom(maxScale);
+    /**
+     * 开启缩放
+     * @param zoom 是否缩放
+     */
+    public void setZoom(boolean zoom) {
+
         matrixHelper.setCanZoom(zoom);
         invalidate();
 
     }
 
-    public void addData(List<T> t,boolean isFoot){
+    /**
+     * 开启缩放设置缩放值
+     * @param zoom 是否缩放
+     * @param maxZoom 最大缩放值
+     * @param minZoom 最小缩放值
+     */
+    public void setZoom(boolean zoom,float maxZoom,float minZoom) {
+
+        matrixHelper.setCanZoom(zoom);
+        matrixHelper.setMinZoom(minZoom);
+        matrixHelper.setMaxZoom(maxZoom);
+        invalidate();
+
+    }
+
+    /**
+     * 获取缩放移动辅助类
+     *如果你需要更多的移动功能，可以使用它
+     * @return 缩放移动辅助类
+     */
+    public MatrixHelper getMatrixHelper() {
+        return matrixHelper;
+    }
+
+    /**
+     * 添加数据
+     * 通过这个方法可以实现动态添加数据，参数isFoot可以实现首尾添加
+     * @param t 新增数据
+     * @param isFoot 是否在尾部添加
+     */
+    public void addData(List<T> t, boolean isFoot){
         if(t != null && t.size() >0) {
             int size = tableData.getT().size();
             parser.addData(tableData, t,isFoot,config);

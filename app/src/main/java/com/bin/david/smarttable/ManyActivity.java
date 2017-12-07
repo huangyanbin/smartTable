@@ -193,9 +193,9 @@ public class ManyActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(String s, int position) {
                 if (position == 0) {
-                    table.setZoom(true,3);
+                    table.setZoom(true,4,0.2f);
                 } else if (position == 1) {
-                    table.setZoom(false,3);
+                    table.setZoom(false);
                 }
                 table.invalidate();
             }

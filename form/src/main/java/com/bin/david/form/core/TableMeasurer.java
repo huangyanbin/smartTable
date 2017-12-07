@@ -154,6 +154,10 @@ public class TableMeasurer<T> {
         return totalWidth;
     }
 
+    /**
+     * 测量列的Rect
+     * @param tableData
+     */
     private void measureColumnSize(TableData<T> tableData){
         List<Column> columnList = tableData.getColumns();
         int left = 0;

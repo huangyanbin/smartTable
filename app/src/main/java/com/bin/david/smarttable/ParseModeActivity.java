@@ -424,9 +424,9 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onItemClick(String s, int position) {
                 if (position == 0) {
-                    table.setZoom(true,3);
+                    table.setZoom(true,3,1);
                 } else if (position == 1) {
-                    table.setZoom(false,3);
+                    table.setZoom(false,3,1);
                 }
                 table.invalidate();
             }
