@@ -24,6 +24,7 @@ import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
 import com.bin.david.form.data.format.draw.BitmapDrawFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
+import com.bin.david.form.data.format.draw.MultiLineDrawFormat;
 import com.bin.david.form.data.format.draw.TextImageDrawFormat;
 import com.bin.david.form.data.format.tip.MultiLineBubbleTip;
 import com.bin.david.form.data.format.title.TitleImageDrawFormat;
@@ -32,6 +33,7 @@ import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.OnColumnItemClickListener;
 import com.bin.david.form.utils.DensityUtils;
+import com.bin.david.form.utils.DrawUtils;
 import com.bin.david.smarttable.bean.ChildData;
 import com.bin.david.smarttable.bean.TableStyle;
 import com.bin.david.smarttable.bean.TanBean;
@@ -73,24 +75,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
     private BaseCheckDialog<TableStyle> chartDialog;
     private QuickChartDialog quickChartDialog;
     private Map<String,Bitmap> map = new HashMap<>();
-        private Handler mHandler = new Handler();
-    private boolean isFrist = true;
-    private Runnable AddDataRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Random random = new Random();
-            List<TanBean> tanBeans = TanBean.initDatas();
-            final List<UserData> testData = new ArrayList<>();
-            for(int i = 0;i <5; i++) {
-                int urlSize = tanBeans.size();
-                UserData userData = new UserData("用户"+i, random.nextInt(70), System.currentTimeMillis()
-                        - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
-                userData.setUrl(tanBeans.get(i%urlSize).getUrl());
-                testData.add(userData);
-                table.addData(testData,true);
-            }
-        }
-    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +89,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
         for(int i = 0;i <50; i++) {
-            UserData userData = new UserData("用户"+i, random.nextInt(70), System.currentTimeMillis()
+            UserData userData = new UserData("用户高中生侦探工藤新一，被称为日本警察的救世主，平成年代的福尔摩斯"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             userData.setUrl(tanBeans.get(i%urlSize).getUrl());
             testData.add(userData);
@@ -113,6 +98,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         final Column<String> nameColumn = new Column<>("姓名", "name");
         nameColumn.setFixed(true);
         nameColumn.setAutoCount(true);
+        nameColumn.setDrawFormat(new MultiLineDrawFormat<String>(this,100));
         final Column<Integer> ageColumn = new Column<>("年龄", "age");
         ageColumn.setFixed(true);
         ageColumn.setAutoCount(true);
@@ -308,7 +294,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
             @Override
             public String[] format(Column column, int position) {
                 UserData data = testData.get(position);
-                String[] strings = {"批注","姓名："+data.getName(),"年龄："+data.getAge()};
+                String[] strings = {"批注","姓名："+data.getName().substring(0,10),data.getName().substring(10,20),"年龄："+data.getAge()};
                 return strings;
             }
         };

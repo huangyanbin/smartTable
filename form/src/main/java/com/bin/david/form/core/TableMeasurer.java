@@ -133,7 +133,8 @@ public class TableMeasurer<T> {
         Paint paint = config.getPaint();
         for(Column column:tableData.getChildColumns()){
             float columnNameWidth =tableData.getTitleDrawFormat().measureWidth(column,config);
-            int contentWidth =column.getDrawFormat().measureWidth(column,config);
+            int contentWidth =column.getDrawFormat().measureWidth(column,config)
+                    +2*config.getHorizontalPadding();
             int width = (int) (Math.max(columnNameWidth,contentWidth));
             if(tableData.isShowCount()) {
                 int totalCountWidth = column.getCountFormat() != null ?

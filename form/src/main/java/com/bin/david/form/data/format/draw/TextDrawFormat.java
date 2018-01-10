@@ -25,8 +25,7 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
-        return (int) paint.measureText(column.getLongestValue())
-                +2*config.getHorizontalPadding();
+        return (int) paint.measureText(column.getLongestValue());
     }
 
     @Override
@@ -34,8 +33,7 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
         if(height == 0){
             Paint paint = config.getPaint();
             config.getContentStyle().fillPaint(paint);
-            height = DrawUtils.getTextHeight(config.getContentStyle(),config.getPaint())
-                    + 2*config.getVerticalPadding();
+            height = DrawUtils.getTextHeight(config.getContentStyle(),config.getPaint());
         }
         return height;
     }
@@ -45,6 +43,12 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
         cellInfo.set(column,t,value,position);
         boolean isDrawBg = drawBackground(c,cellInfo,left,top,right,bottom,config);
         Paint paint = config.getPaint();
+        setTextPaint(config, isDrawBg, paint);
+        c.drawText(value,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
+    }
+
+
+    protected void setTextPaint(TableConfig config, boolean isDrawBg, Paint paint) {
         config.getContentStyle().fillPaint(paint);
         IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
         if(isDrawBg && backgroundFormat.getTextColor(cellInfo) != TableConfig.INVALID_COLOR){
@@ -52,7 +56,6 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
         }
         paint.setTextSize(paint.getTextSize()*config.getZoom());
         paint.setTextAlign(Paint.Align.CENTER);
-        c.drawText(value,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
     }
 
     @Override
@@ -71,5 +74,13 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
     public void setDrawBg(boolean drawBg) {
         isDrawBg = drawBg;
+    }
+
+    public CellInfo<T> getCellInfo() {
+        return cellInfo;
+    }
+
+    public void setCellInfo(CellInfo<T> cellInfo) {
+        this.cellInfo = cellInfo;
     }
 }

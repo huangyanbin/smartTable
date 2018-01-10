@@ -98,8 +98,6 @@ public class TableProvider<T> implements TableClickObserver {
             if (DrawUtils.isVerticalMixRect(showRect, top, bottom)) {
                 List<Column> columns = tableData.getChildColumns();
                 int columnSize = columns.size();
-                //Column firstColumn = tableData.getChildColumns().get(0);
-                //boolean isFixedFirstColumn = false;
                 boolean isPerColumnFixed = false;
                 clipRect.set(showRect);
                 int clipCount = 0;
@@ -252,7 +250,6 @@ public class TableProvider<T> implements TableClickObserver {
             }
             int right = left + width;
             if (left < showRect.right) {
-                Log.e("li","value"+values.size()+"info.getLineHeightArray"+info.getLineHeightArray().length);
                 for (int j = 0; j < values.size(); j++) {
                     String value = values.get(j);
                     int bottom = (int) (top + info.getLineHeightArray()[j]*config.getZoom());

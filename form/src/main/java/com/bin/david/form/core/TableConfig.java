@@ -265,10 +265,17 @@ public class TableConfig {
         return this;
     }
 
+
     public boolean isFixedFirstColumn() {
         return fixedFirstColumn;
     }
 
+    /**你可以使用Column.setFixed(boolean isFixed) 来固定任何一列
+     * 此方法作废
+     * @param fixedFirstColumn
+     * @return
+     */
+    @Deprecated
     public TableConfig setFixedFirstColumn(boolean fixedFirstColumn) {
         this.fixedFirstColumn = fixedFirstColumn;
         return this;

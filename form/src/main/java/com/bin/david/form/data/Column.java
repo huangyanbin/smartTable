@@ -280,7 +280,8 @@ public class Column<T> implements Comparable<Column> {
         if(countFormat != null){
             countFormat.count(t);
         }
-        int height = drawFormat.measureHeight(this, position, config);
+        int height = drawFormat.measureHeight(this, position, config)
+                +2*config.getVerticalPadding();
         if (height > lineHeightArray[position]) {
             lineHeightArray[position] = height;
         }

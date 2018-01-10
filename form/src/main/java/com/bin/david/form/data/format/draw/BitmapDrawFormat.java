@@ -40,13 +40,13 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
 
     @Override
     public int measureWidth(Column<T>column, TableConfig config) {
-        return  imageWidth +2*config.getHorizontalPadding();
+        return  imageWidth;
     }
 
     @Override
     public int measureHeight(Column<T> column,int position, TableConfig config) {
 
-        return imageHeight + 2*config.getVerticalPadding();
+        return imageHeight;
     }
 
     /**

@@ -21,8 +21,6 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
    private TextDrawFormat<T> textDrawFormat;
     private int drawPadding;
    private int direction;
-   private int verticalPadding;
-   private int horizontalPadding;
 
     public TextImageDrawFormat(int imageWidth, int imageHeight,int drawPadding) {
        this(imageWidth,imageHeight,LEFT,drawPadding);
@@ -43,7 +41,6 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
     @Override
     public int measureWidth(Column<T>column, TableConfig config) {
         int textWidth = textDrawFormat.measureWidth(column, config);
-        horizontalPadding = config.getHorizontalPadding();
         if(direction == LEFT || direction == RIGHT) {
             return getImageWidth() + textWidth+drawPadding;
         }else {
@@ -55,7 +52,7 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
     public int measureHeight(Column<T> column,int position, TableConfig config) {
         int imgHeight = super.measureHeight(column,position,config);
         int textHeight = textDrawFormat.measureHeight(column,position,config);
-        verticalPadding = config.getVerticalPadding();
+
         if(direction == TOP || direction == BOTTOM) {
             return getImageHeight() + textHeight+drawPadding;
         }else {
@@ -79,19 +76,23 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
         switch (direction){
             case LEFT:
                 textDrawFormat.draw(c,column,t,value,left+(imgWidth+drawPadding)/2,top,right,bottom,position,config);
-                super.draw(c,column,t,value,left+horizontalPadding,top,left+horizontalPadding+imgWidth,bottom,position,config);
+                int imgRight = (right+left)/2- textDrawFormat.measureWidth(column,config)/2 - drawPadding;
+                super.draw(c,column,t,value,imgRight-imgWidth,top,imgRight,bottom,position,config);
                 break;
             case RIGHT:
                 textDrawFormat.draw(c,column,t,value,left,top,right-(imgWidth+drawPadding)/2,bottom,position,config);
-                super.draw(c,column,t,value,right-horizontalPadding-imgWidth,top,right-horizontalPadding,bottom,position,config);
+                int imgLeft = (right+left)/2+ textDrawFormat.measureWidth(column,config)/2 + drawPadding;
+                super.draw(c,column,t,value,imgLeft,top,imgLeft+imgWidth,bottom,position,config);
                 break;
             case TOP:
                 textDrawFormat.draw(c,column,t,value,left,top+(imgHeight+drawPadding)/2,right,bottom,position,config);
-                super.draw(c,column,t,value,left,top+verticalPadding,right,top+verticalPadding+imgHeight,position,config);
+                int imgBottom = (top+bottom)/2- textDrawFormat.measureHeight(column,position,config)/2+drawPadding;
+                super.draw(c,column,t,value,left,imgBottom -imgHeight,right,imgBottom,position,config);
                 break;
             case BOTTOM:
                 textDrawFormat.draw(c,column,t,value,left,top,right,bottom-(imgHeight+drawPadding)/2,position,config);
-                super.draw(c,column,t,value,left,bottom-verticalPadding-imgHeight,right,bottom-verticalPadding,position,config);
+                int imgTop = (top+bottom)/2+ textDrawFormat.measureHeight(column,position,config)/2-drawPadding ;
+                super.draw(c,column,t,value,left,imgTop,right,imgTop +imgHeight,position,config);
                 break;
 
         }

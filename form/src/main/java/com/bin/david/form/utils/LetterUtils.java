@@ -1,13 +1,5 @@
 package com.bin.david.form.utils;
 
-import android.util.Log;
-
-import com.bin.david.form.data.Column;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
-
 /**
  * Created by huang on 2017/11/1.
  */
