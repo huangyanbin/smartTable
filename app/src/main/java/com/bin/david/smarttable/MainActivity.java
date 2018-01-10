@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(ManyActivity.class,"测试150列"));
        items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
         items.add(new MainItem(TanTanActivity.class,"探探效果"));
-        items.add(new MainItem(CalendarMonthActivity.class,"RecyclerView日历(月模式)"));
-        items.add(new MainItem(CalendarWeekActivity.class,"RecyclerView日历(星期模式)"));
         itemAdapter = new ItemAdapter(items);
         recyclerView.setAdapter(itemAdapter);
         itemAdapter.openLoadAnimation();
