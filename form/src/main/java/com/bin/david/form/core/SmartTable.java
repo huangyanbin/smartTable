@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.bin.david.form.annotation.AnnotationParser;
 import com.bin.david.form.component.IComponent;
 import com.bin.david.form.component.ITableTitle;
 import com.bin.david.form.component.TableProvider;

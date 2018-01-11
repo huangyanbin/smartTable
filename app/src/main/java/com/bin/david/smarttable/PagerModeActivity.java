@@ -15,7 +15,6 @@ import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.data.PageTableData;
-import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
@@ -24,13 +23,12 @@ import com.bin.david.form.data.format.draw.TextImageDrawFormat;
 import com.bin.david.form.data.format.tip.MultiLineBubbleTip;
 import com.bin.david.form.data.format.title.TitleImageDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
-import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.OnColumnItemClickListener;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
 import com.bin.david.smarttable.bean.TableStyle;
-import com.bin.david.smarttable.bean.UserData;
+import com.bin.david.smarttable.bean.UserInfo;
 import com.bin.david.smarttable.view.BaseCheckDialog;
 import com.bin.david.smarttable.view.BaseDialog;
 import com.bin.david.smarttable.view.QuickChartDialog;
@@ -48,26 +46,27 @@ import com.daivd.chart.provider.component.point.Point;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 public class PagerModeActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private SmartTable<UserData> table;
+    private SmartTable<UserInfo> table;
     private BaseCheckDialog<TableStyle> chartDialog;
     private QuickChartDialog quickChartDialog;
-    private PageTableData<UserData> tableData;
+    private PageTableData<UserInfo> tableData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
         quickChartDialog = new QuickChartDialog();
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
-        table = (SmartTable<UserData>) findViewById(R.id.table);
-        final List<UserData> testData = new ArrayList<>();
+        table = (SmartTable<UserInfo>) findViewById(R.id.table);
+        final List<UserInfo> testData = new ArrayList<>();
         Random random = new Random();
         for(int i = 0;i <500; i++) {
-            testData.add(new UserData("用户"+i, random.nextInt(70), System.currentTimeMillis()
+            testData.add(new UserInfo("用户"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i)));
         }
 
@@ -249,7 +248,7 @@ public class PagerModeActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public String[] format(Column column, int position) {
-                UserData data = testData.get(position);
+                UserInfo data = testData.get(position);
                 String[] strings = {"批注","姓名："+data.getName(),"年龄："+data.getAge()};
                 return strings;
             }
@@ -257,7 +256,13 @@ public class PagerModeActivity extends AppCompatActivity implements View.OnClick
         tip.setColorFilter(Color.parseColor("#FA8072"));
         tip.setAlpha(0.8f);
         table.getProvider().setTip(tip);
-
+        table.setSortColumn(ageColumn,false);
+        ageColumn.setComparator(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1- o2;
+            }
+        });
         table.setOnColumnClickListener(new OnColumnClickListener() {
             @Override
             public void onClick(ColumnInfo columnInfo) {
@@ -283,6 +288,7 @@ public class PagerModeActivity extends AppCompatActivity implements View.OnClick
                return cellInfo.position%2 ==0;
             }
         });
+
         tableData.setPageSize(9);
         table.setTableData(tableData);
 

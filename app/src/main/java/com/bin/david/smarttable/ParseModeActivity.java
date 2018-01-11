@@ -5,11 +5,9 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,18 +27,15 @@ import com.bin.david.form.data.format.draw.TextImageDrawFormat;
 import com.bin.david.form.data.format.tip.MultiLineBubbleTip;
 import com.bin.david.form.data.format.title.TitleImageDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
-import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.OnColumnItemClickListener;
 import com.bin.david.form.utils.DensityUtils;
-import com.bin.david.form.utils.DrawUtils;
 import com.bin.david.smarttable.bean.ChildData;
 import com.bin.david.smarttable.bean.TableStyle;
 import com.bin.david.smarttable.bean.TanBean;
-import com.bin.david.smarttable.bean.UserData;
+import com.bin.david.smarttable.bean.UserInfo;
 import com.bin.david.smarttable.view.BaseCheckDialog;
 import com.bin.david.smarttable.view.BaseDialog;
-import com.bin.david.smarttable.view.GlideCircleTransform;
 import com.bin.david.smarttable.view.QuickChartDialog;
 
 import com.bumptech.glide.Glide;
@@ -60,7 +55,6 @@ import com.daivd.chart.provider.component.mark.BubbleMarkView;
 import com.daivd.chart.provider.component.point.Point;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +65,7 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class ParseModeActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private SmartTable<UserData> table;
+    private SmartTable<UserInfo> table;
     private BaseCheckDialog<TableStyle> chartDialog;
     private QuickChartDialog quickChartDialog;
     private Map<String,Bitmap> map = new HashMap<>();
@@ -82,14 +76,14 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_table);
         quickChartDialog = new QuickChartDialog();
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
-        table = (SmartTable<UserData>) findViewById(R.id.table);
-        final List<UserData> testData = new ArrayList<>();
+        table = (SmartTable<UserInfo>) findViewById(R.id.table);
+        final List<UserInfo> testData = new ArrayList<>();
         Random random = new Random();
         List<TanBean> tanBeans = TanBean.initDatas();
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
         for(int i = 0;i <50; i++) {
-            UserData userData = new UserData("用户高中生侦探工藤新一，被称为日本警察的救世主，平成年代的福尔摩斯"+i, random.nextInt(70), System.currentTimeMillis()
+            UserInfo userData = new UserInfo("用户高中生侦探工藤新一，被称为日本警察的救世主，平成年代的福尔摩斯"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             userData.setUrl(tanBeans.get(i%urlSize).getUrl());
             testData.add(userData);
@@ -230,7 +224,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column totalColumn2 = new Column("总项2",nameColumn,ageColumn,timeColumn);
         Column totalColumn = new Column("总项",nameColumn,totalColumn1,totalColumn2,timeColumn);
 
-        final TableData<UserData> tableData = new TableData<>("测试",testData,nameColumn,
+        final TableData<UserInfo> tableData = new TableData<>("测试",testData,nameColumn,
                 avatarColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
         tableData.setShowCount(true);
         table.getConfig().setColumnTitleBackgroundColor(getResources().getColor(R.color.windows_bg));
@@ -293,7 +287,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public String[] format(Column column, int position) {
-                UserData data = testData.get(position);
+                UserInfo data = testData.get(position);
                 String[] strings = {"批注","姓名："+data.getName().substring(0,10),data.getName().substring(10,20),"年龄："+data.getAge()};
                 return strings;
             }

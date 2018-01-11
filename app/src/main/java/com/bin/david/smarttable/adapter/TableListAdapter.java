@@ -1,9 +1,7 @@
 package com.bin.david.smarttable.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
@@ -23,7 +21,7 @@ import com.bin.david.form.listener.OnColumnItemClickListener;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.R;
 import com.bin.david.smarttable.bean.ChildData;
-import com.bin.david.smarttable.bean.UserData;
+import com.bin.david.smarttable.bean.UserInfo;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -48,11 +46,11 @@ public class TableListAdapter extends BaseQuickAdapter<String,BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, String item) {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(mContext,15));
-        final SmartTable<UserData> table =  helper.getView(R.id.table);
-        final List<UserData> testData = new ArrayList<>();
+        final SmartTable<UserInfo> table =  helper.getView(R.id.table);
+        final List<UserInfo> testData = new ArrayList<>();
         Random random = new Random();
         for(int i = 0;i <50; i++) {
-            testData.add(new UserData("用户"+i, random.nextInt(70), System.currentTimeMillis()
+            testData.add(new UserInfo("用户"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i)));
         }
 
@@ -170,7 +168,7 @@ public class TableListAdapter extends BaseQuickAdapter<String,BaseViewHolder> {
         Column totalColumn2 = new Column("总项2",nameColumn,ageColumn,timeColumn);
         Column totalColumn = new Column("总项",nameColumn,totalColumn1,totalColumn2,timeColumn);
 
-        final TableData<UserData> tableData = new TableData<>("测试",testData,nameColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
+        final TableData<UserInfo> tableData = new TableData<>("测试",testData,nameColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
 
         tableData.setShowCount(true);
         // ageColumn.setAutoCount(true);
@@ -237,7 +235,7 @@ public class TableListAdapter extends BaseQuickAdapter<String,BaseViewHolder> {
 
             @Override
             public String[] format(Column column, int position) {
-                UserData data = testData.get(position);
+                UserInfo data = testData.get(position);
                 String[] strings = {"批注","姓名："+data.getName(),"年龄："+data.getAge()};
                 return strings;
             }

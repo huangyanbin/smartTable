@@ -1,5 +1,6 @@
-package com.bin.david.form.annotation;
+package com.bin.david.form.core;
 
+import com.bin.david.form.annotation.*;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.PageTableData;
 import com.bin.david.form.data.TableData;
@@ -25,9 +26,9 @@ public class AnnotationParser<T>  {
             T firstData = dataList.get(0);
             if(firstData != null) {
                 Class clazz = firstData.getClass();
-                Annotation tableAnnotation = clazz.getAnnotation(SmartTable.class);
+                Annotation tableAnnotation = clazz.getAnnotation(com.bin.david.form.annotation.SmartTable.class);
                 if(tableAnnotation != null){
-                    SmartTable table = (SmartTable) tableAnnotation;
+                    com.bin.david.form.annotation.SmartTable table = (com.bin.david.form.annotation.SmartTable) tableAnnotation;
                     List<Column> columns = new ArrayList<>();
                     PageTableData<T> tableData = new PageTableData<>(table.name(),dataList,columns);
                     tableData.setCurrentPage(table.currentPage());

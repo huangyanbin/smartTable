@@ -2,7 +2,10 @@ package com.bin.david.smarttable.layoutManager;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.util.SparseArray;
 import android.view.View;
+
+import java.util.HashMap;
 
 /**
  * Created by huang on 2017/11/9.
