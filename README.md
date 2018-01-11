@@ -4,6 +4,7 @@
 * [English README](/README.en.md/)
 * [apk1.3版本下载地址](/img/smartTable.apk)
 * [历史版本介绍](/README_old_version.md/)
+* [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
 > 功能介绍
 1.  快速配置自动生成表格；
 2.  自动计算表格宽高；
