@@ -34,7 +34,6 @@ public class Column<T> implements Comparable<Column> {
      */
     private List<Column> children;
 
-    private Column parent;
 
     private IFormat<T> format;
     private IDrawFormat<T> drawFormat;
@@ -349,6 +348,12 @@ public class Column<T> implements Comparable<Column> {
         }
     }
 
+    /**
+     * 动态添加数据
+     * @param t 数据
+     * @param value 值
+     * @param isFoot 是否添加到尾部
+     */
     private void addData(T t,String value,boolean isFoot){
         if(isFoot) {
             datas.add(t);
@@ -385,7 +390,10 @@ public class Column<T> implements Comparable<Column> {
         return t;
     }
 
-
+    /**
+     * 获取等级 如果上面没有parent 则为1，否则等于parent 递归+1
+     * @return
+     */
     public int getLevel() {
         return level;
     }
@@ -394,104 +402,171 @@ public class Column<T> implements Comparable<Column> {
         this.level = level;
     }
 
+    /**
+     * 列的宽度
+     * @return 宽度
+     */
     public int getWidth() {
         return width;
     }
-
+    /**
+     * 设置列的宽度
+     */
     public void setWidth(int width) {
         this.width = width;
     }
 
+    /**
+     * 获取当前列最长值长度
+     * @return 最长值长度
+     */
     public int getMaxValueLength() {
         return maxValueLength;
     }
 
-    public void setMaxValueLength(int maxValueLength) {
-        this.maxValueLength = maxValueLength;
-    }
-
+    /**
+     * 获取当前列最长值
+     * @return 最长值
+     */
     public String getLongestValue() {
         return longestValue;
     }
-
+    /**
+     * 统计总数
+     * @return 最长值
+     */
     public  String getTotalNumString(){
         if(countFormat != null){
             return countFormat.getCountString();
         }
         return "";
     }
-
+    /**
+     * 获取子列列表
+     */
     public List<Column> getChildren() {
         return children;
     }
 
+    /**
+     * 添加子列
+     * @param column
+     */
     public void addChildren(Column column) {
         children.add(column);
     }
 
+    /**
+     * 获取用于排序比较器
+     * @return 排序比较器
+     */
     public Comparator<T> getComparator() {
         return comparator;
     }
-
+    /**
+     * 设置用于排序比较器
+     */
     public void setComparator(Comparator<T> comparator) {
         this.comparator = comparator;
     }
 
+    /**
+     * 获取统计格式化
+     * @return 统计格式化
+     */
     public ICountFormat<T, ? extends Number> getCountFormat() {
         return countFormat;
     }
-
+    /**
+     * 设置统计格式化
+     */
     public void setCountFormat(ICountFormat<T, ? extends Number> countFormat) {
         this.countFormat = countFormat;
     }
 
+    /**
+     * 设置最长值
+     * @param longestValue
+     */
     public void setLongestValue(String longestValue) {
         this.longestValue = longestValue;
     }
 
+    /**
+     * 获取列ID
+     * @return ID
+     */
     public int getId() {
         return id;
     }
-
+    /**
+     * 设置列ID
+     */
     public void setId(int id) {
         this.id = id;
     }
-
+    /**
+     * 比较
+     */
     @Override
     public int compareTo(Column o) {
         return  this.id - o.getId();
     }
 
+    /**
+     * 判断是否开启自动统计
+     * @return 是否开启自动统计
+     */
     public boolean isAutoCount() {
         return isAutoCount;
     }
-
+    /**
+     * 设置开启自动统计
+     */
     public void setAutoCount(boolean autoCount) {
         isAutoCount = autoCount;
     }
 
+    /**
+     * 判断是否反序
+     * @return 是否反序
+     */
     public boolean isReverseSort() {
         return isReverseSort;
     }
-
+    /**
+     * 设置是否反序
+     */
     public void setReverseSort(boolean reverseSort) {
         isReverseSort = reverseSort;
     }
 
+    /**
+     * 获取点击列监听
+     * @return 点击列监听
+     */
     public OnColumnItemClickListener<T> getOnColumnItemClickListener() {
         return onColumnItemClickListener;
     }
-
+    /**
+     * 设置点击列监听
+     */
     public void setOnColumnItemClickListener(OnColumnItemClickListener<T> onColumnItemClickListener) {
         this.onColumnItemClickListener = onColumnItemClickListener;
     }
 
 
-
+    /**
+     * 判断是否固定
+     * @return 是否固定
+     */
     public boolean isFixed() {
         return isFixed;
     }
 
+    /**
+     * 设置是否固定
+     */
     public void setFixed(boolean fixed) {
         isFixed = fixed;
     }

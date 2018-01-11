@@ -20,14 +20,26 @@ public class TableInfo {
     private int[] lineHeightArray;
     private float zoom =1;
 
+    /**
+     * 获取最大层级
+     * @return 最大层级
+     */
     public int getMaxLevel() {
         return maxLevel;
     }
-
+    /**
+     * 设置最大层级
+     * 该方法提供用于表格递归
+     * @return 最大层级
+     */
     public void setMaxLevel(int maxLevel) {
         this.maxLevel = maxLevel;
     }
 
+    /**
+     * 获取列总数
+     * @return 列总数
+     */
     public int getColumnSize() {
         return columnSize;
     }
@@ -71,6 +83,10 @@ public class TableInfo {
         lineHeightArray = new int[lineSize];
     }
 
+    /**
+     * 动态添加列，数组重新创建Copy
+     * @param count 添加数量
+     */
     public void addLine(int count){
         int size = lineHeightArray.length;
         int[] tempArray = new int[size+count];
@@ -78,7 +94,6 @@ public class TableInfo {
 
         System.arraycopy(lineHeightArray,0,tempArray,0,size);
         lineHeightArray = tempArray;
-        Log.e("li","lineHeightArray"+lineHeightArray.length);
     }
     public int getCountHeight() {
         return (int) (zoom*countHeight);
@@ -94,10 +109,16 @@ public class TableInfo {
         return lineHeightArray;
     }
 
+    /**
+     * 获取缩放值
+     * @return 缩放值
+     */
     public float getZoom() {
         return zoom;
     }
-
+    /**
+     * 设置缩放值
+     */
     public void setZoom(float zoom) {
         this.zoom = zoom;
     }
