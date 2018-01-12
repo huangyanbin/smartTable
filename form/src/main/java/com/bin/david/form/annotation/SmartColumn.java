@@ -1,6 +1,8 @@
 package com.bin.david.form.annotation;
 
 
+import android.graphics.Paint;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,6 +29,10 @@ public @interface SmartColumn {
 
     String parent() default "";
 
+    /**
+     * 对齐
+     */
+    Paint.Align align() default Paint.Align.CENTER;
     /**
      * 设置是否查询下一级
      * @return

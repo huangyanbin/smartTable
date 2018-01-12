@@ -28,6 +28,7 @@ public class TableData<T> {
     private ITitleDrawFormat titleDrawFormat;
     private ISequenceFormat XSequenceFormat;
     private ISequenceFormat YSequenceFormat;
+    private int maxHierarchy;
     /**
      *
      * @param tableName 表名
@@ -268,5 +269,13 @@ public class TableData<T> {
             }
         }
         return null;
+    }
+
+    public int getMaxHierarchy() {
+        return maxHierarchy;
+    }
+
+    public void setMaxHierarchy(int maxHierarchy) {
+        this.maxHierarchy = maxHierarchy;
     }
 }

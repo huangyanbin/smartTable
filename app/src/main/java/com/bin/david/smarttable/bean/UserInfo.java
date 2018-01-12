@@ -5,6 +5,8 @@ import com.bin.david.form.annotation.SmartColumn;
 import com.bin.david.form.annotation.SmartTable;
 import com.bin.david.smarttable.bean.ChildData;
 
+import java.util.List;
+
 /**
  * Created by huang on 2017/11/1.
  */
@@ -16,10 +18,13 @@ public class UserInfo {
     private int age;
     @SmartColumn(id =3,name="更新时间")
     private long time;
+    @SmartColumn(type= ColumnType.Child)
     private ChildData childData;
     @SmartColumn(id =4,name="选中")
     private boolean isCheck;
     private String url;
+    @SmartColumn(type= ColumnType.List)
+    private List<PM25> weather;
 
     public UserInfo(String name, int age, long time, boolean isCheck, ChildData childData) {
         this.name = name;

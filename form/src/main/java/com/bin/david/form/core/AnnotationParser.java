@@ -1,9 +1,9 @@
 package com.bin.david.form.core;
 
+
 import com.bin.david.form.annotation.*;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.PageTableData;
-import com.bin.david.form.data.TableData;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -66,6 +66,7 @@ public class AnnotationParser<T>  {
                    String fieldName =parentFieldName != null? (parentFieldName+field.getName()) :field.getName();
                    Column<?> column = genericHandler.getGenericColumn(fieldClass, name, fieldName);
                    column.setId(id);
+                   column.setTextAlign(smartColumn.align());
                    column.setAutoCount(isAutoCount);
                    column.setFixed(smartColumn.fixed());
                    if (!parent.equals("")) {
@@ -85,8 +86,7 @@ public class AnnotationParser<T>  {
                    }else{
                        columns.add(column);
                    }
-               }else{
-
+               }else if(type == ColumnType.Child){
                    String fieldName = (parentFieldName != null ?parentFieldName:"")
                            +field.getName()+".";
                    getColumnAnnotation(fieldClass,fieldName,columns,genericHandler,parentMap);

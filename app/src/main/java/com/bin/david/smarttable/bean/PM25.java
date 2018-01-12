@@ -1,5 +1,7 @@
 package com.bin.david.smarttable.bean;
 
+import android.graphics.Paint;
+
 import com.bin.david.form.annotation.SmartColumn;
 import com.bin.david.form.annotation.SmartTable;
 
@@ -23,9 +25,9 @@ public class PM25 {
      */
 
     private int aqi;
-    @SmartColumn(id =1,name="地区")
+    @SmartColumn(id =1,name="地区",align = Paint.Align.LEFT)
     private String area;
-    @SmartColumn(parent = "PM",id =3,name="PM10")
+    @SmartColumn(parent = "PM",id =3,name="PM10",align = Paint.Align.RIGHT)
     private int pm10;
     @SmartColumn(parent = "PM",id =2,name="PM10 24小时")
     private int pm10_24h;

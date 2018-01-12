@@ -22,8 +22,11 @@ public class SelectionOperation {
     private ISelectFormat selectFormat;
     private int selectRow = INVALID;
     private int selectColumn = INVALID;
+    private boolean isShow;
 
-
+    void reset(){
+        isShow = false;
+    }
 
     SelectionOperation() {
         this.selectionRect = new Rect();
@@ -33,6 +36,7 @@ public class SelectionOperation {
         this.selectRow = selectRow;
         this.selectColumn = selectColumn;
         selectionRect.set(rect);
+        isShow = true;
     }
 
     boolean isSelectedPoint( int selectColumn,int selectRow){
@@ -44,6 +48,7 @@ public class SelectionOperation {
 
          if(isSelectedPoint(selectColumn,selectRow)){
              selectionRect.set(rect);
+             isShow = true;
          }
     }
 
@@ -53,9 +58,8 @@ public class SelectionOperation {
 
     public void draw(Canvas canvas, Rect showRect, TableConfig config){
 
-        if(selectFormat !=null && selectRow != INVALID
-                && selectColumn != INVALID && showRect.contains(selectionRect)){
-                 selectFormat.draw(canvas,selectionRect,config);
+        if(selectFormat !=null && isShow){
+          selectFormat.draw(canvas,selectionRect,config);
         }
     }
 

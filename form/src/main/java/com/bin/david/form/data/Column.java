@@ -52,6 +52,7 @@ public class Column<T> implements Comparable<Column> {
     private Paint.Align textAlign;
     private boolean isAutoCount =false;
     private int id;
+    private int hierarchy = 1; //数据层级
 
     private boolean isParent;
 

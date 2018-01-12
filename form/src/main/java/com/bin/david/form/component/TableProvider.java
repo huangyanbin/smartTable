@@ -65,6 +65,7 @@ public class TableProvider<T> implements TableClickObserver {
         isClickPoint = false;
         clickColumnInfo = null;
         tipColumn = null;
+        operation.reset();
         originRect.set(showRect);
         this.scaleRect = scaleRect;
         this.showRect = showRect;
@@ -82,11 +83,12 @@ public class TableProvider<T> implements TableClickObserver {
         }
         drawCount(canvas);
         drawContent(canvas);
+        operation.draw(canvas,showRect,config);
         canvas.restore();
         if (isClickPoint && clickColumnInfo != null) {
             onColumnClickListener.onClick(clickColumnInfo);
         }
-        operation.draw(canvas,showRect,config);
+
         if (tipColumn != null) {
             drawTip(canvas, tipPoint.x, tipPoint.y, tipColumn, tipPosition);
         }
