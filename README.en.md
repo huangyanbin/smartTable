@@ -1,5 +1,5 @@
 # SmartTable
-
+[![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
 ###### A Android automatically generated table framework
 * [Chinese README](/README.md/)
 * [Apk download 1.3version](/img/smartTable.apk)
@@ -49,7 +49,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.4.4'
+	        compile 'com.github.huangyanbin:SmartTable:1.4.7'
 	}
 ```
 
