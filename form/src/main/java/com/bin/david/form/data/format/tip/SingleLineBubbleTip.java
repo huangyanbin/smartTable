@@ -33,6 +33,7 @@ public  abstract  class SingleLineBubbleTip<C> extends BaseBubbleTip<C,String> {
 
     @Override
     public void drawText(Canvas canvas, Rect tipRect, String content, int textWidth,int textHeight,  Paint paint) {
+        paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(content,tipRect.centerX()-textWidth/2,tipRect.centerY()+textHeight/2-deviation/2,paint);
     }
 

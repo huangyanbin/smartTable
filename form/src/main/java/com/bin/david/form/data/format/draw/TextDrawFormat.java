@@ -2,6 +2,7 @@ package com.bin.david.form.data.format.draw;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
@@ -39,15 +40,15 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     }
 
     @Override
-    public void draw(Canvas c, Column<T> column,T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+    public void draw(Canvas c, Column<T> column, T t, String value, Rect rect, int position, TableConfig config) {
         cellInfo.set(column,t,value,position);
-        boolean isDrawBg = drawBackground(c,cellInfo,left,top,right,bottom,config);
+        boolean isDrawBg = drawBackground(c,cellInfo,rect,config);
         Paint paint = config.getPaint();
         setTextPaint(config, isDrawBg, paint);
         if(column.getTextAlign() !=null) {
             paint.setTextAlign(column.getTextAlign());
         }
-        c.drawText(value,DrawUtils.getTextCenterX(left,right,paint), DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
+        c.drawText(value,DrawUtils.getTextCenterX(rect.left,rect.right,paint), DrawUtils.getTextCenterY((rect.bottom+rect.top)/2,paint) ,paint);
     }
 
 
@@ -62,10 +63,10 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     }
 
     @Override
-    public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, int left, int top, int right, int bottom,TableConfig config) {
+    public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, Rect rect,TableConfig config) {
         IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
         if(isDrawBg && backgroundFormat != null && backgroundFormat.isDraw(cellInfo)){
-            backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+            backgroundFormat.drawBackground(c,rect,config.getPaint());
             return true;
         }
         return false;

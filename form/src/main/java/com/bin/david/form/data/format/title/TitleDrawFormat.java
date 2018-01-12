@@ -2,6 +2,7 @@ package com.bin.david.form.data.format.title;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
@@ -34,9 +35,9 @@ public class TitleDrawFormat implements ITitleDrawFormat {
     }
 
     @Override
-    public void draw(Canvas c, Column column, int left, int top, int right, int bottom, TableConfig config) {
+    public void draw(Canvas c, Column column, Rect rect, TableConfig config) {
         Paint paint = config.getPaint();
-        boolean isDrawBg =drawBackground(c,column,left,top,right,bottom,config);
+        boolean isDrawBg =drawBackground(c,column,rect,config);
         config.getColumnTitleStyle().fillPaint(paint);
         IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
         if(isDrawBg && backgroundFormat.getTextColor(column) != TableConfig.INVALID_COLOR){
@@ -46,14 +47,14 @@ public class TitleDrawFormat implements ITitleDrawFormat {
         if(column.getTextAlign() !=null) { //如果列设置Align ，则使用列的Align
             paint.setTextAlign(column.getTextAlign());
         }
-        c.drawText(column.getColumnName(),DrawUtils.getTextCenterX(left,right,paint), DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
+        c.drawText(column.getColumnName(),DrawUtils.getTextCenterX(rect.left,rect.right,paint), DrawUtils.getTextCenterY((rect.bottom+rect.top)/2,paint) ,paint);
     }
 
     @Override
-    public boolean drawBackground(Canvas c, Column column, int left, int top, int right, int bottom,  TableConfig config) {
+    public boolean drawBackground(Canvas c, Column column, Rect rect,  TableConfig config) {
         IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
         if(isDrawBg && backgroundFormat != null && backgroundFormat.isDraw(column)){
-            backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+            backgroundFormat.drawBackground(c,rect,config.getPaint());
             return true;
         }
         return false;

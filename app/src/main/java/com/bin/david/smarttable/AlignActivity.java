@@ -14,6 +14,7 @@ import com.bin.david.form.data.Column;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.selected.BaseSelectFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
@@ -87,7 +88,7 @@ public class AlignActivity extends AppCompatActivity implements View.OnClickList
             }
 
         };
-
+        table.setSelectFormat(new BaseSelectFormat());
         table.getConfig().setContentBackgroundFormat(backgroundFormat);
         table.setTableData(tableData);
 

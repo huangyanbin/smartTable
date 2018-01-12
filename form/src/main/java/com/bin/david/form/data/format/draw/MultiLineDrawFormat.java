@@ -3,6 +3,7 @@ package com.bin.david.form.data.format.draw;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -56,10 +57,10 @@ public class MultiLineDrawFormat<T> extends TextDrawFormat<T> {
     }
 
     @Override
-    public void draw(Canvas c, Column<T> column, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+    public void draw(Canvas c, Column<T> column, T t, String value, Rect rect, int position, TableConfig config) {
         CellInfo<T> cellInfo = getCellInfo();
         cellInfo.set(column, t, value, position);
-        boolean isDrawBg = drawBackground(c, cellInfo, left, top, right, bottom, config);
+        boolean isDrawBg = drawBackground(c, cellInfo, rect, config);
         setTextPaint(config, isDrawBg, textPaint);
         if(column.getTextAlign() !=null) {
             textPaint.setTextAlign(column.getTextAlign());
@@ -67,7 +68,7 @@ public class MultiLineDrawFormat<T> extends TextDrawFormat<T> {
         int realWidth = width;
         StaticLayout staticLayout = new StaticLayout(column.getValues().get(position), textPaint, realWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         c.save();
-        c.translate(DrawUtils.getTextCenterX(left,right,textPaint), top+config.getVerticalPadding());
+        c.translate(DrawUtils.getTextCenterX(rect.left,rect.right,textPaint), rect.top+config.getVerticalPadding());
         staticLayout.draw(c);
         c.restore();
     }

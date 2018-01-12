@@ -49,9 +49,9 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
     protected abstract Bitmap getBitmap(Column column);
 
     @Override
-    public void draw(Canvas c, Column column, int left, int top, int right, int bottom,TableConfig config) {
+    public void draw(Canvas c, Column column, Rect rect,TableConfig config) {
         Paint paint = config.getPaint();
-        drawBackground(c,column,left,top,right,bottom,config);
+        drawBackground(c,column,rect,config);
         Bitmap bitmap = getBitmap(column);
         if(bitmap != null) {
             paint.setStyle(Paint.Style.FILL);
@@ -71,21 +71,21 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
             }
             width= (int) (width*config.getZoom());
             height = (int) (height*config.getZoom());
-            int disX= (right-left-width)/2;
-            int disY= (bottom-top-height)/2;
-            drawRect.left = left+disX;
-            drawRect.top = top+ disY;
-            drawRect.right = right - disX;
-            drawRect.bottom = bottom - disY;
+            int disX= (rect.right-rect.left-width)/2;
+            int disY= (rect.bottom-rect.top-height)/2;
+            drawRect.left = rect.left+disX;
+            drawRect.top = rect.top+ disY;
+            drawRect.right = rect.right - disX;
+            drawRect.bottom = rect.bottom - disY;
             c.drawBitmap(bitmap, imgRect, drawRect, paint);
         }
     }
 
     @Override
-    public boolean drawBackground(Canvas c, Column column, int left, int top, int right, int bottom, TableConfig config) {
+    public boolean drawBackground(Canvas c, Column column, Rect rect, TableConfig config) {
         IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
         if(isDrawBackground && backgroundFormat != null && backgroundFormat.isDraw(column)){
-            backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+            backgroundFormat.drawBackground(c,rect,config.getPaint());
             return true;
         }
         return false;

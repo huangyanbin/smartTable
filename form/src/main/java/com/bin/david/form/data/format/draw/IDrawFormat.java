@@ -2,6 +2,7 @@ package com.bin.david.form.data.format.draw;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
@@ -25,9 +26,9 @@ public interface IDrawFormat<T>  {
     int measureHeight(Column<T> column,int position, TableConfig config);
 
 
-    void draw(Canvas c,Column<T> column,T t,String value,int left,int top,int right,int bottom,int position,TableConfig config);
+    void draw(Canvas c, Column<T> column, T t, String value, Rect rect, int position, TableConfig config);
 
-    boolean drawBackground(Canvas c, CellInfo<T> cellInfo, int left, int top, int right, int bottom,  TableConfig config);
+    boolean drawBackground(Canvas c, CellInfo<T> cellInfo,Rect rect,  TableConfig config);
 
 
 }

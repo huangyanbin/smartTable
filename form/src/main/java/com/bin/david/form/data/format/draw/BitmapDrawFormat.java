@@ -59,10 +59,10 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     protected abstract Bitmap getBitmap(T t,String value, int position);
 
     @Override
-    public void draw(Canvas c,Column<T> column, T t, String value, int left, int top, int right, int bottom, int position, TableConfig config) {
+    public void draw(Canvas c,Column<T> column, T t, String value, Rect rect, int position, TableConfig config) {
         Paint paint = config.getPaint();
         cellInfo.set(column,t,value,position);
-        drawBackground(c,cellInfo,left,top,right,bottom,config);
+        drawBackground(c,cellInfo,rect,config);
         Bitmap bitmap = getBitmap(t,value,position);
         if(bitmap != null) {
             paint.setStyle(Paint.Style.FILL);
@@ -82,21 +82,21 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
             }
             width= (int) (width*config.getZoom());
             height = (int) (height*config.getZoom());
-            int disX= (right-left-width)/2;
-            int disY= (bottom-top-height)/2;
-            drawRect.left = left+disX;
-            drawRect.top = top+ disY;
-            drawRect.right = right - disX;
-            drawRect.bottom = bottom - disY;
+            int disX= (rect.right-rect.left-width)/2;
+            int disY= (rect.bottom-rect.top-height)/2;
+            drawRect.left = rect.left+disX;
+            drawRect.top = rect.top+ disY;
+            drawRect.right = rect.right - disX;
+            drawRect.bottom = rect.bottom - disY;
             c.drawBitmap(bitmap, imgRect, drawRect, paint);
         }
     }
 
     @Override
-    public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, int left, int top, int right, int bottom,  TableConfig config) {
+    public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, Rect rect,TableConfig config) {
         IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
         if(isDrawBg &&backgroundFormat != null && backgroundFormat.isDraw(cellInfo)){
-            backgroundFormat.drawBackground(c,left,top,right,bottom,config.getPaint());
+            backgroundFormat.drawBackground(c,rect,config.getPaint());
             return true;
         }
         return false;

@@ -18,6 +18,7 @@ import com.bin.david.form.data.Column;
 import com.bin.david.form.data.PageTableData;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.TableInfo;
+import com.bin.david.form.data.format.selected.ISelectFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.OnTableChangeListener;
@@ -46,6 +47,7 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
     private AnnotationParser<T> annotationParser;
     protected Paint paint;
     private MatrixHelper matrixHelper;
+
     public SmartTable(Context context) {
         super(context);
         init();
@@ -331,6 +333,11 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
      */
     public void back(){
         matrixHelper.flingBack();
+    }
+
+
+    public void setSelectFormat(ISelectFormat selectFormat) {
+        this.provider.setSelectFormat(selectFormat);
     }
 }
 

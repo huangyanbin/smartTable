@@ -2,6 +2,7 @@ package com.bin.david.form.data.format.bg;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 /**
  * Created by huang on 2017/11/14.
@@ -11,7 +12,7 @@ public interface IBackgroundFormat<T> {
     /**
      * 绘制背景
      */
-    void drawBackground(Canvas canvas, int left, int top, int right, int bottom, Paint paint);
+    void drawBackground(Canvas canvas, Rect rect, Paint paint);
 
     /**
      * 获取背景颜色

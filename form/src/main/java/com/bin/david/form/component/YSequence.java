@@ -26,9 +26,11 @@ public class YSequence<T> implements IComponent<TableData<T>> {
     private int clipWidth;
     private Rect scaleRect;
     private ISequenceFormat format;
+    private Rect tempRect; //临时使用
 
     public YSequence() {
         rect = new Rect();
+        tempRect = new Rect();
     }
 
     @Override
@@ -133,7 +135,8 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         boolean isDrawBg = false;
         int textColor =TableConfig.INVALID_COLOR;
         if(backgroundFormat != null&& backgroundFormat.isDraw(position)){
-            backgroundFormat.drawBackground(canvas,left,top,right,bottom,config.getPaint());
+            tempRect.set(left,top,right,bottom);
+            backgroundFormat.drawBackground(canvas,tempRect,config.getPaint());
             textColor =  backgroundFormat.getTextColor(position);
             isDrawBg = true;
         }

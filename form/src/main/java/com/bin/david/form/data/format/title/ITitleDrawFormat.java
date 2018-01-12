@@ -2,6 +2,7 @@ package com.bin.david.form.data.format.title;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
@@ -26,15 +27,11 @@ public interface ITitleDrawFormat {
      * 绘制
      * @param c 画笔
      * @param column 列信息
-     * @param left 左
-     * @param top 顶
-     * @param right 右
-     * @param bottom 底
      */
-    void draw(Canvas c, Column column,int left, int top, int right, int bottom, TableConfig config);
+    void draw(Canvas c, Column column, Rect rect, TableConfig config);
 
     /**
      * 重写可以绘制背景
      */
-     boolean drawBackground(Canvas c, Column column, int left, int top, int right, int bottom, TableConfig config);
+     boolean drawBackground(Canvas c, Column column, Rect rect, TableConfig config);
 }

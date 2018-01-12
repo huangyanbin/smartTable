@@ -26,10 +26,12 @@ public class XSequence<T> implements IComponent<TableData<T>>{
     private int clipHeight;
     private ISequenceFormat format;
     private Rect clipRect;
+    private Rect tempRect; //临时使用
 
     public XSequence() {
         this.rect = new Rect();
         clipRect = new Rect();
+        tempRect = new Rect();
     }
 
     @Override
@@ -116,7 +118,8 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         IBackgroundFormat<Integer> backgroundFormat = config.getXSequenceBgFormat();
         boolean isDrawBg = false;
         if(backgroundFormat != null&& backgroundFormat.isDraw(position)){
-            backgroundFormat.drawBackground(canvas,left,top,right,bottom,config.getPaint());
+            tempRect.set(left,top,right,bottom);
+            backgroundFormat.drawBackground(canvas, tempRect,config.getPaint());
             isDrawBg = true;
         }
         config.getXSequenceStyle().fillPaint(paint);
