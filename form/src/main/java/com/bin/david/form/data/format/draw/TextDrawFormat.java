@@ -44,7 +44,10 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
         boolean isDrawBg = drawBackground(c,cellInfo,left,top,right,bottom,config);
         Paint paint = config.getPaint();
         setTextPaint(config, isDrawBg, paint);
-        c.drawText(value,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
+        if(column.getTextAlign() !=null) {
+            paint.setTextAlign(column.getTextAlign());
+        }
+        c.drawText(value,DrawUtils.getTextCenterX(left,right,paint), DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
     }
 
 
@@ -52,10 +55,10 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
         config.getContentStyle().fillPaint(paint);
         IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
         if(isDrawBg && backgroundFormat.getTextColor(cellInfo) != TableConfig.INVALID_COLOR){
-            paint.setColor( backgroundFormat.getTextColor(cellInfo));
+            paint.setColor(backgroundFormat.getTextColor(cellInfo));
         }
         paint.setTextSize(paint.getTextSize()*config.getZoom());
-        paint.setTextAlign(Paint.Align.CENTER);
+
     }
 
     @Override

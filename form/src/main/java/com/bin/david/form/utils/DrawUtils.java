@@ -29,6 +29,17 @@ public class DrawUtils {
        return centerY-((paint.descent() + paint.ascent()) / 2);
     }
 
+    public static float getTextCenterX(int left,int right,Paint paint){
+        Paint.Align align = paint.getTextAlign();
+        if(align == Paint.Align.RIGHT){
+            return right;
+        }else if(align == Paint.Align.LEFT){
+            return left;
+        }else{
+            return (right +left)/2;
+        }
+    }
+
     public static boolean isMixRect(Rect rect,int left,int top,int right,int bottom){
 
         return rect.bottom>= top && rect.right >= left && rect.top <bottom && rect.left< right;

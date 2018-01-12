@@ -344,7 +344,6 @@ public class TableProvider<T> implements TableClickObserver {
             paint.setColor(backgroundFormat.getTextColor(column));
         }
         paint.setTextSize(paint.getTextSize()*config.getZoom());
-        paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(text, (right + left) / 2, DrawUtils.getTextCenterY((bottom + top) / 2, paint), paint);
     }
 

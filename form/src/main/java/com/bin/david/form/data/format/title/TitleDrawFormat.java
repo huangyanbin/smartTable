@@ -42,9 +42,11 @@ public class TitleDrawFormat implements ITitleDrawFormat {
         if(isDrawBg && backgroundFormat.getTextColor(column) != TableConfig.INVALID_COLOR){
             paint.setColor(backgroundFormat.getTextColor(column));
         }
-        paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(paint.getTextSize()*config.getZoom());
-        c.drawText(column.getColumnName(),(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
+        if(column.getTextAlign() !=null) { //如果列设置Align ，则使用列的Align
+            paint.setTextAlign(column.getTextAlign());
+        }
+        c.drawText(column.getColumnName(),DrawUtils.getTextCenterX(left,right,paint), DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
     }
 
     @Override

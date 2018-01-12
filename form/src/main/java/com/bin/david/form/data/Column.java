@@ -1,5 +1,6 @@
 package com.bin.david.form.data;
 
+import android.graphics.Paint;
 import android.util.Log;
 
 import com.bin.david.form.core.TableConfig;
@@ -34,15 +35,10 @@ public class Column<T> implements Comparable<Column> {
      */
     private List<Column> children;
 
-
     private IFormat<T> format;
     private IDrawFormat<T> drawFormat;
-
-
     private String fieldName;
-
     private List<T> datas;
-
     private List<String> values;
     private boolean isFixed;
     private int maxValueLength = -1; //最长的长度
@@ -53,34 +49,65 @@ public class Column<T> implements Comparable<Column> {
     private ICountFormat<T,? extends Number> countFormat;
     private boolean isReverseSort;
     private OnColumnItemClickListener<T> onColumnItemClickListener;
-
+    private Paint.Align textAlign;
     private boolean isAutoCount =false;
     private int id;
 
     private boolean isParent;
 
+    /**列构造方法
+     * 用于构造组合列
+     * @param columnName 列名
+     * @param children 子列
+     */
     public Column(String columnName, List<Column> children) {
         this.columnName = columnName;
         this.children = children;
         isParent = true;
     }
-
+    /**列构造方法
+     * 用于构造组合列
+     * @param columnName 列名
+     * @param children 子列
+     */
     public Column(String columnName, Column... children) {
         this(columnName, Arrays.asList(children));
     }
-
+    /**列构造方法
+     * 用于构造子列
+     * @param columnName 列名
+     * @param fieldName 需要解析的反射字段
+     */
     public Column(String columnName, String fieldName) {
         this(columnName, fieldName, null, null);
     }
 
+    /**列构造方法
+     * 用于构造子列
+     * @param columnName 列名
+     * @param fieldName 需要解析的反射字段
+     * @param format 文字格式化
+     */
     public Column(String columnName, String fieldName, IFormat<T> format) {
         this(columnName, fieldName, format, null);
     }
-
-    public Column(String columnName, String fieldName, IDrawFormat<T> format) {
-        this(columnName, fieldName, null, format);
+    /**列构造方法
+     * 用于构造子列
+     * @param columnName 列名
+     * @param fieldName 需要解析的反射字段
+     * @param drawFormat 绘制格式化
+     */
+    public Column(String columnName, String fieldName, IDrawFormat<T> drawFormat) {
+        this(columnName, fieldName, null, drawFormat);
     }
 
+    /**列构造方法
+     * 用于构造子列
+     * @param columnName 列名
+     * @param fieldName 需要解析的反射字段
+     * @param format 文字格式化
+     * @param drawFormat 绘制格式化
+     */
     public Column(String columnName, String fieldName, IFormat<T> format, IDrawFormat<T> drawFormat) {
         this.columnName = columnName;
         this.format = format;
@@ -91,55 +118,90 @@ public class Column<T> implements Comparable<Column> {
         values = new ArrayList<>();
     }
 
+    /**
+     * 获取列名
+     * @return 列名
+     */
     public String getColumnName() {
         return columnName;
     }
 
+    /**
+     * 设置列名
+     * @param columnName 列名
+     */
     public void setColumnName(String columnName) {
         this.columnName = columnName;
     }
 
-
+    /**
+     * 获取文字格式化
+     * @return 文字格式化
+     */
     public IFormat<T> getFormat() {
         return format;
     }
-
+    /**
+     * 设置文字格式化
+     */
     public void setFormat(IFormat<T> format) {
         this.format = format;
     }
-
+    /**
+     * 获取反射name
+     */
     public String getFieldName() {
         return fieldName;
     }
-
+    /**
+     * 设置反射name
+     */
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
     }
-
+    /**
+     * 设置子列
+     */
     public void setChildren(List<Column> children) {
         this.children = children;
     }
 
+    /**
+     * 获取绘制格式化
+     * @return 绘制格式化
+     */
     public IDrawFormat<T> getDrawFormat() {
         return drawFormat;
     }
-
+    /**
+     * 设置绘制格式化
+     */
     public void setDrawFormat(IDrawFormat<T> drawFormat) {
         this.drawFormat = drawFormat;
     }
-
+    /**
+     * 是否是父列 组合列
+     */
     public boolean isParent() {
         return isParent;
     }
-
+    /**
+     * 设置是否是父列 组合列
+     */
     public void setParent(boolean parent) {
         isParent = parent;
     }
 
+    /**
+     * 获取需要解析的数据
+     * @return 数据
+     */
     public List<T> getDatas() {
         return datas;
     }
-
+    /**
+     * 设置需要解析的数据
+     */
     public void setDatas(List<T> datas) {
         this.datas = datas;
     }
@@ -571,5 +633,17 @@ public class Column<T> implements Comparable<Column> {
         isFixed = fixed;
     }
 
-
+    /**
+     * 获取字体位置
+     * @return Align
+     */
+    public Paint.Align getTextAlign() {
+        return textAlign;
+    }
+    /**
+     * 设置字体位置
+     */
+    public void setTextAlign(Paint.Align textAlign) {
+        this.textAlign = textAlign;
+    }
 }

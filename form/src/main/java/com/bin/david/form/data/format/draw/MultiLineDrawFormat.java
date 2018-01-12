@@ -61,10 +61,13 @@ public class MultiLineDrawFormat<T> extends TextDrawFormat<T> {
         cellInfo.set(column, t, value, position);
         boolean isDrawBg = drawBackground(c, cellInfo, left, top, right, bottom, config);
         setTextPaint(config, isDrawBg, textPaint);
+        if(column.getTextAlign() !=null) {
+            textPaint.setTextAlign(column.getTextAlign());
+        }
         int realWidth = width;
         StaticLayout staticLayout = new StaticLayout(column.getValues().get(position), textPaint, realWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         c.save();
-        c.translate((left+right)/2, top);
+        c.translate(DrawUtils.getTextCenterX(left,right,textPaint), top+config.getVerticalPadding());
         staticLayout.draw(c);
         c.restore();
     }

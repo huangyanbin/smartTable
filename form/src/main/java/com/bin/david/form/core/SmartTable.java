@@ -65,7 +65,7 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
      * 初始化
      */
     private void init(){
-        FontStyle.setDefaultTextSize(14);
+        FontStyle.setDefaultTextSpSize(getContext(),13);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         showRect = new Rect();
         tableRect = new Rect();

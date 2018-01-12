@@ -13,18 +13,38 @@ import com.bin.david.form.utils.DensityUtils;
 
 public class FontStyle implements IStyle{
 
-    public static int defaultFontSize = 12;
-    public static int defaultFontColor = Color.parseColor("#636363");
+    private static int defaultFontSize = 12;
+    private static int defaultFontColor = Color.parseColor("#636363");
+    private static Paint.Align defaultAlign = Paint.Align.CENTER;
     private int textSize;
     private int textColor;
+    private Paint.Align align;
 
+    /**
+     * 设置表格全局默认字体大小
+     * @param defaultTextSize 默认字体大小
+     */
     public static void setDefaultTextSize(int defaultTextSize){
         defaultFontSize = defaultTextSize;
     }
-
+    /**
+     * 设置表格全局默认字体位置
+     * @param align 默认字体位置
+     */
+    public static void setDefaultTextAlign(Paint.Align align){
+        defaultAlign = align;
+    }
+    /**
+     * 设置表格全局默认字体大小
+     * @param defaultTextSpSize 默认字体Sp大小
+     */
     public static void setDefaultTextSpSize(Context context,int defaultTextSpSize){
         defaultFontSize = DensityUtils.sp2px(context,defaultTextSpSize);
     }
+    /**
+     * 设置表格全局默认字体颜色
+     * @param defaultTextColor 默认字体颜色
+     */
     public static void setDefaultTextColor(int defaultTextColor){
         defaultFontColor = defaultTextColor;
     }
@@ -41,9 +61,18 @@ public class FontStyle implements IStyle{
         this.textSize = DensityUtils.sp2px(context,sp);
         this.textColor = textColor;
     }
-    
-    
 
+    public Paint.Align getAlign() {
+        if(align == null){
+            return defaultAlign;
+        }
+        return align;
+    }
+
+    public FontStyle setAlign(Paint.Align align) {
+        this.align = align;
+        return this;
+    }
 
     public int getTextSize() {
         if(textSize == 0){
@@ -52,8 +81,9 @@ public class FontStyle implements IStyle{
         return textSize;
     }
 
-    public void setTextSize(int textSize) {
+    public FontStyle setTextSize(int textSize) {
         this.textSize = textSize;
+        return this;
     }
 
     public void setTextSpSize(Context context,int sp){
@@ -78,7 +108,10 @@ public class FontStyle implements IStyle{
     @Override
     public void fillPaint(Paint paint){
         paint.setColor(getTextColor());
+        paint.setTextAlign(getAlign());
         paint.setTextSize(getTextSize());
         paint.setStyle(Paint.Style.FILL);
     }
+
+
 }

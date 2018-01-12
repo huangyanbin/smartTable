@@ -25,6 +25,7 @@
         <activity android:name=".TanTanActivity"/>
         <activity android:name=".PagerModeActivity"/>
         <activity android:name=".ManyActivity"/>
+        <activity android:name=".AlignActivity"/>
     </application>
 
 </manifest>
