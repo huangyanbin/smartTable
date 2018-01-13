@@ -391,13 +391,14 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         int oldh = providerRect.height();
         int newWidth = (int) (oldw * zoom);
         int newHeight = (int) (oldh * zoom);
-        int minTranslateX = 0;
-        int maxTranslateX = newWidth-showWidth;
-        int minTranslateY = 0;
-        int maxTranslateY = newHeight-showHeight;
-        //计算出对比当前中心点的偏移量
         int offsetX = (int) (showRect.width()*(zoom-1))/2;
         int offsetY =(int) (showRect.height()*(zoom-1))/2;
+        int minTranslateX = -offsetX;
+        int maxTranslateX = newWidth-showWidth-offsetX;
+        int minTranslateY = -offsetY;
+        int maxTranslateY = newHeight-showHeight-offsetY;
+        //计算出对比当前中心点的偏移量
+
         if(translateX  < minTranslateX){
             translateX = minTranslateX;
         }else if(translateX > maxTranslateX){
@@ -408,12 +409,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         }else if(translateY > maxTranslateY){
             translateY = maxTranslateY;
         }
-        if(translateX <0){
-            translateX =0;
-        }
-        if(translateY <0){
-            translateY =0;
-        }
+
         scaleRect.left = providerRect.left - offsetX - translateX;
         scaleRect.right = providerRect.right - offsetX - translateX;
         scaleRect.top = providerRect.top - offsetY - translateY;

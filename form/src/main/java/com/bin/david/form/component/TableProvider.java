@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
@@ -97,17 +98,17 @@ public class TableProvider<T> implements TableClickObserver {
 
     private void drawCount(Canvas canvas) {
         if (tableData.isShowCount()) {
-            int left = scaleRect.left;
-            int bottom = config.isFixedCountRow() ? showRect.bottom : scaleRect.bottom;
+            float left = scaleRect.left;
+            float bottom = config.isFixedCountRow() ? showRect.bottom : scaleRect.bottom;
             int countHeight = tableData.getTableInfo().getCountHeight();
-            int top = bottom - countHeight;
+            float top = bottom - countHeight;
             int backgroundColor = config.getCountBackgroundColor();
             if(backgroundColor != TableConfig.INVALID_COLOR) {
-                DrawUtils.fillBackground(canvas, left, top, showRect.right,
-                        bottom, backgroundColor, config.getPaint());
+                DrawUtils.fillBackground(canvas, (int)left, (int)top, showRect.right,
+                        (int)bottom, backgroundColor, config.getPaint());
             }
             List<ColumnInfo> childColumnInfos = tableData.getChildColumnInfos();
-            if (DrawUtils.isVerticalMixRect(showRect, top, bottom)) {
+            if (DrawUtils.isVerticalMixRect(showRect, (int)top, (int)bottom)) {
                 List<Column> columns = tableData.getChildColumns();
                 int columnSize = columns.size();
                 boolean isPerColumnFixed = false;
@@ -115,8 +116,8 @@ public class TableProvider<T> implements TableClickObserver {
                 int clipCount = 0;
                 for (int i = 0; i < columnSize; i++) {
                     Column column = columns.get(i);
-                    int tempLeft = left;
-                    int width = (int) (column.getWidth()*config.getZoom());
+                    float tempLeft = left;
+                    float width = column.getWidth()*config.getZoom();
                     if(childColumnInfos.get(i).getTopParent().column.isFixed()){
                         if(left < clipRect.left) {
                             left = clipRect.left;
@@ -129,7 +130,7 @@ public class TableProvider<T> implements TableClickObserver {
                         canvas.clipRect(clipRect.left, showRect.bottom - countHeight,
                                 showRect.right, showRect.bottom);
                     }
-                    tempRect.set(left, top, left+width, bottom);
+                    tempRect.set((int)left, (int)top, (int)(left+width), (int)bottom);
                     drawCountText(canvas, column,tempRect, column.getTotalNumString(), config);
                     left = tempLeft;
                     left +=width;
@@ -217,8 +218,8 @@ public class TableProvider<T> implements TableClickObserver {
 
 
     private void drawContent(Canvas canvas) {
-        int top;
-        int left = scaleRect.left;
+        float top;
+        float left = scaleRect.left;
         Paint paint = config.getPaint();
         List<Column> columns = tableData.getChildColumns();
         clipRect.set(showRect);
@@ -239,9 +240,9 @@ public class TableProvider<T> implements TableClickObserver {
         for (int i = 0; i < columnSize; i++) {
             top = scaleRect.top;
             Column column = columns.get(i);
-            int width = (int) (column.getWidth()*config.getZoom());
+            float width = column.getWidth()*config.getZoom();
             List<String> values = column.getValues();
-            int tempLeft = left;
+            float tempLeft = left;
             //根据根部标题是否固定
             Column topColumn = childColumnInfo.get(i).getTopParent().column;
             if (topColumn.isFixed()) {
@@ -257,17 +258,18 @@ public class TableProvider<T> implements TableClickObserver {
                 isPerFixed = false;
                clipCount++;
             }
-            int right = left + width;
+            float right = left + width;
             if (left < showRect.right) {
-                for (int j = 0; j < values.size(); j++) {
+                int size = values.size();
+                for (int j = 0; j < size; j++) {
                     String value = values.get(j);
-                    int bottom = (int) (top + info.getLineHeightArray()[j]*config.getZoom());
+                    float bottom = top + info.getLineHeightArray()[j]*config.getZoom();
 
                     if (top < showRect.bottom) {
                         if (right > showRect.left && bottom > showRect.top) {
                             Object data = column.getDatas().get(j);
-                            tempRect.set(left,top,right,bottom);
-                            if (DrawUtils.isClick(left, top, right, bottom, clickPoint)) {
+                            tempRect.set((int)left,(int)top,(int)right,(int)bottom);
+                            if (DrawUtils.isClick(tempRect, clickPoint)) {
                                 operation.setSelectionRect(i,j,tempRect);
                                 tipPoint.x = (left + right) / 2;
                                 tipPoint.y = (top + bottom) / 2;
@@ -286,13 +288,13 @@ public class TableProvider<T> implements TableClickObserver {
                     if (i == 0) {
                         config.getGridStyle().fillPaint(paint);
                         drawHorizontalGrid(canvas, Math.max(scaleRect.left, showRect.left),
-                                top, Math.min(scaleRect.right, showRect.right), bottom, paint);
+                                (int)top, Math.min(scaleRect.right, showRect.right), (int)bottom, paint);
                     }
                     top = bottom;
                 }
                 config.getGridStyle().fillPaint(paint);
-                drawVerticalGrid(canvas, left, Math.max(scaleRect.top, showRect.top)
-                        , right, showRect.bottom, paint);
+                drawVerticalGrid(canvas, (int)left, Math.max(scaleRect.top, showRect.top)
+                        , (int)right, showRect.bottom, paint);
                 left = tempLeft + width;
             } else {
                 break;

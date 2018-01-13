@@ -59,7 +59,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         List<T> list = tableData.getT();
         int totalSize = list.size();
         TableInfo info = tableData.getTableInfo();
-        int top = rect.top + info.getTopHeight();
+        float top = rect.top + info.getTopHeight();
         canvas.save();
         int showLeft = showRect.left-clipWidth;
         boolean isFixTop = config.isFixedXSequence();
@@ -68,7 +68,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         DrawUtils.fillBackground(canvas, showLeft,isFixTop ?(showRect.top+info.getTopHeight()):showRect.top,
                 showRect.left,showRect.bottom,config.getYSequenceBackgroundColor(),config.getPaint());
         int num = 0;
-        int tempTop= top;
+        float tempTop= top;
         boolean isFixedTitle = config.isFixedTitle();
         boolean isFixedCount = config.isFixedCountRow();
         if(isFixedTitle){
@@ -83,10 +83,10 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         }
         for(int i = 0; i <info.getMaxLevel(); i++){
             num++;
-            int bottom = tempTop+info.getTitleHeight();
-            if(DrawUtils.isVerticalMixRect(showRect,top,bottom)) {
+            float bottom = tempTop+info.getTitleHeight();
+            if(DrawUtils.isVerticalMixRect(showRect,(int)top,(int)bottom)) {
 
-                draw(canvas, rect.left, tempTop, rect.right, bottom,  format.format(num),num,config);
+                draw(canvas, rect.left, (int)tempTop, rect.right, (int)bottom,  format.format(num),num,config);
             }
             tempTop = bottom;
             top +=info.getTitleHeight();
@@ -104,10 +104,10 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         }
         for(int i = 0; i < totalSize;i++){
             num++;
-            int bottom = (int) (top+info.getLineHeightArray()[i]*config.getZoom());
+            float bottom = top+info.getLineHeightArray()[i]*config.getZoom();
             if(showRect.bottom >= rect.top) {
-                if (DrawUtils.isVerticalMixRect(showRect, top,  bottom)) {
-                    draw(canvas, rect.left, top, rect.right, bottom, format.format(num),num, config);
+                if (DrawUtils.isVerticalMixRect(showRect, (int)top,  (int)bottom)) {
+                    draw(canvas, rect.left, (int)top, rect.right, (int)bottom, format.format(num),num, config);
                 }
             }else{
                 break;
@@ -116,9 +116,9 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         }
         if(tableData.isShowCount() && !isFixedCount){
             num++;
-            int bottom = top+info.getCountHeight();
-            if(DrawUtils.isVerticalMixRect(showRect,top,bottom)) {
-                draw(canvas, rect.left, top, rect.right, bottom, format.format(num),num, config);
+            float bottom = top+info.getCountHeight();
+            if(DrawUtils.isVerticalMixRect(showRect,(int)top,(int)bottom)) {
+                draw(canvas, rect.left, (int)top, rect.right, (int)bottom, format.format(num),num, config);
             }
         }
         if(isFixedTitle || isFixedCount){

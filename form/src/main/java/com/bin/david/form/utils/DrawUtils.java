@@ -49,6 +49,9 @@ public class DrawUtils {
         return clickPoint.x >= left && clickPoint.x <=right && clickPoint.y>=top && clickPoint.y <=bottom;
     }
 
+    public static boolean isClick(Rect rect, PointF clickPoint){
+        return rect.contains((int)clickPoint.x,(int)clickPoint.y);
+    }
     public static void fillBackground(Canvas canvas,int left, int top, int right, int bottom,int bgColor,Paint paint){
         if(bgColor != TableConfig.INVALID_COLOR) {
             paint.setColor(bgColor);

@@ -61,7 +61,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         format = tableData.getXSequenceFormat();
         List<Column> columns = tableData.getChildColumns();
         int columnSize = columns.size();
-        int left  = rect.left;
+        float left  = rect.left;
         int showTop = showRect.top-clipHeight;
         canvas.save();
         canvas.clipRect(showRect.left,showTop,showRect.right, showRect.top);
@@ -73,12 +73,12 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         List<ColumnInfo> childColumnInfos = tableData.getChildColumnInfos();
         for(int i = 0;i < columnSize;i++){
             Column column = columns.get(i);
-            int width = (int) (column.getWidth()*config.getZoom());
-            int right = left + width;
+            float width = column.getWidth()*config.getZoom();
+            float right = left + width;
             if(childColumnInfos.get(i).getTopParent().column.isFixed()){
                 if(left < clipRect.left) {
                     isPerColumnFixed = true;
-                    showTextNum(canvas, showRect, config, clipRect.left, i, clipRect.left + width);
+                    showTextNum(canvas, showRect, config, clipRect.left, i, (int)(clipRect.left + width));
                     clipRect.left += width;
                     left += width;
                     continue;
@@ -101,10 +101,10 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         canvas.restore();
     }
 
-    private int showTextNum(Canvas canvas, Rect showRect, TableConfig config, int left, int i, int right) {
-        if(DrawUtils.isMixHorizontalRect(showRect,left,right)) {
+    private float showTextNum(Canvas canvas, Rect showRect, TableConfig config, float left, int i, float right) {
+        if(DrawUtils.isMixHorizontalRect(showRect,(int)left,(int)right)) {
             String text = format.format(i+1);
-            draw(canvas, left, rect.top,right, rect.bottom,text,i, config);
+            draw(canvas, (int)left, rect.top,(int)right, rect.bottom,text,i, config);
         }
         left = right;
         return left;
