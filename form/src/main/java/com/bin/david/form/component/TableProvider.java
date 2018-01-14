@@ -74,14 +74,7 @@ public class TableProvider<T> implements TableClickObserver {
         this.tableData = tableData;
         canvas.save();
         canvas.clipRect(this.showRect);
-        if (config.isFixedTitle()) {
-            drawTitle(canvas);
-            canvas.restore();
-            canvas.save();
-            canvas.clipRect(this.showRect);
-        } else {
-            drawTitle(canvas);
-        }
+        drawColumnTitle(canvas, config);
         drawCount(canvas);
         drawContent(canvas);
         operation.draw(canvas,showRect,config);
@@ -94,6 +87,19 @@ public class TableProvider<T> implements TableClickObserver {
             drawTip(canvas, tipPoint.x, tipPoint.y, tipColumn, tipPosition);
         }
 
+    }
+
+    private void drawColumnTitle(Canvas canvas, TableConfig config) {
+        if(config.isShowColumnTitle()) {
+            if (config.isFixedTitle()) {
+                drawTitle(canvas);
+                canvas.restore();
+                canvas.save();
+                canvas.clipRect(this.showRect);
+            } else {
+                drawTitle(canvas);
+            }
+        }
     }
 
     private void drawCount(Canvas canvas) {
@@ -280,6 +286,7 @@ public class TableProvider<T> implements TableClickObserver {
                                 clickPoint.set(-1, -1);
                             }
                             operation.checkSelectedPoint(i,j,tempRect);
+                            config.getContentStyle().fillPaint(paint);
                             column.getDrawFormat().draw(canvas,column, data, value, tempRect, j, config);
                         }
                     } else {
@@ -354,7 +361,7 @@ public class TableProvider<T> implements TableClickObserver {
         boolean isDrawBg = false;
 
         if(backgroundFormat != null&& backgroundFormat.isDraw(column)){
-            backgroundFormat.drawBackground(canvas,tempRect,config.getPaint());
+            backgroundFormat.drawBackground(canvas,rect,column,config.getPaint());
             isDrawBg = true;
         }
         config.getGridStyle().fillPaint(paint);

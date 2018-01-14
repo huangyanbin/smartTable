@@ -80,15 +80,17 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             }
             tempTop = showRect.top + clipHeight;
         }
-        for(int i = 0; i <info.getMaxLevel(); i++){
-            num++;
-            float bottom = tempTop+info.getTitleHeight();
-            if(DrawUtils.isVerticalMixRect(showRect,(int)top,(int)bottom)) {
+        if(config.isShowColumnTitle()) {
+            for (int i = 0; i < info.getMaxLevel(); i++) {
+                num++;
+                float bottom = tempTop + info.getTitleHeight();
+                if (DrawUtils.isVerticalMixRect(showRect, (int) top, (int) bottom)) {
 
-                draw(canvas, rect.left, (int)tempTop, rect.right, (int)bottom,  format.format(num),num,config);
+                    draw(canvas, rect.left, (int) tempTop, rect.right, (int) bottom, format.format(num), num, config);
+                }
+                tempTop = bottom;
+                top += info.getTitleHeight();
             }
-            tempTop = bottom;
-            top +=info.getTitleHeight();
         }
         int tempBottom =  showRect.bottom;
         if(tableData.isShowCount() && isFixedCount){
@@ -135,7 +137,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         int textColor =TableConfig.INVALID_COLOR;
         if(backgroundFormat != null&& backgroundFormat.isDraw(position)){
             tempRect.set(left,top,right,bottom);
-            backgroundFormat.drawBackground(canvas,tempRect,config.getPaint());
+            backgroundFormat.drawBackground(canvas,tempRect,position,config.getPaint());
             textColor =  backgroundFormat.getTextColor(position);
             isDrawBg = true;
         }

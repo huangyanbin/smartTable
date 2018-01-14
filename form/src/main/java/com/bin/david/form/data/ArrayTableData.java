@@ -1,5 +1,6 @@
 package com.bin.david.form.data;
 
+import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 import com.bin.david.form.listener.OnColumnItemClickListener;
 
@@ -15,7 +16,6 @@ import java.util.List;
 public class ArrayTableData<T> extends TableData<T>{
 
     private  T[][] data;
-    private String[] titleNames;
     private List<Column<T>> arrayColumns;
     private OnItemClickListener onItemClickListener;
 
@@ -23,16 +23,22 @@ public class ArrayTableData<T> extends TableData<T>{
         List<Column<T>> columns = new ArrayList<>();
         for(int i = 0;i <data.length;i++){
             T[] dataArray = data[i];
-            Column<T> column = new Column<>(titleNames[i], "ARRAY",drawFormat);
+            Column<T> column = new Column<>(titleNames == null?"":titleNames[i], null,drawFormat);
             column.setDatas(Arrays.asList(dataArray));
             columns.add(column);
         }
         ArrayList<T> arrayList = new ArrayList<>(Arrays.asList( data[0]));
         ArrayTableData<T> tableData =  new ArrayTableData<>(tableName,arrayList,columns);
-        tableData.setTitleNames(titleNames);
+
         tableData.setData(data);
         return tableData;
     }
+
+    public static<T> ArrayTableData<T> create(SmartTable<T> table,String tableName, T[][] data, IDrawFormat<T> drawFormat){
+        table.getConfig().setShowColumnTitle(false);
+        return create(tableName,null,data,drawFormat);
+    }
+
 
     private ArrayTableData(String tableName, List<T> t, List<Column<T>> columns) {
         super(tableName, t, new ArrayList<Column>(columns));
@@ -53,13 +59,6 @@ public class ArrayTableData<T> extends TableData<T>{
         this.data = data;
     }
 
-    public String[] getTitleNames() {
-        return titleNames;
-    }
-
-    public void setTitleNames(String[] titleNames) {
-        this.titleNames = titleNames;
-    }
 
 
 

@@ -15,7 +15,7 @@ import com.bin.david.form.utils.DensityUtils;
 public class LineStyle implements IStyle {
 
     private float width =-1;
-    private int color;
+    private int color =-1;
     private boolean isFill;
     private PathEffect effect = new PathEffect();
     private static  float defaultLineSize = 2f;
@@ -63,7 +63,7 @@ public class LineStyle implements IStyle {
     }
 
     public int getColor() {
-        if(color == 0){
+        if(color == -1){
             return defaultLineColor;
         }
         return color;

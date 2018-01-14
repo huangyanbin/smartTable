@@ -104,6 +104,14 @@ public class TableConfig {
      */
     private boolean isShowYSequence = true;
     /**
+     * 是否显示表格标题
+     */
+    private boolean isShowTableTitle = true;
+    /**
+     * 是否显示列标题
+     */
+    private boolean isShowColumnTitle = true;
+    /**
      * 格子进行背景格式化
      */
     private IBackgroundFormat<CellInfo> contentBackgroundFormat;
@@ -459,5 +467,21 @@ public class TableConfig {
 
     public void setColumnTitleHorizontalPadding(int columnTitleHorizontalPadding) {
         this.columnTitleHorizontalPadding = columnTitleHorizontalPadding;
+    }
+
+    public boolean isShowTableTitle() {
+        return isShowTableTitle;
+    }
+
+    public void setShowTableTitle(boolean showTableTitle) {
+        isShowTableTitle = showTableTitle;
+    }
+
+    public boolean isShowColumnTitle() {
+        return isShowColumnTitle;
+    }
+
+    public void setShowColumnTitle(boolean showColumnTitle) {
+        isShowColumnTitle = showColumnTitle;
     }
 }

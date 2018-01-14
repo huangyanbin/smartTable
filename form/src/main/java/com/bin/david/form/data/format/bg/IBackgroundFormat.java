@@ -12,12 +12,9 @@ public interface IBackgroundFormat<T> {
     /**
      * 绘制背景
      */
-    void drawBackground(Canvas canvas, Rect rect, Paint paint);
+    void drawBackground(Canvas canvas, Rect rect,T t, Paint paint);
 
-    /**
-     * 获取背景颜色
-     */
-    int getBackGroundColor();
+
 
     /**
      * 是否绘制

@@ -84,7 +84,7 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
     public boolean drawBackground(Canvas c, Column column, Rect rect, TableConfig config) {
         IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
         if(isDrawBackground && backgroundFormat != null && backgroundFormat.isDraw(column)){
-            backgroundFormat.drawBackground(c,rect,config.getPaint());
+            backgroundFormat.drawBackground(c,rect,column,config.getPaint());
             return true;
         }
         return false;

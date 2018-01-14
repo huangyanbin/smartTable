@@ -109,6 +109,7 @@ public class ManyActivity extends AppCompatActivity implements View.OnClickListe
         };
         table.getConfig().setContentBackgroundFormat(backgroundFormat)
                 .setYSequenceBgFormat(backgroundFormat2);
+        table.getConfig().setFixedYSequence(true);
         table.setTableData(tableData);
 
     }

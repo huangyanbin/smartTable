@@ -13,11 +13,16 @@ import com.bin.david.form.core.TableConfig;
 public abstract class BaseBackgroundFormat<T> implements IBackgroundFormat<T> {
 
     @Override
-    public void drawBackground(Canvas canvas, Rect rect, Paint paint) {
+    public void drawBackground(Canvas canvas, Rect rect, T t,Paint paint) {
         paint.setColor(getBackGroundColor());
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(rect.left,rect.top,rect.right,rect.bottom,paint);
     }
+
+    /**
+     * 获取背景颜色
+     */
+      public abstract   int getBackGroundColor();
 
     /**
      * 默认字体颜色不跟随背景变化，

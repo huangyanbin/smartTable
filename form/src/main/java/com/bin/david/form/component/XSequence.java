@@ -119,7 +119,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         boolean isDrawBg = false;
         if(backgroundFormat != null&& backgroundFormat.isDraw(position)){
             tempRect.set(left,top,right,bottom);
-            backgroundFormat.drawBackground(canvas, tempRect,config.getPaint());
+            backgroundFormat.drawBackground(canvas, tempRect,position,config.getPaint());
             isDrawBg = true;
         }
         config.getXSequenceStyle().fillPaint(paint);

@@ -102,11 +102,15 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
         if(tableData != null) {
             Rect rect = tableData.getTableInfo().getTableRect();
             if(rect != null) {
-                measurer.measureTableTitle(tableData,tableTitle,showRect);
+                if(config.isShowTableTitle()) {
+                    measurer.measureTableTitle(tableData, tableTitle, showRect);
+                }
                 tableRect.set(rect);
-                Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,measurer.getHeadHeight(tableData));
-                tableTitle.onMeasure(scaleRect,showRect,config);
-                tableTitle.onDraw(canvas,showRect, tableData.getTableName(), config);
+                Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,config.isShowTableTitle()?measurer.getHeadHeight(tableData):0);
+                if(config.isShowTableTitle()) {
+                    tableTitle.onMeasure(scaleRect, showRect, config);
+                    tableTitle.onDraw(canvas, showRect, tableData.getTableName(), config);
+                }
                 drawGridBackground(canvas);
                 if(config.isShowYSequence()) {
                     yAxis.onMeasure(scaleRect, showRect, config);

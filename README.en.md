@@ -30,6 +30,8 @@
 ![zoom function](/img/zoom.gif)
 
 ![progress](/img/progress.jpg)
+
+![seat](/img/seat.jpg)
 > How Use
 
 - Quote

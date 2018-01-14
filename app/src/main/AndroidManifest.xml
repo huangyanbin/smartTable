@@ -28,6 +28,7 @@
         <activity android:name=".AlignActivity"/>
         <activity android:name=".ArrayModeActivity"/>
         <activity android:name=".MultParseModeActivity"/>
+        <activity android:name=".SeatModeActivity"/>
     </application>
 
 </manifest>

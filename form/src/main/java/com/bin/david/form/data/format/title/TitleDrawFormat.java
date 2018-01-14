@@ -51,7 +51,7 @@ public class TitleDrawFormat implements ITitleDrawFormat {
     public boolean drawBackground(Canvas c, Column column, Rect rect,  TableConfig config) {
         IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
         if(isDrawBg && backgroundFormat != null && backgroundFormat.isDraw(column)){
-            backgroundFormat.drawBackground(c,rect,config.getPaint());
+            backgroundFormat.drawBackground(c,rect,column,config.getPaint());
             return true;
         }
         return false;
