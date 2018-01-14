@@ -29,6 +29,7 @@ public class TableData<T> {
     private ISequenceFormat XSequenceFormat;
     private ISequenceFormat YSequenceFormat;
     private int maxHierarchy;
+    private int lineSize;
     /**
      *
      * @param tableName 表名
@@ -58,7 +59,8 @@ public class TableData<T> {
         this.tableName = tableName;
         this.columns = columns;
         this.t = t;
-        tableInfo.setLineSize(t.size());
+        lineSize = t.size();
+        tableInfo.setLineSize(lineSize);
         childColumns = new ArrayList<>();
         columnInfos = new ArrayList<>();
         childColumnInfos = new ArrayList<>();
@@ -105,7 +107,8 @@ public class TableData<T> {
      */
     public void setT(List<T> t) {
         this.t = t;
-        tableInfo.setLineSize(t.size());
+        lineSize = t.size();
+        tableInfo.setLineSize(lineSize);
     }
 
 
@@ -184,6 +187,10 @@ public class TableData<T> {
      */
     public boolean isShowCount() {
         return showCount;
+    }
+
+    public void setLineSize(int lineSize) {
+        this.lineSize = lineSize;
     }
 
     /**
@@ -270,6 +277,11 @@ public class TableData<T> {
         }
         return null;
     }
+
+    public int getLineSize() {
+        return lineSize;
+    }
+
 
     public int getMaxHierarchy() {
         return maxHierarchy;

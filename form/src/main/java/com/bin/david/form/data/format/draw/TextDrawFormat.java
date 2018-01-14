@@ -62,7 +62,6 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
     }
 
-    @Override
     public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, Rect rect,TableConfig config) {
         IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
         if(isDrawBg && backgroundFormat != null && backgroundFormat.isDraw(cellInfo)){

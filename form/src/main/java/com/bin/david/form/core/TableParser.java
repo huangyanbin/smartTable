@@ -1,5 +1,6 @@
 package com.bin.david.form.core;
 
+import com.bin.david.form.data.ArrayTableData;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.TableInfo;
@@ -22,26 +23,33 @@ public class TableParser<T> {
      * 解析数据
      */
     public List<Column> parse(TableData<T> tableData, TableConfig config){
-        sort(tableData);
+
         tableData.getChildColumns().clear();
         tableData.getColumnInfos().clear();
         int maxLevel = getChildColumn(tableData);
         TableInfo tableInfo =  tableData.getTableInfo();
         tableInfo.setColumnSize(tableData.getChildColumns().size());
         tableInfo.setMaxLevel(maxLevel);
-        try {
-            List<T> dataList = tableData.getT();
+        if(tableData instanceof ArrayTableData){
             for (Column column : tableData.getChildColumns()) {
-                column.getValues().clear();
-                column.getDatas().clear();
-                column.fillData(dataList,tableInfo,config);
+                column.parseData(tableInfo,config);
             }
-        }catch (NoSuchFieldException e){
-            throw new TableException(
-                    "NoSuchFieldException :Please check whether field name is correct!");
-        }catch (IllegalAccessException e){
-            throw new TableException(
-                    "IllegalAccessException :Please make sure that access objects are allowed!");
+        }else {
+            sort(tableData);
+            try {
+                List<T> dataList = tableData.getT();
+                for (Column column : tableData.getChildColumns()) {
+                    column.getValues().clear();
+                    column.getDatas().clear();
+                    column.fillData(dataList, tableInfo, config);
+                }
+            } catch (NoSuchFieldException e) {
+                throw new TableException(
+                        "NoSuchFieldException :Please check whether field name is correct!");
+            } catch (IllegalAccessException e) {
+                throw new TableException(
+                        "IllegalAccessException :Please make sure that access objects are allowed!");
+            }
         }
        return tableData.getColumns();
     }
@@ -52,12 +60,13 @@ public class TableParser<T> {
     public void addData(TableData<T> tableData, List<T> addData,boolean isFoot, TableConfig config){
 
         try {
-            int size = tableData.getT().size();
+            int size = tableData.getLineSize();
             if(isFoot) {
                 tableData.getT().addAll(addData);
             }else{
                 tableData.getT().addAll(0,addData);
             }
+            tableData.setLineSize(tableData.getT().size());
             TableInfo tableInfo =  tableData.getTableInfo();
             tableInfo.addLine(addData.size());
             for (Column column : tableData.getChildColumns()) {

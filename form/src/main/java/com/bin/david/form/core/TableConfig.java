@@ -61,6 +61,15 @@ public class TableConfig {
      * 上下padding(为了表格的美观，暂只支持统一的padding)
      */
     private int verticalPadding = 10;
+
+    /**
+     * 增加列标题上下padding
+     */
+    private int columnTitleVerticalPadding =10;
+    /**
+     * 增加列标题左右padding
+     */
+    private int columnTitleHorizontalPadding =40;
     /**
      * 左右padding(为了表格的美观，暂只支持统一的padding)
      */
@@ -315,6 +324,15 @@ public class TableConfig {
         return this;
     }
 
+    public int getColumnTitleVerticalPadding() {
+        return columnTitleVerticalPadding;
+    }
+
+    public TableConfig setColumnTitleVerticalPadding(int columnTitleVerticalPadding) {
+        this.columnTitleVerticalPadding = columnTitleVerticalPadding;
+        return this;
+    }
+
     public int getContentBackgroundColor() {
         return contentBackgroundColor;
     }
@@ -433,5 +451,13 @@ public class TableConfig {
 
      void setZoom(float zoom) {
         this.zoom = zoom;
+    }
+
+    public int getColumnTitleHorizontalPadding() {
+        return columnTitleHorizontalPadding;
+    }
+
+    public void setColumnTitleHorizontalPadding(int columnTitleHorizontalPadding) {
+        this.columnTitleHorizontalPadding = columnTitleHorizontalPadding;
     }
 }

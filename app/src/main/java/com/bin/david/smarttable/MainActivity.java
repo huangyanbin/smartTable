@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(ParseModeActivity.class,"解析模式"));
         items.add(new MainItem(AnnotationModeActivity.class,"注解模式"));
         items.add(new MainItem(NetHttpActivity.class,"网络模式"));
+        items.add(new MainItem(ArrayModeActivity.class,"数组模式"));
         items.add(new MainItem(PagerModeActivity.class,"分页模式"));
+        items.add(new MainItem(MultParseModeActivity.class,"多行解析模式"));
         items.add(new MainItem(AlignActivity.class,"文字Align测试"));
         items.add(new MainItem(ManyActivity.class,"测试150列"));
        items.add(new MainItem(TableListActivity.class,"测试手势冲突"));

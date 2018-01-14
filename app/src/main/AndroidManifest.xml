@@ -26,6 +26,8 @@
         <activity android:name=".PagerModeActivity"/>
         <activity android:name=".ManyActivity"/>
         <activity android:name=".AlignActivity"/>
+        <activity android:name=".ArrayModeActivity"/>
+        <activity android:name=".MultParseModeActivity"/>
     </application>
 
 </manifest>

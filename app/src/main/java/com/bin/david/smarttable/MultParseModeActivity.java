@@ -5,9 +5,9 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,8 +15,8 @@ import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
-import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.TableData;
+import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
@@ -37,7 +37,6 @@ import com.bin.david.smarttable.bean.UserInfo;
 import com.bin.david.smarttable.view.BaseCheckDialog;
 import com.bin.david.smarttable.view.BaseDialog;
 import com.bin.david.smarttable.view.QuickChartDialog;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -63,7 +62,7 @@ import java.util.Random;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
-public class ParseModeActivity extends AppCompatActivity implements View.OnClickListener{
+public class MultParseModeActivity extends AppCompatActivity implements View.OnClickListener{
 
     private SmartTable<UserInfo> table;
     private BaseCheckDialog<TableStyle> chartDialog;
@@ -83,7 +82,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
         for(int i = 0;i <50; i++) {
-            UserInfo userData = new UserInfo("用户"+i, random.nextInt(70), System.currentTimeMillis()
+            UserInfo userData = new UserInfo("用户高中生侦探工藤新一，被称为日本警察的救世主，平成年代的福尔摩斯"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             userData.setUrl(tanBeans.get(i%urlSize).getUrl());
             testData.add(userData);
@@ -92,6 +91,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         final Column<String> nameColumn = new Column<>("姓名", "name");
         nameColumn.setFixed(true);
         nameColumn.setAutoCount(true);
+        nameColumn.setDrawFormat(new MultiLineDrawFormat<String>(this,100));
         final Column<Integer> ageColumn = new Column<>("年龄", "age");
         ageColumn.setFixed(true);
         ageColumn.setAutoCount(true);
@@ -100,7 +100,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
             @Override
             protected Bitmap getBitmap(final String s, String value, int position) {
                 if(map.get(s)== null) {
-                    Glide.with(ParseModeActivity.this).asBitmap().load(s)
+                    Glide.with(MultParseModeActivity.this).asBitmap().load(s)
                             .apply(bitmapTransform(new CenterCrop())).into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
@@ -152,7 +152,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column5 = new Column<>("勾选1", "isCheck", new ImageResDrawFormat<Boolean>(size,size) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return MultParseModeActivity.this;
             }
 
             @Override
@@ -166,7 +166,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column6 = new Column<>("勾选2", "isCheck", new TextImageDrawFormat<Boolean>(size,size, TextImageDrawFormat.LEFT,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return MultParseModeActivity.this;
             }
 
             @Override
@@ -180,7 +180,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column7 = new Column<>("勾选3", "isCheck", new TextImageDrawFormat<Boolean>(size,size, TextImageDrawFormat.RIGHT,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return MultParseModeActivity.this;
             }
 
             @Override
@@ -194,7 +194,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column8 = new Column<>("勾选4", "isCheck", new TextImageDrawFormat<Boolean>(size,size, TextImageDrawFormat.TOP,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return MultParseModeActivity.this;
             }
 
             @Override
@@ -208,7 +208,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column<Boolean> column9 = new Column<>("勾选5", "isCheck", new TextImageDrawFormat<Boolean>(size,size, TextImageDrawFormat.BOTTOM,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return MultParseModeActivity.this;
             }
 
             @Override
@@ -231,7 +231,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         tableData.setTitleDrawFormat(new TitleImageDrawFormat(size,size, TitleImageDrawFormat.RIGHT,10) {
             @Override
             protected Context getContext() {
-                return ParseModeActivity.this;
+                return MultParseModeActivity.this;
             }
 
             @Override
@@ -269,7 +269,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         ageColumn.setOnColumnItemClickListener(new OnColumnItemClickListener<Integer>() {
             @Override
             public void onClick(Column<Integer> column, String value, Integer integer, int position) {
-                Toast.makeText(ParseModeActivity.this,"点击了"+value,Toast.LENGTH_SHORT).show();
+                Toast.makeText(MultParseModeActivity.this,"点击了"+value,Toast.LENGTH_SHORT).show();
             }
         });
         FontStyle fontStyle = new FontStyle();
@@ -306,14 +306,14 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                         table.setSortColumn(columnInfo.column, !columnInfo.column.isReverseSort());
                     }
                 }
-                Toast.makeText(ParseModeActivity.this,"点击了"+columnInfo.column.getColumnName(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(MultParseModeActivity.this,"点击了"+columnInfo.column.getColumnName(),Toast.LENGTH_SHORT).show();
             }
         });
         table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
         IBackgroundFormat<CellInfo> backgroundFormat = new BaseBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor() {
-                return ContextCompat.getColor(ParseModeActivity.this,R.color.content_bg);
+                return ContextCompat.getColor(MultParseModeActivity.this,R.color.content_bg);
             }
             @Override
             public boolean isDraw(CellInfo cellInfo) {
@@ -324,7 +324,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         IBackgroundFormat<Integer> backgroundFormat2 = new BaseBackgroundFormat<Integer>() {
             @Override
             public int getBackGroundColor() {
-                return ContextCompat.getColor(ParseModeActivity.this,R.color.arc1);
+                return ContextCompat.getColor(MultParseModeActivity.this,R.color.arc1);
             }
             @Override
             public boolean isDraw(Integer integer) {
@@ -337,7 +337,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
             @Override
             public int getTextColor(Integer integer) {
 
-                return  ContextCompat.getColor(ParseModeActivity.this,R.color.white);
+                return  ContextCompat.getColor(MultParseModeActivity.this,R.color.white);
             }
         };
         table.getConfig().setContentBackgroundFormat(backgroundFormat)

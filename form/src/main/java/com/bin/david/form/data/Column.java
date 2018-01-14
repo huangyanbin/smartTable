@@ -1,7 +1,6 @@
 package com.bin.david.form.data;
 
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.count.DecimalCountFormat;
@@ -52,6 +51,7 @@ public class Column<T> implements Comparable<Column> {
     private Paint.Align textAlign;
     private boolean isAutoCount =false;
     private int id;
+    private boolean isReflect = true;
 
     private boolean isParent;
 
@@ -117,6 +117,8 @@ public class Column<T> implements Comparable<Column> {
         datas = new ArrayList<>();
         values = new ArrayList<>();
     }
+
+
 
     /**
      * 获取列名
@@ -201,9 +203,11 @@ public class Column<T> implements Comparable<Column> {
     }
     /**
      * 设置需要解析的数据
+     * 直接设置数据，不需要反射获取值
      */
     public void setDatas(List<T> datas) {
         this.datas = datas;
+        isReflect = false;
     }
 
     public List<String> getValues() {
@@ -316,6 +320,27 @@ public class Column<T> implements Comparable<Column> {
                 }
             }
         }
+    }
+
+    public void parseData( TableInfo tableInfo, TableConfig config){
+        if(datas != null) {
+            int size = datas.size();
+            int[] lineHeightArray = tableInfo.getLineHeightArray();
+            for (int i = 0; i < size; i++) {
+                T t = datas.get(i);
+                values.add(format(t));
+                setRowHeight(config, lineHeightArray, i,null);
+            }
+        }
+    }
+    private String format(T t){
+        String value;
+        if (format != null) {
+            value = format.format(t);
+        } else {
+            value = t == null ? "" : t.toString();
+        }
+        return value;
     }
 
     /**
@@ -439,12 +464,7 @@ public class Column<T> implements Comparable<Column> {
         T t = (T) field.get(o);
 
 
-        String value;
-        if (format != null) {
-            value = format.format(t);
-        } else {
-            value = t == null ? "" : t.toString();
-        }
+        String value = format(t);
         if (value.length() > maxValueLength) {
             maxValueLength = value.length();
             longestValue = value;
@@ -645,5 +665,13 @@ public class Column<T> implements Comparable<Column> {
      */
     public void setTextAlign(Paint.Align textAlign) {
         this.textAlign = textAlign;
+    }
+
+    public boolean isReflect() {
+        return isReflect;
+    }
+
+    public void setReflect(boolean reflect) {
+        isReflect = reflect;
     }
 }

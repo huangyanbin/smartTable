@@ -56,8 +56,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
     @Override
     public void onDraw(Canvas canvas, Rect showRect, TableData<T> tableData, TableConfig config) {
         format = tableData.getYSequenceFormat();
-        List<T> list = tableData.getT();
-        int totalSize = list.size();
+        int totalSize = tableData.getLineSize();
         TableInfo info = tableData.getTableInfo();
         float top = rect.top + info.getTopHeight();
         canvas.save();

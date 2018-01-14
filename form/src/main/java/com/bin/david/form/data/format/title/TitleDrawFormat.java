@@ -21,8 +21,7 @@ public class TitleDrawFormat implements ITitleDrawFormat {
     public int measureWidth(Column column, TableConfig config) {
         Paint paint = config.getPaint();
         config.getColumnTitleStyle().fillPaint(paint);
-        return (int) (paint.measureText(column.getColumnName())
-                        +2*config.getHorizontalPadding());
+        return (int) (paint.measureText(column.getColumnName()));
     }
 
 
@@ -30,8 +29,7 @@ public class TitleDrawFormat implements ITitleDrawFormat {
     public int measureHeight(TableConfig config) {
         Paint paint = config.getPaint();
         config.getColumnTitleStyle().fillPaint(paint);
-        return DrawUtils.getTextHeight(config.getColumnTitleStyle(),config.getPaint())
-                + 2*config.getVerticalPadding();
+        return DrawUtils.getTextHeight(config.getColumnTitleStyle(),config.getPaint());
     }
 
     @Override
@@ -50,7 +48,6 @@ public class TitleDrawFormat implements ITitleDrawFormat {
         c.drawText(column.getColumnName(),DrawUtils.getTextCenterX(rect.left,rect.right,paint), DrawUtils.getTextCenterY((rect.bottom+rect.top)/2,paint) ,paint);
     }
 
-    @Override
     public boolean drawBackground(Canvas c, Column column, Rect rect,  TableConfig config) {
         IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
         if(isDrawBg && backgroundFormat != null && backgroundFormat.isDraw(column)){

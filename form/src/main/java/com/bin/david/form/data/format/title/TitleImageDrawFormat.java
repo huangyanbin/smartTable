@@ -45,7 +45,7 @@ public abstract class TitleImageDrawFormat extends ImageResTitleDrawFormat {
     @Override
     public int measureWidth(Column column, TableConfig config) {
         int textWidth = textDrawFormat.measureWidth(column, config);
-        horizontalPadding = config.getHorizontalPadding();
+        horizontalPadding = config.getColumnTitleHorizontalPadding();
         if(direction == LEFT || direction == RIGHT) {
             return getImageWidth() + textWidth+drawPadding;
         }else {
@@ -57,7 +57,7 @@ public abstract class TitleImageDrawFormat extends ImageResTitleDrawFormat {
     public int measureHeight( TableConfig config) {
         int imgHeight = super.measureHeight(config);
         int textHeight = textDrawFormat.measureHeight(config);
-        verticalPadding = config.getVerticalPadding();
+        verticalPadding = config.getColumnTitleVerticalPadding();
         if(direction == TOP || direction == BOTTOM) {
             return getImageHeight() + textHeight+drawPadding;
         }else {
@@ -79,43 +79,43 @@ public abstract class TitleImageDrawFormat extends ImageResTitleDrawFormat {
         switch (direction){
             case LEFT:
                     width = (int) (measureWidth(column,config)*config.getZoom());
-                    imgLeft = (int) (rect.left+(rect.right -rect.left- width)/2 +horizontalPadding*config.getZoom());
+                    imgLeft = rect.left+(rect.right -rect.left- width)/2;
                     imgRight = (int) (imgLeft+getImageWidth()*config.getZoom());
                     this.rect.set(imgLeft,rect.top,imgRight,rect.bottom);
                     super.draw(c,column,this.rect,config);
-                     textWidth = (int) ((textDrawFormat.measureWidth(column,config) -2*horizontalPadding)*config.getZoom());
+                     textWidth = (int) (textDrawFormat.measureWidth(column,config)*config.getZoom());
                      this.rect.set(imgRight+drawPadding,rect.top,imgRight+drawPadding+textWidth,rect.bottom);
                      textDrawFormat.draw(c,column,this.rect,config);
 
                    break;
             case RIGHT:
                 width = (int) (measureWidth(column,config)*config.getZoom());
-                 imgRight = (int) (rect.right-(rect.right -rect.left- width)/2-horizontalPadding*config.getZoom());
+                 imgRight = rect.right-(rect.right -rect.left- width)/2;
                 imgLeft = (int) (imgRight - getImageWidth()*config.getZoom());
                 this.rect.set(imgLeft,rect.top,imgRight,rect.bottom);
                 super.draw(c,column,this.rect,config);
-                textWidth = (int) ((textDrawFormat.measureWidth(column,config) -2*horizontalPadding)*config.getZoom());
+                textWidth = (int) (textDrawFormat.measureWidth(column,config)*config.getZoom());
                 this.rect.set(imgLeft-drawPadding - textWidth,rect.top,imgLeft-drawPadding,rect.bottom);
                 textDrawFormat.draw(c,column,this.rect,config);
 
                 break;
             case TOP:
                 height = (int) (measureHeight(config)*config.getZoom());
-                imgTop = (int) (rect.top+(rect.top -rect.bottom- height)/2 +verticalPadding*config.getZoom());
+                imgTop =rect.top+(rect.top -rect.bottom- height)/2 ;
                 imgBottom = (int) (imgTop+ getImageHeight()*config.getZoom());
                 this.rect.set(rect.left,imgTop,rect.right,imgBottom);
                 textDrawFormat.draw(c,column, this.rect,config);
-                textHeight = (int) ((textDrawFormat.measureHeight(config) -2*verticalPadding)*config.getZoom());
+                textHeight = (int) (textDrawFormat.measureHeight(config)*config.getZoom());
                 this.rect.set(rect.left,imgBottom+drawPadding,rect.right,imgBottom+drawPadding+textHeight);
                 super.draw(c,column,this.rect,config);
                 break;
             case BOTTOM:
                 height = (int) (measureHeight(config)*config.getZoom());
-                imgBottom = (int) (rect.bottom-(rect.bottom -rect.top- height)/2- verticalPadding*config.getZoom());
+                imgBottom = rect.bottom-(rect.bottom -rect.top- height)/2;
                 imgTop = (int) (imgBottom - getImageHeight()*config.getZoom());
                 this.rect.set(rect.left,imgTop,rect.right,imgBottom);
                 textDrawFormat.draw(c,column,this.rect,config);
-                textHeight = (int) ((textDrawFormat.measureHeight(config) -2*verticalPadding)*config.getZoom());
+                textHeight = (int) (textDrawFormat.measureHeight(config)*config.getZoom());
                 this.rect.set(rect.left,imgTop-drawPadding-textHeight,rect.right,imgTop-drawPadding);
                 super.draw(c,column,this.rect,config);
                 break;

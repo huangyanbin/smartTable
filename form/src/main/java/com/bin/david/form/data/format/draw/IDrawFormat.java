@@ -28,7 +28,7 @@ public interface IDrawFormat<T>  {
 
     void draw(Canvas c, Column<T> column, T t, String value, Rect rect, int position, TableConfig config);
 
-    boolean drawBackground(Canvas c, CellInfo<T> cellInfo,Rect rect,  TableConfig config);
+
 
 
 }

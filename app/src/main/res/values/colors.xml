@@ -27,4 +27,10 @@
     <color name="arc23">#079df9</color>
     <color name="white">#FFFFFF</color> <!--白色 -->
     <color name="windows_bg">#f6f6f6</color>
+    
+    <color name="github_con_0">#ebedf0</color>
+    <color name="github_con_1">#c6e48b</color>
+    <color name="github_con_2">#7bc96f</color>
+    <color name="github_con_3">#239a3b</color>
+    <color name="github_con_4">#196127</color>
 </resources>

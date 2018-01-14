@@ -30,8 +30,5 @@ public interface ITitleDrawFormat {
      */
     void draw(Canvas c, Column column, Rect rect, TableConfig config);
 
-    /**
-     * 重写可以绘制背景
-     */
-     boolean drawBackground(Canvas c, Column column, Rect rect, TableConfig config);
+
 }

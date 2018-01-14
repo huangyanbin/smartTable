@@ -33,13 +33,13 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
 
     @Override
     public int measureWidth(Column column, TableConfig config) {
-        return  imageWidth +2*config.getHorizontalPadding();
+        return  imageWidth ;
     }
 
     @Override
     public int measureHeight(TableConfig config) {
 
-        return imageHeight + 2*config.getVerticalPadding();
+        return imageHeight;
     }
 
     /**
@@ -81,7 +81,6 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
         }
     }
 
-    @Override
     public boolean drawBackground(Canvas c, Column column, Rect rect, TableConfig config) {
         IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
         if(isDrawBackground && backgroundFormat != null && backgroundFormat.isDraw(column)){
