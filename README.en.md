@@ -19,8 +19,8 @@
 12. contents are displayed in many lines.
 13. pagination mode;
 14. dynamically added data at the end of the end.
-15. rich formatting.
-
+15. rich formatting;
+16. support two dimensional array display (for similar timetable, film ballot, etc.)
 >  video display
 
 ![set table background](/img/bg.png)
@@ -29,7 +29,7 @@
 
 ![zoom function](/img/zoom.gif)
 
-
+![progress](/img/progress.jpg)
 > How Use
 
 - Quote
@@ -49,7 +49,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.4.7'
+	        compile 'com.github.huangyanbin:SmartTable:1.5'
 	}
 ```
 

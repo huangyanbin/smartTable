@@ -20,10 +20,12 @@
 12. 内容多行显示；
 13. 分页模式；
 14. 首尾动态添加数据;
-15. 丰富的格式化。
-
+15. 丰富的格式化;
+16. 支持二维数组展示（用于类似日程表，电影选票等）
 > 视频展示
 ![设置背景](/img/bg.png)
+
+![日程](/img/progress.jpg)
 
 ![基本功能](/img/table.gif)
 
@@ -49,7 +51,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.4.7'
+	        compile 'com.github.huangyanbin:SmartTable:1.5'
 	}
 ```
 
