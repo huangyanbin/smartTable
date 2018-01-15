@@ -106,7 +106,8 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
                     measurer.measureTableTitle(tableData, tableTitle, showRect);
                 }
                 tableRect.set(rect);
-                Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,config.isShowTableTitle()?measurer.getHeadHeight(tableData):0);
+                Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,0,
+                        tableData.getTableInfo());
                 if(config.isShowTableTitle()) {
                     tableTitle.onMeasure(scaleRect, showRect, config);
                     tableTitle.onDraw(canvas, showRect, tableData.getTableName(), config);

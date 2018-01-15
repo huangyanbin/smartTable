@@ -49,6 +49,10 @@ public class TableInfo {
     }
 
     public int getTopHeight() {
+        return topHeight;
+    }
+
+    public int getTopHeight(float zoom) {
         return (int) (topHeight*zoom);
     }
 

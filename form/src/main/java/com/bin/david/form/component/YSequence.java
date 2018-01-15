@@ -37,7 +37,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
     @Override
     public void onMeasure(Rect scaleRect, Rect showRect, TableConfig config) {
         this.scaleRect = scaleRect;
-        int scaleWidth = (int) (width*config.getZoom());
+        int scaleWidth = (int) (width*(config.getZoom()>1?1:config.getZoom()));
         boolean fixed = config.isFixedYSequence();
         rect.top = scaleRect.top;
         rect.bottom = scaleRect.bottom;
@@ -58,15 +58,16 @@ public class YSequence<T> implements IComponent<TableData<T>> {
     @Override
     public void onDraw(Canvas canvas, Rect showRect, TableData<T> tableData, TableConfig config) {
         format = tableData.getYSequenceFormat();
+        float hZoom = (config.getZoom()>1?1:config.getZoom());
         int totalSize = tableData.getLineSize();
         TableInfo info = tableData.getTableInfo();
-        float top = rect.top + info.getTopHeight();
+        float top = rect.top + info.getTopHeight(hZoom);
         canvas.save();
         int showLeft = showRect.left-clipWidth;
         boolean isFixTop = config.isFixedXSequence();
-        canvas.clipRect(showLeft,isFixTop ?(showRect.top+info.getTopHeight()):showRect.top,
+        canvas.clipRect(showLeft,isFixTop ?(showRect.top+info.getTopHeight(hZoom)):showRect.top,
                 showRect.left,showRect.bottom);
-        DrawUtils.fillBackground(canvas, showLeft,isFixTop ?(showRect.top+info.getTopHeight()):showRect.top,
+        DrawUtils.fillBackground(canvas, showLeft,isFixTop ?(showRect.top+info.getTopHeight(hZoom)):showRect.top,
                 showRect.left,showRect.bottom,config.getYSequenceBackgroundColor(),config.getPaint());
         int num = 0;
         float tempTop= top;
@@ -75,10 +76,10 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         if(isFixedTitle){
             int clipHeight;
             if(isFixTop){
-                clipHeight = info.getTopHeight();
+                clipHeight = info.getTopHeight(hZoom);
             }else{
                 int disY = showRect.top - scaleRect.top;
-                clipHeight= Math.max(0, info.getTopHeight()-disY);
+                clipHeight= Math.max(0, info.getTopHeight(hZoom)-disY);
             }
             tempTop = showRect.top + clipHeight;
         }
@@ -150,7 +151,8 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         if(isDrawBg && textColor != TableConfig.INVALID_COLOR){
             paint.setColor(textColor);
         }
-        paint.setTextSize(paint.getTextSize()*config.getZoom());
+        float hZoom = (config.getZoom()>1?1:config.getZoom());
+        paint.setTextSize(paint.getTextSize()*hZoom);
         paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(text,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
     }

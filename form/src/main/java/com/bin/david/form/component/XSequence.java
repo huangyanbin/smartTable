@@ -37,7 +37,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
     @Override
     public void onMeasure(Rect scaleRect, Rect showRect, TableConfig config) {
         boolean fixed = config.isFixedXSequence();
-        int scaleHeight = (int) (config.getZoom() *height);
+        int scaleHeight = (int) ((config.getZoom()>1?1:config.getZoom()) *height);
         rect.top = fixed ? showRect.top: scaleRect.top;
         rect.bottom = rect.top+ scaleHeight;
         rect.left = scaleRect.left;
@@ -128,7 +128,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
             paint.setColor(backgroundFormat.getTextColor(position));
         }
         //字体缩放
-        paint.setTextSize(paint.getTextSize()*config.getZoom());
+        paint.setTextSize(paint.getTextSize()*(config.getZoom()>1?1:config.getZoom()));
         paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(text,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
 

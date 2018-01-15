@@ -32,7 +32,7 @@ public class AnnotationModeActivity extends AppCompatActivity {
         }
         table = (SmartTable<UserInfo>) findViewById(R.id.table);
         table.setData(list);
-        table.getConfig().setShowTableTitle(true);
+        table.getConfig().setShowTableTitle(false);
         table.setZoom(true,2,0.2f);
         table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<CellInfo>() {
             @Override

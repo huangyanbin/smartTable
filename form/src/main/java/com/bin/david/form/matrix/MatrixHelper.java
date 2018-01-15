@@ -15,6 +15,7 @@ import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
+import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.listener.OnTableChangeListener;
 import com.bin.david.form.listener.TableClickObserver;
 import com.bin.david.form.listener.Observable;
@@ -381,7 +382,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
      * @return 缩放后内容的大小
      *
      */
-    public Rect getZoomProviderRect(Rect showRect,Rect providerRect,int offsetTop) {
+    public Rect getZoomProviderRect(Rect showRect, Rect providerRect, int offsetTop, TableInfo tableInfo) {
 
         originalRect.set(showRect);
         originalRect.top +=offsetTop;
@@ -392,6 +393,10 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         int oldh = providerRect.height();
         int newWidth = (int) (oldw * zoom);
         int newHeight = (int) (oldh * zoom);
+        if(zoom >1) {
+            newWidth -= (int)(tableInfo.getyAxisWidth() * (zoom - 1));
+            newHeight -= (int)(tableInfo.getTopHeight()*(zoom-1));
+        }
         int offsetX = (int) (showRect.width()*(zoom-1))/2;
         int offsetY =(int) (showRect.height()*(zoom-1))/2;
         int minTranslateX = -offsetX;

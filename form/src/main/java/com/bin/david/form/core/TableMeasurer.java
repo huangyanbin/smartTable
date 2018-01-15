@@ -31,11 +31,11 @@ public class TableMeasurer<T> {
         return tableInfo;
     }
 
-    public int getHeadHeight(TableData<T> tableData){
+/*    public int getHeadHeight(TableData<T> tableData){
         TableInfo tableInfo = tableData.getTableInfo();
         return tableInfo.getTopHeight()+tableInfo.getTableTitleHeight()
                 +tableInfo.getTitleHeight()*tableInfo.getMaxLevel();
-    }
+    }*/
 
     public void measureTableTitle(TableData<T> tableData,ITableTitle tableTitle,Rect showRect){
         TableInfo tableInfo = tableData.getTableInfo();

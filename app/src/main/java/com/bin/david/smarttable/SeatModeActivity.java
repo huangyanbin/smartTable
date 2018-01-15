@@ -75,7 +75,7 @@ public class SeatModeActivity extends AppCompatActivity {
             @Override
             public void drawBackground(Canvas canvas, Rect rect, Integer position, Paint paint) {
                 paint.setStyle(Paint.Style.FILL);
-                paint.setColor(ContextCompat.getColor(SeatModeActivity.this,R.color.base_black_title_color));
+                paint.setColor(ContextCompat.getColor(SeatModeActivity.this,R.color.seat_y_bg));
                 canvas.drawRect(rect,paint);
             }
 
