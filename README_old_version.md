@@ -2,6 +2,12 @@
 
 ###### 一款android自动生成表格框架
 
+
+**- 1.5版本**
+
+> 修复缩放问题
+> 增加ArrayTableData 支持二维数组
+
 **- 1.4版本**
 
 > 删除设置固定第一列setFixedFirstColumn方法，column的setFixed(boolean fixed)来固定任意列。

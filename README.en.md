@@ -2,7 +2,7 @@
 [![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
 ###### A Android automatically generated table framework
 * [Chinese README](/README.md/)
-* [Apk download 1.3version](/img/smartTable.apk)
+* [Apk download version1.5 ](/img/smartTable.apk)
 * [Version of history](/README_old_version_en.md/)
 > function introduction
 1. fast configuration automatic generation of tables;
