@@ -68,7 +68,7 @@ public class SeatModeActivity extends AppCompatActivity {
         lineStyle.setColor(ContextCompat.getColor(this,android.R.color.transparent));
         table.getConfig().setGridStyle(lineStyle);
         table.getConfig().setShowXSequence(false);
-        table.getConfig().setFixedYSequence(false);//暂时有问题 ，后面修复
+        table.getConfig().setFixedYSequence(true);//暂时有问题 ，后面修复
         table.setZoom(true,2,1);
         final  int roundSize = DensityUtils.dp2px(SeatModeActivity.this,5);
         table.getConfig().setYSequenceBgFormat(new IBackgroundFormat<Integer>() {

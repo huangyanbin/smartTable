@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -397,23 +398,39 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         int maxTranslateX = newWidth-showWidth-offsetX;
         int minTranslateY = -offsetY;
         int maxTranslateY = newHeight-showHeight-offsetY;
+        boolean isFullShowX = false,isFullShowY = false;
         //计算出对比当前中心点的偏移量
+        if(maxTranslateX > minTranslateX){
+            if(translateX  < minTranslateX){
+                translateX = minTranslateX;
 
-        if(translateX  < minTranslateX){
-            translateX = minTranslateX;
-        }else if(translateX > maxTranslateX){
-            translateX = maxTranslateX;
+            }else if(translateX > maxTranslateX){
+                translateX = maxTranslateX;
+            }
+        }else{
+            isFullShowX = true;
         }
-        if(translateY < minTranslateY){
-            translateY = minTranslateY;
-        }else if(translateY > maxTranslateY){
-            translateY = maxTranslateY;
+        if(maxTranslateY > minTranslateY) {
+            if (translateY < minTranslateY) {
+                translateY = minTranslateY;
+            } else if (translateY > maxTranslateY) {
+                translateY = maxTranslateY;
+            }
+        }else{
+            isFullShowY = true;
         }
-
         scaleRect.left = providerRect.left - offsetX - translateX;
-        scaleRect.right = providerRect.right - offsetX - translateX;
         scaleRect.top = providerRect.top - offsetY - translateY;
-        scaleRect.bottom = providerRect.bottom - offsetY - translateY;
+        if(isFullShowX){
+            scaleRect.left = scaleRect.left < showRect.left ? showRect.left :scaleRect.left;
+            scaleRect.left = scaleRect.left > showRect.right-newWidth ? showRect.right-newWidth :scaleRect.left;
+        }
+        if(isFullShowY){
+            scaleRect.top = scaleRect.top < showRect.top ? showRect.top :scaleRect.top;
+            scaleRect.top = scaleRect.top > showRect.bottom-newHeight ? showRect.bottom-newHeight :scaleRect.top;
+        }
+        scaleRect.right = scaleRect.left+newWidth;
+        scaleRect.bottom = providerRect.bottom +newHeight;
         zoomRect.set(scaleRect);
         return scaleRect;
 

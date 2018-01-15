@@ -1,6 +1,7 @@
 package com.bin.david.form.component;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -45,6 +46,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         if(fixed){
             scaleRect.left += scaleWidth;
             showRect.left +=scaleWidth;
+            clipWidth = scaleWidth;
         }else{
             int disX = showRect.left - scaleRect.left;
             clipWidth=Math.max(0, scaleWidth-disX);

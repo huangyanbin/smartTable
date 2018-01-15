@@ -478,6 +478,7 @@ public class TableConfig {
     }
 
     public boolean isShowColumnTitle() {
+
         return isShowColumnTitle;
     }
 
