@@ -29,7 +29,7 @@ public class SeatModeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_annotation);
+        setContentView(R.layout.activity_full_table);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         table = (SmartTable<Integer>) findViewById(R.id.table);
         Integer[][] data = new Integer[20][];

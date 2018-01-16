@@ -41,7 +41,7 @@ public class NetHttpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table);
+        setContentView(R.layout.activity_full_table);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         table = (SmartTable<PM25>) findViewById(R.id.table);
 
@@ -104,8 +104,8 @@ public class NetHttpActivity extends AppCompatActivity {
                             table.setData(pm25List);
                             isFrist = false;
                         }else{
-                            table.addData(pm25List,false);
-                            table.back();
+                            table.addData(pm25List,true);
+                            table.end();
                         }
                         mHandler.postDelayed(AddDataRunnable,1000);
 

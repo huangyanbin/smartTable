@@ -9,6 +9,12 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+    }
+
+    packagingOptions {
+        exclude('META-INF/LICENSE.txt')
+        exclude('META-INF/LICENSE')
     }
     buildTypes {
         release {
@@ -28,9 +34,14 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.github.huangyanbin:SmartChart:1.3.2'
     compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.android.support:multidex:1.0.0'
     compile 'com.github.bumptech.glide:glide:4.3.1'
     compile 'jp.wasabeef:glide-transformations:3.0.1'
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.31'
+    compile files('libs/poi-3.16.jar')
+    compile files('libs/poi-ooxml-3.16.jar')
+    compile files('libs/poi-excelant-3.16.jar')
+    compile files('libs/jxl.jar')
 }

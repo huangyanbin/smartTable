@@ -4,10 +4,15 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
+        android:name="android.support.multidex.MultiDexApplication"
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -29,6 +34,7 @@
         <activity android:name=".ArrayModeActivity"/>
         <activity android:name=".MultParseModeActivity"/>
         <activity android:name=".SeatModeActivity"/>
+        <activity android:name=".ExcelModeActivity"/>
     </application>
 
 </manifest>

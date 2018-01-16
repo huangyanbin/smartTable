@@ -31,10 +31,12 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(SeatModeActivity.class,"数组模式2(选座)"));
         items.add(new MainItem(PagerModeActivity.class,"分页模式"));
         items.add(new MainItem(MultParseModeActivity.class,"多行解析模式"));
+        items.add(new MainItem(ExcelModeActivity.class,"Excel模式"));
         items.add(new MainItem(AlignActivity.class,"文字Align测试"));
         items.add(new MainItem(ManyActivity.class,"测试150列"));
-       items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
+        items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
         items.add(new MainItem(TanTanActivity.class,"探探效果"));
+
         itemAdapter = new ItemAdapter(items);
         recyclerView.setAdapter(itemAdapter);
         itemAdapter.openLoadAnimation();

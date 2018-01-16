@@ -328,12 +328,18 @@ public class Column<T> implements Comparable<Column> {
             int[] lineHeightArray = tableInfo.getLineHeightArray();
             for (int i = 0; i < size; i++) {
                 T t = datas.get(i);
-                values.add(format(t));
+                String value = format(t);
+                if(value.length() > maxValueLength){
+                    longestValue = value;
+                    maxValueLength = value.length();
+                }
+                values.add(value);
+
                 setRowHeight(config, lineHeightArray, i,null);
             }
         }
     }
-    private String format(T t){
+    public String format(T t){
         String value;
         if (format != null) {
             value = format.format(t);

@@ -1,6 +1,7 @@
 package com.bin.david.form.data;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 import com.bin.david.form.listener.OnColumnItemClickListener;
 
@@ -27,7 +28,7 @@ public class ArrayTableData<T> extends TableData<T>{
             column.setDatas(Arrays.asList(dataArray));
             columns.add(column);
         }
-        ArrayList<T> arrayList = new ArrayList<>(Arrays.asList( data[0]));
+        ArrayList<T> arrayList = new ArrayList<>(Arrays.asList(data[0]));
         ArrayTableData<T> tableData =  new ArrayTableData<>(tableName,arrayList,columns);
 
         tableData.setData(data);
@@ -39,7 +40,15 @@ public class ArrayTableData<T> extends TableData<T>{
         return create(tableName,null,data,drawFormat);
     }
 
-
+    /**
+     * 设置默认格式化
+     * @param format
+     */
+    private void setFormat(IFormat<T> format){
+        for(Column<T> column:arrayColumns){
+            column.setFormat(format);
+        }
+    }
     private ArrayTableData(String tableName, List<T> t, List<Column<T>> columns) {
         super(tableName, t, new ArrayList<Column>(columns));
         this.arrayColumns = columns;
