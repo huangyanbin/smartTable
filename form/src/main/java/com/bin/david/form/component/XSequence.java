@@ -112,7 +112,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
 
     private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,int position,TableConfig config){
         Paint paint= config.getPaint();
-        config.getGridStyle().fillPaint(paint);
+        config.getSequenceGridStyle().fillPaint(paint);
         canvas.drawRect(left,top,right,bottom,paint);
         //绘制背景
         IBackgroundFormat<Integer> backgroundFormat = config.getXSequenceBgFormat();

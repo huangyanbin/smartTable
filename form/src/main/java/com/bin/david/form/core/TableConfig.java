@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 
@@ -53,6 +54,10 @@ public class TableConfig {
      * 列标题网格样式
      */
     private LineStyle columnTitleGridStyle;
+    /**
+     * 序列网格样式
+     */
+    private LineStyle SequenceGridStyle;
     /**
      * 表格网格
      */
@@ -153,6 +158,14 @@ public class TableConfig {
      * 是否固定统计行
      */
     private boolean fixedCountRow = true;
+    /**
+     * 左上角空隙背景颜色
+     */
+    private int leftAndTopBackgroundColor;
+    /**
+     * 左上角资源设置
+     */
+    private LeftTopDrawFormat leftTopDrawFormat;
     /**
      * 画笔
      */
@@ -465,16 +478,18 @@ public class TableConfig {
         return columnTitleHorizontalPadding;
     }
 
-    public void setColumnTitleHorizontalPadding(int columnTitleHorizontalPadding) {
+    public TableConfig setColumnTitleHorizontalPadding(int columnTitleHorizontalPadding) {
         this.columnTitleHorizontalPadding = columnTitleHorizontalPadding;
+        return this;
     }
 
     public boolean isShowTableTitle() {
         return isShowTableTitle;
     }
 
-    public void setShowTableTitle(boolean showTableTitle) {
+    public TableConfig setShowTableTitle(boolean showTableTitle) {
         isShowTableTitle = showTableTitle;
+        return this;
     }
 
     public boolean isShowColumnTitle() {
@@ -482,7 +497,37 @@ public class TableConfig {
         return isShowColumnTitle;
     }
 
-    public void setShowColumnTitle(boolean showColumnTitle) {
+    public int getLeftAndTopBackgroundColor() {
+        return leftAndTopBackgroundColor;
+    }
+
+    public TableConfig setLeftAndTopBackgroundColor(int leftAndTopBackgroundColor) {
+        this.leftAndTopBackgroundColor = leftAndTopBackgroundColor;
+        return this;
+    }
+
+    public LeftTopDrawFormat getLeftTopDrawFormat() {
+        return leftTopDrawFormat;
+    }
+
+    public void setLeftTopDrawFormat(LeftTopDrawFormat leftTopDrawFormat) {
+        this.leftTopDrawFormat = leftTopDrawFormat;
+    }
+
+    public TableConfig setShowColumnTitle(boolean showColumnTitle) {
         isShowColumnTitle = showColumnTitle;
+        return this;
+    }
+
+    public LineStyle getSequenceGridStyle() {
+        if(SequenceGridStyle == null){
+            return defaultGridStyle;
+        }
+        return SequenceGridStyle;
+    }
+
+    public TableConfig setSequenceGridStyle(LineStyle sequenceGridStyle) {
+        SequenceGridStyle = sequenceGridStyle;
+        return this;
     }
 }

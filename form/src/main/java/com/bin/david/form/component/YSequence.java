@@ -1,5 +1,6 @@
 package com.bin.david.form.component;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,6 +11,8 @@ import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.draw.ImageResDrawFormat;
+import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
 import com.bin.david.form.utils.DrawUtils;
 
@@ -62,10 +65,13 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         int totalSize = tableData.getLineSize();
         TableInfo info = tableData.getTableInfo();
         float top = rect.top + info.getTopHeight(hZoom);
-        canvas.save();
         int showLeft = showRect.left-clipWidth;
         boolean isFixTop = config.isFixedXSequence();
-        canvas.clipRect(showLeft,isFixTop ?(showRect.top+info.getTopHeight(hZoom)):showRect.top,
+        int showTop = isFixTop ?(showRect.top+info.getTopHeight(hZoom)):showRect.top;
+        tempRect.set(showLeft,showTop-info.getTopHeight(hZoom),showRect.left,showTop);
+        drawLeftAndTop(canvas,tempRect,config);
+        canvas.save();
+        canvas.clipRect(showLeft,showTop,
                 showRect.left,showRect.bottom);
         DrawUtils.fillBackground(canvas, showLeft,isFixTop ?(showRect.top+info.getTopHeight(hZoom)):showRect.top,
                 showRect.left,showRect.bottom,config.getYSequenceBackgroundColor(),config.getPaint());
@@ -132,6 +138,19 @@ public class YSequence<T> implements IComponent<TableData<T>> {
 
     }
 
+    private void drawLeftAndTop(Canvas canvas,Rect rect,TableConfig config){
+        if(config.getLeftAndTopBackgroundColor() !=0){
+            Paint paint = config.getPaint();
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(config.getLeftAndTopBackgroundColor());
+            canvas.drawRect(rect,paint);
+        }
+        LeftTopDrawFormat format = config.getLeftTopDrawFormat();
+        if( format!=null){
+            format.setImageSize(rect.width(),rect.height());
+            config.getLeftTopDrawFormat().draw(canvas,null,null,null,rect,0,config);
+        }
+    }
 
     private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,int position,TableConfig config){
         Paint paint= config.getPaint();
@@ -144,7 +163,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             textColor =  backgroundFormat.getTextColor(position);
             isDrawBg = true;
         }
-        config.getGridStyle().fillPaint(paint);
+        config.getSequenceGridStyle().fillPaint(paint);
         canvas.drawRect(left,top,right,bottom,paint);
         config.getYSequenceStyle().fillPaint(paint);
 

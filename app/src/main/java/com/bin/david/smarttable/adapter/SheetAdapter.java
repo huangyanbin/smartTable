@@ -24,7 +24,7 @@ public class SheetAdapter  extends BaseQuickAdapter<String,BaseViewHolder>{
     protected void convert(BaseViewHolder helper, String item) {
         helper.setText(R.id.tv_sheet_name,item).setTextColor(R.id.tv_sheet_name,
                 ContextCompat.getColor(mContext,
-                        selectPosition == helper.getAdapterPosition()?R.color.arc2:R.color.arc_temp));
+                        selectPosition == helper.getAdapterPosition()?R.color.arc23:R.color.arc_temp));
         helper.getView(R.id.tv_sheet_name).setBackgroundColor( ContextCompat.getColor(mContext,
                 selectPosition == helper.getAdapterPosition()?R.color.white:R.color.arc_bg));
     }

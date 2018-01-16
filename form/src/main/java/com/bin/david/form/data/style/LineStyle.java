@@ -22,7 +22,7 @@ public class LineStyle implements IStyle {
     private static  int  defaultLineColor = Color.parseColor("#e6e6e6");
 
     public LineStyle() {
-        width = 0;
+
     }
 
 

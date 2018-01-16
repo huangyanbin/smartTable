@@ -1,5 +1,6 @@
 package com.bin.david.smarttable;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -11,8 +12,10 @@ import android.view.View;
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.ArrayTableData;
 import com.bin.david.form.data.CellRange;
+import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.format.draw.TextDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
+import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.adapter.SheetAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -46,10 +49,25 @@ public class ExcelModeActivity extends AppCompatActivity {
         table.getConfig().setFixedYSequence(true);
         table.getConfig().setFixedXSequence(true);
         table.getConfig().setShowTableTitle(false);
-        table.getConfig().setHorizontalPadding(DensityUtils.dp2px(this,10));
-        table.getConfig().setColumnTitleHorizontalPadding(DensityUtils.dp2px(this,5));
-        table.getConfig().setXSequenceBackgroundColor(ContextCompat.getColor(this,R.color.arc_bg));
-        table.getConfig().setYSequenceBackgroundColor(ContextCompat.getColor(this,R.color.arc_bg));
+        int backgroundColor = ContextCompat.getColor(this,R.color.arc_bg);
+        int xyGridColor = ContextCompat.getColor(this,R.color.excel_bg); //x,y序列网格颜色
+        table.getConfig().setHorizontalPadding(DensityUtils.dp2px(this,10))
+                .setColumnTitleHorizontalPadding(DensityUtils.dp2px(this,5))
+                .setXSequenceBackgroundColor(backgroundColor)
+                .setYSequenceBackgroundColor(backgroundColor)
+                .setLeftAndTopBackgroundColor(backgroundColor)
+                .setSequenceGridStyle(new LineStyle().setColor(xyGridColor))
+                .setLeftTopDrawFormat(new LeftTopDrawFormat() { //设置左上角三角形
+                    @Override
+                    protected int getResourceID() {
+                        return R.mipmap.excel_triangle;
+                    }
+
+                    @Override
+                    protected Context getContext() {
+                        return ExcelModeActivity.this;
+                    }
+                });
         table.setZoom(true,3,0.5f);
         sheetTask = new SheetAsyncTask();
         sheetTask.execute();
@@ -125,7 +143,6 @@ public class ExcelModeActivity extends AppCompatActivity {
                                 range.getTopLeft().getColumn(),range.getBottomRight().getColumn());
                         cellRanges[i] = cellRange;
                     }
-
                 }
                 maxRow = sheet.getRows();
                 maxColumn =  sheet.getColumns();
