@@ -3,10 +3,8 @@ package com.bin.david.form.component;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
@@ -29,7 +27,7 @@ import java.util.List;
 
 public class TableProvider<T> implements TableClickObserver {
 
-    private Path path;
+
     private Rect scaleRect;
     private Rect showRect;
     private Rect originRect;
@@ -37,8 +35,6 @@ public class TableProvider<T> implements TableClickObserver {
     private PointF clickPoint;
     private ColumnInfo clickColumnInfo;
     private boolean isClickPoint;
-
-
     private OnColumnClickListener onColumnClickListener;
     /**
      * 选中格子格式化
@@ -50,28 +46,22 @@ public class TableProvider<T> implements TableClickObserver {
     private Rect tempRect; //用于存储数据
     private Column tipColumn;
     private int tipPosition;
+    private GridDrawer<T> gridDrawer;
     private PointF tipPoint = new PointF();
 
     public TableProvider() {
-       path = new Path();
+
         clickPoint = new PointF(-1, -1);
         originRect = new Rect();
         clipRect = new Rect();
         tempRect  = new Rect();
         operation = new SelectionOperation();
+        gridDrawer  = new GridDrawer<>();
     }
 
     public void onDraw(Canvas canvas, Rect scaleRect, Rect showRect,
                        TableData<T> tableData, TableConfig config) {
-        isClickPoint = false;
-        clickColumnInfo = null;
-        tipColumn = null;
-        operation.reset();
-        originRect.set(showRect);
-        this.scaleRect = scaleRect;
-        this.showRect = showRect;
-        this.config = config;
-        this.tableData = tableData;
+        setData(scaleRect, showRect, tableData, config);
         canvas.save();
         canvas.clipRect(this.showRect);
         drawColumnTitle(canvas, config);
@@ -82,11 +72,23 @@ public class TableProvider<T> implements TableClickObserver {
         if (isClickPoint && clickColumnInfo != null) {
             onColumnClickListener.onClick(clickColumnInfo);
         }
-
         if (tipColumn != null) {
             drawTip(canvas, tipPoint.x, tipPoint.y, tipColumn, tipPosition);
         }
+    }
 
+    private void setData(Rect scaleRect, Rect showRect, TableData<T> tableData, TableConfig config) {
+        isClickPoint = false;
+        clickColumnInfo = null;
+        tipColumn = null;
+        gridDrawer.reset();
+        operation.reset();
+        originRect.set(showRect);
+        this.scaleRect = scaleRect;
+        this.showRect = showRect;
+        this.config = config;
+        this.tableData = tableData;
+        gridDrawer.setTableData(tableData);
     }
 
     private void drawColumnTitle(Canvas canvas, TableConfig config) {
@@ -243,6 +245,7 @@ public class TableProvider<T> implements TableClickObserver {
         List<ColumnInfo> childColumnInfo = tableData.getChildColumnInfos();
         boolean isPerFixed = false;
         int clipCount = 0;
+        Rect correctCellRect;
         for (int i = 0; i < columnSize; i++) {
             top = scaleRect.top;
             Column column = columns.get(i);
@@ -270,43 +273,45 @@ public class TableProvider<T> implements TableClickObserver {
                 for (int j = 0; j < size; j++) {
                     String value = values.get(j);
                     float bottom = top + info.getLineHeightArray()[j]*config.getZoom();
-
                     if (top < showRect.bottom) {
                         if (right > showRect.left && bottom > showRect.top) {
                             Object data = column.getDatas().get(j);
-                            tempRect.set((int)left,(int)top,(int)right,(int)bottom);
-                            if (DrawUtils.isClick(tempRect, clickPoint)) {
-                                operation.setSelectionRect(i,j,tempRect);
-                                tipPoint.x = (left + right) / 2;
-                                tipPoint.y = (top + bottom) / 2;
-                                tipColumn = column;
-                                tipPosition = j;
-                                clickColumn(column, j, value, data);
-                                isClickPoint = true;
-                                clickPoint.set(-1, -1);
+                            tempRect.set((int) left, (int) top, (int) right, (int) bottom);
+                            correctCellRect = gridDrawer.correctCellRect(j, i, tempRect, config.getZoom()); //矫正格子的大小
+                            if (correctCellRect != null) {
+                                if (DrawUtils.isClick(correctCellRect, clickPoint)) {
+                                    operation.setSelectionRect(i, j, correctCellRect);
+                                    tipPoint.x = (left + right) / 2;
+                                    tipPoint.y = (top + bottom) / 2;
+                                    tipColumn = column;
+                                    tipPosition = j;
+                                    clickColumn(column, j, value, data);
+                                    isClickPoint = true;
+                                    clickPoint.set(-1, -1);
+                                }
+                                operation.checkSelectedPoint(i, j, correctCellRect);
+                                config.getContentStyle().fillPaint(paint);
+                                column.getDrawFormat().draw(canvas, column, data, value, correctCellRect, j, config);
                             }
-                            operation.checkSelectedPoint(i,j,tempRect);
-                            config.getContentStyle().fillPaint(paint);
-                            column.getDrawFormat().draw(canvas,column, data, value, tempRect, j, config);
                         }
                     } else {
                         break;
                     }
                     if (i == 0) {
-                        config.getGridStyle().fillPaint(paint);
-                        drawHorizontalGrid(canvas, Math.max(scaleRect.left, showRect.left),
-                                (int)top, Math.min(scaleRect.right, showRect.right), (int)bottom, paint);
+                        gridDrawer.addHorizontalGrid(j, Math.max(scaleRect.left, showRect.left),
+                                 Math.min(scaleRect.right, showRect.right), (int)bottom);
                     }
                     top = bottom;
                 }
                 config.getGridStyle().fillPaint(paint);
-                drawVerticalGrid(canvas, (int)left, Math.max(scaleRect.top, showRect.top)
-                        , (int)right, showRect.bottom, paint);
+                gridDrawer.addVerticalGrid(i,Math.max(scaleRect.top, showRect.top)
+                        , showRect.bottom,(int)left);
                 left = tempLeft + width;
             } else {
                 break;
             }
         }
+        gridDrawer.drawGrid(canvas,config);
         for(int i = 0;i < clipCount;i++){
             canvas.restore();
         }
@@ -328,22 +333,9 @@ public class TableProvider<T> implements TableClickObserver {
         }
     }
 
-    private void drawHorizontalGrid(Canvas canvas, int left, int top, int right, int bottom, Paint paint) {
-        path.rewind();
-        path.moveTo(left, bottom);
-        path.lineTo(right, bottom);
-        canvas.drawPath(path, paint);
-    }
 
-    private void drawVerticalGrid(Canvas canvas, int left, int top, int right, int bottom, Paint paint) {
-        path.rewind();
-        path.moveTo(left, top);
-        path.lineTo(left, bottom);
-        path.rewind();
-        path.moveTo(right, top);
-        path.lineTo(right, bottom);
-        canvas.drawPath(path, paint);
-    }
+
+
 
     /**
      * 绘制提示

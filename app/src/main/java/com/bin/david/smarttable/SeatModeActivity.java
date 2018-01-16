@@ -69,7 +69,7 @@ public class SeatModeActivity extends AppCompatActivity {
         table.getConfig().setGridStyle(lineStyle);
         table.getConfig().setShowXSequence(false);
         table.getConfig().setFixedYSequence(true);//暂时有问题 ，后面修复
-        table.setZoom(true,2,1);
+        table.setZoom(true,1,0.5f);
         final  int roundSize = DensityUtils.dp2px(SeatModeActivity.this,5);
         table.getConfig().setYSequenceBgFormat(new IBackgroundFormat<Integer>() {
             @Override

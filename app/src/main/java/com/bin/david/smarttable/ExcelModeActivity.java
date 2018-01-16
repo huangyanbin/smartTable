@@ -6,11 +6,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.ArrayTableData;
+import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.format.draw.TextDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.utils.DensityUtils;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jxl.Cell;
+import jxl.Range;
 import jxl.Sheet;
 import jxl.Workbook;
 
@@ -33,6 +34,7 @@ public class ExcelModeActivity extends AppCompatActivity {
     private ExcelAsyncTask excelTask;
     private RecyclerView recyclerView;
     private String fileName = "c.xls";
+    private  CellRange[] cellRanges;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,9 +111,22 @@ public class ExcelModeActivity extends AppCompatActivity {
 
             try {
                 int maxRow, maxColumn;
+                cellRanges = null;
                 InputStream is = getAssets().open(fileName);
                 Workbook workbook = Workbook.getWorkbook(is);
                 Sheet sheet = workbook.getSheet(position[0]);
+                Range[] ranges = sheet.getMergedCells();
+                if(ranges !=null) {
+                    cellRanges = new CellRange[ranges.length];
+                    for (int i = 0;i < ranges.length;i++) {
+                        Range range =ranges[i];
+                        CellRange cellRange = new CellRange(range.getTopLeft().getRow(),
+                                range.getBottomRight().getRow(),
+                                range.getTopLeft().getColumn(),range.getBottomRight().getColumn());
+                        cellRanges[i] = cellRange;
+                    }
+
+                }
                 maxRow = sheet.getRows();
                 maxColumn =  sheet.getColumns();
                 String[][] data = new String[maxRow][];
@@ -149,6 +164,7 @@ public class ExcelModeActivity extends AppCompatActivity {
                 data = new String[26][50]; //美观
             }
             ArrayTableData<String> tableData = ArrayTableData.create(table, "Excel表", data, new TextDrawFormat<String>());
+            tableData.setCellRangeAddresses(cellRanges);
             table.setTableData(tableData);
 
         }

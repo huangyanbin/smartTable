@@ -30,6 +30,7 @@ public class TableData<T> {
     private ISequenceFormat YSequenceFormat;
     private int maxHierarchy;
     private int lineSize;
+    private CellRange[] cellRangeAddresses;
     /**
      *
      * @param tableName 表名
@@ -282,6 +283,13 @@ public class TableData<T> {
         return lineSize;
     }
 
+    public CellRange[] getCellRangeAddresses() {
+        return cellRangeAddresses;
+    }
+
+    public void setCellRangeAddresses(CellRange[] cellRangeAddresses) {
+        this.cellRangeAddresses = cellRangeAddresses;
+    }
 
     public int getMaxHierarchy() {
         return maxHierarchy;
