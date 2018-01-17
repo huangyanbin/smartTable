@@ -1,6 +1,10 @@
 package com.bin.david.smarttable;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.format.selected.ISelectFormat;
 import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
@@ -69,6 +75,19 @@ public class ExcelModeActivity extends AppCompatActivity {
                     }
                 });
         table.setZoom(true,3,0.5f);
+        table.setSelectFormat(new ISelectFormat() {
+            @Override
+            public void draw(Canvas canvas, Rect rect, Rect showRect, TableConfig config) {
+                Paint paint = config.getPaint();
+                paint.setColor(Color.parseColor("#3A5FCD"));
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setStrokeWidth(3);
+                canvas.drawRect(rect.left,showRect.top,rect.right,showRect.bottom,paint);
+                paint.setStyle(Paint.Style.FILL);
+                canvas.drawRect(rect.left-10,showRect.top-10,rect.left+10,showRect.top+10,paint);
+                canvas.drawRect(rect.right-10,showRect.bottom-10,rect.right+10,showRect.bottom+10,paint);
+            }
+        });
         sheetTask = new SheetAsyncTask();
         sheetTask.execute();
 

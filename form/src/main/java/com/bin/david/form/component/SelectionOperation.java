@@ -59,7 +59,7 @@ public class SelectionOperation {
     public void draw(Canvas canvas, Rect showRect, TableConfig config){
 
         if(selectFormat !=null && isShow){
-          selectFormat.draw(canvas,selectionRect,config);
+          selectFormat.draw(canvas,selectionRect,showRect,config);
         }
     }
 

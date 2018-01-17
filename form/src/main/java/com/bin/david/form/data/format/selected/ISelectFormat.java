@@ -12,5 +12,5 @@ import com.bin.david.form.core.TableConfig;
 
 public interface ISelectFormat {
 
-     void draw(Canvas canvas, Rect rect, TableConfig config);
+     void draw(Canvas canvas, Rect rect,Rect showRect, TableConfig config);
 }

@@ -16,7 +16,7 @@ public class BaseSelectFormat implements ISelectFormat {
 
 
      @Override
-     public void draw(Canvas canvas, Rect rect, TableConfig config) {
+     public void draw(Canvas canvas, Rect rect,Rect showRect, TableConfig config) {
           Paint paint = config.getPaint();
           paint.setColor(Color.parseColor("#3A5FCD"));
           paint.setStyle(Paint.Style.STROKE);
