@@ -2,7 +2,7 @@
 [![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
 ###### An Android automatically generated table framework
 * [Chinese README](/README.md/)
-* [Apk download version1.5 ](/img/smartTable.apk)
+* [Apk download version1.6](/img/smartTable.apk)
 * [Version of history](/README_old_version_en.md/)
 > function introduction
 1. fast configuration automatic generation of tables;
@@ -21,6 +21,8 @@
 14. dynamically added data at the end of the end.
 15. rich formatting;
 16. support two dimensional array display (for similar timetable, film ballot, etc.)
+17. support the import of Excel
+18. form merge cell
 >  video display
 
 ![set table background](/img/bg.png)
@@ -51,7 +53,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.5'
+	        compile 'com.github.huangyanbin:SmartTable:1.6'
 	}
 ```
 

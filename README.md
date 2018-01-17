@@ -2,7 +2,7 @@
 [![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
 ###### 一款android自动生成表格框架
 * [English README](/README.en.md/)
-* [apk version 1.5版本下载地址](/img/smartTable.apk)
+* [apk version 1.6版本下载地址](/img/smartTable.apk)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
 > 功能介绍
@@ -54,7 +54,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.5'
+	        compile 'com.github.huangyanbin:SmartTable:1.6'
 	}
 ```
 

@@ -1,6 +1,19 @@
 # SmartTable version of history
 
-######Automatic table frame of a Android
+###### An Android automatically generated table framework
+
+
+**- version 1.6**
+
+> repair the zoom offset problem
+> increase import Excel
+Increase cell merge
+> increase the upper left corner voids formatting
+
+**- version 1.5**
+
+> fix the zoom problem
+> add ArrayTableData to support two dimensional arrays
 
 **- version 1.4**
 
