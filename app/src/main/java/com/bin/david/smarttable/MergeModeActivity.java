@@ -41,23 +41,7 @@ public class MergeModeActivity extends AppCompatActivity {
         table.setData(list);
         table.getConfig().setShowTableTitle(false);
         table.setZoom(true,2,0.2f);
-        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<CellInfo>() {
-            @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(MergeModeActivity.this,R.color.selectColor);
-            }
 
-            @Override
-            public boolean isDraw(CellInfo cellInfo) {
-               return "name".equals(cellInfo.column.getFieldName())
-                       && cellInfo.position%2 ==1;
-            }
-
-            @Override
-            public int getTextColor(CellInfo cellInfo) {
-                return ContextCompat.getColor(MergeModeActivity.this,R.color.white);
-            }
-        });
     }
     public void onClick(View view) {
         table.back();

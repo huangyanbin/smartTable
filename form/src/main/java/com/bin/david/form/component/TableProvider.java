@@ -309,8 +309,8 @@ public class TableProvider<T> implements TableClickObserver {
                     tempRect.set((int) left, (int) top, (int) right, (int) bottom);
                     correctCellRect = gridDrawer.correctCellRect(j, i, tempRect, config.getZoom()); //矫正格子的大小
                     if (correctCellRect != null) {
-                    if (top < showRect.bottom) {
-                        if (right > showRect.left && bottom > showRect.top) {
+                    if (correctCellRect.top < showRect.bottom) {
+                        if (correctCellRect.right > showRect.left && correctCellRect.bottom > showRect.top) {
                             Object data = column.getDatas().get(j);
                                 if (DrawUtils.isClick(correctCellRect, clickPoint)) {
                                     operation.setSelectionRect(i, j, correctCellRect);
