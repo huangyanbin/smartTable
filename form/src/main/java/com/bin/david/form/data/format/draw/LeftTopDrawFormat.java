@@ -3,7 +3,12 @@ package com.bin.david.form.data.format.draw;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.LruCache;
+
+import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.Column;
 
 /**
  * Created by huang on 2017/10/30.
@@ -28,4 +33,13 @@ public abstract class LeftTopDrawFormat extends ImageResDrawFormat<String> {
        setImageHeight(h);
    }
 
+
+    @Override
+    public void draw(Canvas c, Column<String> column, String s, String value, Rect rect, int position, TableConfig config) {
+       //为了保持三角形不变形，不跟随缩放
+       float zoom = config.getZoom();
+        config.setZoom(zoom>1?1:zoom);
+        super.draw(c, column, s, value, rect, position, config);
+        config.setZoom(zoom);
+    }
 }

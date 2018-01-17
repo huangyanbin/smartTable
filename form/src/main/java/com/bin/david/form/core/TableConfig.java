@@ -470,7 +470,7 @@ public class TableConfig {
         return zoom;
     }
 
-     void setZoom(float zoom) {
+    public void setZoom(float zoom) {
         this.zoom = zoom;
     }
 

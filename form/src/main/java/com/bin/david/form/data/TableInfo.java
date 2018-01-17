@@ -1,7 +1,6 @@
 package com.bin.david.form.data;
 
 import android.graphics.Rect;
-import android.util.Log;
 
 /**
  * Created by huang on 2017/11/1.
@@ -11,9 +10,10 @@ public class TableInfo {
 
     private int topHeight;
     private int titleHeight;
-    private int tableTitleHeight;
+    private int tableTitleSize;
     private int yAxisWidth;
     private int countHeight;
+    private int titleDirection;
     private Rect tableRect;
     private int maxLevel = 1;
     private int columnSize;
@@ -131,11 +131,19 @@ public class TableInfo {
         this.yAxisWidth = yAxisWidth;
     }
 
-    public int getTableTitleHeight() {
-        return tableTitleHeight;
+    public int getTableTitleSize() {
+        return tableTitleSize;
     }
 
-    public void setTableTitleHeight(int tableTitleHeight) {
-        this.tableTitleHeight = tableTitleHeight;
+    public void setTableTitleSize(int tableTitleSize) {
+        this.tableTitleSize = tableTitleSize;
+    }
+
+    public int getTitleDirection() {
+        return titleDirection;
+    }
+
+    public void setTitleDirection(int titleDirection) {
+        this.titleDirection = titleDirection;
     }
 }

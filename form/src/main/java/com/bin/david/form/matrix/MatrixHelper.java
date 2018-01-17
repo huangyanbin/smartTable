@@ -15,6 +15,7 @@ import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
+import com.bin.david.form.component.IComponent;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.listener.OnTableChangeListener;
 import com.bin.david.form.listener.TableClickObserver;
@@ -378,14 +379,12 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
      * 获取图片内容的缩放大小
      * @param showRect 当前View显示大小
      *@param providerRect 表格实际需要的大小
-     * @param offsetTop 顶部偏移量 （主要为了修复table标题的偏移量）
      * @return 缩放后内容的大小
      *
      */
-    public Rect getZoomProviderRect(Rect showRect, Rect providerRect, int offsetTop, TableInfo tableInfo) {
+    public Rect getZoomProviderRect(Rect showRect, Rect providerRect,TableInfo tableInfo) {
 
         originalRect.set(showRect);
-        originalRect.top +=offsetTop;
          this.showRect.set(showRect);
         int showWidth = showRect.width();
         int showHeight = showRect.height();
@@ -393,9 +392,23 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         int oldh = providerRect.height();
         int newWidth = (int) (oldw * zoom);
         int newHeight = (int) (oldh * zoom);
+        /**
+         * 在表格中，x序列和Y序列不需要跟随放大，需要减掉多计算部分
+         */
         if(zoom >1) {
             newWidth -= (int)(tableInfo.getyAxisWidth() * (zoom - 1));
             newHeight -= (int)(tableInfo.getTopHeight()*(zoom-1));
+        }
+
+        /**
+         * 表格的标题不会跟随放大和缩小，也需要减掉多计算部分
+         * 根据表格标题方向来判断减掉高还是宽
+         */
+        if(tableInfo.getTitleDirection() == IComponent.TOP
+                || tableInfo.getTitleDirection() == IComponent.BOTTOM){
+            newHeight -= (int)(tableInfo.getTableTitleSize()*(zoom-1));
+        }else{
+            newWidth -= (int)(tableInfo.getTableTitleSize()*(zoom-1));
         }
         int offsetX = (int) (showRect.width()*(zoom-1))/2;
         int offsetY =(int) (showRect.height()*(zoom-1))/2;

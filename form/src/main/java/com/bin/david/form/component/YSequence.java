@@ -1,22 +1,17 @@
 package com.bin.david.form.component;
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Rect;
 
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
-import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
 import com.bin.david.form.utils.DrawUtils;
 
-import java.util.List;
 
 /**
  * Created by huang on 2017/10/30.
@@ -94,8 +89,8 @@ public class YSequence<T> implements IComponent<TableData<T>> {
                 num++;
                 float bottom = tempTop + info.getTitleHeight();
                 if (DrawUtils.isVerticalMixRect(showRect, (int) top, (int) bottom)) {
-
-                    draw(canvas, rect.left, (int) tempTop, rect.right, (int) bottom, format.format(num), num, config);
+                    tempRect.set(rect.left, (int) tempTop, rect.right, (int) bottom);
+                    draw(canvas,rect, format.format(num), num, config);
                 }
                 tempTop = bottom;
                 top += info.getTitleHeight();
@@ -105,8 +100,9 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         if(tableData.isShowCount() && isFixedCount){
             int bottom = showRect.bottom;
             tempBottom = bottom-info.getCountHeight();
-            draw(canvas, rect.left, tempBottom,
-                    rect.right, bottom,  format.format(num +totalSize+1),num +totalSize+1, config);
+            tempRect.set(rect.left, tempBottom,
+                    rect.right, bottom);
+            draw(canvas,tempRect,format.format(num +totalSize+1),num +totalSize+1, config);
         }
         if(isFixedTitle || isFixedCount){
             canvas.save();
@@ -117,7 +113,8 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             float bottom = top+info.getLineHeightArray()[i]*config.getZoom();
             if(showRect.bottom >= rect.top) {
                 if (DrawUtils.isVerticalMixRect(showRect, (int)top,  (int)bottom)) {
-                    draw(canvas, rect.left, (int)top, rect.right, (int)bottom, format.format(num),num, config);
+                    tempRect.set(rect.left, (int)top, rect.right, (int)bottom);
+                    draw(canvas, tempRect,format.format(num),num, config);
                 }
             }else{
                 break;
@@ -128,7 +125,8 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             num++;
             float bottom = top+info.getCountHeight();
             if(DrawUtils.isVerticalMixRect(showRect,(int)top,(int)bottom)) {
-                draw(canvas, rect.left, (int)top, rect.right, (int)bottom, format.format(num),num, config);
+                tempRect.set(rect.left, (int)top, rect.right, (int)bottom);
+                draw(canvas,rect, format.format(num),num, config);
             }
         }
         if(isFixedTitle || isFixedCount){
@@ -138,13 +136,21 @@ public class YSequence<T> implements IComponent<TableData<T>> {
 
     }
 
+    /**
+     * 绘制左上角空隙
+     * @param canvas
+     * @param rect
+     * @param config
+     */
     private void drawLeftAndTop(Canvas canvas,Rect rect,TableConfig config){
+        Paint paint = config.getPaint();
         if(config.getLeftAndTopBackgroundColor() !=0){
-            Paint paint = config.getPaint();
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(config.getLeftAndTopBackgroundColor());
             canvas.drawRect(rect,paint);
         }
+        config.getSequenceGridStyle().fillPaint(paint);
+        canvas.drawRect(rect,paint);
         LeftTopDrawFormat format = config.getLeftTopDrawFormat();
         if( format!=null){
             format.setImageSize(rect.width(),rect.height());
@@ -152,19 +158,18 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         }
     }
 
-    private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,int position,TableConfig config){
+    private void draw(Canvas canvas,Rect rect,String text,int position,TableConfig config){
         Paint paint= config.getPaint();
         IBackgroundFormat<Integer> backgroundFormat = config.getYSequenceBgFormat();
         boolean isDrawBg = false;
         int textColor =TableConfig.INVALID_COLOR;
         if(backgroundFormat != null&& backgroundFormat.isDraw(position)){
-            tempRect.set(left,top,right,bottom);
-            backgroundFormat.drawBackground(canvas,tempRect,position,config.getPaint());
+            backgroundFormat.drawBackground(canvas,rect,position,config.getPaint());
             textColor =  backgroundFormat.getTextColor(position);
             isDrawBg = true;
         }
         config.getSequenceGridStyle().fillPaint(paint);
-        canvas.drawRect(left,top,right,bottom,paint);
+        canvas.drawRect(rect,paint);
         config.getYSequenceStyle().fillPaint(paint);
 
         if(isDrawBg && textColor != TableConfig.INVALID_COLOR){
@@ -173,7 +178,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         float hZoom = (config.getZoom()>1?1:config.getZoom());
         paint.setTextSize(paint.getTextSize()*hZoom);
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(text,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
+        canvas.drawText(text,rect.centerX(), DrawUtils.getTextCenterY(rect.centerY(),paint) ,paint);
     }
 
     public int getWidth() {

@@ -31,11 +31,7 @@ public class TableMeasurer<T> {
         return tableInfo;
     }
 
-/*    public int getHeadHeight(TableData<T> tableData){
-        TableInfo tableInfo = tableData.getTableInfo();
-        return tableInfo.getTopHeight()+tableInfo.getTableTitleHeight()
-                +tableInfo.getTitleHeight()*tableInfo.getMaxLevel();
-    }*/
+
 
     public void measureTableTitle(TableData<T> tableData,ITableTitle tableTitle,Rect showRect){
         TableInfo tableInfo = tableData.getTableInfo();
@@ -43,7 +39,8 @@ public class TableMeasurer<T> {
         if(isReMeasure) {
             isReMeasure = false;
             int size = tableTitle.getSize();
-            tableInfo.setTableTitleHeight(size);
+            tableInfo.setTitleDirection(tableTitle.getDirection());
+            tableInfo.setTableTitleSize(size);
             if (tableTitle.getDirection() == IComponent.TOP ||
                     tableTitle.getDirection() == IComponent.BOTTOM) {
                 int height = size;

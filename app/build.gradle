@@ -40,8 +40,5 @@ dependencies {
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.31'
-    compile files('libs/poi-3.16.jar')
-    compile files('libs/poi-ooxml-3.16.jar')
-    compile files('libs/poi-excelant-3.16.jar')
     compile files('libs/jxl.jar')
 }
