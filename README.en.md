@@ -1,6 +1,6 @@
 # SmartTable
 [![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
-###### An Android automatically generated table framework
+###### An Andr oid automatically generated table framework
 * [Chinese README](/README.md/)
 * [Apk download version1.6](/img/smartTable.apk)
 * [Version of history](/README_old_version_en.md/)

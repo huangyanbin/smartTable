@@ -38,7 +38,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     private ScaleGestureDetector mScaleGestureDetector;
     private GestureDetector mGestureDetector;
     private boolean isCanZoom = false;
-    private boolean isScale; //是否正在缩放
+    private boolean isScale; //是否正在缩小
     private Rect originalRect; //原始大小
     private Rect zoomRect;
     private Rect showRect;
@@ -50,6 +50,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     private OnTableChangeListener listener;
     private float flingRate = 0.5f; //速率
     private Rect scaleRect = new Rect();
+    private boolean isZooming; //是否正在缩放
 
     /**
      * 手势帮助类构造方法
@@ -293,7 +294,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
         tempZoom = this.zoom;
-
+        isZooming = true;
         return true;
     }
 
@@ -317,7 +318,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
 
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
-
+        isZooming = false;
     }
 
 
@@ -440,12 +441,21 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         scaleRect.left = providerRect.left - offsetX - translateX;
         scaleRect.top = providerRect.top - offsetY - translateY;
         if(isFullShowX){
-            scaleRect.left = scaleRect.left < showRect.left ? showRect.left :scaleRect.left;
-            scaleRect.left = scaleRect.left > showRect.right-newWidth ? showRect.right-newWidth :scaleRect.left;
+            if(isZooming){
+                scaleRect.left = scaleRect.left < showRect.left ? showRect.left :scaleRect.left;
+                scaleRect.left = scaleRect.left > showRect.right-newWidth ? showRect.right-newWidth :scaleRect.left;
+            }else{
+                scaleRect.left =showRect.left;
+            }
+
         }
         if(isFullShowY){
-            scaleRect.top = scaleRect.top < showRect.top ? showRect.top :scaleRect.top;
-            scaleRect.top = scaleRect.top > showRect.bottom-newHeight ? showRect.bottom-newHeight :scaleRect.top;
+            if(isZooming) {
+                scaleRect.top = scaleRect.top < showRect.top ? showRect.top : scaleRect.top;
+                scaleRect.top = scaleRect.top > showRect.bottom - newHeight ? showRect.bottom - newHeight : scaleRect.top;
+            }else{
+                scaleRect.top =showRect.top;
+            }
         }
         scaleRect.right = scaleRect.left+newWidth;
         scaleRect.bottom = providerRect.bottom +newHeight;
