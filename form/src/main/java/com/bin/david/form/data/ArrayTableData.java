@@ -1,10 +1,12 @@
 package com.bin.david.form.data;
 
+
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 import com.bin.david.form.listener.OnColumnItemClickListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +21,41 @@ public class ArrayTableData<T> extends TableData<T>{
     private  T[][] data;
     private List<Column<T>> arrayColumns;
     private OnItemClickListener onItemClickListener;
+
+    /**
+     * 提供将数组[row][col]转换成数组[col][row]
+     * 因为平时我们提供的二维数组可能是以行作为一组。
+     * @param rowArray
+     * @param <T>
+     * @return
+     */
+    public static<T> T[][]  transformColumnArray(T[][] rowArray){
+        T[][] newData = null;
+        T[] row= null;
+        if(rowArray != null){
+            int maxLength = 0;
+            for(T[] t :rowArray){
+                if(t !=null && t.length > maxLength){
+                    maxLength = t.length;
+                    row= t;
+                }
+            }
+            if(row !=null) {
+                newData = (T[][]) Array.newInstance(rowArray.getClass().getComponentType(),maxLength);
+                for (int i = 0; i < rowArray.length; i++) { //转换一下
+                    for (int j = 0; j < rowArray[i].length; j++) {
+                        if(newData[j] == null) {
+                            T[] column = (T[]) Array.newInstance(row.getClass().getComponentType(),rowArray.length);
+                            newData[j] = column;
+                        }
+                        newData[j][i] = rowArray[i][j];
+                    }
+                }
+            }
+
+        }
+        return newData;
+    }
 
     public static<T> ArrayTableData<T> create(String tableName,String[] titleNames, T[][] data, IDrawFormat<T> drawFormat){
         List<Column<T>> columns = new ArrayList<>();

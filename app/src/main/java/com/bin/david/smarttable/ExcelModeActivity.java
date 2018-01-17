@@ -160,13 +160,8 @@ public class ExcelModeActivity extends AppCompatActivity {
                     data[i] = rows;
                 }
                 workbook.close();
-                String[][] newData = new String[maxColumn][maxRow];
-                for (int i = 0; i < data.length; i++) { //转换一下
-                    for (int j = 0; j < data[i].length; j++) {
-                        newData[j][i] = data[i][j]; // 转置核心
-                    }
-                }
-                return newData;
+                //将行二维数组转换成列的二维数组
+                return  ArrayTableData.transformColumnArray(data);
 
             } catch (Exception e) {
 

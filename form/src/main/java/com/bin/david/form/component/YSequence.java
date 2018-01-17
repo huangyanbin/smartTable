@@ -90,7 +90,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
                 float bottom = tempTop + info.getTitleHeight();
                 if (DrawUtils.isVerticalMixRect(showRect, (int) top, (int) bottom)) {
                     tempRect.set(rect.left, (int) tempTop, rect.right, (int) bottom);
-                    draw(canvas,rect, format.format(num), num, config);
+                    draw(canvas,tempRect, format.format(num), num, config);
                 }
                 tempTop = bottom;
                 top += info.getTitleHeight();
