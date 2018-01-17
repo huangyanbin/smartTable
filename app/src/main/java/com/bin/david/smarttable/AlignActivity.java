@@ -1,7 +1,5 @@
 package com.bin.david.smarttable;
 
-import android.content.res.Resources;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -11,7 +9,7 @@ import android.view.View;
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
-import com.bin.david.form.data.TableData;
+import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.selected.BaseSelectFormat;
@@ -22,19 +20,7 @@ import com.bin.david.smarttable.bean.TableStyle;
 import com.bin.david.smarttable.bean.TanBean;
 import com.bin.david.smarttable.bean.UserInfo;
 import com.bin.david.smarttable.view.BaseCheckDialog;
-import com.bin.david.smarttable.view.BaseDialog;
 import com.bin.david.smarttable.view.QuickChartDialog;
-import com.daivd.chart.component.axis.BaseAxis;
-import com.daivd.chart.component.base.IAxis;
-import com.daivd.chart.component.base.IComponent;
-import com.daivd.chart.core.LineChart;
-import com.daivd.chart.data.ChartData;
-import com.daivd.chart.data.LineData;
-import com.daivd.chart.data.style.PointStyle;
-import com.daivd.chart.provider.component.cross.VerticalCross;
-import com.daivd.chart.provider.component.level.LevelLine;
-import com.daivd.chart.provider.component.mark.BubbleMarkView;
-import com.daivd.chart.provider.component.point.Point;
 
 import java.util.ArrayList;
 import java.util.List;

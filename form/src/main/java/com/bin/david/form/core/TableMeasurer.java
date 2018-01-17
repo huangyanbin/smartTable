@@ -7,7 +7,7 @@ import com.bin.david.form.component.IComponent;
 import com.bin.david.form.component.ITableTitle;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
-import com.bin.david.form.data.TableData;
+import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.utils.DrawUtils;
 

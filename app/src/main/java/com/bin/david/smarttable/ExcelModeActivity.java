@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
-import com.bin.david.form.data.ArrayTableData;
+import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.format.draw.TextDrawFormat;
@@ -37,7 +37,7 @@ public class ExcelModeActivity extends AppCompatActivity {
     private ExcelAsyncTask excelTask;
     private RecyclerView recyclerView;
     private String fileName = "c.xls";
-    private  CellRange[] cellRanges;
+    private  List<CellRange> cellRanges;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,13 +135,13 @@ public class ExcelModeActivity extends AppCompatActivity {
                 Sheet sheet = workbook.getSheet(position[0]);
                 Range[] ranges = sheet.getMergedCells();
                 if(ranges !=null) {
-                    cellRanges = new CellRange[ranges.length];
+                    cellRanges = new ArrayList<>();
                     for (int i = 0;i < ranges.length;i++) {
                         Range range =ranges[i];
                         CellRange cellRange = new CellRange(range.getTopLeft().getRow(),
                                 range.getBottomRight().getRow(),
                                 range.getTopLeft().getColumn(),range.getBottomRight().getColumn());
-                        cellRanges[i] = cellRange;
+                        cellRanges.add(cellRange);
                     }
                 }
                 maxRow = sheet.getRows();

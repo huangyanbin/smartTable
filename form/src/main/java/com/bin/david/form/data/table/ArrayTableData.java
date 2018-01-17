@@ -1,7 +1,8 @@
-package com.bin.david.form.data;
+package com.bin.david.form.data.table;
 
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.data.Column;
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 import com.bin.david.form.listener.OnColumnItemClickListener;
@@ -16,7 +17,7 @@ import java.util.List;
  * 数组TableData
  */
 
-public class ArrayTableData<T> extends TableData<T>{
+public class ArrayTableData<T> extends TableData<T> {
 
     private  T[][] data;
     private List<Column<T>> arrayColumns;

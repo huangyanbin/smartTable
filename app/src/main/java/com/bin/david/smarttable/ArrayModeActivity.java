@@ -6,24 +6,16 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.ArrayTableData;
-import com.bin.david.form.data.CellInfo;
+import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.Column;
-import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.utils.DensityUtils;
-import com.bin.david.smarttable.bean.ChildData;
-import com.bin.david.smarttable.bean.UserInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ArrayModeActivity extends AppCompatActivity {
 

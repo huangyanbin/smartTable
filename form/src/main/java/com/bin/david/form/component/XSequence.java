@@ -7,7 +7,7 @@ import android.graphics.Rect;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.ColumnInfo;
-import com.bin.david.form.data.TableData;
+import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
 import com.bin.david.form.utils.DrawUtils;

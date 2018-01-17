@@ -14,7 +14,7 @@ import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
-import com.bin.david.form.data.PageTableData;
+import com.bin.david.form.data.table.PageTableData;
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;

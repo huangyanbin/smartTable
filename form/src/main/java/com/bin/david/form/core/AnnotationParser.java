@@ -3,7 +3,7 @@ package com.bin.david.form.core;
 
 import com.bin.david.form.annotation.*;
 import com.bin.david.form.data.Column;
-import com.bin.david.form.data.PageTableData;
+import com.bin.david.form.data.table.PageTableData;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

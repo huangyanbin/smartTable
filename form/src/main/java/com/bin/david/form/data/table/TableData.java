@@ -1,5 +1,9 @@
-package com.bin.david.form.data;
+package com.bin.david.form.data.table;
 
+import com.bin.david.form.data.CellRange;
+import com.bin.david.form.data.Column;
+import com.bin.david.form.data.ColumnInfo;
+import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
 import com.bin.david.form.data.format.sequence.LetterSequenceFormat;
 import com.bin.david.form.data.format.sequence.NumberSequenceFormat;
@@ -30,7 +34,7 @@ public class TableData<T> {
     private ISequenceFormat YSequenceFormat;
     private int maxHierarchy;
     private int lineSize;
-    private CellRange[] cellRangeAddresses;
+    private List<CellRange> cellRangeAddresses;
     /**
      *
      * @param tableName 表名
@@ -283,11 +287,11 @@ public class TableData<T> {
         return lineSize;
     }
 
-    public CellRange[] getCellRangeAddresses() {
+    public List<CellRange> getCellRangeAddresses() {
         return cellRangeAddresses;
     }
 
-    public void setCellRangeAddresses(CellRange[] cellRangeAddresses) {
+    public void setCellRangeAddresses(List<CellRange> cellRangeAddresses) {
         this.cellRangeAddresses = cellRangeAddresses;
     }
 

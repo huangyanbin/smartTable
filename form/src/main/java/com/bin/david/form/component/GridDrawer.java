@@ -8,7 +8,7 @@ import android.graphics.Rect;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.Column;
-import com.bin.david.form.data.TableData;
+import com.bin.david.form.data.table.TableData;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +33,7 @@ public class GridDrawer<T>{
     private int vMaxPosition;
     private boolean isHasHData;
     private boolean isHasVData;
-    private CellRange[] cellRanges;
+    private List<CellRange> cellRanges;
     private Set<Integer> set;
     private TableData<T> tableData;
 
@@ -100,7 +100,7 @@ public class GridDrawer<T>{
     }
 
     private void drawHGrid(Canvas canvas, Paint paint) {
-        if(cellRanges ==null || cellRanges.length==0) {
+        if(cellRanges ==null || cellRanges.size()==0) {
             for (int hGrid : horizontalGrids) {
                 path.rewind();
                 path.moveTo(tableShowRect.left, hGrid);
@@ -148,7 +148,7 @@ public class GridDrawer<T>{
     }
 
     private void drawVGrid(Canvas canvas, Paint paint) {
-        if(cellRanges ==null || cellRanges.length==0) {
+        if(cellRanges ==null || cellRanges.size()==0) {
             for(int vGrid :verticalGrids){
                 path.rewind();
                 path.moveTo(vGrid, tableShowRect.top);

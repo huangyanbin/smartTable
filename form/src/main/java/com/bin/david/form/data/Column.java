@@ -50,9 +50,11 @@ public class Column<T> implements Comparable<Column> {
     private OnColumnItemClickListener<T> onColumnItemClickListener;
     private Paint.Align textAlign;
     private boolean isAutoCount =false;
+    private boolean isAutoMerge = false; //是否自动合并单元格
+    private int maxMergeCount = Integer.MAX_VALUE;
     private int id;
-
     private boolean isParent;
+    private List<Integer[]> ranges; //合并数据
 
     /**列构造方法
      * 用于构造组合列
@@ -232,7 +234,7 @@ public class Column<T> implements Comparable<Column> {
         if (field != null) {
             Object child = o;
             if (fieldNames.length == 0 || fieldNames.length == 1) {
-                return getFieldValue(field, o,true);
+                return getFieldValue(-1,field, o,true);
             }
             for (int i = 0; i < fieldNames.length; i++) {
                 if (child == null) {
@@ -244,7 +246,7 @@ public class Column<T> implements Comparable<Column> {
                     return null;
                 }
                 if (i == fieldNames.length - 1) {
-                    return getFieldValue(childField, child,true);
+                    return getFieldValue(-1,childField, child,true);
                 } else {
                     field.setAccessible(true);
                     child = field.get(child);
@@ -260,16 +262,20 @@ public class Column<T> implements Comparable<Column> {
          * @param objects 对象列表
          * @param tableInfo 表格信息
          * @param config 配置
+         * @return 返回需要合并的单元
          * @throws NoSuchFieldException
          * @throws IllegalAccessException
          */
 
-    public void fillData(List<Object> objects, TableInfo tableInfo, TableConfig config) throws NoSuchFieldException, IllegalAccessException {
+    public List<Integer[]> fillData(List<Object> objects, TableInfo tableInfo, TableConfig config) throws NoSuchFieldException, IllegalAccessException {
         if(countFormat != null){
             countFormat.clearCount();
         }
         if(datas.size() == objects.size()){
-            return;
+            return ranges;
+        }
+        if(ranges != null){
+            ranges.clear();
         }
         if (objects.size() > 0) {
             int[] lineHeightArray = tableInfo.getLineHeightArray();
@@ -284,30 +290,30 @@ public class Column<T> implements Comparable<Column> {
                     Object o = objects.get(k);
                     Object child = o;
                     if (o == null) {
-                        addData(null,"",true);
+                        addData(k,null,true);
                         setRowHeight(config, lineHeightArray, k,null);
                         continue;
                     }
                     if (fieldNames.length == 0 || fieldNames.length == 1) {
-                        T t = getFieldValue(field, o,true);
+                        T t = getFieldValue(k,field, o,true);
                         setRowHeight(config, lineHeightArray, k,t);
                         continue;
                     }
                     for (int i = 0; i < fieldNames.length; i++) {
                         if (child == null) {
-                            addData(null,"",true);
+                            addData(k,null,true);
                             setRowHeight(config, lineHeightArray, k,null);
                             break;
                         }
                         Class childClazz = child.getClass();
                         Field childField = childClazz.getDeclaredField(fieldNames[i]);
                         if (childField == null) {
-                            addData(null,"",true);
+                            addData(k,null,true);
                             setRowHeight(config, lineHeightArray, k,null);
                             break;
                         }
                         if (i == fieldNames.length - 1) {
-                            T t = getFieldValue(childField, child,true);
+                            T t = getFieldValue(k,childField, child,true);
                             setRowHeight(config, lineHeightArray, k,t);
                         } else {
                             field.setAccessible(true);
@@ -318,9 +324,10 @@ public class Column<T> implements Comparable<Column> {
                 }
             }
         }
+        return ranges;
     }
 
-    public void parseData( TableInfo tableInfo, TableConfig config){
+    public void parseData(TableInfo tableInfo, TableConfig config){
         if(datas != null) {
             int size = datas.size();
             int[] lineHeightArray = tableInfo.getLineHeightArray();
@@ -403,30 +410,30 @@ public class Column<T> implements Comparable<Column> {
                     Object o = objects.get(isFoot ? k:(size-1-k));
                     Object child = o;
                     if (o == null) {
-                        addData(null,"",isFoot);
+                        addData(k,null,isFoot);
                         setRowHeight(config, lineHeightArray, k+startPosition,null);
                         continue;
                     }
                     if (fieldNames.length == 0 || fieldNames.length == 1) {
-                        T t = getFieldValue(field, o,isFoot);
+                        T t = getFieldValue(k,field, o,isFoot);
                         setRowHeight(config, lineHeightArray, k+startPosition,t);
                         continue;
                     }
                     for (int i = 0; i < fieldNames.length; i++) {
                         if (child == null) {
-                            addData(null,"",isFoot);
+                            addData(k,null,isFoot);
                             setRowHeight(config, lineHeightArray, k+startPosition,null);
                             break;
                         }
                         Class childClazz = child.getClass();
                         Field childField = childClazz.getDeclaredField(fieldNames[i]);
                         if (childField == null) {
-                            addData(null,"",isFoot);
+                            addData(k,null,isFoot);
                             setRowHeight(config, lineHeightArray, k+startPosition,null);
                             break;
                         }
                         if (i == fieldNames.length - 1) {
-                            T t = getFieldValue(childField, child,isFoot);
+                            T t = getFieldValue(k,childField, child,isFoot);
                             setRowHeight(config, lineHeightArray, k+startPosition,t);
                         } else {
                             field.setAccessible(true);
@@ -442,10 +449,14 @@ public class Column<T> implements Comparable<Column> {
     /**
      * 动态添加数据
      * @param t 数据
-     * @param value 值
      * @param isFoot 是否添加到尾部
      */
-    private void addData(T t,String value,boolean isFoot){
+    private void addData(int position,T t,boolean isFoot){
+        String value = format(t);
+        if (value.length() > maxValueLength) {
+            maxValueLength = value.length();
+            longestValue = value;
+        }
         if(isFoot) {
             datas.add(t);
             values.add(value);
@@ -463,16 +474,12 @@ public class Column<T> implements Comparable<Column> {
      * @param o     对象
      * @throws IllegalAccessException
      */
-    private T getFieldValue(Field field, Object o,boolean isFoot) throws IllegalAccessException {
+    private T getFieldValue(int position,Field field, Object o,boolean isFoot) throws IllegalAccessException {
         field.setAccessible(true);
         T t = (T) field.get(o);
-
-
-        String value = format(t);
-        if (value.length() > maxValueLength) {
-            maxValueLength = value.length();
-            longestValue = value;
-        } addData(t,value,isFoot);
+        if(position >0) {
+            addData(position, t, isFoot);
+        }
         return t;
     }
 
@@ -671,5 +678,29 @@ public class Column<T> implements Comparable<Column> {
         this.textAlign = textAlign;
     }
 
-
+    /**
+     * 是否自动合并
+     */
+    public boolean isAutoMerge() {
+        return isAutoMerge;
+    }
+    /**
+     * 设置是否自动合并
+     *
+     */
+    public void setAutoMerge(boolean autoMerge) {
+        isAutoMerge = autoMerge;
+    }
+    /**
+     * 是否最大合并数量
+     */
+    public int getMaxMergeCount() {
+        return maxMergeCount;
+    }
+    /**
+     * 设置是否最大合并数量
+     */
+    public void setMaxMergeCount(int maxMergeCount) {
+        this.maxMergeCount = maxMergeCount;
+    }
 }

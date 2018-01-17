@@ -1,12 +1,11 @@
 package com.bin.david.form.component;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.TableData;
+import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
