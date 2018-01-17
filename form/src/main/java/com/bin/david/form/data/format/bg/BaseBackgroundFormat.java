@@ -8,6 +8,7 @@ import com.bin.david.form.core.TableConfig;
 
 /**
  * Created by huang on 2017/11/14.
+ * 提供绘制Rect背景绘制
  */
 
 public abstract class BaseBackgroundFormat<T> implements IBackgroundFormat<T> {

@@ -1,6 +1,7 @@
 package com.bin.david.form.component;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -59,17 +60,11 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         float hZoom = (config.getZoom()>1?1:config.getZoom());
         int totalSize = tableData.getLineSize();
         TableInfo info = tableData.getTableInfo();
-        float top = rect.top + info.getTopHeight(hZoom);
+        int topHeight = info.getTopHeight(hZoom);
+        float top = rect.top + topHeight;
         int showLeft = showRect.left-clipWidth;
         boolean isFixTop = config.isFixedXSequence();
-        int showTop = isFixTop ?(showRect.top+info.getTopHeight(hZoom)):showRect.top;
-        tempRect.set(showLeft,showTop-info.getTopHeight(hZoom),showRect.left,showTop);
-        drawLeftAndTop(canvas,tempRect,config);
-        canvas.save();
-        canvas.clipRect(showLeft,showTop,
-                showRect.left,showRect.bottom);
-        DrawUtils.fillBackground(canvas, showLeft,isFixTop ?(showRect.top+info.getTopHeight(hZoom)):showRect.top,
-                showRect.left,showRect.bottom,config.getYSequenceBackgroundColor(),config.getPaint());
+        int showTop = isFixTop ?(showRect.top+topHeight):showRect.top;
         int num = 0;
         float tempTop= top;
         boolean isFixedTitle = config.isFixedTitle();
@@ -80,10 +75,19 @@ public class YSequence<T> implements IComponent<TableData<T>> {
                 clipHeight = info.getTopHeight(hZoom);
             }else{
                 int disY = showRect.top - scaleRect.top;
-                clipHeight= Math.max(0, info.getTopHeight(hZoom)-disY);
+                clipHeight= Math.max(0, topHeight-disY);
             }
             tempTop = showRect.top + clipHeight;
         }
+
+        tempRect.set(showLeft,(int)tempTop-topHeight,showRect.left,(int)tempTop);
+        drawLeftAndTop(canvas,showRect,tempRect,config);
+
+        canvas.save();
+        canvas.clipRect(showLeft,showTop,
+                showRect.left,showRect.bottom);
+        DrawUtils.fillBackground(canvas, showLeft,showTop,
+                showRect.left,showRect.bottom,config.getYSequenceBackgroundColor(),config.getPaint());
         if(config.isShowColumnTitle()) {
             for (int i = 0; i < info.getMaxLevel(); i++) {
                 num++;
@@ -142,7 +146,10 @@ public class YSequence<T> implements IComponent<TableData<T>> {
      * @param rect
      * @param config
      */
-    private void drawLeftAndTop(Canvas canvas,Rect rect,TableConfig config){
+    private void drawLeftAndTop(Canvas canvas,Rect showRect,Rect rect,TableConfig config){
+        canvas.save();
+        canvas.clipRect(rect.left,showRect.top,
+                showRect.left,rect.bottom);
         Paint paint = config.getPaint();
         if(config.getLeftAndTopBackgroundColor() !=0){
             paint.setStyle(Paint.Style.FILL);
@@ -156,6 +163,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             format.setImageSize(rect.width(),rect.height());
             config.getLeftTopDrawFormat().draw(canvas,null,null,null,rect,0,config);
         }
+        canvas.restore();
     }
 
     private void draw(Canvas canvas,Rect rect,String text,int position,TableConfig config){

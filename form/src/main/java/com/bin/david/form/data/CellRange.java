@@ -8,7 +8,13 @@ package com.bin.david.form.data;
 public class CellRange {
     private int[] cellRange;
 
-
+    /**
+     * 合并单元格构造方法
+     * @param firstRow 合并第一行
+     * @param lastRow 合并最后一行
+     * @param firstCol 合并第一列
+     * @param lastCol 合并最后一列
+     */
     public CellRange(int firstRow , int lastRow, int firstCol, int lastCol) {
         this.cellRange = new int[4];
         this.cellRange[0] = firstRow;

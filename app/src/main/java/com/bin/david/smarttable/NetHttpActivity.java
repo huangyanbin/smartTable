@@ -98,16 +98,21 @@ public class NetHttpActivity extends AppCompatActivity {
                     public void onResponse(String response, int id) {
 
                         Gson gson = new Gson();
-                        Type type = new TypeToken<ArrayList<PM25>>() {}.getType();
-                        List<PM25> pm25List = gson.fromJson(response,type);
-                        if(isFrist) {
-                            table.setData(pm25List);
-                            isFrist = false;
-                        }else{
-                            table.addData(pm25List,true);
-                            table.end();
+                        try {
+                            Type type = new TypeToken<ArrayList<PM25>>() {}.getType();
+                            List<PM25> pm25List = gson.fromJson(response,type);
+                            if(isFrist) {
+                                table.setData(pm25List);
+                                isFrist = false;
+                            }else{
+                                table.addData(pm25List,true);
+                                table.end();
+                            }
+                            mHandler.postDelayed(AddDataRunnable,1000);
+                        }catch (Exception e){
+
                         }
-                        mHandler.postDelayed(AddDataRunnable,1000);
+
 
                     }
 

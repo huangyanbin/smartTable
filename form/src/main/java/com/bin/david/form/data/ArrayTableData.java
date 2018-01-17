@@ -23,11 +23,10 @@ public class ArrayTableData<T> extends TableData<T>{
     private OnItemClickListener onItemClickListener;
 
     /**
-     * 提供将数组[row][col]转换成数组[col][row]
+     * 提供将数组[col][row]转换成数组[row][col]
      * 因为平时我们提供的二维数组可能是以行作为一组。
-     * @param rowArray
-     * @param <T>
-     * @return
+     * @param rowArray 数组[row][col]
+     * @return 数组[col][row]
      */
     public static<T> T[][]  transformColumnArray(T[][] rowArray){
         T[][] newData = null;
@@ -57,6 +56,15 @@ public class ArrayTableData<T> extends TableData<T>{
         return newData;
     }
 
+    /**
+     * 创建二维数组表格数据
+     * 如果数据不是数组[row][col]，可以使用transformColumnArray方法转换
+     * @param tableName 表名
+     * @param titleNames 列名
+     * @param data 数据 数组[row][col]
+     * @param drawFormat 数据格式化
+     * @return 创建的二维数组表格数据
+     */
     public static<T> ArrayTableData<T> create(String tableName,String[] titleNames, T[][] data, IDrawFormat<T> drawFormat){
         List<Column<T>> columns = new ArrayList<>();
         for(int i = 0;i <data.length;i++){
@@ -71,7 +79,14 @@ public class ArrayTableData<T> extends TableData<T>{
         tableData.setData(data);
         return tableData;
     }
-
+    /**
+     * 创建不需要显示列名的二维数组表格数据
+     * 如果数据不是数组[row][col]，可以使用transformColumnArray方法转换
+     * @param tableName 表名
+     * @param data 数据 数组[row][col]
+     * @param drawFormat 数据格式化
+     * @return 创建的二维数组表格数据
+     */
     public static<T> ArrayTableData<T> create(SmartTable<T> table,String tableName, T[][] data, IDrawFormat<T> drawFormat){
         table.getConfig().setShowColumnTitle(false);
         return create(tableName,null,data,drawFormat);
@@ -86,33 +101,54 @@ public class ArrayTableData<T> extends TableData<T>{
             column.setFormat(format);
         }
     }
+
+    /**
+     * 二维数组的构造方法
+     * @param tableName 表名
+     * @param t 数据
+     * @param columns 列
+     */
     private ArrayTableData(String tableName, List<T> t, List<Column<T>> columns) {
         super(tableName, t, new ArrayList<Column>(columns));
         this.arrayColumns = columns;
     }
-
+    /**
+     * 获取当前的列
+     */
     public List<Column<T>> getArrayColumns() {
         return arrayColumns;
     }
 
 
-
+    /**
+     * 获取二维数组数据
+     */
     public T[][] getData() {
         return data;
     }
 
+    /**
+     * 设置二维数组数据
+     * @param data
+     */
     public void setData(T[][] data) {
         this.data = data;
     }
 
 
 
-
+    /**
+     * 获取表格单元格Cell点击事件
+     */
     public OnItemClickListener getOnItemClickListener() {
         return onItemClickListener;
 
     }
 
+    /**
+     * 设置表格单元格Cell点击事件
+     * @param onItemClickListener 点击事件
+     */
     public void setOnItemClickListener(final OnItemClickListener<T> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
         for(Column<T> column: arrayColumns){
@@ -127,7 +163,9 @@ public class ArrayTableData<T> extends TableData<T>{
             });
         }
     }
-
+    /**
+     * 表格单元格Cell点击事件接口
+     */
     public interface  OnItemClickListener<T>{
         void onClick(Column<T> column,String value, T t, int col,int row);
     }

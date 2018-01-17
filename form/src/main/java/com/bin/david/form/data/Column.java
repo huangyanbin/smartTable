@@ -51,7 +51,6 @@ public class Column<T> implements Comparable<Column> {
     private Paint.Align textAlign;
     private boolean isAutoCount =false;
     private int id;
-    private boolean isReflect = true;
 
     private boolean isParent;
 
@@ -207,7 +206,6 @@ public class Column<T> implements Comparable<Column> {
      */
     public void setDatas(List<T> datas) {
         this.datas = datas;
-        isReflect = false;
     }
 
     public List<String> getValues() {
@@ -673,11 +671,5 @@ public class Column<T> implements Comparable<Column> {
         this.textAlign = textAlign;
     }
 
-    public boolean isReflect() {
-        return isReflect;
-    }
 
-    public void setReflect(boolean reflect) {
-        isReflect = reflect;
-    }
 }

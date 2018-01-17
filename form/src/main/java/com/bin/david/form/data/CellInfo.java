@@ -2,17 +2,26 @@ package com.bin.david.form.data;
 
 /**
  * Created by huang on 2017/11/15.
+ * 单元格数据
  */
 
 public class CellInfo<T> {
-
+    /**
+     * 数据
+     */
     public T t;
-
+    /**
+     * 所在列位置
+     */
     public int position;
 
-
+    /**
+     * 所在列
+     */
     public Column<T> column;
-
+    /**
+     * 显示的值
+     */
     public String value;
 
     public void set(Column<T> column,T t,String value, int position){
@@ -21,9 +30,5 @@ public class CellInfo<T> {
         this.t = t;
         this.position = position;
     }
-
-
-
-
 
 }
