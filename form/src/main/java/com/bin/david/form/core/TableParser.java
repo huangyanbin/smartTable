@@ -1,5 +1,6 @@
 package com.bin.david.form.core;
 
+import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.table.TableData;
@@ -26,6 +27,7 @@ public class TableParser<T> {
 
         tableData.getChildColumns().clear();
         tableData.getColumnInfos().clear();
+        tableData.getCellRangeAddresses().clear();
         int maxLevel = getChildColumn(tableData);
         TableInfo tableInfo =  tableData.getTableInfo();
         tableInfo.setColumnSize(tableData.getChildColumns().size());
@@ -38,10 +40,19 @@ public class TableParser<T> {
             sort(tableData);
             try {
                 List<T> dataList = tableData.getT();
+                int i = 0;
                 for (Column column : tableData.getChildColumns()) {
                     column.getValues().clear();
                     column.getDatas().clear();
                     column.fillData(dataList, tableInfo, config);
+                    List<int[]> ranges = column.parseRanges();
+                    if(ranges !=null && ranges.size()>0){
+                        for(int[] range:ranges){
+                            tableData.getCellRangeAddresses().
+                                    add(new CellRange(range[0],range[1],i,i));
+                        }
+                    }
+                    i++;
                 }
             } catch (NoSuchFieldException e) {
                 throw new TableException(
@@ -60,6 +71,7 @@ public class TableParser<T> {
     public void addData(TableData<T> tableData, List<T> addData,boolean isFoot, TableConfig config){
 
         try {
+            tableData.getCellRangeAddresses().clear();
             int size = tableData.getLineSize();
             if(isFoot) {
                 tableData.getT().addAll(addData);
@@ -69,8 +81,17 @@ public class TableParser<T> {
             tableData.setLineSize(tableData.getT().size());
             TableInfo tableInfo =  tableData.getTableInfo();
             tableInfo.addLine(addData.size());
+            int i =0;
             for (Column column : tableData.getChildColumns()) {
                 column.addData(addData,tableInfo,config,size,isFoot);
+                List<int[]> ranges = column.parseRanges();
+                if(ranges !=null && ranges.size()>0){
+                    for(int[] range:ranges){
+                        tableData.getCellRangeAddresses()
+                                .add(new CellRange(range[0],range[1],i,i));
+                    }
+                }
+                i++;
             }
         }catch (NoSuchFieldException e){
             throw new TableException(

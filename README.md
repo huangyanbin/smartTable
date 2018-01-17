@@ -33,6 +33,8 @@
 ![基本功能](/img/table.gif)
 
 ![缩放功能](/img/zoom.gif)
+> 导入表格
+![Excel](/img/excel.png)
 
 ---
 > 如何使用

@@ -59,6 +59,14 @@ public class TableProvider<T> implements TableClickObserver {
         gridDrawer  = new GridDrawer<>();
     }
 
+    /**
+     * 绘制
+     * @param canvas 画布
+     * @param scaleRect 缩放Rect
+     * @param showRect 显示Rect
+     * @param tableData 表格数据
+     * @param config 配置
+     */
     public void onDraw(Canvas canvas, Rect scaleRect, Rect showRect,
                        TableData<T> tableData, TableConfig config) {
         setData(scaleRect, showRect, tableData, config);
@@ -77,6 +85,13 @@ public class TableProvider<T> implements TableClickObserver {
         }
     }
 
+    /**
+     * 设置基本信息和清除数据
+     * @param scaleRect 缩放Rect
+     * @param showRect 显示Rect
+     * @param tableData 表格数据
+     * @param config 配置
+     */
     private void setData(Rect scaleRect, Rect showRect, TableData<T> tableData, TableConfig config) {
         isClickPoint = false;
         clickColumnInfo = null;
@@ -91,6 +106,7 @@ public class TableProvider<T> implements TableClickObserver {
         gridDrawer.setTableData(tableData);
     }
 
+
     private void drawColumnTitle(Canvas canvas, TableConfig config) {
         if(config.isShowColumnTitle()) {
             if (config.isFixedTitle()) {
@@ -104,6 +120,10 @@ public class TableProvider<T> implements TableClickObserver {
         }
     }
 
+    /**
+     * 绘制统计行
+     * @param canvas 画布
+     */
     private void drawCount(Canvas canvas) {
         if (tableData.isShowCount()) {
             float left = scaleRect.left;
@@ -150,6 +170,10 @@ public class TableProvider<T> implements TableClickObserver {
         }
     }
 
+    /**
+     * 绘制列标题
+     * @param canvas 画布
+     */
     private void drawTitle(Canvas canvas) {
         int dis = showRect.top - scaleRect.top;
         TableInfo tableInfo = tableData.getTableInfo();
@@ -201,6 +225,12 @@ public class TableProvider<T> implements TableClickObserver {
 
     }
 
+    /**
+     * 填充列标题
+     * @param canvas 画布
+     * @param info 列信息
+     * @param left 左边
+     */
     private void fillColumnTitle(Canvas canvas, ColumnInfo info, int left) {
 
         int top = (int)(info.top*config.getZoom())
@@ -224,7 +254,10 @@ public class TableProvider<T> implements TableClickObserver {
         }
     }
 
-
+    /**
+     * 绘制内容
+     * @param canvas 画布
+     */
     private void drawContent(Canvas canvas) {
         float top;
         float left = scaleRect.left;
@@ -273,12 +306,12 @@ public class TableProvider<T> implements TableClickObserver {
                 for (int j = 0; j < size; j++) {
                     String value = values.get(j);
                     float bottom = top + info.getLineHeightArray()[j]*config.getZoom();
+                    tempRect.set((int) left, (int) top, (int) right, (int) bottom);
+                    correctCellRect = gridDrawer.correctCellRect(j, i, tempRect, config.getZoom()); //矫正格子的大小
+                    if (correctCellRect != null) {
                     if (top < showRect.bottom) {
                         if (right > showRect.left && bottom > showRect.top) {
                             Object data = column.getDatas().get(j);
-                            tempRect.set((int) left, (int) top, (int) right, (int) bottom);
-                            correctCellRect = gridDrawer.correctCellRect(j, i, tempRect, config.getZoom()); //矫正格子的大小
-                            if (correctCellRect != null) {
                                 if (DrawUtils.isClick(correctCellRect, clickPoint)) {
                                     operation.setSelectionRect(i, j, correctCellRect);
                                     tipPoint.x = (left + right) / 2;
@@ -293,9 +326,9 @@ public class TableProvider<T> implements TableClickObserver {
                                 config.getContentStyle().fillPaint(paint);
                                 column.getDrawFormat().draw(canvas, column, data, value, correctCellRect, j, config);
                             }
+                        } else {
+                            break;
                         }
-                    } else {
-                        break;
                     }
                     if (i == 0) {
                         gridDrawer.addHorizontalGrid(j, Math.max(scaleRect.left, showRect.left),

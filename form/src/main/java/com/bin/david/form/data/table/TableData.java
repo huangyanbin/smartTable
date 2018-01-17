@@ -43,6 +43,7 @@ public class TableData<T> {
      */
     public TableData(String tableName,List<T> t,List<Column> columns) {
         this(tableName,t,columns,null);
+
     }
     /**
      *
@@ -69,6 +70,7 @@ public class TableData<T> {
         childColumns = new ArrayList<>();
         columnInfos = new ArrayList<>();
         childColumnInfos = new ArrayList<>();
+        cellRangeAddresses = new ArrayList<>();
         this.titleDrawFormat = titleDrawFormat == null?new TitleDrawFormat() :titleDrawFormat;
     }
 

@@ -35,9 +35,19 @@ public @interface SmartColumn {
     Paint.Align align() default Paint.Align.CENTER;
     /**
      * 设置是否查询下一级
-     * @return
+     * @return 是否查询下一级
      */
     ColumnType type() default ColumnType.Own;
+    /**
+     * 设置是否自动合并
+     * @return 是否自动合并
+     */
+    boolean autoMerge() default false;
+    /**
+     * 设置自动合并最大数量
+     * @return 自动合并最大数量
+     */
+    int maxMergeCount() default -1;
 
     boolean autoCount() default false;
     boolean fixed() default false;

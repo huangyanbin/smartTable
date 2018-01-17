@@ -67,6 +67,10 @@ public class AnnotationParser<T>  {
                    Column<?> column = genericHandler.getGenericColumn(fieldClass, name, fieldName);
                    column.setId(id);
                    column.setTextAlign(smartColumn.align());
+                   column.setAutoMerge(smartColumn.autoMerge());
+                   if(smartColumn.maxMergeCount() !=-1) {
+                       column.setMaxMergeCount(smartColumn.maxMergeCount());
+                   }
                    column.setAutoCount(isAutoCount);
                    column.setFixed(smartColumn.fixed());
                    if (!parent.equals("")) {

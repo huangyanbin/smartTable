@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 字体Align
+ */
 public class AlignActivity extends AppCompatActivity implements View.OnClickListener{
 
     private SmartTable<UserInfo> table;
