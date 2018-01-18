@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
@@ -125,8 +126,7 @@ public class ExcelModeActivity extends AppCompatActivity {
             public String[] format(Column column, int position) {
                 Cell cell = (Cell) column.getDatas().get(position);
                 String comment = cell.getCellFeatures().getComment();
-                String[] strings = {comment};
-                return strings;
+                return comment.split("\n");
             }
         };
         tip.setColorFilter(ContextCompat.getColor(this,R.color.column_bg));

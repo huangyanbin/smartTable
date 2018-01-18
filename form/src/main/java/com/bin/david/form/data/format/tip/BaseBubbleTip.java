@@ -34,7 +34,7 @@ public abstract class BaseBubbleTip<C,S> implements ITip<C,S>{
 
     public BaseBubbleTip(Context context, int backgroundDrawableID, int triangleDrawableID, FontStyle fontStyle){
         tipRect = new Rect();
-        this.paint = new Paint();
+        this.paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         fontStyle.fillPaint(paint);
         triangleBitmap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.getResources(), triangleDrawableID));
         if(ninePatch == null) {
