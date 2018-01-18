@@ -8,9 +8,7 @@ import android.graphics.Rect;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
-
-import java.util.Map;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 
 /**
  * Created by huang on 2017/10/30.
@@ -93,8 +91,8 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     }
 
     public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, Rect rect,TableConfig config) {
-        IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
-        if(isDrawBg &&backgroundFormat != null && backgroundFormat.isDraw(cellInfo)){
+        ICellBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
+        if(isDrawBg &&backgroundFormat != null){
             backgroundFormat.drawBackground(c,rect,cellInfo,config.getPaint());
             return true;
         }

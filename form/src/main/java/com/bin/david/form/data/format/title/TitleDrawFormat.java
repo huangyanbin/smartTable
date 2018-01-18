@@ -6,7 +6,7 @@ import android.graphics.Rect;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.utils.DrawUtils;
 
 /**
@@ -37,7 +37,7 @@ public class TitleDrawFormat implements ITitleDrawFormat {
         Paint paint = config.getPaint();
         boolean isDrawBg =drawBackground(c,column,rect,config);
         config.getColumnTitleStyle().fillPaint(paint);
-        IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
+        ICellBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
         if(isDrawBg && backgroundFormat.getTextColor(column) != TableConfig.INVALID_COLOR){
             paint.setColor(backgroundFormat.getTextColor(column));
         }
@@ -49,8 +49,8 @@ public class TitleDrawFormat implements ITitleDrawFormat {
     }
 
     public boolean drawBackground(Canvas c, Column column, Rect rect,  TableConfig config) {
-        IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
-        if(isDrawBg && backgroundFormat != null && backgroundFormat.isDraw(column)){
+        ICellBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
+        if(isDrawBg && backgroundFormat != null ){
             backgroundFormat.drawBackground(c,rect,column,config.getPaint());
             return true;
         }

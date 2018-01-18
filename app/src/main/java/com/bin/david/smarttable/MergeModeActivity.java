@@ -1,13 +1,10 @@
 package com.bin.david.smarttable;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
-import com.bin.david.form.data.CellInfo;
-import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;

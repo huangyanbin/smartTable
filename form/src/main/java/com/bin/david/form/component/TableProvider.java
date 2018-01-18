@@ -11,7 +11,7 @@ import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.selected.ISelectFormat;
 import com.bin.david.form.data.format.tip.ITip;
 import com.bin.david.form.listener.OnColumnClickListener;
@@ -382,18 +382,15 @@ public class TableProvider<T> implements TableClickObserver {
     private void drawCountText(Canvas canvas,Column column, Rect rect, String text, TableConfig config) {
         Paint paint = config.getPaint();
         //绘制背景
-        IBackgroundFormat<Column> backgroundFormat = config.getCountBgFormat();
-        boolean isDrawBg = false;
-
-        if(backgroundFormat != null&& backgroundFormat.isDraw(column)){
+        ICellBackgroundFormat<Column> backgroundFormat = config.getCountBgFormat();
+        if(backgroundFormat != null){
             backgroundFormat.drawBackground(canvas,rect,column,config.getPaint());
-            isDrawBg = true;
         }
         config.getGridStyle().fillPaint(paint);
         canvas.drawRect(rect, paint);
         config.getCountStyle().fillPaint(paint);
         //字体颜色跟随背景变化
-        if(isDrawBg && backgroundFormat.getTextColor(column) != TableConfig.INVALID_COLOR){
+        if(backgroundFormat != null&& backgroundFormat.getTextColor(column) != TableConfig.INVALID_COLOR){
             paint.setColor(backgroundFormat.getTextColor(column));
         }
         paint.setTextSize(paint.getTextSize()*config.getZoom());

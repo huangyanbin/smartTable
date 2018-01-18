@@ -8,7 +8,7 @@ import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.data.table.TableData;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
 import com.bin.david.form.utils.DrawUtils;
 
@@ -115,16 +115,14 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         config.getSequenceGridStyle().fillPaint(paint);
         canvas.drawRect(left,top,right,bottom,paint);
         //绘制背景
-        IBackgroundFormat<Integer> backgroundFormat = config.getXSequenceBgFormat();
-        boolean isDrawBg = false;
-        if(backgroundFormat != null&& backgroundFormat.isDraw(position)){
+        ICellBackgroundFormat<Integer> backgroundFormat = config.getXSequenceBgFormat();
+        if(backgroundFormat != null){
             tempRect.set(left,top,right,bottom);
             backgroundFormat.drawBackground(canvas, tempRect,position,config.getPaint());
-            isDrawBg = true;
         }
         config.getXSequenceStyle().fillPaint(paint);
         //字体颜色跟随背景变化
-        if(isDrawBg && backgroundFormat.getTextColor(position) != TableConfig.INVALID_COLOR){
+        if(backgroundFormat != null&& backgroundFormat.getTextColor(position) != TableConfig.INVALID_COLOR){
             paint.setColor(backgroundFormat.getTextColor(position));
         }
         //字体缩放

@@ -8,11 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.table.TableData;
-import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
@@ -77,34 +78,34 @@ public class ManyActivity extends AppCompatActivity implements View.OnClickListe
         fontStyle.setTextColor(getResources().getColor(android.R.color.white));
 
         table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
-        IBackgroundFormat<CellInfo> backgroundFormat = new BaseBackgroundFormat<CellInfo>() {
+
+        ICellBackgroundFormat<CellInfo> backgroundFormat = new BaseCellBackgroundFormat<CellInfo>() {
             @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(ManyActivity.this,R.color.content_bg);
+            public int getBackGroundColor( CellInfo cellInfo) {
+                if(cellInfo.position%2 == 0) {
+                    return ContextCompat.getColor(ManyActivity.this, R.color.content_bg);
+                }
+                return TableConfig.INVALID_COLOR;
             }
-            @Override
-            public boolean isDraw(CellInfo cellInfo) {
-                return cellInfo.position%2 == 0;
-            }
+
 
         };
-        IBackgroundFormat<Integer> backgroundFormat2 = new BaseBackgroundFormat<Integer>() {
+        ICellBackgroundFormat<Integer> backgroundFormat2 = new BaseCellBackgroundFormat<Integer>() {
             @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(ManyActivity.this,R.color.arc1);
-            }
-            @Override
-            public boolean isDraw(Integer integer) {
-                if(integer%2 == 0){
-                    return true;
+            public int getBackGroundColor(Integer position) {
+                if(position%2 == 0){
+                    return ContextCompat.getColor(ManyActivity.this,R.color.arc1);
                 }
-                return false;
+                return TableConfig.INVALID_COLOR;
+
             }
 
             @Override
-            public int getTextColor(Integer integer) {
-
-                return  ContextCompat.getColor(ManyActivity.this,R.color.white);
+            public int getTextColor(Integer position) {
+                if(position%2 == 0) {
+                    return ContextCompat.getColor(ManyActivity.this, R.color.white);
+                }
+                return TableConfig.INVALID_COLOR;
             }
         };
         table.getConfig().setContentBackgroundFormat(backgroundFormat)

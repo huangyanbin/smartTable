@@ -301,19 +301,20 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
         float oldZoom = zoom;
+        boolean isScaleEnd = false;
         float scale = detector.getScaleFactor();
         this.zoom = tempZoom * scale;
+        if (this.zoom >= maxZoom) {
+            this.zoom = maxZoom;
+            isScaleEnd = true;
+        } else if (this.zoom <= minZoom) {
+            this.zoom = minZoom;
+            isScaleEnd = true;
+        }
         float factor = zoom / oldZoom;
         resetTranslate(factor);
         notifyViewChanged();
-        if (this.zoom > maxZoom) {
-            this.zoom = maxZoom;
-            return true;
-        } else if (this.zoom < minZoom) {
-            this.zoom = minZoom;
-            return true;
-        }
-        return false;
+        return isScaleEnd;
     }
 
     @Override

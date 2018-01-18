@@ -9,7 +9,7 @@ public class CellInfo<T> {
     /**
      * 数据
      */
-    public T t;
+    public T data;
     /**
      * 所在列位置
      */
@@ -27,7 +27,7 @@ public class CellInfo<T> {
     public void set(Column<T> column,T t,String value, int position){
         this.column = column;
         this.value= value;
-        this.t = t;
+        this.data = t;
         this.position = position;
     }
 

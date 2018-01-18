@@ -1,7 +1,6 @@
 package com.bin.david.smarttable;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -9,11 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
-import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
+import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
-import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.PM25;
 import com.google.gson.Gson;
@@ -45,33 +44,30 @@ public class NetHttpActivity extends AppCompatActivity {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         table = (SmartTable<PM25>) findViewById(R.id.table);
 
-        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<CellInfo>() {
+        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(NetHttpActivity.this,R.color.content_bg);
-            }
-
-            @Override
-            public boolean isDraw(CellInfo cellInfo) {
-               return cellInfo.position%2 == 1;
-            }
-        }).setColumnBackgroundFormat(new BaseBackgroundFormat<Column>() {
-            @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(NetHttpActivity.this,R.color.column_bg);
-            }
-
-            @Override
-            public boolean isDraw(Column column) {
-                if("area".equals(column.getFieldName())) {
-                    return true;
+            public int getBackGroundColor(CellInfo cellInfo) {
+                if(cellInfo.position%2 == 1) {
+                    return ContextCompat.getColor(NetHttpActivity.this, R.color.content_bg);
                 }
-                return false;
+                return TableConfig.INVALID_COLOR;
             }
 
+        }).setColumnBackgroundFormat(new BaseCellBackgroundFormat<Column>() {
+            @Override
+            public int getBackGroundColor(Column column) {
+                if("area".equals(column.getFieldName())) {
+                    return ContextCompat.getColor(NetHttpActivity.this,R.color.column_bg);
+                }
+                return TableConfig.INVALID_COLOR;
+            }
             @Override
             public int getTextColor(Column column) {
-                return  ContextCompat.getColor(NetHttpActivity.this,R.color.white);
+                if("area".equals(column.getFieldName())) {
+                    return ContextCompat.getColor(NetHttpActivity.this, R.color.white);
+                }else{
+                    return TableConfig.INVALID_COLOR;
+                }
             }
         });
         getData();

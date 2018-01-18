@@ -7,7 +7,7 @@ import android.graphics.Rect;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
 import com.bin.david.form.utils.DrawUtils;
@@ -167,19 +167,17 @@ public class YSequence<T> implements IComponent<TableData<T>> {
 
     private void draw(Canvas canvas,Rect rect,String text,int position,TableConfig config){
         Paint paint= config.getPaint();
-        IBackgroundFormat<Integer> backgroundFormat = config.getYSequenceBgFormat();
-        boolean isDrawBg = false;
+        ICellBackgroundFormat<Integer> backgroundFormat = config.getYSequenceBgFormat();
         int textColor =TableConfig.INVALID_COLOR;
-        if(backgroundFormat != null&& backgroundFormat.isDraw(position)){
+        if(backgroundFormat != null){
             backgroundFormat.drawBackground(canvas,rect,position,config.getPaint());
             textColor =  backgroundFormat.getTextColor(position);
-            isDrawBg = true;
         }
         config.getSequenceGridStyle().fillPaint(paint);
         canvas.drawRect(rect,paint);
         config.getYSequenceStyle().fillPaint(paint);
 
-        if(isDrawBg && textColor != TableConfig.INVALID_COLOR){
+        if(textColor != TableConfig.INVALID_COLOR){
             paint.setColor(textColor);
         }
         float hZoom = (config.getZoom()>1?1:config.getZoom());

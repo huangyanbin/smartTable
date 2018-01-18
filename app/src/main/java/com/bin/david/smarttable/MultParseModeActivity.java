@@ -17,8 +17,8 @@ import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.format.IFormat;
-import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
 import com.bin.david.form.data.format.draw.BitmapDrawFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
@@ -310,38 +310,6 @@ public class MultParseModeActivity extends AppCompatActivity implements View.OnC
             }
         });
         table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
-        IBackgroundFormat<CellInfo> backgroundFormat = new BaseBackgroundFormat<CellInfo>() {
-            @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(MultParseModeActivity.this,R.color.content_bg);
-            }
-            @Override
-            public boolean isDraw(CellInfo cellInfo) {
-                return cellInfo.position%2 == 0;
-            }
-
-        };
-        IBackgroundFormat<Integer> backgroundFormat2 = new BaseBackgroundFormat<Integer>() {
-            @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(MultParseModeActivity.this,R.color.arc1);
-            }
-            @Override
-            public boolean isDraw(Integer integer) {
-                if(integer%2 == 0){
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public int getTextColor(Integer integer) {
-
-                return  ContextCompat.getColor(MultParseModeActivity.this,R.color.white);
-            }
-        };
-        table.getConfig().setContentBackgroundFormat(backgroundFormat)
-                .setYSequenceBgFormat(backgroundFormat2);
         table.setTableData(tableData);
 
     }

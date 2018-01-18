@@ -6,21 +6,15 @@ import android.graphics.Rect;
 
 /**
  * Created by huang on 2017/11/14.
- * 绘制背景格式化
+ * 绘制格子背景格式化
  */
 
-public interface IBackgroundFormat<T> {
+public interface ICellBackgroundFormat<T> {
     /**
      * 绘制背景
      */
     void drawBackground(Canvas canvas, Rect rect,T t, Paint paint);
 
-
-
-    /**
-     * 是否绘制
-     */
-    boolean isDraw(T t);
 
     /**
      *当背景颜色改变字体也需要跟随变化

@@ -4,7 +4,7 @@ import android.graphics.Paint;
 
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
@@ -119,21 +119,21 @@ public class TableConfig {
     /**
      * 格子进行背景格式化
      */
-    private IBackgroundFormat<CellInfo> contentBackgroundFormat;
+    private ICellBackgroundFormat<CellInfo> contentBackgroundFormat;
     /**
      * 标题格子背景格式化
      */
-    private IBackgroundFormat<Column> columnBackgroundFormat;
+    private ICellBackgroundFormat<Column> columnBackgroundFormat;
     /**
      * 顶部序号背景格式化
      */
-    private IBackgroundFormat<Integer> XSequenceBgFormat;
+    private ICellBackgroundFormat<Integer> XSequenceBgFormat;
     /**
      * 左序号背景格式化
      */
-    private IBackgroundFormat<Integer> YSequenceBgFormat;
+    private ICellBackgroundFormat<Integer> YSequenceBgFormat;
 
-    private IBackgroundFormat<Column> countBgFormat;
+    private ICellBackgroundFormat<Column> countBgFormat;
     /**
      * 是否固定左侧
      *
@@ -421,47 +421,47 @@ public class TableConfig {
         return this;
     }
 
-    public IBackgroundFormat<CellInfo> getContentBackgroundFormat() {
+    public ICellBackgroundFormat<CellInfo> getContentBackgroundFormat() {
         return contentBackgroundFormat;
     }
 
-    public TableConfig setContentBackgroundFormat(IBackgroundFormat<CellInfo> contentBackgroundFormat) {
+    public TableConfig setContentBackgroundFormat(ICellBackgroundFormat<CellInfo> contentBackgroundFormat) {
         this.contentBackgroundFormat = contentBackgroundFormat;
         return this;
     }
 
-    public IBackgroundFormat<Column> getColumnBackgroundFormat() {
+    public ICellBackgroundFormat<Column> getColumnBackgroundFormat() {
         return columnBackgroundFormat;
     }
 
-    public TableConfig setColumnBackgroundFormat(IBackgroundFormat<Column> columnBackgroundFormat) {
+    public TableConfig setColumnBackgroundFormat(ICellBackgroundFormat<Column> columnBackgroundFormat) {
         this.columnBackgroundFormat = columnBackgroundFormat;
         return this;
     }
 
-    public IBackgroundFormat<Integer> getXSequenceBgFormat() {
+    public ICellBackgroundFormat<Integer> getXSequenceBgFormat() {
         return XSequenceBgFormat;
     }
 
-    public TableConfig setXSequenceBgFormat(IBackgroundFormat<Integer> XSequenceBgFormat) {
+    public TableConfig setXSequenceBgFormat(ICellBackgroundFormat<Integer> XSequenceBgFormat) {
         this.XSequenceBgFormat = XSequenceBgFormat;
         return this;
     }
 
-    public IBackgroundFormat<Integer> getYSequenceBgFormat() {
+    public ICellBackgroundFormat<Integer> getYSequenceBgFormat() {
         return YSequenceBgFormat;
     }
 
-    public TableConfig setYSequenceBgFormat(IBackgroundFormat<Integer> YSequenceBgFormat) {
+    public TableConfig setYSequenceBgFormat(ICellBackgroundFormat<Integer> YSequenceBgFormat) {
         this.YSequenceBgFormat = YSequenceBgFormat;
         return this;
     }
 
-    public IBackgroundFormat<Column> getCountBgFormat() {
+    public ICellBackgroundFormat<Column> getCountBgFormat() {
         return countBgFormat;
     }
 
-    public TableConfig setCountBgFormat(IBackgroundFormat<Column> countBgFormat) {
+    public TableConfig setCountBgFormat(ICellBackgroundFormat<Column> countBgFormat) {
         this.countBgFormat = countBgFormat;
         return this;
     }

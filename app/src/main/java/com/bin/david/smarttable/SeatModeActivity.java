@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.Column;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
@@ -67,18 +67,13 @@ public class SeatModeActivity extends AppCompatActivity {
         table.getConfig().setFixedYSequence(true);//暂时有问题 ，后面修复
         table.setZoom(true,1,0.5f);
         final  int roundSize = DensityUtils.dp2px(SeatModeActivity.this,5);
-        table.getConfig().setYSequenceBgFormat(new IBackgroundFormat<Integer>() {
+        table.getConfig().setYSequenceBgFormat(new ICellBackgroundFormat<Integer>() {
             @Override
             public void drawBackground(Canvas canvas, Rect rect, Integer position, Paint paint) {
+
                 paint.setStyle(Paint.Style.FILL);
                 paint.setColor(ContextCompat.getColor(SeatModeActivity.this,R.color.seat_y_bg));
                 canvas.drawRect(rect,paint);
-            }
-
-
-            @Override
-            public boolean isDraw(Integer integer) {
-                return true;
             }
 
             @Override

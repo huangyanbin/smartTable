@@ -27,7 +27,7 @@ public class TableParser<T> {
 
         tableData.getChildColumns().clear();
         tableData.getColumnInfos().clear();
-        tableData.getCellRangeAddresses().clear();
+        tableData.clearCellRangeAddresses();
         int maxLevel = getChildColumn(tableData);
         TableInfo tableInfo =  tableData.getTableInfo();
         tableInfo.setColumnSize(tableData.getChildColumns().size());
@@ -71,7 +71,7 @@ public class TableParser<T> {
     public void addData(TableData<T> tableData, List<T> addData,boolean isFoot, TableConfig config){
 
         try {
-            tableData.getCellRangeAddresses().clear();
+            tableData.clearCellRangeAddresses();
             int size = tableData.getLineSize();
             if(isFoot) {
                 tableData.getT().addAll(addData);

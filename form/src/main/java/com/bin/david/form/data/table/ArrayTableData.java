@@ -97,11 +97,13 @@ public class ArrayTableData<T> extends TableData<T> {
      * 设置默认格式化
      * @param format
      */
-    private void setFormat(IFormat<T> format){
+    public void setFormat(IFormat<T> format){
         for(Column<T> column:arrayColumns){
             column.setFormat(format);
         }
     }
+
+
 
     /**
      * 二维数组的构造方法

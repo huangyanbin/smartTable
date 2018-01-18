@@ -1,17 +1,14 @@
 package com.bin.david.form.data.format.draw;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.LruCache;
 
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.Column;
 
 /**
  * Created by huang on 2017/10/30.
+ * 左上角格式化
  */
 
 public abstract class LeftTopDrawFormat extends ImageResDrawFormat<String> {

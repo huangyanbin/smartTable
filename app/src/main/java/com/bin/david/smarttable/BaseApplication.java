@@ -12,7 +12,7 @@ import okhttp3.OkHttpClient;
  * Created by huang on 2017/11/4.
  */
 
-public class BaseApplication extends Application {
+public class BaseApplication extends android.support.multidex.MultiDexApplication {
 
     @Override
     public void onCreate() {

@@ -34,6 +34,10 @@
 ![progress](/img/progress.jpg)
 
 ![seat](/img/seat.jpg)
+
+![Excel](/img/old_excel.png)
+
+![Excel](/img/new_excel.png)
 > How Use
 
 - Quote

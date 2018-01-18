@@ -32,9 +32,10 @@ public class TableData<T> {
     private ITitleDrawFormat titleDrawFormat;
     private ISequenceFormat XSequenceFormat;
     private ISequenceFormat YSequenceFormat;
-    private int maxHierarchy;
     private int lineSize;
     private List<CellRange> cellRangeAddresses;
+    //用户设置的 不能清除
+    private List<CellRange> userSetRangeAddress;
     /**
      *
      * @param tableName 表名
@@ -285,23 +286,47 @@ public class TableData<T> {
         return null;
     }
 
+    /**
+     * 获取行数
+     * @return 行数
+     */
     public int getLineSize() {
         return lineSize;
     }
 
+    /**
+     * 获取所有合并规则，包括自定义和自动合并规则
+     * 请不要使用该方法来添加合并单元格
+     * 而是通过设置setUserCellRange来添加
+     * @return
+     */
     public List<CellRange> getCellRangeAddresses() {
         return cellRangeAddresses;
     }
 
-    public void setCellRangeAddresses(List<CellRange> cellRangeAddresses) {
-        this.cellRangeAddresses = cellRangeAddresses;
+    /**
+     * 清除自动合并的规则
+     */
+    public void clearCellRangeAddresses(){
+        cellRangeAddresses.clear();
+        if(userSetRangeAddress !=null)
+            cellRangeAddresses.addAll(userSetRangeAddress);
+    }
+    /**
+     * 提供添加自定义合并规则
+     * @return
+     */
+    public void setUserCellRange(List<CellRange> userCellRange) {
+        this.userSetRangeAddress = userCellRange;
     }
 
-    public int getMaxHierarchy() {
-        return maxHierarchy;
+    /**
+     * 获取自定义合并规则
+     * @return
+     */
+    public List<CellRange> getUserCellRange() {
+        return userSetRangeAddress;
     }
 
-    public void setMaxHierarchy(int maxHierarchy) {
-        this.maxHierarchy = maxHierarchy;
-    }
+
 }

@@ -15,7 +15,13 @@ import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.CellInfo;
+import com.bin.david.form.data.Column;
+import com.bin.david.form.data.format.IFormat;
+import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
+import com.bin.david.form.data.format.selected.BaseSelectFormat;
 import com.bin.david.form.data.format.selected.ISelectFormat;
+import com.bin.david.form.data.format.tip.MultiLineBubbleTip;
 import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
@@ -35,10 +41,15 @@ import jxl.Cell;
 import jxl.Range;
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.format.Alignment;
+import jxl.format.CellFormat;
+import jxl.format.Colour;
+import jxl.format.Font;
+import jxl.format.RGB;
 
 public class ExcelModeActivity extends AppCompatActivity {
 
-    private SmartTable<String> table;
+    private SmartTable<Cell> table;
     private SheetAsyncTask sheetTask;
     private ExcelAsyncTask excelTask;
     private RecyclerView recyclerView;
@@ -51,12 +62,13 @@ public class ExcelModeActivity extends AppCompatActivity {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        table = (SmartTable<String>) findViewById(R.id.table);
+        table = (SmartTable<Cell>) findViewById(R.id.table);
         table.getConfig().setFixedYSequence(true);
         table.getConfig().setFixedXSequence(true);
         table.getConfig().setShowTableTitle(false);
         int backgroundColor = ContextCompat.getColor(this,R.color.arc_bg);
         int xyGridColor = ContextCompat.getColor(this,R.color.excel_bg); //x,y序列网格颜色
+        //配置
         table.getConfig().setHorizontalPadding(DensityUtils.dp2px(this,10))
                 .setColumnTitleHorizontalPadding(DensityUtils.dp2px(this,5))
                 .setXSequenceBackgroundColor(backgroundColor)
@@ -74,20 +86,52 @@ public class ExcelModeActivity extends AppCompatActivity {
                         return ExcelModeActivity.this;
                     }
                 });
-        table.setZoom(true,3,0.5f);
-        table.setSelectFormat(new ISelectFormat() {
+        //设置表格背景颜色
+        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
-            public void draw(Canvas canvas, Rect rect, Rect showRect, TableConfig config) {
-                Paint paint = config.getPaint();
-                paint.setColor(Color.parseColor("#3A5FCD"));
-                paint.setStyle(Paint.Style.STROKE);
-                paint.setStrokeWidth(3);
-                canvas.drawRect(rect.left,showRect.top,rect.right,showRect.bottom,paint);
-                paint.setStyle(Paint.Style.FILL);
-                canvas.drawRect(rect.left-10,showRect.top-10,rect.left+10,showRect.top+10,paint);
-                canvas.drawRect(rect.right-10,showRect.bottom-10,rect.right+10,showRect.bottom+10,paint);
+            public int getBackGroundColor(CellInfo cellInfo) {
+                Cell cell = (Cell) cellInfo.data;
+                if(cell !=null) {
+                    CellFormat cellFormat = cell.getCellFormat();
+                    Colour colour = cellFormat.getBackgroundColour();
+                    RGB rgb= colour.getDefaultRGB();
+                    return Color.rgb(rgb.getRed(),rgb.getGreen(),rgb.getBlue());
+                }
+                return TableConfig.INVALID_COLOR;
             }
+
         });
+        table.setZoom(true,3,0.5f);
+        //绘制选中区域
+        table.setSelectFormat(new BaseSelectFormat());
+        //增加批注
+        FontStyle fontStyle = new FontStyle();
+        fontStyle.setTextColor(getResources().getColor(android.R.color.white));
+        MultiLineBubbleTip<Column> tip = new MultiLineBubbleTip<Column>(this,R.mipmap.round_rect,R.mipmap.triangle,fontStyle) {
+            @Override
+            public boolean isShowTip(Column column, int position) {
+                Cell cell = (Cell) column.getDatas().get(position);
+                if(cell !=null && cell.getCellFeatures()!=null){
+                    String comment = cell.getCellFeatures().getComment();
+                    if(comment !=null && comment.length()>0){
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+
+            @Override
+            public String[] format(Column column, int position) {
+                Cell cell = (Cell) column.getDatas().get(position);
+                String comment = cell.getCellFeatures().getComment();
+                String[] strings = {comment};
+                return strings;
+            }
+        };
+        tip.setColorFilter(ContextCompat.getColor(this,R.color.column_bg));
+        tip.setAlpha(0.9f);
+        table.getProvider().setTip(tip);
         sheetTask = new SheetAsyncTask();
         sheetTask.execute();
 
@@ -141,10 +185,10 @@ public class ExcelModeActivity extends AppCompatActivity {
     }
 
 
-    public class ExcelAsyncTask extends AsyncTask<Integer,Void,String[][]>{
+    public class ExcelAsyncTask extends AsyncTask<Integer,Void,Cell[][]>{
 
         @Override
-        protected String[][] doInBackground(Integer... position) {
+        protected Cell[][] doInBackground(Integer... position) {
 
             try {
                 int maxRow, maxColumn;
@@ -165,13 +209,13 @@ public class ExcelModeActivity extends AppCompatActivity {
                 }
                 maxRow = sheet.getRows();
                 maxColumn =  sheet.getColumns();
-                String[][] data = new String[maxRow][];
+                Cell[][] data = new Cell[maxRow][];
                 for (int i = 0; i < maxRow; i++) {
-                    String[] rows = new String[maxColumn];
+                    Cell[] rows = new Cell[maxColumn];
                     for(int j = 0;j < maxColumn;j++){
                         Cell cell = sheet.getCell(j, i);
                         if(cell !=null){
-                            rows[j] = cell.getContents();
+                            rows[j] = cell;
                         }else{
                             rows[j] = null;
                         }
@@ -190,13 +234,44 @@ public class ExcelModeActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String[][] data) {
+        protected void onPostExecute(Cell[][] data) {
             if(data ==null || data.length==0) {
-                data = new String[26][50]; //美观
+                data = new Cell[26][50]; //美观
             }
-            ArrayTableData<String> tableData = ArrayTableData.create(table, "Excel表", data, new TextDrawFormat<String>());
-            tableData.setCellRangeAddresses(cellRanges);
+            //设置字体
+            ArrayTableData<Cell> tableData = ArrayTableData.create(table, "Excel表", data, new TextDrawFormat<Cell>(){
+
+
+
+                @Override
+                public void setTextPaint(TableConfig config, Cell cell, Paint paint) {
+                    super.setTextPaint(config,cell,paint);
+                    if(cell !=null) {
+                        CellFormat cellFormat = cell.getCellFormat();
+                        Alignment alignment = cellFormat.getAlignment();
+                        paint.setTextAlign(alignment == Alignment.LEFT ? Paint.Align.LEFT :
+                                        alignment == Alignment.RIGHT ? Paint.Align.RIGHT
+                                                : Paint.Align.CENTER);
+                        Font font = cellFormat.getFont();
+                        int size = (int) (font.getPointSize()*1.7f); //增加字体，效果更好看
+                        paint.setTextSize(DensityUtils.sp2px(ExcelModeActivity.this,size)*config.getZoom());
+                        Colour colour = font.getColour();
+                        RGB rgb= colour.getDefaultRGB();
+                        paint.setColor( Color.rgb(rgb.getRed(),rgb.getGreen(),rgb.getBlue()));
+                    }
+                }
+            });
+            if(cellRanges !=null) {
+                tableData.setUserCellRange(cellRanges); //设置自定义规则
+            }
+            tableData.setFormat(new IFormat<Cell>() {
+                @Override
+                public String format(Cell cell) {
+                    return cell.getContents();
+                }
+            });
             table.setTableData(tableData);
+
 
         }
     }

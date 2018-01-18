@@ -234,7 +234,7 @@ public class Column<T> implements Comparable<Column> {
         if (field != null) {
             Object child = o;
             if (fieldNames.length == 0 || fieldNames.length == 1) {
-                return getFieldValue(-1,field, o,true);
+                return getFieldValue(field, o,true);
             }
             for (int i = 0; i < fieldNames.length; i++) {
                 if (child == null) {
@@ -246,7 +246,7 @@ public class Column<T> implements Comparable<Column> {
                     return null;
                 }
                 if (i == fieldNames.length - 1) {
-                    return getFieldValue(-1,childField, child,true);
+                    return getFieldValue(childField, child,true);
                 } else {
                     field.setAccessible(true);
                     child = field.get(child);
@@ -289,7 +289,7 @@ public class Column<T> implements Comparable<Column> {
                         continue;
                     }
                     if (fieldNames.length == 0 || fieldNames.length == 1) {
-                        T t = getFieldValue(k,field, o,true);
+                        T t = getFieldValue(field, o,true);
                         setRowHeight(config, lineHeightArray, k,t);
                         continue;
                     }
@@ -307,7 +307,7 @@ public class Column<T> implements Comparable<Column> {
                             break;
                         }
                         if (i == fieldNames.length - 1) {
-                            T t = getFieldValue(k,childField, child,true);
+                            T t = getFieldValue(childField, child,true);
                             setRowHeight(config, lineHeightArray, k,t);
                         } else {
                             field.setAccessible(true);
@@ -445,7 +445,7 @@ public class Column<T> implements Comparable<Column> {
                         continue;
                     }
                     if (fieldNames.length == 0 || fieldNames.length == 1) {
-                        T t = getFieldValue(k,field, o,isFoot);
+                        T t = getFieldValue(field, o,isFoot);
                         setRowHeight(config, lineHeightArray, k+startPosition,t);
                         continue;
                     }
@@ -463,7 +463,7 @@ public class Column<T> implements Comparable<Column> {
                             break;
                         }
                         if (i == fieldNames.length - 1) {
-                            T t = getFieldValue(k,childField, child,isFoot);
+                            T t = getFieldValue(childField, child,isFoot);
                             setRowHeight(config, lineHeightArray, k+startPosition,t);
                         } else {
                             field.setAccessible(true);
@@ -505,12 +505,11 @@ public class Column<T> implements Comparable<Column> {
      * @param o     对象
      * @throws IllegalAccessException
      */
-    private T getFieldValue(int position,Field field, Object o,boolean isFoot) throws IllegalAccessException {
+    private T getFieldValue(Field field, Object o,boolean isFoot) throws IllegalAccessException {
         field.setAccessible(true);
         T t = (T) field.get(o);
-        if(position >0) {
-            addData(t, isFoot);
-        }
+        addData(t, isFoot);
+
         return t;
     }
 

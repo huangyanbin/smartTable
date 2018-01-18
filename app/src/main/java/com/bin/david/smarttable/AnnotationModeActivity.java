@@ -6,8 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
-import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
+import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
@@ -34,21 +35,26 @@ public class AnnotationModeActivity extends AppCompatActivity {
         table.setData(list);
         table.getConfig().setShowTableTitle(false);
         table.setZoom(true,2,0.2f);
-        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<CellInfo>() {
+        //设置单个格子背景颜色
+        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(AnnotationModeActivity.this,R.color.selectColor);
+            public int getBackGroundColor(CellInfo cellInfo) {
+                if("name".equals(cellInfo.column.getFieldName())
+                        && cellInfo.position%2 ==1) {
+                    return ContextCompat.getColor(AnnotationModeActivity.this, R.color.selectColor);
+                }else{
+                    return TableConfig.INVALID_COLOR;
+                }
             }
-
-            @Override
-            public boolean isDraw(CellInfo cellInfo) {
-               return "name".equals(cellInfo.column.getFieldName())
-                       && cellInfo.position%2 ==1;
-            }
-
+            //根据背景颜色设置字体颜色
             @Override
             public int getTextColor(CellInfo cellInfo) {
-                return ContextCompat.getColor(AnnotationModeActivity.this,R.color.white);
+                if("name".equals(cellInfo.column.getFieldName())
+                        && cellInfo.position%2 ==1) {
+                    return ContextCompat.getColor(AnnotationModeActivity.this, R.color.white);
+                }else{
+                    return super.getTextColor(cellInfo);
+                }
             }
         });
     }

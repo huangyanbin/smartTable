@@ -17,7 +17,7 @@ public class SelectionOperation {
     /**
      * 选中区域
      */
-    public static final int INVALID = -1; //无效坐标
+    private static final int INVALID = -1; //无效坐标
     private Rect selectionRect;
     private ISelectFormat selectFormat;
     private int selectRow = INVALID;

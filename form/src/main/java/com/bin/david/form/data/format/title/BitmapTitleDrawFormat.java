@@ -7,7 +7,7 @@ import android.graphics.Rect;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 
 /**
  * Created by huang on 2017/10/30.
@@ -82,8 +82,8 @@ public abstract class BitmapTitleDrawFormat implements ITitleDrawFormat {
     }
 
     public boolean drawBackground(Canvas c, Column column, Rect rect, TableConfig config) {
-        IBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
-        if(isDrawBackground && backgroundFormat != null && backgroundFormat.isDraw(column)){
+        ICellBackgroundFormat<Column> backgroundFormat = config.getColumnBackgroundFormat();
+        if(isDrawBackground && backgroundFormat != null){
             backgroundFormat.drawBackground(c,rect,column,config.getPaint());
             return true;
         }

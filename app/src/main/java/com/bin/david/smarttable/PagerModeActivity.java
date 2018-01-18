@@ -11,12 +11,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.data.table.PageTableData;
 import com.bin.david.form.data.format.IFormat;
-import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
+import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.format.draw.TextImageDrawFormat;
@@ -244,8 +245,6 @@ public class PagerModeActivity extends AppCompatActivity implements View.OnClick
                 }
                 return false;
             }
-
-
             @Override
             public String[] format(Column column, int position) {
                 UserInfo data = testData.get(position);
@@ -278,14 +277,13 @@ public class PagerModeActivity extends AppCompatActivity implements View.OnClick
             }
         });
         table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
-        table.getConfig().setContentBackgroundFormat(new BaseBackgroundFormat<CellInfo>() {
+        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
-            public int getBackGroundColor() {
-                return ContextCompat.getColor(PagerModeActivity.this,R.color.content_bg);
-            }
-            @Override
-            public boolean isDraw(CellInfo cellInfo) {
-               return cellInfo.position%2 ==0;
+            public int getBackGroundColor(CellInfo cellInfo) {
+                if(cellInfo.position%2 ==0) {
+                    return ContextCompat.getColor(PagerModeActivity.this, R.color.content_bg);
+                }
+                return TableConfig.INVALID_COLOR;
             }
         });
 

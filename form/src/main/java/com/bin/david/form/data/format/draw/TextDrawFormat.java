@@ -7,7 +7,7 @@ import android.graphics.Rect;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.utils.DrawUtils;
 
 /**
@@ -42,9 +42,9 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     @Override
     public void draw(Canvas c, Column<T> column, T t, String value, Rect rect, int position, TableConfig config) {
         cellInfo.set(column,t,value,position);
-        boolean isDrawBg = drawBackground(c,cellInfo,rect,config);
+        drawBackground(c,cellInfo,rect,config);
         Paint paint = config.getPaint();
-        setTextPaint(config, isDrawBg, paint);
+        setTextPaint(config,t, paint);
         if(column.getTextAlign() !=null) {
             paint.setTextAlign(column.getTextAlign());
         }
@@ -52,23 +52,21 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     }
 
 
-    protected void setTextPaint(TableConfig config, boolean isDrawBg, Paint paint) {
+    public void setTextPaint(TableConfig config,T t, Paint paint) {
         config.getContentStyle().fillPaint(paint);
-        IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
-        if(isDrawBg && backgroundFormat.getTextColor(cellInfo) != TableConfig.INVALID_COLOR){
+        ICellBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
+        if(backgroundFormat!=null && backgroundFormat.getTextColor(cellInfo) != TableConfig.INVALID_COLOR){
             paint.setColor(backgroundFormat.getTextColor(cellInfo));
         }
         paint.setTextSize(paint.getTextSize()*config.getZoom());
 
     }
 
-    public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, Rect rect,TableConfig config) {
-        IBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
-        if(isDrawBg && backgroundFormat != null && backgroundFormat.isDraw(cellInfo)){
+    public void drawBackground(Canvas c, CellInfo<T> cellInfo, Rect rect,TableConfig config) {
+        ICellBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
+        if(isDrawBg && backgroundFormat != null){
             backgroundFormat.drawBackground(c,rect,cellInfo,config.getPaint());
-            return true;
         }
-        return false;
     }
 
     public boolean isDrawBg() {

@@ -11,7 +11,6 @@ import android.text.TextPaint;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.form.utils.DrawUtils;
 
@@ -60,8 +59,8 @@ public class MultiLineDrawFormat<T> extends TextDrawFormat<T> {
     public void draw(Canvas c, Column<T> column, T t, String value, Rect rect, int position, TableConfig config) {
         CellInfo<T> cellInfo = getCellInfo();
         cellInfo.set(column, t, value, position);
-        boolean isDrawBg = drawBackground(c, cellInfo, rect, config);
-        setTextPaint(config, isDrawBg, textPaint);
+        drawBackground(c, cellInfo, rect, config);
+        setTextPaint(config, t, textPaint);
         if(column.getTextAlign() !=null) {
             textPaint.setTextAlign(column.getTextAlign());
         }
