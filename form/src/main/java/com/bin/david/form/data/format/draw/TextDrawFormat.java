@@ -32,8 +32,6 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     @Override
     public int measureHeight(Column<T> column,int position, TableConfig config) {
         if(height == 0){
-            Paint paint = config.getPaint();
-            config.getContentStyle().fillPaint(paint);
             height = DrawUtils.getTextHeight(config.getContentStyle(),config.getPaint());
         }
         return height;

@@ -447,6 +447,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
                 scaleRect.left = scaleRect.left > showRect.right-newWidth ? showRect.right-newWidth :scaleRect.left;
             }else{
                 scaleRect.left =showRect.left;
+                translateX = minTranslateX;
             }
 
         }
@@ -456,6 +457,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
                 scaleRect.top = scaleRect.top > showRect.bottom - newHeight ? showRect.bottom - newHeight : scaleRect.top;
             }else{
                 scaleRect.top =showRect.top;
+                translateY =minTranslateY;
             }
         }
         scaleRect.right = scaleRect.left+newWidth;
@@ -464,6 +466,11 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         return scaleRect;
 
     }
+
+    public void setZoom(float zoom) {
+        this.zoom = zoom;
+    }
+
 
 
     /**

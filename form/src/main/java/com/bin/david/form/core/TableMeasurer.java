@@ -2,6 +2,7 @@ package com.bin.david.form.core;
 
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.bin.david.form.component.IComponent;
 import com.bin.david.form.component.ITableTitle;

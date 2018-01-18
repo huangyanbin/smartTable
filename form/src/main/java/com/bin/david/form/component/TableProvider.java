@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.format.selected.IDrawOver;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
@@ -48,6 +49,7 @@ public class TableProvider<T> implements TableClickObserver {
     private int tipPosition;
     private GridDrawer<T> gridDrawer;
     private PointF tipPoint = new PointF();
+    private IDrawOver drawOver;
 
     public TableProvider() {
 
@@ -76,6 +78,7 @@ public class TableProvider<T> implements TableClickObserver {
         drawCount(canvas);
         drawContent(canvas);
         operation.draw(canvas,showRect,config);
+        drawOver.draw(canvas,showRect,config);
         canvas.restore();
         if (isClickPoint && clickColumnInfo != null) {
             onColumnClickListener.onClick(clickColumnInfo);
@@ -320,7 +323,7 @@ public class TableProvider<T> implements TableClickObserver {
                                     tipPosition = j;
                                     clickColumn(column, j, value, data);
                                     isClickPoint = true;
-                                    clickPoint.set(-1, -1);
+                                    clickPoint.set(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
                                 }
                                 operation.checkSelectedPoint(i, j, correctCellRect);
                                 config.getContentStyle().fillPaint(paint);
@@ -426,5 +429,67 @@ public class TableProvider<T> implements TableClickObserver {
 
     public void setSelectFormat(ISelectFormat selectFormat) {
         this.operation.setSelectFormat(selectFormat);
+    }
+
+    public GridDrawer<T> getGridDrawer() {
+        return gridDrawer;
+    }
+
+    public void setGridDrawer(GridDrawer<T> gridDrawer) {
+        this.gridDrawer = gridDrawer;
+    }
+
+    /**
+     * 计算任何point在View的位置
+     * @param row
+     * @param col
+     * @return
+     */
+    public int[] getPointLocation(double row,double col){
+        List<Column> childColumns = tableData.getChildColumns();
+        int[] lineHeights =  tableData.getTableInfo().getLineHeightArray();
+        int x=0,y =0;
+        int columnSize = childColumns.size();
+        for(int i = 0; i <= (columnSize > col+1 ? col+1 : columnSize-1);i++){
+            int w = childColumns.get(i).getWidth();
+            if(i == (int)col+1){
+                x +=w *(col-(int)col);
+            }else {
+                x += w;
+            }
+        }
+        for(int i = 0; i <= (lineHeights.length > row+1 ? row+1 : lineHeights.length-1);i++){
+            int h = lineHeights[i];
+            if(i == (int)row+1){
+                y +=h *(row-(int)row);
+            }else {
+                y += h;
+            }
+        }
+        x *= config.getZoom();
+        y *= config.getZoom();
+        x += scaleRect.left;
+        y +=scaleRect.top;
+        return new int[]{x,y};
+
+    }
+    /**
+     * 计算任何point在View的大小
+     * @param row
+     * @param col
+     * @return
+     */
+    public int[] getPointSize(int row,int col){
+        List<Column> childColumns = tableData.getChildColumns();
+        int[] lineHeights =  tableData.getTableInfo().getLineHeightArray();
+        col= col < childColumns.size() ? col:childColumns.size()-1;//列
+        row = row< lineHeights.length ? row:lineHeights.length;//行
+        return new int[]{(int) (childColumns.get(col).getWidth()*config.getZoom()),
+                (int) (lineHeights[row]*config.getZoom())};
+
+    }
+
+    public void setDrawOver(IDrawOver drawOver) {
+        this.drawOver = drawOver;
     }
 }

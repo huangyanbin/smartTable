@@ -1,9 +1,12 @@
 package com.bin.david.smarttable;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.LruCache;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
@@ -20,8 +23,9 @@ import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
+import com.bin.david.form.data.format.draw.BitmapDrawFormat;
 import com.bin.david.form.data.format.selected.BaseSelectFormat;
-import com.bin.david.form.data.format.selected.ISelectFormat;
+import com.bin.david.form.data.format.selected.IDrawOver;
 import com.bin.david.form.data.format.tip.MultiLineBubbleTip;
 import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.CellRange;
@@ -30,15 +34,21 @@ import com.bin.david.form.data.format.draw.TextDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.utils.DensityUtils;
+import com.bin.david.form.utils.DrawUtils;
 import com.bin.david.smarttable.adapter.SheetAdapter;
+import com.bin.david.smarttable.bean.ImagePoint;
+import com.bin.david.smarttable.utils.DrawHelper;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jxl.Cell;
+import jxl.Image;
 import jxl.Range;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -54,8 +64,12 @@ public class ExcelModeActivity extends AppCompatActivity {
     private SheetAsyncTask sheetTask;
     private ExcelAsyncTask excelTask;
     private RecyclerView recyclerView;
-    private String fileName = "c.xls";
+    private String fileName = "c1.xls";
     private  List<CellRange> cellRanges;
+    private Set<ImagePoint> imgPointSet;
+    //使用缓存
+    private LruCache<ImagePoint,Bitmap> cache;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,9 +108,11 @@ public class ExcelModeActivity extends AppCompatActivity {
                 Cell cell = (Cell) cellInfo.data;
                 if(cell !=null) {
                     CellFormat cellFormat = cell.getCellFormat();
-                    Colour colour = cellFormat.getBackgroundColour();
-                    RGB rgb= colour.getDefaultRGB();
-                    return Color.rgb(rgb.getRed(),rgb.getGreen(),rgb.getBlue());
+                    if(cellFormat !=null) {
+                        Colour colour = cellFormat.getBackgroundColour();
+                        RGB rgb = colour.getDefaultRGB();
+                        return Color.rgb(rgb.getRed(), rgb.getGreen(), rgb.getBlue());
+                    }
                 }
                 return TableConfig.INVALID_COLOR;
             }
@@ -105,6 +121,24 @@ public class ExcelModeActivity extends AppCompatActivity {
         table.setZoom(true,3,0.5f);
         //绘制选中区域
         table.setSelectFormat(new BaseSelectFormat());
+        table.getProvider().setDrawOver(new IDrawOver() {
+            @Override
+            public void draw(Canvas canvas, Rect showRect, TableConfig config) {
+                if(imgPointSet.size() >0){
+                    for(ImagePoint point :imgPointSet){
+                        if(table.getProvider().getGridDrawer().maybeContain(point.row,point.col)) {
+                            Bitmap bitmap = cache.get(point);
+                            int[] location = table.getProvider().getPointLocation(point.row,point.col);
+                            int[] size = table.getProvider().getPointSize((int)Math.ceil(point.row),(int)Math.ceil(point.col));
+                            int width = (int) (size[0]*point.width);
+                            int height = (int)(size[1]*point.height);
+                            Rect imgBitmap = new Rect(location[0],location[1],location[0]+width,location[1]+height);
+                            DrawHelper.drawBitmap(canvas,imgBitmap,bitmap,config);
+                        }
+                    }
+                }
+            }
+        });
         //增加批注
         FontStyle fontStyle = new FontStyle();
         fontStyle.setTextColor(getResources().getColor(android.R.color.white));
@@ -134,6 +168,15 @@ public class ExcelModeActivity extends AppCompatActivity {
         table.getProvider().setTip(tip);
         sheetTask = new SheetAsyncTask();
         sheetTask.execute();
+        int maxMemory = (int)(Runtime.getRuntime().maxMemory() / 1024);// kB
+        int cacheSize = maxMemory / 16;
+        imgPointSet = new HashSet<>();
+        cache = new LruCache<ImagePoint,Bitmap>(cacheSize){
+            @Override
+            protected int sizeOf(ImagePoint key,Bitmap bitmap){
+                return bitmap.getRowBytes() * bitmap.getHeight() / 1024;// KB
+            }
+        };
 
     }
 
@@ -171,8 +214,6 @@ public class ExcelModeActivity extends AppCompatActivity {
                         sheetAdapter.setSelectPosition(position);
                         excelTask = new ExcelAsyncTask();
                         excelTask.execute(position);
-
-
                     }
                 });
                 recyclerView.setAdapter(sheetAdapter);
@@ -191,6 +232,9 @@ public class ExcelModeActivity extends AppCompatActivity {
         protected Cell[][] doInBackground(Integer... position) {
 
             try {
+                //这里可以优化
+                cache.evictAll();
+                imgPointSet.clear();
                 int maxRow, maxColumn;
                 cellRanges = null;
                 InputStream is = getAssets().open(fileName);
@@ -207,8 +251,20 @@ public class ExcelModeActivity extends AppCompatActivity {
                         cellRanges.add(cellRange);
                     }
                 }
+
                 maxRow = sheet.getRows();
                 maxColumn =  sheet.getColumns();
+                int imageCount = sheet.getNumberOfImages();//获得第一个sheet中的图片数目
+                for(int i = 0;i < imageCount;i++) {
+                    Image img = sheet.getDrawing(i);//取第一个sheet中的第i个图片（插入时间上的第i个）
+                    byte[] bytes = img.getImageData();//从图片中取出数据
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    ImagePoint point = new ImagePoint(img.getColumn()-1,img.getRow()-1);//jxl从1开始
+                    point.height =  img.getHeight();
+                    point.width =img.getWidth();
+                    cache.put(point,bitmap);
+                    imgPointSet.add(point);
+                }
                 Cell[][] data = new Cell[maxRow][];
                 for (int i = 0; i < maxRow; i++) {
                     Cell[] rows = new Cell[maxColumn];
@@ -242,22 +298,73 @@ public class ExcelModeActivity extends AppCompatActivity {
             ArrayTableData<Cell> tableData = ArrayTableData.create(table, "Excel表", data, new TextDrawFormat<Cell>(){
 
 
+                //Excel 因为每格的大小都不一样，所以需要重新计算高度和宽度
+                @Override
+                public int measureWidth(Column<Cell> column, TableConfig config) {
+                    int maxWidth = 0;
+                    int count = column.getDatas().size();
+                    for(int i = 0;i < count;i++){
+                        Cell cell = column.getDatas().get(i);
+                        if(cell !=null) {
+                            CellFormat cellFormat = cell.getCellFormat();
+                            if (cellFormat != null) {
+                                Alignment alignment = cellFormat.getAlignment();
+                                config.getPaint().setTextAlign(alignment == Alignment.LEFT ? Paint.Align.LEFT :
+                                        alignment == Alignment.RIGHT ? Paint.Align.RIGHT
+                                                : Paint.Align.CENTER);
+                                Font font = cellFormat.getFont();
+                                int fontSize = (int) (font.getPointSize() * 1.7f); //增加字体，效果更好看
+                                config.getPaint().setTextSize(DensityUtils.sp2px(ExcelModeActivity.this, fontSize));
+                                int width =  (int) config.getPaint().measureText(column.getValues().get(i));
+                                if(width > maxWidth){
+                                    maxWidth = width;
+                                }
+                            }
+                        }
+                    }
+                    return maxWidth;
+                }
+
+                @Override
+                public int measureHeight(Column<Cell> column, int position, TableConfig config) {
+                    Cell cell = column.getDatas().get(position);
+                    if(cell !=null) {
+                        CellFormat cellFormat = cell.getCellFormat();
+                        if (cellFormat != null) {
+                            Alignment alignment = cellFormat.getAlignment();
+                            config.getPaint().setTextAlign(alignment == Alignment.LEFT ? Paint.Align.LEFT :
+                                    alignment == Alignment.RIGHT ? Paint.Align.RIGHT
+                                            : Paint.Align.CENTER);
+                            Font font = cellFormat.getFont();
+                            int fontSize = (int) (font.getPointSize() * 1.7f); //增加字体，效果更好看
+                            config.getPaint().setTextSize(DensityUtils.sp2px(ExcelModeActivity.this, fontSize) );
+                            return DrawUtils.getTextHeight(config.getPaint());
+                        }
+                    }
+                    return super.measureHeight(column, position, config);
+                }
+
 
                 @Override
                 public void setTextPaint(TableConfig config, Cell cell, Paint paint) {
+
                     super.setTextPaint(config,cell,paint);
                     if(cell !=null) {
                         CellFormat cellFormat = cell.getCellFormat();
-                        Alignment alignment = cellFormat.getAlignment();
-                        paint.setTextAlign(alignment == Alignment.LEFT ? Paint.Align.LEFT :
-                                        alignment == Alignment.RIGHT ? Paint.Align.RIGHT
-                                                : Paint.Align.CENTER);
-                        Font font = cellFormat.getFont();
-                        int size = (int) (font.getPointSize()*1.7f); //增加字体，效果更好看
-                        paint.setTextSize(DensityUtils.sp2px(ExcelModeActivity.this,size)*config.getZoom());
-                        Colour colour = font.getColour();
-                        RGB rgb= colour.getDefaultRGB();
-                        paint.setColor( Color.rgb(rgb.getRed(),rgb.getGreen(),rgb.getBlue()));
+                        if(cellFormat !=null) {
+                            Alignment alignment = cellFormat.getAlignment();
+                            paint.setTextAlign(alignment == Alignment.LEFT ? Paint.Align.LEFT :
+                                    alignment == Alignment.RIGHT ? Paint.Align.RIGHT
+                                            : Paint.Align.CENTER);
+                            Font font = cellFormat.getFont();
+                            int size = (int) (font.getPointSize() * 1.7f); //增加字体，效果更好看
+                            paint.setTextSize(DensityUtils.sp2px(ExcelModeActivity.this, size) * config.getZoom());
+                            Colour colour = font.getColour();
+                            RGB rgb = colour.getDefaultRGB();
+
+                            paint.setColor(Color.rgb(rgb.getRed(), rgb.getGreen(), rgb.getBlue()));
+                        }
+
                     }
                 }
             });
@@ -267,7 +374,10 @@ public class ExcelModeActivity extends AppCompatActivity {
             tableData.setFormat(new IFormat<Cell>() {
                 @Override
                 public String format(Cell cell) {
-                    return cell.getContents();
+                    if(cell !=null) {
+                        return cell.getContents();
+                    }
+                    return "";
                 }
             });
             table.setTableData(tableData);

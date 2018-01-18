@@ -227,6 +227,18 @@ public class GridDrawer<T>{
            }
         }
         return rect;
-
     }
+
+    /**
+     * 判断点是否可能显示在View上
+     * @param row 列
+     * @param col 行
+     * @return 显示在View上
+     */
+    public boolean maybeContain(double row,double col){
+        return row> hMinPosition-1 && row< hMaxPosition+1
+                && col> vMinPosition-1 && col<vMaxPosition+1;
+    }
+
+
 }

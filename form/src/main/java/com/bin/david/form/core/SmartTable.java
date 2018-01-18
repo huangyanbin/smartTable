@@ -178,11 +178,18 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
     public void notifyDataChanged(){
         if(tableData != null) {
             config.setPaint(paint);
-            parser.parse(tableData, config);
-            TableInfo info = measurer.measure(tableData, config);
-            xAxis.setHeight(info.getTopHeight());
-            yAxis.setWidth(info.getyAxisWidth());
-            invalidate();
+            //开启线程
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    parser.parse(tableData, config);
+                    TableInfo info = measurer.measure(tableData, config);
+                    xAxis.setHeight(info.getTopHeight());
+                    yAxis.setWidth(info.getyAxisWidth());
+                    postInvalidate();
+                }
+            }).start();
+
         }
     }
 
@@ -303,6 +310,8 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
 
     }
 
+
+
     /**
      * 获取缩放移动辅助类
      *如果你需要更多的移动功能，可以使用它
@@ -344,5 +353,7 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
     public void setSelectFormat(ISelectFormat selectFormat) {
         this.provider.setSelectFormat(selectFormat);
     }
+
+
 }
 

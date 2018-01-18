@@ -2,6 +2,7 @@ package com.bin.david.form.component;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.selected.ISelectFormat;
@@ -33,6 +34,7 @@ public class SelectionOperation {
     }
 
     void setSelectionRect(int selectColumn,int selectRow, Rect rect){
+        Log.e("huang","setSelectionRect selectColumn"+selectColumn+"selectRow"+selectRow);
         this.selectRow = selectRow;
         this.selectColumn = selectColumn;
         selectionRect.set(rect);
@@ -47,6 +49,7 @@ public class SelectionOperation {
     void checkSelectedPoint(int selectColumn,int selectRow, Rect rect){
 
          if(isSelectedPoint(selectColumn,selectRow)){
+             Log.e("huang"," isSelectedPoint selectColumn"+selectColumn+"selectRow"+selectRow);
              selectionRect.set(rect);
              isShow = true;
          }
