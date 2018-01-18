@@ -34,7 +34,6 @@ public class SelectionOperation {
     }
 
     void setSelectionRect(int selectColumn,int selectRow, Rect rect){
-        Log.e("huang","setSelectionRect selectColumn"+selectColumn+"selectRow"+selectRow);
         this.selectRow = selectRow;
         this.selectColumn = selectColumn;
         selectionRect.set(rect);
@@ -49,7 +48,7 @@ public class SelectionOperation {
     void checkSelectedPoint(int selectColumn,int selectRow, Rect rect){
 
          if(isSelectedPoint(selectColumn,selectRow)){
-             Log.e("huang"," isSelectedPoint selectColumn"+selectColumn+"selectRow"+selectRow);
+
              selectionRect.set(rect);
              isShow = true;
          }
