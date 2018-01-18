@@ -39,7 +39,7 @@
 
 ![Excel](/img/old_excel.png)
 
-![Excel](/img/new_excel.png)
+![Excel](/img/new_excel.jpg)
 
 ---
 > 如何使用
