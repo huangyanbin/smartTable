@@ -54,14 +54,11 @@ import java.util.Random;
 public class PagerModeActivity extends AppCompatActivity implements View.OnClickListener{
 
     private SmartTable<UserInfo> table;
-    private BaseCheckDialog<TableStyle> chartDialog;
-    private QuickChartDialog quickChartDialog;
     private PageTableData<UserInfo> tableData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
-        quickChartDialog = new QuickChartDialog();
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
         table = (SmartTable<UserInfo>) findViewById(R.id.table);
         final List<UserInfo> testData = new ArrayList<>();

@@ -307,7 +307,7 @@ public class TableProvider<T> implements TableClickObserver {
             if (left < showRect.right) {
                 int size = column.getDatas().size();
                 for (int j = 0; j < size; j++) {
-                    String value = column.format(column.getDatas().get(j));
+                    String value = column.format(j);
                     float bottom = top + info.getLineHeightArray()[j]*config.getZoom();
                     tempRect.set((int) left, (int) top, (int) right, (int) bottom);
                     correctCellRect = gridDrawer.correctCellRect(j, i, tempRect, config.getZoom()); //矫正格子的大小

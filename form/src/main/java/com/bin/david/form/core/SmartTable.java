@@ -337,20 +337,11 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         invalidate();
     }
 
-    /**
-     * 滚动到原点
-     */
-    public void end(){
-        matrixHelper.flingEnd(showRect,tableRect);
-    }
-    /**
-     * 滚动到原点
-     */
-    public void back(){
-        matrixHelper.flingBack();
-    }
 
-
+    /**
+     * 设置选中格子格式化
+     * @param selectFormat 选中格子格式化
+     */
     public void setSelectFormat(ISelectFormat selectFormat) {
         this.provider.setSelectFormat(selectFormat);
     }

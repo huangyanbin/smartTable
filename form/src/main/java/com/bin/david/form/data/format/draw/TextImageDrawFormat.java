@@ -20,7 +20,7 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
     public static final int BOTTOM =3;
 
    private TextDrawFormat<T> textDrawFormat;
-    private int drawPadding;
+   private int drawPadding;
    private int direction;
    private Rect rect;
 

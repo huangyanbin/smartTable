@@ -25,7 +25,7 @@
        android:layout_marginTop="10dp"
        android:layout_marginBottom="10dp"
        android:background="@drawable/dialog_btn_bg"
-       android:text="滚动到原点"
+       android:text="Fling"
        android:onClick="onClick"
        android:clickable="true"
        android:textColor="#fff"

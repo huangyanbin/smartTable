@@ -8,6 +8,7 @@ import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
+import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.form.utils.DrawUtils;
 
 /**
@@ -26,7 +27,15 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
-        return (int) paint.measureText(column.getLongestValue());
+        int maxWidth = 0;
+        int count = column.getDatas().size();
+        for(int i = 0;i < count;i++){
+            int width =  (int) config.getPaint().measureText(column.format(i));
+            if(width > maxWidth){
+                maxWidth = width;
+            }
+        }
+        return maxWidth;
     }
 
     @Override

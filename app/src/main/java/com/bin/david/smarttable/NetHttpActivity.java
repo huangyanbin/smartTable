@@ -102,7 +102,8 @@ public class NetHttpActivity extends AppCompatActivity {
                                 isFrist = false;
                             }else{
                                 table.addData(pm25List,true);
-                                table.end();
+                                table.getMatrixHelper().flingBottom(200);
+                                table.getMatrixHelper().flingLeft(200);
                             }
                             mHandler.postDelayed(AddDataRunnable,1000);
                         }catch (Exception e){

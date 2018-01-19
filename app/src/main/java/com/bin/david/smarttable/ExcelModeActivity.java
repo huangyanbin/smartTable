@@ -308,14 +308,10 @@ public class ExcelModeActivity extends AppCompatActivity {
                         if(cell !=null) {
                             CellFormat cellFormat = cell.getCellFormat();
                             if (cellFormat != null) {
-                                Alignment alignment = cellFormat.getAlignment();
-                                config.getPaint().setTextAlign(alignment == Alignment.LEFT ? Paint.Align.LEFT :
-                                        alignment == Alignment.RIGHT ? Paint.Align.RIGHT
-                                                : Paint.Align.CENTER);
                                 Font font = cellFormat.getFont();
                                 int fontSize = (int) (font.getPointSize() * 1.7f); //增加字体，效果更好看
                                 config.getPaint().setTextSize(DensityUtils.sp2px(ExcelModeActivity.this, fontSize));
-                                int width =  (int) config.getPaint().measureText(column.getValues().get(i));
+                                int width =  (int) config.getPaint().measureText(column.format(i));
                                 if(width > maxWidth){
                                     maxWidth = width;
                                 }

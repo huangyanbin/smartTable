@@ -38,10 +38,7 @@ public class Column<T> implements Comparable<Column> {
     private IDrawFormat<T> drawFormat;
     private String fieldName;
     private List<T> datas;
-    private List<String> values;
     private boolean isFixed;
-    private int maxValueLength = -1; //最长的长度
-    private String longestValue = ""; //最长的值
     private int width;
     private int level;
     private Comparator<T> comparator;
@@ -55,6 +52,7 @@ public class Column<T> implements Comparable<Column> {
     private int id;
     private boolean isParent;
     private List<int[]> ranges; //合并数据
+    private boolean isArray;
 
     /**列构造方法
      * 用于构造组合列
@@ -116,7 +114,6 @@ public class Column<T> implements Comparable<Column> {
         //默认给一个TextDrawFormat
         this.drawFormat = (drawFormat == null ? new TextDrawFormat<T>() : drawFormat);
         datas = new ArrayList<>();
-        values = new ArrayList<>();
     }
 
 
@@ -210,13 +207,7 @@ public class Column<T> implements Comparable<Column> {
         this.datas = datas;
     }
 
-    public List<String> getValues() {
-        return values;
-    }
 
-    public void setValues(List<String> values) {
-        this.values = values;
-    }
 
 
 
@@ -328,12 +319,12 @@ public class Column<T> implements Comparable<Column> {
             }else{
                 ranges = new ArrayList<>();
             }
-            int size = values.size();
+            int size = datas.size();
             String perVal = null;
             int rangeStartPosition= -1;
             int rangeCount = 0;
             for (int i = 0; i < size; i++) {
-                String val = values.get(i);
+                String val = format(datas.get(i));
                 if(perVal !=null && val !=null
                         && val.length() != 0 && val.equals(perVal)){
                     if(rangeCount < maxMergeCount && rangeStartPosition ==-1){
@@ -362,18 +353,18 @@ public class Column<T> implements Comparable<Column> {
             int size = datas.size();
             int[] lineHeightArray = tableInfo.getLineHeightArray();
             for (int i = 0; i < size; i++) {
-                T t = datas.get(i);
-                String value = format(t);
-                if(value.length() > maxValueLength){
-                    longestValue = value;
-                    maxValueLength = value.length();
-                }
-                values.add(value);
-
                 setRowHeight(config, lineHeightArray, i,null);
             }
         }
     }
+
+    public String format(int position){
+       if(position >=0 && position< datas.size()){
+          return format(datas.get(position));
+       }
+       return "";
+    }
+
     public String format(T t){
         String value;
         if (format != null) {
@@ -446,6 +437,7 @@ public class Column<T> implements Comparable<Column> {
                     }
                     if (fieldNames.length == 0 || fieldNames.length == 1) {
                         T t = getFieldValue(field, o,isFoot);
+
                         setRowHeight(config, lineHeightArray, k+startPosition,t);
                         continue;
                     }
@@ -482,17 +474,10 @@ public class Column<T> implements Comparable<Column> {
      * @param isFoot 是否添加到尾部
      */
     private void addData(T t,boolean isFoot){
-        String value = format(t);
-        if (value.length() > maxValueLength) {
-            maxValueLength = value.length();
-            longestValue = value;
-        }
         if(isFoot) {
             datas.add(t);
-            values.add(value);
         }else {
             datas.add(0,t);
-            values.add(0,value);
         }
 
     }
@@ -539,21 +524,7 @@ public class Column<T> implements Comparable<Column> {
         this.width = width;
     }
 
-    /**
-     * 获取当前列最长值长度
-     * @return 最长值长度
-     */
-    public int getMaxValueLength() {
-        return maxValueLength;
-    }
 
-    /**
-     * 获取当前列最长值
-     * @return 最长值
-     */
-    public String getLongestValue() {
-        return longestValue;
-    }
     /**
      * 统计总数
      * @return 最长值
@@ -607,13 +578,6 @@ public class Column<T> implements Comparable<Column> {
         this.countFormat = countFormat;
     }
 
-    /**
-     * 设置最长值
-     * @param longestValue
-     */
-    public void setLongestValue(String longestValue) {
-        this.longestValue = longestValue;
-    }
 
     /**
      * 获取列ID
@@ -732,5 +696,13 @@ public class Column<T> implements Comparable<Column> {
      */
     public void setMaxMergeCount(int maxMergeCount) {
         this.maxMergeCount = maxMergeCount;
+    }
+
+    public boolean isArray() {
+        return isArray;
+    }
+
+    public void setArray(boolean array) {
+        isArray = array;
     }
 }

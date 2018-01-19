@@ -51,7 +51,7 @@ public class MultiLineDrawFormat<T> extends TextDrawFormat<T> {
     @Override
     public int measureHeight(Column<T> column, int position, TableConfig config) {
         config.getContentStyle().fillPaint(textPaint);
-        StaticLayout sl = new StaticLayout(column.getValues().get(position), textPaint, width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout sl = new StaticLayout(column.format(position), textPaint, width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         return sl.getHeight();
     }
 
@@ -67,7 +67,7 @@ public class MultiLineDrawFormat<T> extends TextDrawFormat<T> {
         int hPadding = (int) (config.getHorizontalPadding()*config.getZoom());
         int vPadding = (int) (config.getVerticalPadding()*config.getZoom());
         int realWidth =rect.width() - 2*hPadding;
-        StaticLayout staticLayout = new StaticLayout(column.getValues().get(position), textPaint, realWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout staticLayout = new StaticLayout(column.format(position), textPaint, realWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         c.save();
         c.translate(DrawUtils.getTextCenterX(rect.left+hPadding,rect.right-hPadding,textPaint), rect.top+vPadding);
         staticLayout.draw(c);

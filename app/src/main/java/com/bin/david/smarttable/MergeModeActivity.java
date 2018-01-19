@@ -40,7 +40,5 @@ public class MergeModeActivity extends AppCompatActivity {
         table.setZoom(true,2,0.2f);
 
     }
-    public void onClick(View view) {
-        table.back();
-    }
+
 }

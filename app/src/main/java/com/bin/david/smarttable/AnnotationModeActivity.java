@@ -12,7 +12,10 @@ import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
+import com.bin.david.smarttable.bean.TableStyle;
 import com.bin.david.smarttable.bean.UserInfo;
+import com.bin.david.smarttable.view.BaseCheckDialog;
+import com.bin.david.smarttable.view.QuickChartDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +23,14 @@ import java.util.List;
 public class AnnotationModeActivity extends AppCompatActivity {
 
     private SmartTable<UserInfo> table;
+    private QuickChartDialog quickChartDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_annotation);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
-       
+        quickChartDialog = new QuickChartDialog();
         List<UserInfo> list = new ArrayList<>();
         for(int i = 0;i <100; i++) {
             list.add(new UserInfo("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
@@ -58,7 +63,30 @@ public class AnnotationModeActivity extends AppCompatActivity {
             }
         });
     }
+
     public void onClick(View view) {
-        table.back();
+        fling(TableStyle.FLING);
     }
+
+    //飞滚
+    private void fling(TableStyle item) {
+        quickChartDialog.showDialog(this, item, new String[]{"Left","Top","Right","Bottom"}, new QuickChartDialog.OnCheckChangeAdapter() {
+
+            @Override
+            public void onItemClick(String s, int position) {
+                if (position == 0) {
+                    table.getMatrixHelper().flingLeft(200);
+                } else if (position == 1) {
+                    table.getMatrixHelper().flingTop(200);
+                }else if(position ==2){
+                    table.getMatrixHelper().flingRight(200);
+                }else {
+                    table.getMatrixHelper().flingBottom(2000);
+                }
+                table.invalidate();
+            }
+        });
+    }
+
+
 }

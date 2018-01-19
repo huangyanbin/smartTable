@@ -1,5 +1,7 @@
 package com.bin.david.form.matrix;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -50,6 +52,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     private float flingRate = 0.5f; //速率
     private Rect scaleRect = new Rect();
     private boolean isZooming; //是否正在缩放
+    private boolean isAutoFling = false;
 
     /**
      * 手势帮助类构造方法
@@ -383,85 +386,88 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
      *
      */
     public Rect getZoomProviderRect(Rect showRect, Rect providerRect,TableInfo tableInfo) {
-
         originalRect.set(showRect);
         int showWidth = showRect.width();
         int showHeight = showRect.height();
-        int oldw = providerRect.width();
-        int oldh = providerRect.height();
-        int newWidth = (int) (oldw * zoom);
-        int newHeight = (int) (oldh * zoom);
-        /**
-         * 在表格中，x序列和Y序列不需要跟随放大，需要减掉多计算部分
-         */
-        if(zoom >1) {
-            newWidth -= (int)(tableInfo.getyAxisWidth() * (zoom - 1));
-            newHeight -= (int)(tableInfo.getTopHeight()*(zoom-1));
-        }
-
-        /**
-         * 表格的标题不会跟随放大和缩小，也需要减掉多计算部分
-         * 根据表格标题方向来判断减掉高还是宽
-         */
-        if(tableInfo.getTitleDirection() == IComponent.TOP
-                || tableInfo.getTitleDirection() == IComponent.BOTTOM){
-            newHeight -= (int)(tableInfo.getTableTitleSize()*(zoom-1));
-        }else{
-            newWidth -= (int)(tableInfo.getTableTitleSize()*(zoom-1));
-        }
-        int offsetX = (int) (showRect.width()*(zoom-1))/2;
-        int offsetY =(int) (showRect.height()*(zoom-1))/2;
-        int minTranslateX = -offsetX;
-        int maxTranslateX = newWidth-showWidth-offsetX;
-        int minTranslateY = -offsetY;
-        int maxTranslateY = newHeight-showHeight-offsetY;
-        boolean isFullShowX = false,isFullShowY = false;
-        //计算出对比当前中心点的偏移量
-        if(maxTranslateX > minTranslateX){
-            if(translateX  < minTranslateX){
-                translateX = minTranslateX;
-
-            }else if(translateX > maxTranslateX){
-                translateX = maxTranslateX;
-            }
-        }else{
-            isFullShowX = true;
-        }
-        if(maxTranslateY > minTranslateY) {
-            if (translateY < minTranslateY) {
-                translateY = minTranslateY;
-            } else if (translateY > maxTranslateY) {
-                translateY = maxTranslateY;
-            }
-        }else{
-            isFullShowY = true;
-        }
-        scaleRect.left = providerRect.left - offsetX - translateX;
-        scaleRect.top = providerRect.top - offsetY - translateY;
-        if(isFullShowX){
-            if(isZooming){
-                scaleRect.left = scaleRect.left < showRect.left ? showRect.left :scaleRect.left;
-                scaleRect.left = scaleRect.left > showRect.right-newWidth ? showRect.right-newWidth :scaleRect.left;
-            }else{
-                scaleRect.left =showRect.left;
-                translateX = minTranslateX;
+        int offsetX = (int) (showWidth * (zoom - 1)) / 2;
+        int offsetY = (int) (showHeight * (zoom - 1)) / 2;
+        if(!isAutoFling) {
+            int oldw = providerRect.width();
+            int oldh = providerRect.height();
+            int newWidth = (int) (oldw * zoom);
+            int newHeight = (int) (oldh * zoom);
+            /**
+             * 在表格中，x序列和Y序列不需要跟随放大，需要减掉多计算部分
+             */
+            if (zoom > 1) {
+                newWidth -= (int) (tableInfo.getyAxisWidth() * (zoom - 1));
+                newHeight -= (int) (tableInfo.getTopHeight() * (zoom - 1));
             }
 
-        }
-        if(isFullShowY){
-            if(isZooming) {
-                scaleRect.top = scaleRect.top < showRect.top ? showRect.top : scaleRect.top;
-                scaleRect.top = scaleRect.top > showRect.bottom - newHeight ? showRect.bottom - newHeight : scaleRect.top;
-            }else{
-                scaleRect.top =showRect.top;
-                translateY =minTranslateY;
+            /**
+             * 表格的标题不会跟随放大和缩小，也需要减掉多计算部分
+             * 根据表格标题方向来判断减掉高还是宽
+             */
+            if (tableInfo.getTitleDirection() == IComponent.TOP
+                    || tableInfo.getTitleDirection() == IComponent.BOTTOM) {
+                newHeight -= (int) (tableInfo.getTableTitleSize() * (zoom - 1));
+            } else {
+                newWidth -= (int) (tableInfo.getTableTitleSize() * (zoom - 1));
             }
+            int minTranslateX = -offsetX;
+            int maxTranslateX = newWidth - showWidth - offsetX;
+            int minTranslateY = -offsetY;
+            int maxTranslateY = newHeight - showHeight - offsetY;
+            boolean isFullShowX = false, isFullShowY = false;
+            //计算出对比当前中心点的偏移量
+            if (maxTranslateX > minTranslateX) {
+                if (translateX < minTranslateX) {
+                    translateX = minTranslateX;
+
+                } else if (translateX > maxTranslateX) {
+                    translateX = maxTranslateX;
+                }
+            } else {
+                isFullShowX = true;
+            }
+            if (maxTranslateY > minTranslateY) {
+                if (translateY < minTranslateY) {
+                    translateY = minTranslateY;
+                } else if (translateY > maxTranslateY) {
+                    translateY = maxTranslateY;
+                }
+            } else {
+                isFullShowY = true;
+            }
+            scaleRect.left = providerRect.left - offsetX - translateX;
+            scaleRect.top = providerRect.top - offsetY - translateY;
+            if (isFullShowX) {
+                if (isZooming) {
+                    scaleRect.left = scaleRect.left < showRect.left ? showRect.left : scaleRect.left;
+                    scaleRect.left = scaleRect.left > showRect.right - newWidth ? showRect.right - newWidth : scaleRect.left;
+                } else {
+                    scaleRect.left = showRect.left;
+                    translateX = minTranslateX;
+                }
+            }
+            if (isFullShowY) {
+                if (isZooming) {
+                    scaleRect.top = scaleRect.top < showRect.top ? showRect.top : scaleRect.top;
+                    scaleRect.top = scaleRect.top > showRect.bottom - newHeight ? showRect.bottom - newHeight : scaleRect.top;
+                } else {
+                    scaleRect.top = showRect.top;
+                    translateY = minTranslateY;
+                }
+            }
+            scaleRect.right = scaleRect.left + newWidth;
+            scaleRect.bottom = scaleRect.top + newHeight;
+            zoomRect.set(scaleRect);
+        }else{
+            translateX= providerRect.left- zoomRect.left- offsetX;
+            translateY  = providerRect.top-zoomRect.top - offsetY ;
+            scaleRect.set(zoomRect);
         }
-        scaleRect.right = scaleRect.left+newWidth;
-        scaleRect.bottom = scaleRect.top +newHeight;
-        zoomRect.set(scaleRect);
         return scaleRect;
-
     }
 
     public void setZoom(float zoom) {
@@ -469,13 +475,10 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     }
 
     public Rect getZoomRect() {
-
-        Log.e("huang","zoom:---top："+zoomRect.top+" bottom:"+zoomRect.bottom);
         return zoomRect;
     }
 
     public Rect getOriginalRect() {
-        Log.e("huang","original:---top："+originalRect.top+" bottom:"+originalRect.bottom);
         return originalRect;
     }
 
@@ -557,36 +560,99 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     }
 
     /**
-     * 飞滚到原点
+     * 飞滚到最左边
      */
-    public void flingBack(){
-       float tempFlingRate  = flingRate;
-       flingRate = 1;
-       scroller.setFinalX(translateX);
-       scroller.setFinalY(translateY);
-       isFling = true;
-       startFilingAnim(true);
-       flingRate = tempFlingRate;
+    public void flingLeft(int duration){
+        final int width = zoomRect.width();
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(zoomRect.left,0).setDuration(duration);
+        valueAnimator.addListener(animatorListenerAdapter);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                zoomRect.left = (int)animation.getAnimatedValue();
+                zoomRect.right = zoomRect.left+width;
+                notifyViewChanged();
+            }
+        });
+        valueAnimator.start();
+
     }
+
+
 
     /**
-     * 飞滚到最后
-     * 这个方法还有点小问题，fling值还不精确
+     * 飞滚到最右边
      */
-    public void flingEnd(Rect showRect,Rect providerRect){
-        int showHeight = showRect.height();
-        int oldh = providerRect.height();
-        int newHeight = (int) (oldh * zoom);
-        int maxTranslateY = newHeight-showHeight;
-        float tempFlingRate  = flingRate;
-        flingRate = 1;
-        scroller.setFinalY(-maxTranslateY-300);
-        //scroller.setFinalX(translateX);
-        isFling = true;
-        startFilingAnim(true);
-        flingRate = tempFlingRate;
+    public void flingRight(int duration){
+        final int width = zoomRect.width();
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(zoomRect.right,
+                originalRect.right).setDuration(duration);
+        valueAnimator.addListener(animatorListenerAdapter);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                zoomRect.right = (int)animation.getAnimatedValue();
+                zoomRect.left = zoomRect.right-width;
+                notifyViewChanged();
+            }
+        });
+        valueAnimator.start();
     }
 
+
+    /**
+     * 飞滚到顶部
+     */
+    public void flingTop(int duration){
+        final int height = zoomRect.height();
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(zoomRect.top,0).setDuration(duration);
+        valueAnimator.addListener(animatorListenerAdapter);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                zoomRect.top = (int)animation.getAnimatedValue();
+                zoomRect.bottom = zoomRect.top+height;
+                notifyViewChanged();
+            }
+        });
+        valueAnimator.start();
+    }
+
+
+
+    /**
+     * 飞滚到底部
+     */
+    public void flingBottom(int duration){
+        final int height = zoomRect.height();
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(zoomRect.bottom,
+                originalRect.bottom).setDuration(duration);
+        valueAnimator.addListener(animatorListenerAdapter);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                zoomRect.bottom = (int)animation.getAnimatedValue();
+                zoomRect.top = zoomRect.bottom-height;
+                notifyViewChanged();
+            }
+        });
+        valueAnimator.start();
+    }
+    private AnimatorListenerAdapter animatorListenerAdapter = new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationStart(Animator animation) {
+            isAutoFling = true;
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+            isAutoFling = false;
+        }
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            isAutoFling = false;
+        }
+    };
     /**
      * 获取当前的缩放值
      * @return 当前的缩放值
