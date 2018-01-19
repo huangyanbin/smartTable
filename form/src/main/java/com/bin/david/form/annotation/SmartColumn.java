@@ -17,16 +17,17 @@ public @interface SmartColumn {
 
     /**
      * 名称
-     * @return
      */
     String name() default "";
 
     /**
      * id 越小越在前面
-     * @return
      */
     int id() default 0;
 
+    /**
+     * 父列名称
+     */
     String parent() default "";
 
     /**
@@ -48,8 +49,13 @@ public @interface SmartColumn {
      * @return 自动合并最大数量
      */
     int maxMergeCount() default -1;
-
+    /**
+     * 开启自动统计
+     */
     boolean autoCount() default false;
+    /**
+     * 是否固定该列
+     */
     boolean fixed() default false;
 
 

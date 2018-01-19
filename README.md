@@ -101,6 +101,60 @@ dependencies {
 
 > 注解模式就是这么简单，你可以直接运行查看效果了。当然这只是注解基本配置，注解里面还有自动统计，列组合等，如果你想要了解注解更多，请查看demo.
 
+##### 注解模式
+
+
+######  ```@SmartTable```表格注解，用于生成表格。
+
+
+header 1 | header 2
+---|---
+name | 表格名
+count | 是否显示统计行
+pageSize | 页数量
+currentPage | 当前页
+
+
+
+
+###### ```@SmartColumn```列，用于注解列。
+
+注解 | 作用
+---|---
+name | 列标题
+id |  列排序位置(越小越在前面)
+parent | 父列名称(不设置则没有父列)
+align  | 列对齐方式
+type   | 设置是否查询下一级
+autoMerge |设置是否自动合并
+maxMergeCount |合并最大数量
+autoCount |是否开启统计
+fixed |是否固定该列
+
+
+> 解释：
+
+- align
+
+> 设置该列对齐方式，默认居中
+
+- type
+
+> 有ColumnType.Own,ColumnType.Child,两个值可以设置，假设UserInfo 有个属性是Family family对象，你想解析faily对象的属性monther,father两个属性，则需要设置Child，并在monther,father下添加相对应的注解@SmartColumn，否则只解析到Family，默认是Own。
+
+- autoMerge
+
+> 假设你返回的数据格式化之后该列附近数据有相同，则会自动合并成一个单元格，默认不开启合并。
+
+- autoCount
+
+> table 开启显示统计行，设置autoCount为true，则该列可以自动统计，默认为false。
+
+- fixed
+
+> fixed设置为true，该列滚动到最左边时，可以自动固定住。
+
+
 
 **- 基本模式**
 ```
