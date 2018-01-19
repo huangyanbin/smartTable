@@ -287,7 +287,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
             @Override
             public String[] format(Column column, int position) {
                 UserInfo data = testData.get(position);
-                String[] strings = {"批注","姓名："+data.getName().substring(0,10),data.getName().substring(10,20),"年龄："+data.getAge()};
+                String[] strings = {"批注","姓名："+data.getName()};
                 return strings;
             }
         };
