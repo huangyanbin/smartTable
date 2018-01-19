@@ -4,10 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.RestrictTo;
-import android.support.v4.view.ScrollingView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -29,14 +26,13 @@ import com.bin.david.form.matrix.MatrixHelper;
 
 import java.util.List;
 
-import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 
 /**
  * Created by huang on 2017/10/30.
  * 表格
  */
 
-public class SmartTable<T> extends View implements OnTableChangeListener{//,ScrollingView {
+public class SmartTable<T> extends View implements OnTableChangeListener{
 
     private XSequence<T> xAxis;
     private YSequence<T> yAxis;
@@ -113,7 +109,6 @@ public class SmartTable<T> extends View implements OnTableChangeListener{//,Scro
                 tableRect.set(rect);
                 Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,
                         tableData.getTableInfo());
-                //setScrollY(-scaleRect.left);
                 if(config.isShowTableTitle()) {
                     tableTitle.onMeasure(scaleRect, showRect, config);
                     tableTitle.onDraw(canvas, showRect, tableData.getTableName(), config);
