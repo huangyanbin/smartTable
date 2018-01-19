@@ -287,7 +287,6 @@ public class TableProvider<T> implements TableClickObserver {
             top = scaleRect.top;
             Column column = columns.get(i);
             float width = column.getWidth()*config.getZoom();
-            List<String> values = column.getValues();
             float tempLeft = left;
             //根据根部标题是否固定
             Column topColumn = childColumnInfo.get(i).getTopParent().column;
@@ -306,9 +305,9 @@ public class TableProvider<T> implements TableClickObserver {
             }
             float right = left + width;
             if (left < showRect.right) {
-                int size = values.size();
+                int size = column.getDatas().size();
                 for (int j = 0; j < size; j++) {
-                    String value = values.get(j);
+                    String value = column.format(column.getDatas().get(j));
                     float bottom = top + info.getLineHeightArray()[j]*config.getZoom();
                     tempRect.set((int) left, (int) top, (int) right, (int) bottom);
                     correctCellRect = gridDrawer.correctCellRect(j, i, tempRect, config.getZoom()); //矫正格子的大小

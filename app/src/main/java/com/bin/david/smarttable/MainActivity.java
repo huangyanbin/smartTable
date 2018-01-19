@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<MainItem> items = new ArrayList<>();
         items.add(new MainItem(ParseModeActivity.class,"解析模式"));
         items.add(new MainItem(AnnotationModeActivity.class,"注解模式"));
+        items.add(new MainItem(RefreshActivity.class,"刷新加载加载更多"));
         items.add(new MainItem(NetHttpActivity.class,"网络模式"));
         items.add(new MainItem(ArrayModeActivity.class,"数组模式1(日程表)"));
         items.add(new MainItem(SeatModeActivity.class,"数组模式2(选座)"));

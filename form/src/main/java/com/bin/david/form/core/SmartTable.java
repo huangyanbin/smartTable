@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.RestrictTo;
+import android.support.v4.view.ScrollingView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -26,12 +29,14 @@ import com.bin.david.form.matrix.MatrixHelper;
 
 import java.util.List;
 
+import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
+
 /**
  * Created by huang on 2017/10/30.
  * 表格
  */
 
-public class SmartTable<T> extends View  implements OnTableChangeListener {
+public class SmartTable<T> extends View implements OnTableChangeListener{//,ScrollingView {
 
     private XSequence<T> xAxis;
     private YSequence<T> yAxis;
@@ -97,7 +102,7 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
      */
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+        setScrollY(0);
         showRect.set(0,0,getWidth(),getHeight());
         if(tableData != null) {
             Rect rect = tableData.getTableInfo().getTableRect();
@@ -108,6 +113,7 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
                 tableRect.set(rect);
                 Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,
                         tableData.getTableInfo());
+                //setScrollY(-scaleRect.left);
                 if(config.isShowTableTitle()) {
                     tableTitle.onMeasure(scaleRect, showRect, config);
                     tableTitle.onDraw(canvas, showRect, tableData.getTableName(), config);
@@ -355,5 +361,71 @@ public class SmartTable<T> extends View  implements OnTableChangeListener {
     }
 
 
+
+
+    @Override
+    public int computeHorizontalScrollRange() {
+        final int contentWidth = getWidth() - getPaddingLeft() - getPaddingRight();
+        int scrollRange = matrixHelper.getZoomRect().right;
+        final int scrollX = -matrixHelper.getZoomRect().right;
+        final int overScrollRight = Math.max(0, scrollRange - contentWidth);
+        if (scrollX < 0) {
+            scrollRange -= scrollX;
+        } else if (scrollX > overScrollRight) {
+            scrollRange += scrollX - overScrollRight;
+        }
+        return scrollRange;
+    }
+
+    @Override
+    public boolean canScrollVertically(int direction) {
+        if(direction<0){
+            return matrixHelper.getZoomRect().top !=0;
+        }else{
+            return super.canScrollVertically(direction);
+        }
+
+    }
+
+    @Override
+    public int computeHorizontalScrollOffset() {
+        return Math.max(0,-matrixHelper.getZoomRect().top);
+    }
+
+
+    @Override
+    public int computeHorizontalScrollExtent() {
+        return super.computeHorizontalScrollExtent();
+    }
+
+    @Override
+    public int computeVerticalScrollRange() {
+
+        final int contentHeight = getHeight() - getPaddingBottom() - getPaddingTop();
+        int scrollRange = matrixHelper.getZoomRect().bottom;
+        final int scrollY = -matrixHelper.getZoomRect().left;
+        final int overScrollBottom = Math.max(0, scrollRange - contentHeight);
+        if (scrollY < 0) {
+            scrollRange -= scrollY;
+        } else if (scrollY > overScrollBottom) {
+            scrollRange += scrollY - overScrollBottom;
+        }
+
+        return scrollRange;
+    }
+
+    @Override
+    public int computeVerticalScrollOffset() {
+
+        return Math.max(0,-matrixHelper.getZoomRect().left);
+    }
+
+    @Override
+    public int computeVerticalScrollExtent() {
+
+        return super.computeVerticalScrollExtent();
+
+
+    }
 }
 

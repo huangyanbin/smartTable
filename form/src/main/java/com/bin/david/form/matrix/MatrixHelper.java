@@ -41,7 +41,6 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     private boolean isScale; //是否正在缩小
     private Rect originalRect; //原始大小
     private Rect zoomRect;
-    private Rect showRect;
     private float mDownX, mDownY;
     private int pointMode; //屏幕的手指点个数
     private Scroller scroller;
@@ -63,7 +62,6 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         scroller = new Scroller(context);
         zoomRect = new Rect();
-        showRect = new Rect();
         originalRect = new Rect();
     }
 
@@ -154,14 +152,14 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
      * @return 是否到右边界
      */
     private boolean toRectRight() {
-        return translateX >= zoomRect.width() -showRect.width();
+        return translateX >= zoomRect.width() -originalRect.width();
     }
     /**
      * 通过translateY值判断是否到底部边界
      * @return 是否到底部边界
      */
     private boolean toRectBottom() {
-        int height = zoomRect.height() -showRect.height();
+        int height = zoomRect.height() -originalRect.height();
         return translateY>= height;
     }
     /**
@@ -387,7 +385,6 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     public Rect getZoomProviderRect(Rect showRect, Rect providerRect,TableInfo tableInfo) {
 
         originalRect.set(showRect);
-         this.showRect.set(showRect);
         int showWidth = showRect.width();
         int showHeight = showRect.height();
         int oldw = providerRect.width();
@@ -461,7 +458,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
             }
         }
         scaleRect.right = scaleRect.left+newWidth;
-        scaleRect.bottom = providerRect.bottom +newHeight;
+        scaleRect.bottom = scaleRect.top +newHeight;
         zoomRect.set(scaleRect);
         return scaleRect;
 
@@ -469,6 +466,17 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
 
     public void setZoom(float zoom) {
         this.zoom = zoom;
+    }
+
+    public Rect getZoomRect() {
+
+        Log.e("huang","zoom:---top："+zoomRect.top+" bottom:"+zoomRect.bottom);
+        return zoomRect;
+    }
+
+    public Rect getOriginalRect() {
+        Log.e("huang","original:---top："+originalRect.top+" bottom:"+originalRect.bottom);
+        return originalRect;
     }
 
 
