@@ -1,10 +1,12 @@
 # SmartTable
 [![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
 ###### 一款android自动生成表格框架
+---
 * [English README](/README.en.md/)
 * [apk version 1.6版本下载地址](/img/smartTable.apk)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
+
 > 功能介绍
 1.  快速配置自动生成表格；
 2.  自动计算表格宽高；
@@ -24,22 +26,29 @@
 16. 支持二维数组展示（用于类似日程表，电影选票等）
 17. 导入excel(支持颜色，字体，背景，批注，对齐，图片等基本Excel属性)
 18. 表格合并单元(支持注解合并，支持自动合并)
-![日程](/img/progress.jpg)
+19. 支持其他刷新框架SmartRefreshLayout
 
-![选票](/img/seat.jpg)
-> 视频展示
-![设置背景](/img/bg.png)
+> 基本功能展示
 
 ![基本功能](/img/table.gif)
 
-![缩放功能](/img/zoom.gif)
+> 缩放功能
 
-> 导入表格 对比：
+![缩放](/img/zoom.gif)
+
+> 刷新功能(使用SmartRefreshLayout)
+
+![刷新](/img/refresh.gif)
+
+> 导入Excel(使用Jxl)
 
 ![Excel](/img/old_excel.png)
-
 ![Excel](/img/new_excel.jpg)
 
+> 导入二维数组
+
+![日程](/img/progress.jpg)
+![选票](/img/seat.jpg)
 
 ---
 > 如何使用
@@ -101,11 +110,7 @@ dependencies {
 
 > 注解模式就是这么简单，你可以直接运行查看效果了。当然这只是注解基本配置，注解里面还有自动统计，列组合等，如果你想要了解注解更多，请查看demo.
 
-##### 注解模式
-
-
 ######  ```@SmartTable```表格注解，用于生成表格。
-
 
 header 1 | header 2
 ---|---
@@ -113,9 +118,6 @@ name | 表格名
 count | 是否显示统计行
 pageSize | 页数量
 currentPage | 当前页
-
-
-
 
 ###### ```@SmartColumn```列，用于注解列。
 

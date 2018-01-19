@@ -21,23 +21,31 @@
 14. dynamically added data at the end of the end.
 15. rich formatting;
 16. support two dimensional array display (for similar timetable, film ballot, etc.)
-17. support the import of Excel
-18. form merge cell
->  video display
+17. import excel (support color, font, background, annotation, alignment, picture and other basic Excel attributes)
+18. form merge unit (supporting annotating merge, supporting auto merge)
+19. support the other refresh framework SmartRefreshLayout
 
-![set table background](/img/bg.png)
+> Basic function display
 
-![Base function](/img/table.gif)
+![Basic](/img/table.gif)
 
-![zoom function](/img/zoom.gif)
+> Zoom function
 
-![progress](/img/progress.jpg)
+![Zoom](/img/zoom.gif)
 
-![seat](/img/seat.jpg)
+> refresh function(使用SmartRefreshLayout)
+
+![refresh](/img/refresh.gif)
+
+> Import Excel (using Jxl jar)
 
 ![Excel](/img/old_excel.png)
-
 ![Excel](/img/new_excel.jpg)
+
+> Importing a two-dimensional array
+
+![schedule](/img/progress.jpg)
+![Vote](/img/seat.jpg)
 > How Use
 
 - Quote
@@ -94,7 +102,51 @@ dependencies {
 
 > The annotation pattern is so simple that you can run directly to see the effect. Of course, this is just the basic configuration of annotations. There are also automatic statistics, column combinations, and so on. If you want to know more about the annotation, please check the demo.
 
+Table ```@SmartTable``` ###### notes, used to generate the table.
 
+Header 1 header 2 |
+---|---
+Name | table name
+Count is | statistics for
+PageSize | page number
+CurrentPage | the current page
+
+###### ```@SmartColumn``` column for comment column.
+
+Note | effect
+---|---
+Name | column headings
+ID | position (column sorting is smaller at the front)
+Parent | parent column name (not set no parent column)
+Align | column alignment
+Type | query set whether the next level
+AutoMerge | is set to automatically merge
+With the maximum number of maxMergeCount |
+AutoCount | is on statistics
+Whether the column fixed | fixed
+
+
+> explanation:
+
+- align
+
+> set the column alignment, default Center
+
+- type
+
+> ColumnType.Own, ColumnType.Child two, a value can be set, assuming that UserInfo has an attribute Family family object, you want to attribute monther parsing faily object, father two properties, you need to set the Child, and in monther, add the corresponding notes @ SmartColumn father, otherwise only resolved to Family, the default is Own.
+
+- autoMerge
+
+If the data that you return is formatted, the same data near the column will be automatically merged into a cell that does not open the merge by default.
+
+- autoCount
+
+> table opens the display statistics line and sets the autoCount to true, then the column can be automatically counted, and the default is false.
+
+- Fixed
+
+> fixed is set to true, which can be automatically fixed when the column rolls to the left.
 **- Basic mode**
 ```
     //Common column
@@ -185,13 +237,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitat
-
-
-
-
-
-
-
-
-
-
