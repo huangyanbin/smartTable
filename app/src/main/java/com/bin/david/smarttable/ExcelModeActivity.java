@@ -300,25 +300,19 @@ public class ExcelModeActivity extends AppCompatActivity {
 
                 //Excel 因为每格的大小都不一样，所以需要重新计算高度和宽度
                 @Override
-                public int measureWidth(Column<Cell> column, TableConfig config) {
-                    int maxWidth = 0;
-                    int count = column.getDatas().size();
-                    for(int i = 0;i < count;i++){
-                        Cell cell = column.getDatas().get(i);
-                        if(cell !=null) {
-                            CellFormat cellFormat = cell.getCellFormat();
-                            if (cellFormat != null) {
-                                Font font = cellFormat.getFont();
-                                int fontSize = (int) (font.getPointSize() * 1.7f); //增加字体，效果更好看
-                                config.getPaint().setTextSize(DensityUtils.sp2px(ExcelModeActivity.this, fontSize));
-                                int width =  (int) config.getPaint().measureText(column.format(i));
-                                if(width > maxWidth){
-                                    maxWidth = width;
-                                }
-                            }
+                public int measureWidth(Column<Cell> column,int position, TableConfig config) {
+                    int width =0;
+                    Cell cell = column.getDatas().get(position);
+                    if(cell !=null) {
+                        CellFormat cellFormat = cell.getCellFormat();
+                        if (cellFormat != null) {
+                            Font font = cellFormat.getFont();
+                            int fontSize = (int) (font.getPointSize() * 1.7f); //增加字体，效果更好看
+                            config.getPaint().setTextSize(DensityUtils.sp2px(ExcelModeActivity.this, fontSize));
+                            width = DrawUtils.getMultiTextWidth(config.getPaint(),column.format(position));
                         }
                     }
-                    return maxWidth;
+                    return width;
                 }
 
                 @Override
@@ -334,12 +328,16 @@ public class ExcelModeActivity extends AppCompatActivity {
                             Font font = cellFormat.getFont();
                             int fontSize = (int) (font.getPointSize() * 1.7f); //增加字体，效果更好看
                             config.getPaint().setTextSize(DensityUtils.sp2px(ExcelModeActivity.this, fontSize) );
-                            return DrawUtils.getTextHeight(config.getPaint());
+                            return DrawUtils.getMultiTextHeight(config.getPaint(),column.format(position));
                         }
                     }
                     return super.measureHeight(column, position, config);
                 }
 
+                @Override
+                protected void drawText(Canvas c, String value, Rect rect, Paint paint) {
+                    DrawUtils.drawMultiText(c,paint,rect,value);
+                }
 
                 @Override
                 public void setTextPaint(TableConfig config, Cell cell, Paint paint) {
@@ -357,7 +355,6 @@ public class ExcelModeActivity extends AppCompatActivity {
                             paint.setTextSize(DensityUtils.sp2px(ExcelModeActivity.this, size) * config.getZoom());
                             Colour colour = font.getColour();
                             RGB rgb = colour.getDefaultRGB();
-
                             paint.setColor(Color.rgb(rgb.getRed(), rgb.getGreen(), rgb.getBlue()));
                         }
 

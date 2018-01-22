@@ -18,7 +18,7 @@ public interface IDrawFormat<T>  {
     /**
      *测量宽
      */
-    int measureWidth(Column<T> column, TableConfig config);
+    int measureWidth(Column<T> column, int position, TableConfig config);
 
     /**
      *测量高

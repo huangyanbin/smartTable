@@ -31,7 +31,6 @@ public class TableProvider<T> implements TableClickObserver {
 
     private Rect scaleRect;
     private Rect showRect;
-    private Rect originRect;
     private TableConfig config;
     private PointF clickPoint;
     private ColumnInfo clickColumnInfo;
@@ -54,7 +53,6 @@ public class TableProvider<T> implements TableClickObserver {
     public TableProvider() {
 
         clickPoint = new PointF(-1, -1);
-        originRect = new Rect();
         clipRect = new Rect();
         tempRect  = new Rect();
         operation = new SelectionOperation();
@@ -102,7 +100,6 @@ public class TableProvider<T> implements TableClickObserver {
         tipColumn = null;
         gridDrawer.reset();
         operation.reset();
-        originRect.set(showRect);
         this.scaleRect = scaleRect;
         this.showRect = showRect;
         this.config = config;
@@ -341,7 +338,7 @@ public class TableProvider<T> implements TableClickObserver {
                 }
                 config.getGridStyle().fillPaint(paint);
                 gridDrawer.addVerticalGrid(i,Math.max(scaleRect.top, showRect.top)
-                        , showRect.bottom,(int)left);
+                        , Math.min(showRect.bottom,scaleRect.bottom),(int)left);
                 left = tempLeft + width;
             } else {
                 break;
@@ -378,7 +375,7 @@ public class TableProvider<T> implements TableClickObserver {
      */
     void drawTip(Canvas canvas, float x, float y, Column c, int position) {
         if (tip != null) {
-            tip.drawTip(canvas, x, y, originRect, c, position);
+            tip.drawTip(canvas, x, y, showRect, c, position);
         }
     }
 

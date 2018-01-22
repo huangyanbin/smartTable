@@ -368,7 +368,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         if(direction<0){
             return matrixHelper.getZoomRect().top !=0;
         }else{
-            return super.canScrollVertically(direction);
+            return matrixHelper.getZoomRect().bottom > matrixHelper.getOriginalRect().bottom;
         }
 
     }

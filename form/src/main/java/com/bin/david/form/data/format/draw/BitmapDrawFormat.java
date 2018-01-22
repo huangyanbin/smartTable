@@ -37,7 +37,7 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
 
 
     @Override
-    public int measureWidth(Column<T>column, TableConfig config) {
+    public int measureWidth(Column<T>column,int position, TableConfig config) {
         return  imageWidth;
     }
 

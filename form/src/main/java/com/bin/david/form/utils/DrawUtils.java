@@ -68,4 +68,41 @@ public class DrawUtils {
 
         return rect.bottom>= top  && rect.top <=bottom;
     }
+
+    /**
+     * 获取多行文字高度
+     * @param paint
+     * @return
+     */
+    public static int getMultiTextHeight(Paint paint,String value){
+
+        return getTextHeight(paint)* value.split("\n").length;
+    }
+
+    /**
+     * 获取多行文字宽度
+     * @param paint
+     * @return
+     */
+    public static int getMultiTextWidth(Paint paint,String value){
+        String[] values = value.split("\n");
+        int maxWidth  =0;
+        for(String val :values){
+            int width = (int) paint.measureText(val);
+            if(maxWidth < width){
+                maxWidth = width;
+            }
+        }
+        return maxWidth;
+    }
+
+    public static void drawMultiText(Canvas canvas,Paint paint,Rect rect,String value){
+        String[] values = value.split("\n");
+        for(int i =0;i <values.length;i++) {
+            int centerY = (int) ((rect.bottom + rect.top) / 2+ (values.length/2f-i-0.5)*getTextHeight(paint));
+            canvas.drawText(values[i], DrawUtils.getTextCenterX(rect.left, rect.right, paint),
+                    DrawUtils.getTextCenterY(centerY, paint), paint);
+        }
+    }
+
 }

@@ -8,7 +8,6 @@ import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
-import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.form.utils.DrawUtils;
 
 /**
@@ -23,19 +22,11 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     private boolean isDrawBg =true;
 
     @Override
-    public int measureWidth(Column<T>column, TableConfig config) {
+    public int measureWidth(Column<T>column, int position, TableConfig config) {
 
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
-        int maxWidth = 0;
-        int count = column.getDatas().size();
-        for(int i = 0;i < count;i++){
-            int width =  (int) config.getPaint().measureText(column.format(i));
-            if(width > maxWidth){
-                maxWidth = width;
-            }
-        }
-        return maxWidth;
+        return  (int) config.getPaint().measureText(column.format(position));
     }
 
     @Override
@@ -55,7 +46,11 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
         if(column.getTextAlign() !=null) {
             paint.setTextAlign(column.getTextAlign());
         }
-        c.drawText(value,DrawUtils.getTextCenterX(rect.left,rect.right,paint), DrawUtils.getTextCenterY((rect.bottom+rect.top)/2,paint) ,paint);
+        drawText(c, value, rect, paint);
+    }
+
+    protected void drawText(Canvas c, String value, Rect rect, Paint paint) {
+        c.drawText(value, DrawUtils.getTextCenterX(rect.left,rect.right,paint), DrawUtils.getTextCenterY((rect.bottom+rect.top)/2,paint) ,paint);
     }
 
 

@@ -40,7 +40,7 @@ public class ArrayModeActivity extends AppCompatActivity {
         ArrayTableData<Integer> tableData = ArrayTableData.create("日程表",week,infos,new IDrawFormat<Integer>(){
 
             @Override
-            public int measureWidth(Column<Integer> column, TableConfig config) {
+            public int measureWidth(Column<Integer> column, int position,TableConfig config) {
                 return DensityUtils.dp2px(ArrayModeActivity.this,50);
             }
 

@@ -42,12 +42,12 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
     }
 
     @Override
-    public int measureWidth(Column<T>column, TableConfig config) {
-        int textWidth = textDrawFormat.measureWidth(column, config);
+    public int measureWidth(Column<T>column, int position,TableConfig config) {
+        int textWidth = textDrawFormat.measureWidth(column,position, config);
         if(direction == LEFT || direction == RIGHT) {
             return getImageWidth() + textWidth+drawPadding;
         }else {
-            return Math.max(super.measureWidth(column,config),textWidth);
+            return Math.max(super.measureWidth(column,position,config),textWidth);
         }
     }
 
@@ -80,14 +80,14 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
             case LEFT:
                 this.rect.set(rect.left+(imgWidth+drawPadding)/2,rect.top,rect.right,rect.bottom);
                 textDrawFormat.draw(c,column,t,value,this.rect,position,config);
-                int imgRight = (rect.right+rect.left)/2- textDrawFormat.measureWidth(column,config)/2 - drawPadding;
+                int imgRight = (rect.right+rect.left)/2- textDrawFormat.measureWidth(column,position,config)/2 - drawPadding;
                 this.rect.set(imgRight-imgWidth,rect.top,imgRight,rect.bottom);
                 super.draw(c,column,t,value,this.rect,position,config);
                 break;
             case RIGHT:
                 this.rect.set(rect.left,rect.top,rect.right-(imgWidth+drawPadding)/2,rect.bottom);
                 textDrawFormat.draw(c,column,t,value,rect,position,config);
-                int imgLeft = (rect.right+rect.left)/2+ textDrawFormat.measureWidth(column,config)/2 + drawPadding;
+                int imgLeft = (rect.right+rect.left)/2+ textDrawFormat.measureWidth(column,position,config)/2 + drawPadding;
                 this.rect.set(imgLeft,rect.top,imgLeft+imgWidth,rect.bottom);
                 super.draw(c,column,t,value,this.rect,position,config);
                 break;

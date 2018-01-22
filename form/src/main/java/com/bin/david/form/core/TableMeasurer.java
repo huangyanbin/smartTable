@@ -132,8 +132,15 @@ public class TableMeasurer<T> {
         Paint paint = config.getPaint();
         for(Column column:tableData.getChildColumns()){
             float columnNameWidth =tableData.getTitleDrawFormat().measureWidth(column,config);
-            int contentWidth =column.getDrawFormat().measureWidth(column,config)
-                    +2*config.getHorizontalPadding();
+            int contentWidth =0;
+            int size = column.getDatas().size();
+            for(int position = 0;position < size;position++) {
+                int width = column.getDrawFormat().measureWidth(column,position,config);
+                if(contentWidth < width){
+                    contentWidth = width;
+                }
+            }
+            contentWidth += 2 * config.getHorizontalPadding();
             int width = (int) (Math.max(columnNameWidth,contentWidth));
             if(tableData.isShowCount()) {
                 int totalCountWidth = column.getCountFormat() != null ?

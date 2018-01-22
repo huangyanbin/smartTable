@@ -43,7 +43,7 @@ public class MultiLineDrawFormat<T> extends TextDrawFormat<T> {
     }
 
     @Override
-    public int measureWidth(Column<T> column, TableConfig config) {
+    public int measureWidth(Column<T> column,int position, TableConfig config) {
 
         return width;
     }
