@@ -29,7 +29,7 @@ public class POIExcelModeActivity extends AppCompatActivity implements ExcelCall
     private SmartTable<Cell> table;
 
     private RecyclerView recyclerView;
-    private String fileName = "c1.xls";
+    private String fileName = "c.xls";
     private IExcel2Table<Cell> iExcel2Table;
 
 
