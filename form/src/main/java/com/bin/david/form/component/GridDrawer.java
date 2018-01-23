@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellRange;
@@ -26,6 +27,7 @@ public class GridDrawer<T>{
     private Path path;
     private ArrayList<Integer> horizontalGrids;
     private ArrayList<Integer> verticalGrids;
+    private Set<Integer> clipVerticalSet;
     private Rect tableShowRect;
     private int hMinPosition;
     private int hMaxPosition;
@@ -42,12 +44,14 @@ public class GridDrawer<T>{
         tableShowRect = new Rect();
         horizontalGrids = new ArrayList<>();
         verticalGrids = new ArrayList<>();
+        clipVerticalSet = new HashSet<>();
         set = new HashSet<>();
     }
 
     public void reset(){
         horizontalGrids.clear();
         verticalGrids.clear();
+        clipVerticalSet.clear();
         tableShowRect.set(-1,-1,-1,-1);
         isHasHData = false;
         isHasVData = false;
@@ -74,7 +78,9 @@ public class GridDrawer<T>{
      * @param bottom
      * @param x
      */
-    public void addVerticalGrid(int position, int top, int bottom, int x) {
+    public void addVerticalGrid(int position, int top, int bottom, int x,boolean isClip) {
+
+        Log.e("huang","position"+position+"left"+x+"isClip"+isClip);
         if(!isHasVData) {
             tableShowRect.top = top;
             tableShowRect.bottom = bottom;
@@ -85,7 +91,8 @@ public class GridDrawer<T>{
             vMaxPosition = position;
         }
         verticalGrids.add(x);
-
+        if(isClip)
+            clipVerticalSet.add(position);
     }
 
     /**
@@ -149,48 +156,55 @@ public class GridDrawer<T>{
 
     private void drawVGrid(Canvas canvas, Paint paint) {
         if(cellRanges ==null || cellRanges.size()==0) {
+            int k= 0;
             for(int vGrid :verticalGrids){
-                path.rewind();
-                path.moveTo(vGrid, tableShowRect.top);
-                path.lineTo(vGrid, tableShowRect.bottom);
-                canvas.drawPath(path, paint);
-            }
-        }else{
-            for (int k =0;k < verticalGrids.size();k++) {
-                int vGrid = verticalGrids.get(k);
                 int currentPosition = k+vMinPosition-1;
-                path.rewind();
-                path.moveTo(vGrid, tableShowRect.top);
-                boolean isLineTo = false;
-                set.clear();
-                for(CellRange address: cellRanges){
-                    if(address.getLastCol() > currentPosition && address.getFirstCol()<= currentPosition){
-                        if(address.getLastRow() >= hMinPosition-1 || address.getFirstRow()<= hMaxPosition+1) {
-                            for (int i = address.getFirstRow(); i <= address.getLastRow(); i++) {
-                                set.add(i);
-                            }
-                        }
-                    }
-                }
-                if(set.size() >0) {
-                    for (int i = hMinPosition; i <= hMaxPosition; i++) {
-                        if (set.contains(i) && i - hMinPosition-1 >=0) {
-                            if (!isLineTo) {
-                                path.lineTo(vGrid, horizontalGrids.get(i - hMinPosition-1));
-                                isLineTo = true;
-                            }
-                        } else {
-                            if (isLineTo && i - hMinPosition-1 >=0) {
-                                path.moveTo(vGrid,horizontalGrids.get(i - hMinPosition-1));
-                                isLineTo = false;
-                            }
-                        }
-                    }
-                }
-                if(!isLineTo) {
+                if(!clipVerticalSet.contains(currentPosition+1)) {
+                    path.rewind();
+                    path.moveTo(vGrid, tableShowRect.top);
                     path.lineTo(vGrid, tableShowRect.bottom);
+                    canvas.drawPath(path, paint);
                 }
-                canvas.drawPath(path, paint);
+                k++;
+            }
+        }else {
+            for (int k = 0; k < verticalGrids.size(); k++) {
+                int currentPosition = k + vMinPosition - 1;
+                if (!clipVerticalSet.contains(currentPosition + 1)) {
+                    int vGrid = verticalGrids.get(k);
+                    path.rewind();
+                    path.moveTo(vGrid, tableShowRect.top);
+                    boolean isLineTo = false;
+                    set.clear();
+                    for (CellRange address : cellRanges) {
+                        if (address.getLastCol() > currentPosition && address.getFirstCol() <= currentPosition) {
+                            if (address.getLastRow() >= hMinPosition - 1 || address.getFirstRow() <= hMaxPosition + 1) {
+                                for (int i = address.getFirstRow(); i <= address.getLastRow(); i++) {
+                                    set.add(i);
+                                }
+                            }
+                        }
+                    }
+                    if (set.size() > 0) {
+                        for (int i = hMinPosition; i <= hMaxPosition; i++) {
+                            if (set.contains(i) && i - hMinPosition - 1 >= 0) {
+                                if (!isLineTo) {
+                                    path.lineTo(vGrid, horizontalGrids.get(i - hMinPosition - 1));
+                                    isLineTo = true;
+                                }
+                            } else {
+                                if (isLineTo && i - hMinPosition - 1 >= 0) {
+                                    path.moveTo(vGrid, horizontalGrids.get(i - hMinPosition - 1));
+                                    isLineTo = false;
+                                }
+                            }
+                        }
+                    }
+                    if (!isLineTo) {
+                        path.lineTo(vGrid, tableShowRect.bottom);
+                    }
+                    canvas.drawPath(path, paint);
+                }
             }
         }
     }

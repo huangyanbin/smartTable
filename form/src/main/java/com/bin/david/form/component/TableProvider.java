@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
@@ -338,16 +339,16 @@ public class TableProvider<T> implements TableClickObserver {
                 }
                 config.getGridStyle().fillPaint(paint);
                 gridDrawer.addVerticalGrid(i,Math.max(scaleRect.top, showRect.top)
-                        , Math.min(showRect.bottom,scaleRect.bottom),(int)left);
+                        , Math.min(showRect.bottom,scaleRect.bottom),isPerFixed?clipRect.left:(int)left,!topColumn.isFixed()&&left<clipRect.left);
                 left = tempLeft + width;
             } else {
                 break;
             }
         }
-        gridDrawer.drawGrid(canvas,config);
         for(int i = 0;i < clipCount;i++){
             canvas.restore();
         }
+        gridDrawer.drawGrid(canvas,config);
         if (config.isFixedCountRow()) {
             canvas.restore();
         }
