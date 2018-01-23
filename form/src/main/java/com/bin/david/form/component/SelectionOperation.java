@@ -3,9 +3,13 @@ package com.bin.david.form.component;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
+import android.view.MotionEvent;
 
+import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.selected.ISelectFormat;
+import com.bin.david.form.data.table.TableData;
+import com.bin.david.form.matrix.MatrixHelper;
 
 /**
  * Created by huang on 2018/1/12.
@@ -14,7 +18,7 @@ import com.bin.david.form.data.format.selected.ISelectFormat;
  * 暂时只做比较简单点击效果
  */
 
-public class SelectionOperation {
+public class SelectionOperation implements MatrixHelper.OnInterceptListener {
     /**
      * 选中区域
      */
@@ -72,4 +76,11 @@ public class SelectionOperation {
     void setSelectFormat(ISelectFormat selectFormat) {
         this.selectFormat = selectFormat;
     }
+
+    @Override
+    public boolean isIntercept(MotionEvent e1, float distanceX, float distanceY) {
+        return false;
+    }
+
+
 }

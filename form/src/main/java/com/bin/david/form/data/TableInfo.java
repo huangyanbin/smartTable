@@ -79,7 +79,7 @@ public class TableInfo {
     }
 
     public int getyAxisWidth() {
-        return (int) (zoom*yAxisWidth);
+        return yAxisWidth;
     }
 
 

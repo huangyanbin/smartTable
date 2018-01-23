@@ -1,6 +1,5 @@
 package com.bin.david.smarttable;
 
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,21 +13,23 @@ import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.adapter.SheetAdapter;
 import com.bin.david.smarttable.excel.ExcelCallback;
 import com.bin.david.smarttable.excel.IExcel2Table;
-import com.bin.david.smarttable.excel.JXLExcel2Table;
+import com.bin.david.smarttable.excel.POIExcel2Table;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
+import org.apache.poi.ss.usermodel.Cell;
 
 import java.util.List;
 
-import jxl.Cell;
-
-
-public class ExcelModeActivity extends AppCompatActivity implements ExcelCallback {
+/**
+ * 通过poi来填充表格
+ * 暂时只能支持xls
+ */
+public class POIExcelModeActivity extends AppCompatActivity implements ExcelCallback {
 
     private SmartTable<Cell> table;
 
     private RecyclerView recyclerView;
-    private String fileName = "c.xls";
+    private String fileName = "c1.xls";
     private IExcel2Table<Cell> iExcel2Table;
 
 
@@ -40,12 +41,16 @@ public class ExcelModeActivity extends AppCompatActivity implements ExcelCallbac
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         table = (SmartTable<Cell>) findViewById(R.id.table);
-        iExcel2Table = new JXLExcel2Table();
+        iExcel2Table = new POIExcel2Table();
         iExcel2Table.initTableConfig(this,table);
         iExcel2Table.setCallback(this);
         iExcel2Table.loadSheetList(this,fileName);
 
+
+
+
     }
+
 
 
 
@@ -67,11 +72,11 @@ public class ExcelModeActivity extends AppCompatActivity implements ExcelCallbac
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     sheetAdapter.setSelectPosition(position);
-                    iExcel2Table.loadSheetContent(ExcelModeActivity.this,fileName,position);
+                    iExcel2Table.loadSheetContent(POIExcelModeActivity.this,fileName,position);
                 }
             });
             recyclerView.setAdapter(sheetAdapter);
-            iExcel2Table.loadSheetContent(ExcelModeActivity.this,fileName,0);
+            iExcel2Table.loadSheetContent(POIExcelModeActivity.this,fileName,0);
         }
     }
 }

@@ -328,5 +328,35 @@ public class TableData<T> {
         return userSetRangeAddress;
     }
 
+    public void clear(){
+        if(t !=null) {
+            t.clear();
+            t= null;
+        }
+        if(childColumns !=null){
+            childColumns.clear();
+            childColumns = null;
+        }
+        if(columns !=null){
+            columns = null;
+        }
+        if(childColumnInfos !=null){
+            childColumnInfos.clear();
+            childColumnInfos = null;
+        }
+        if(cellRangeAddresses !=null){
+            cellRangeAddresses.clear();
+            cellRangeAddresses =null;
+        }
+        if(userSetRangeAddress !=null){
+            userSetRangeAddress.clear();
+            userSetRangeAddress =null;
+        }
+        sortColumn = null;
+        titleDrawFormat = null;
+        XSequenceFormat=null;
+        YSequenceFormat = null;
+
+    }
 
 }

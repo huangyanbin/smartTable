@@ -84,6 +84,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         matrixHelper = new MatrixHelper(getContext());
         matrixHelper.setOnTableChangeListener(this);
         matrixHelper.register(provider);
+        matrixHelper.setOnInterceptListener(provider.getOperation());
 
     }
 
@@ -411,7 +412,25 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
 
         return super.computeVerticalScrollExtent();
 
+    }
 
+    public XSequence<T> getXSequence() {
+        return xAxis;
+    }
+
+    public YSequence getYSequence() {
+        return yAxis;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        matrixHelper.unRegisterAll();
+        provider = null;
+        tableData.clear();
+        tableData =null;
+        xAxis = null;
+        yAxis = null;
+        super.onDetachedFromWindow();
     }
 }
 

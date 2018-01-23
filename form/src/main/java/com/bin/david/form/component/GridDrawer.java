@@ -6,6 +6,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.Log;
 
+import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.Column;
@@ -79,8 +80,6 @@ public class GridDrawer<T>{
      * @param x
      */
     public void addVerticalGrid(int position, int top, int bottom, int x,boolean isClip) {
-
-        Log.e("huang","position"+position+"left"+x+"isClip"+isClip);
         if(!isHasVData) {
             tableShowRect.top = top;
             tableShowRect.bottom = bottom;
@@ -254,5 +253,72 @@ public class GridDrawer<T>{
                 && col> vMinPosition-1 && col<vMaxPosition+1;
     }
 
+
+    /**
+     * 判断是否点击X序列
+     * @param y y值
+     * @return 是否点击X序列
+     */
+    public boolean isClickXSequence(float y){
+        int bottom = tableShowRect.top- tableData.getTableInfo().getTitleHeight();
+        float zoom = tableData.getTableInfo().getZoom();
+        int top = bottom - tableData.getTableInfo().getTopHeight(zoom >1?1:zoom);
+        return y >= top && y <= bottom;
+    }
+    /**
+     * 获取点击X序列的位置
+     * @param x x值
+     * @return 点击X序列的位置
+     */
+    public int getClickXSequence(float x){
+        for(int i = vMinPosition; i< vMaxPosition+1;i++){
+            int startX = verticalGrids.get(i-vMinPosition);
+            if(i ==0){
+                if(x <startX){
+                    return vMinPosition-1>=0?vMinPosition-1:0;
+                }
+            }else if(i == vMaxPosition){
+                return vMaxPosition+1;
+            }
+            int endX = verticalGrids.get(i+1-vMinPosition);
+            if(x> startX && x> endX){
+                return i;
+            }
+        }
+        return -1;
+    }
+    /**
+     * 判断是否点击Y序列
+     * @param x x值
+     * @return 是否点击Y序列
+     */
+    public boolean isClickYSequence(float x){
+        int right = tableShowRect.right;
+        float zoom = tableData.getTableInfo().getZoom();
+        int left = (int) (right - tableData.getTableInfo().getyAxisWidth()*(zoom >1?1:zoom));
+        return x >= left && x <= right;
+    }
+    /**
+     * 获取点击Y序列的位置
+     * @param y Y值
+     * @return 点击Y序列的位置
+     */
+    public int getClickYSequence(float y){
+        for(int i = hMinPosition; i< hMaxPosition+1;i++){
+            int startY = horizontalGrids.get(i-hMinPosition);
+            if(i ==0){
+                if(y <startY){
+                    return hMinPosition-1>=0?hMinPosition-1:0;
+                }
+            }else if(i == hMaxPosition){
+                return hMaxPosition+1;
+            }
+            int endY = horizontalGrids.get(i+1-hMinPosition);
+            if(y> startY && y> endY){
+                return i;
+            }
+        }
+        return -1;
+    }
 
 }

@@ -7,15 +7,15 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.Log;
 
+import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
-import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.format.selected.IDrawOver;
-import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
+import com.bin.david.form.data.format.selected.IDrawOver;
 import com.bin.david.form.data.format.selected.ISelectFormat;
 import com.bin.david.form.data.format.tip.ITip;
+import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.TableClickObserver;
 import com.bin.david.form.utils.DrawUtils;
@@ -404,8 +404,15 @@ public class TableProvider<T> implements TableClickObserver {
 
     @Override
     public void onClick(float x, float y) {
-        clickPoint.x = x;
-        clickPoint.y = y;
+       /* if(gridDrawer.isClickXSequence(y)){
+            int position = gridDrawer.getClickXSequence(x);
+
+        }else if(gridDrawer.isClickYSequence(x)) {
+            int position =gridDrawer.getClickYSequence(y);
+        }else{*/
+            clickPoint.x = x;
+            clickPoint.y = y;
+        /*}*/
     }
 
     public OnColumnClickListener getOnColumnClickListener() {
@@ -436,6 +443,7 @@ public class TableProvider<T> implements TableClickObserver {
     public void setGridDrawer(GridDrawer<T> gridDrawer) {
         this.gridDrawer = gridDrawer;
     }
+
 
     /**
      * 计算任何point在View的位置
@@ -490,4 +498,9 @@ public class TableProvider<T> implements TableClickObserver {
     public void setDrawOver(IDrawOver drawOver) {
         this.drawOver = drawOver;
     }
+
+    public SelectionOperation getOperation() {
+        return operation;
+    }
+
 }

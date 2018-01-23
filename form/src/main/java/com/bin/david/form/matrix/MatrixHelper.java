@@ -7,7 +7,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -19,9 +18,9 @@ import android.widget.Scroller;
 
 import com.bin.david.form.component.IComponent;
 import com.bin.david.form.data.TableInfo;
+import com.bin.david.form.listener.Observable;
 import com.bin.david.form.listener.OnTableChangeListener;
 import com.bin.david.form.listener.TableClickObserver;
-import com.bin.david.form.listener.Observable;
 
 import java.util.List;
 
@@ -53,6 +52,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     private Rect scaleRect = new Rect();
     private boolean isZooming; //是否正在缩放
     private boolean isAutoFling = false;
+    private OnInterceptListener onInterceptListener;
 
     /**
      * 手势帮助类构造方法
@@ -217,13 +217,11 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            //if(Math.abs(distanceX) >touchSlop) {
+            if(onInterceptListener ==null || !onInterceptListener.isIntercept(e1,distanceX,distanceY)){
                 translateX += distanceX;
-            //}
-            //if(Math.abs(distanceY) > touchSlop) {
                 translateY += distanceY;
-            //}
-            notifyViewChanged();
+                notifyViewChanged();
+            }
             return true;
         }
 
@@ -676,5 +674,17 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
      */
     public void setFlingRate(float flingRate) {
         this.flingRate = flingRate;
+    }
+
+    public OnInterceptListener getOnInterceptListener() {
+        return onInterceptListener;
+    }
+
+    public void setOnInterceptListener(OnInterceptListener onInterceptListener) {
+        this.onInterceptListener = onInterceptListener;
+    }
+
+    public interface OnInterceptListener {
+        boolean isIntercept(MotionEvent e1, float distanceX, float distanceY);
     }
 }

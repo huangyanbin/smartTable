@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(SeatModeActivity.class,"数组模式2(选座)"));
         items.add(new MainItem(PagerModeActivity.class,"分页模式"));
         items.add(new MainItem(MultParseModeActivity.class,"多行解析模式"));
-        items.add(new MainItem(ExcelModeActivity.class,"Excel模式"));
+        items.add(new MainItem(ExcelModeActivity.class,"JXL Excel模式"));
+        items.add(new MainItem(POIExcelModeActivity.class,"POI Excel模式"));
         items.add(new MainItem(MergeModeActivity.class,"自动合并模式"));
         items.add(new MainItem(AlignActivity.class,"文字Align测试"));
         items.add(new MainItem(ManyActivity.class,"测试大量列"));

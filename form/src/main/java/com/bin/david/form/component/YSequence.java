@@ -198,4 +198,5 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         return rect;
     }
 
+
 }
