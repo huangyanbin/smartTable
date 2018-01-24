@@ -90,7 +90,6 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         }
 
         final Column<String> nameColumn = new Column<>("姓名", "name");
-        nameColumn.setFixed(true);
         nameColumn.setAutoCount(true);
         final Column<Integer> ageColumn = new Column<>("年龄", "age");
         ageColumn.setFixed(true);

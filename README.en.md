@@ -40,7 +40,7 @@
 > Import Excel (using Jxl jar)
 
 ![Excel](/img/old_excel.png)
-![Excel](/img/new_excel.jpg)
+![Excel](/img/new_excel.png)
 
 > Importing a two-dimensional array
 

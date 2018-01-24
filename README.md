@@ -43,7 +43,7 @@
 > 导入Excel(使用Jxl)
 
 ![Excel](/img/old_excel.png)
-![Excel](/img/new_excel.jpg)
+![Excel](/img/new_excel.png)
 
 > 导入二维数组
 
