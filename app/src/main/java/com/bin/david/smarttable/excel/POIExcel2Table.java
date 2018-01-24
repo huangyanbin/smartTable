@@ -83,6 +83,7 @@ public class POIExcel2Table extends BaseExcel2Table<Cell> {
 
     @Override
     protected Cell[][] readExcelCell(Context context, String fileName, int position) throws Exception {
+        chartData = null;
         int maxRow, maxColumn;
         HSSFWorkbook workbook = getWorkBook(context,fileName);
         HSSFSheet sheet = workbook.getSheetAt(position);
@@ -267,7 +268,7 @@ public class POIExcel2Table extends BaseExcel2Table<Cell> {
     @Override
     protected int getBackgroundColor(Context context, Cell cell) {
         if( cell.getCellStyle() !=null) {
-            return cell.getCellStyle().getFillForegroundColor();
+            return cell.getCellStyle().getFillBackgroundColor();
         }
         return TableConfig.INVALID_COLOR;
     }

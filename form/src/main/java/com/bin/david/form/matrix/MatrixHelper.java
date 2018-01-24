@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -300,18 +301,33 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         return true;
     }
 
+    private boolean isScaleMax;
+    private boolean isScaleMin;
+
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
         float oldZoom = zoom;
         boolean isScaleEnd = false;
         float scale = detector.getScaleFactor();
+        if(scale >1 && isScaleMax){
+            isScaleMin = false;
+            return true;
+        }else if(scale <1 && isScaleMin){
+            isScaleMax = false;
+            return true;
+        }
         this.zoom = tempZoom * scale;
-        if (this.zoom >= maxZoom) {
+        if (zoom >= maxZoom) {
+            isScaleMax = true;
             this.zoom = maxZoom;
             isScaleEnd = true;
-        } else if (this.zoom <= minZoom) {
+        } else if (this.zoom<= minZoom) {
+            isScaleMin = true;
             this.zoom = minZoom;
             isScaleEnd = true;
+        }else{
+            isScaleMin = false;
+            isScaleMax = false;
         }
         float factor = zoom / oldZoom;
         resetTranslate(factor);
