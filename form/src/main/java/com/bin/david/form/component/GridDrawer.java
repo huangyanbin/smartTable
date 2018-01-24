@@ -4,12 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
-import android.util.Log;
 
-import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.Column;
+import com.bin.david.form.data.Cell;
 import com.bin.david.form.data.table.TableData;
 
 import java.util.ArrayList;
@@ -39,6 +38,7 @@ public class GridDrawer<T>{
     private List<CellRange> cellRanges;
     private Set<Integer> set;
     private TableData<T> tableData;
+    private Cell[][] rangePoints;
 
     public GridDrawer(){
         path = new Path();
@@ -213,31 +213,30 @@ public class GridDrawer<T>{
     public void setTableData(TableData<T> tableData) {
         this.tableData = tableData;
         this.cellRanges = tableData.getCellRangeAddresses();
+        this.rangePoints = tableData.getTableInfo().getRangeCells();
 
     }
 
+
     //矫正格子大小
-    public Rect correctCellRect(int row, int col, Rect rect,float zoom){
-        if(cellRanges !=null){
-           for(CellRange range:cellRanges){
-               if(range.contain(row,col)){
-                   if(range.isLeftAndTop(row,col)){
-                       List<Column> childColumns = tableData.getChildColumns();
-                       int[] lineHeights =  tableData.getTableInfo().getLineHeightArray();
-                       int width = 0,height = 0;
-                       for(int i = col;i<= range.getLastCol();i++){
-                           width += childColumns.get(i).getWidth()*zoom;
-                       }
-                       for(int i = row;i<= range.getLastRow();i++){
-                           height += lineHeights[i]*zoom;
-                       }
-                       rect.right=rect.left+width;
-                       rect.bottom=rect.top+height;
-                       return rect;
-                   }
-                   return  null;
-               }
-           }
+    public Rect correctCellRect(int row, int col, Rect rect, float zoom) {
+        Cell point = rangePoints[row][col];
+        if (point != null) {
+            if (point.col !=Cell.INVALID && point.row != Cell.INVALID ) {
+                List<Column> childColumns = tableData.getChildColumns();
+                int[] lineHeights = tableData.getTableInfo().getLineHeightArray();
+                int width = 0, height = 0;
+                for (int i = col; i < Math.min(childColumns.size(),col + point.col); i++) {
+                    width += childColumns.get(i).getWidth() * zoom;
+                }
+                for (int i = row; i < Math.min(lineHeights.length,row + point.row); i++) {
+                    height += lineHeights[i] * zoom;
+                }
+                rect.right = rect.left + width;
+                rect.bottom = rect.top + height;
+                return rect;
+            }
+            return null;
         }
         return rect;
     }

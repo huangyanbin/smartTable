@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.bin.david.form.component.IComponent;
 import com.bin.david.form.component.ITableTitle;
+import com.bin.david.form.data.Cell;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
 import com.bin.david.form.data.table.TableData;
@@ -130,12 +131,27 @@ public class TableMeasurer<T> {
     private int getTableWidth(TableData<T> tableData,TableConfig config){
         int totalWidth= 0;
         Paint paint = config.getPaint();
+        Cell[][] rangeCells = tableData.getTableInfo().getRangeCells();
+        int columnPos =0;
         for(Column column:tableData.getChildColumns()){
             float columnNameWidth =tableData.getTitleDrawFormat().measureWidth(column,config);
             int contentWidth =0;
+
             int size = column.getDatas().size();
             for(int position = 0;position < size;position++) {
                 int width = column.getDrawFormat().measureWidth(column,position,config);
+                /**
+                 * 为了解决合并单元宽度过大问题
+                 */
+                Cell cell  = rangeCells[position][columnPos];
+                if(cell != null){
+                    if(cell.row != Cell.INVALID && cell.col != Cell.INVALID) {
+                        cell.width = width;
+                        width = width/cell.col;
+                    }else if(cell.realCell !=null){
+                        width = cell.realCell.width/cell.realCell.col;
+                    }
+                }
                 if(contentWidth < width){
                     contentWidth = width;
                 }
@@ -149,6 +165,7 @@ public class TableMeasurer<T> {
             }
             column.setWidth(width);
             totalWidth+=width;
+            columnPos++;
         }
         config.getYSequenceStyle().fillPaint(paint);
         int totalSize = tableData.getLineSize();

@@ -27,11 +27,11 @@ public class TableParser<T> {
 
         tableData.getChildColumns().clear();
         tableData.getColumnInfos().clear();
-        tableData.clearCellRangeAddresses();
         int maxLevel = getChildColumn(tableData);
         TableInfo tableInfo =  tableData.getTableInfo();
         tableInfo.setColumnSize(tableData.getChildColumns().size());
         tableInfo.setMaxLevel(maxLevel);
+        tableData.clearCellRangeAddresses();
         if(tableData instanceof ArrayTableData){
             for (Column column : tableData.getChildColumns()) {
                 column.parseData(tableInfo,config);
@@ -47,8 +47,7 @@ public class TableParser<T> {
                     List<int[]> ranges = column.parseRanges();
                     if(ranges !=null && ranges.size()>0){
                         for(int[] range:ranges){
-                            tableData.getCellRangeAddresses().
-                                    add(new CellRange(range[0],range[1],i,i));
+                            tableData.addCellRange(new CellRange(range[0],range[1],i,i));
                         }
                     }
                     i++;
@@ -70,7 +69,7 @@ public class TableParser<T> {
     public void addData(TableData<T> tableData, List<T> addData,boolean isFoot, TableConfig config){
 
         try {
-            tableData.clearCellRangeAddresses();
+
             int size = tableData.getLineSize();
             if(isFoot) {
                 tableData.getT().addAll(addData);
@@ -80,14 +79,14 @@ public class TableParser<T> {
             tableData.setLineSize(tableData.getT().size());
             TableInfo tableInfo =  tableData.getTableInfo();
             tableInfo.addLine(addData.size());
+            tableData.clearCellRangeAddresses();
             int i =0;
             for (Column column : tableData.getChildColumns()) {
                 column.addData(addData,tableInfo,config,size,isFoot);
                 List<int[]> ranges = column.parseRanges();
                 if(ranges !=null && ranges.size()>0){
                     for(int[] range:ranges){
-                        tableData.getCellRangeAddresses()
-                                .add(new CellRange(range[0],range[1],i,i));
+                        tableData.addCellRange(new CellRange(range[0],range[1],i,i));
                     }
                 }
                 i++;

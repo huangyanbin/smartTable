@@ -50,7 +50,7 @@ public class JXLExcel2Table extends BaseExcel2Table<Cell> {
         super.initTableConfig(context, table);
         table.getProvider().setDrawOver(new IDrawOver() {
             @Override
-            public void draw(Canvas canvas, Rect showRect, TableConfig config) {
+            public void draw(Canvas canvas,Rect scaleRect, Rect showRect, TableConfig config) {
                 if(imgPointSet.size() >0){
                     for(ImagePoint point :imgPointSet){
                         if(table.getProvider().getGridDrawer().maybeContain(point.row,point.col)) {

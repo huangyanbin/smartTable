@@ -1,5 +1,9 @@
 package com.bin.david.form.data.table;
 
+
+import android.util.Log;
+
+import com.bin.david.form.data.Cell;
 import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
@@ -294,14 +298,36 @@ public class TableData<T> {
         return lineSize;
     }
 
-    /**
+    private void addCellRange(int firstRow,int lastRow,int firstCol,int lastCol){
+        Cell[][] tableCells = tableInfo.getRangeCells();
+        Cell realCell = null;
+        for(int i = firstRow; i <= lastRow;i++){
+            if(i < tableCells.length)
+            for(int j = firstCol; j <= lastCol;j++){
+               if(j < tableCells[i].length) {
+                   if (i == firstRow && j == firstCol) {
+                       int rowCount = Math.min(lastRow+1,tableCells.length) - firstRow;
+                       int colCount = Math.min(lastCol+1,tableCells[i].length) - firstCol;
+                       realCell = new Cell(colCount,rowCount);
+                       tableCells[i][j] = realCell;
+                       continue;
+                   }
+                   tableCells[i][j] = new Cell(realCell);
+               }
+            }
+        }
+    }
+
+   /* *//**
      * 获取所有合并规则，包括自定义和自动合并规则
      * 请不要使用该方法来添加合并单元格
      * 而是通过设置setUserCellRange来添加
      * @return
      */
-    public List<CellRange> getCellRangeAddresses() {
-        return cellRangeAddresses;
+    public void addCellRange(CellRange range) {
+        addCellRange(range.getFirstRow(),range.getLastRow(),
+                range.getFirstCol(),range.getLastCol());
+        cellRangeAddresses.add(range);
     }
 
     /**
@@ -309,8 +335,12 @@ public class TableData<T> {
      */
     public void clearCellRangeAddresses(){
         cellRangeAddresses.clear();
-        if(userSetRangeAddress !=null)
-            cellRangeAddresses.addAll(userSetRangeAddress);
+        if(userSetRangeAddress !=null) {
+            for(CellRange range:userSetRangeAddress) {
+                addCellRange(range);
+            }
+
+        }
     }
     /**
      * 提供添加自定义合并规则
@@ -352,6 +382,10 @@ public class TableData<T> {
             userSetRangeAddress.clear();
             userSetRangeAddress =null;
         }
+        if(tableInfo !=null){
+            tableInfo.clear();
+            tableInfo = null;
+        }
         sortColumn = null;
         titleDrawFormat = null;
         XSequenceFormat=null;
@@ -359,4 +393,7 @@ public class TableData<T> {
 
     }
 
+    public List<CellRange> getCellRangeAddresses() {
+        return cellRangeAddresses;
+    }
 }

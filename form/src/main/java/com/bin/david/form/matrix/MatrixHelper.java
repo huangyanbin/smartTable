@@ -53,6 +53,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     private boolean isZooming; //是否正在缩放
     private boolean isAutoFling = false;
     private OnInterceptListener onInterceptListener;
+    int touchSlop; //最小滚动距离
 
     /**
      * 手势帮助类构造方法
@@ -62,6 +63,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         mScaleGestureDetector = new ScaleGestureDetector(context, this);
         mGestureDetector = new GestureDetector(context, new OnTableGestureListener());
         final ViewConfiguration configuration = ViewConfiguration.get(context);
+        touchSlop = configuration.getScaledTouchSlop();
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         scroller = new Scroller(context);
         zoomRect = new Rect();
@@ -218,6 +220,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             if(onInterceptListener ==null || !onInterceptListener.isIntercept(e1,distanceX,distanceY)){
+
                 translateX += distanceX;
                 translateY += distanceY;
                 notifyViewChanged();

@@ -19,6 +19,7 @@ public class TableInfo {
     private int columnSize;
     private int[] lineHeightArray;
     private float zoom =1;
+    private Cell[][] rangeCells;
 
     /**
      * 获取最大层级
@@ -46,6 +47,8 @@ public class TableInfo {
 
     public void setColumnSize(int columnSize) {
         this.columnSize = columnSize;
+        rangeCells = new Cell[lineHeightArray.length][columnSize];
+
     }
 
     public int getTopHeight() {
@@ -85,6 +88,7 @@ public class TableInfo {
 
     public void setLineSize(int lineSize) {
         lineHeightArray = new int[lineSize];
+
     }
 
     /**
@@ -95,9 +99,11 @@ public class TableInfo {
         int size = lineHeightArray.length;
         int[] tempArray = new int[size+count];
         //数组复制
-
         System.arraycopy(lineHeightArray,0,tempArray,0,size);
         lineHeightArray = tempArray;
+        Cell[][] tempPoints = new Cell[size+count][columnSize];
+        System.arraycopy(rangeCells,0,tempPoints,0,size);
+        rangeCells = tempPoints;
     }
     public int getCountHeight() {
         return (int) (zoom*countHeight);
@@ -146,4 +152,15 @@ public class TableInfo {
     public void setTitleDirection(int titleDirection) {
         this.titleDirection = titleDirection;
     }
+
+    public Cell[][] getRangeCells() {
+        return rangeCells;
+    }
+
+    public void clear(){
+        rangeCells = null;
+        lineHeightArray = null;
+        tableRect = null;
+    }
+
 }

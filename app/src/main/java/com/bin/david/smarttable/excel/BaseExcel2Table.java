@@ -45,7 +45,8 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
     private String fileName;
     private List<CellRange> ranges;
     private float fontScale =  1.7f;
-    private SmartTable<T> smartTable;
+    protected SmartTable<T> smartTable;
+
 
     /**
      * 初始化默认配置
@@ -196,6 +197,7 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
     protected abstract boolean hasComment(T t);
     protected abstract String getComment(T t);
     public abstract T[][]  getEmptyTableData();
+    public void loadDataSuc(Context context){}
 
 
 
@@ -283,6 +285,7 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
                         return "";
                     }
                 });
+                loadDataSuc(softReference.get());
                 ((SmartTable<K>)smartTable).setTableData(tableData);
             }
         }

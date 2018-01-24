@@ -78,7 +78,7 @@ public class TableProvider<T> implements TableClickObserver {
         drawContent(canvas);
         operation.draw(canvas,showRect,config);
         if(drawOver !=null)
-            drawOver.draw(canvas,showRect,config);
+            drawOver.draw(canvas,scaleRect,showRect,config);
         canvas.restore();
         if (isClickPoint && clickColumnInfo != null) {
             onColumnClickListener.onClick(clickColumnInfo);

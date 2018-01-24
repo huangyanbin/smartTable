@@ -23,7 +23,6 @@ public class UserInfo {
     @SmartColumn(id =4,name="选中")
     private boolean isCheck;
     private String url;
-    @SmartColumn(type= ColumnType.List)
     private List<PM25> weather;
 
     public UserInfo(String name, int age, long time, boolean isCheck, ChildData childData) {

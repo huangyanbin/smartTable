@@ -43,5 +43,5 @@ dependencies {
     compile files('libs/jxl.jar')
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
     implementation files('libs/poi-3.17.jar')
-    implementation files('libs/poi-ooxml-3.17.jar')
+    implementation files('libs/poi-scratchpad-3.17.jar')
 }

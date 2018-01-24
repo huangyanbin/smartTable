@@ -11,5 +11,5 @@ import com.bin.david.form.core.TableConfig;
 
 public interface IDrawOver {
 
-     void draw(Canvas canvas, Rect showRect, TableConfig config);
+     void draw(Canvas canvas,Rect scaleRect, Rect showRect, TableConfig config);
 }
