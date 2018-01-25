@@ -65,7 +65,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.6'
+	        compile 'com.github.huangyanbin:SmartTable:1.6.6'
 	}
 ```
 
