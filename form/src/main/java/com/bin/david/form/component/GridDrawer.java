@@ -252,23 +252,23 @@ public class GridDrawer<T>{
                 && col> vMinPosition-1 && col<vMaxPosition+1;
     }
 
-
-    /**
+/*
+    *//**
      * 判断是否点击X序列
      * @param y y值
      * @return 是否点击X序列
-     */
+     *//*
     public boolean isClickXSequence(float y){
         int bottom = tableShowRect.top- tableData.getTableInfo().getTitleHeight();
         float zoom = tableData.getTableInfo().getZoom();
         int top = bottom - tableData.getTableInfo().getTopHeight(zoom >1?1:zoom);
         return y >= top && y <= bottom;
     }
-    /**
+    *//**
      * 获取点击X序列的位置
      * @param x x值
      * @return 点击X序列的位置
-     */
+     *//*
     public int getClickXSequence(float x){
         for(int i = vMinPosition; i< vMaxPosition+1;i++){
             int startX = verticalGrids.get(i-vMinPosition);
@@ -286,22 +286,22 @@ public class GridDrawer<T>{
         }
         return -1;
     }
-    /**
+    *//**
      * 判断是否点击Y序列
      * @param x x值
      * @return 是否点击Y序列
-     */
+     *//*
     public boolean isClickYSequence(float x){
         int right = tableShowRect.right;
         float zoom = tableData.getTableInfo().getZoom();
         int left = (int) (right - tableData.getTableInfo().getyAxisWidth()*(zoom >1?1:zoom));
         return x >= left && x <= right;
     }
-    /**
+    *//**
      * 获取点击Y序列的位置
      * @param y Y值
      * @return 点击Y序列的位置
-     */
+     *//*
     public int getClickYSequence(float y){
         for(int i = hMinPosition; i< hMaxPosition+1;i++){
             int startY = horizontalGrids.get(i-hMinPosition);
@@ -318,6 +318,6 @@ public class GridDrawer<T>{
             }
         }
         return -1;
-    }
+    }*/
 
 }

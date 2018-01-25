@@ -29,6 +29,7 @@ import jxl.Image;
 import jxl.Range;
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.biff.drawing.Chart;
 import jxl.format.Alignment;
 import jxl.format.CellFormat;
 import jxl.format.Colour;

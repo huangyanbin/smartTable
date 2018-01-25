@@ -38,6 +38,7 @@
         <activity android:name=".POIExcelModeActivity"/>
         <activity android:name=".MergeModeActivity"/>
         <activity android:name=".RefreshActivity"/>
+        <activity android:name=".MinModeActivity"/>
     </application>
 
 </manifest>

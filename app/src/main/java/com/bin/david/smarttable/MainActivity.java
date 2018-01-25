@@ -37,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(MergeModeActivity.class,"自动合并模式"));
         items.add(new MainItem(AlignActivity.class,"文字Align测试"));
         items.add(new MainItem(ManyActivity.class,"测试大量列"));
+        items.add(new MainItem(MinModeActivity.class,"设置表格最小宽度"));
         items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
         items.add(new MainItem(TanTanActivity.class,"探探效果"));
+
 
         itemAdapter = new ItemAdapter(items);
         recyclerView.setAdapter(itemAdapter);

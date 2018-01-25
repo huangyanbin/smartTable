@@ -166,6 +166,8 @@ public class TableConfig {
      * 左上角资源设置
      */
     private LeftTopDrawFormat leftTopDrawFormat;
+
+    private int minTableWidth =-1;
     /**
      * 画笔
      */
@@ -529,5 +531,16 @@ public class TableConfig {
     public TableConfig setSequenceGridStyle(LineStyle sequenceGridStyle) {
         SequenceGridStyle = sequenceGridStyle;
         return this;
+    }
+
+
+
+    public TableConfig setMinTableWidth(int minTableWidth) {
+        this.minTableWidth = minTableWidth;
+        return this;
+    }
+
+    public int getMinTableWidth() {
+        return minTableWidth;
     }
 }

@@ -131,12 +131,20 @@ public class TableMeasurer<T> {
     private int getTableWidth(TableData<T> tableData,TableConfig config){
         int totalWidth= 0;
         Paint paint = config.getPaint();
+        config.getYSequenceStyle().fillPaint(paint);
+        int totalSize = tableData.getLineSize();
+        if(config.isShowYSequence()) {
+            int yAxisWidth = (int) paint.measureText(tableData.getYSequenceFormat().format(totalSize)
+                    + 2 * config.getHorizontalPadding());
+            tableData.getTableInfo().setyAxisWidth(yAxisWidth);
+            totalWidth+=yAxisWidth;
+        }
         Cell[][] rangeCells = tableData.getTableInfo().getRangeCells();
         int columnPos =0;
+        int contentWidth = 0;
         for(Column column:tableData.getChildColumns()){
             float columnNameWidth =tableData.getTitleDrawFormat().measureWidth(column,config);
-            int contentWidth =0;
-
+            int columnWidth =0;
             int size = column.getDatas().size();
             for(int position = 0;position < size;position++) {
                 int width = column.getDrawFormat().measureWidth(column,position,config);
@@ -152,28 +160,32 @@ public class TableMeasurer<T> {
                         width = cell.realCell.width/cell.realCell.col;
                     }
                 }
-                if(contentWidth < width){
-                    contentWidth = width;
+                if(columnWidth < width){
+                    columnWidth = width;
                 }
             }
-            contentWidth += 2 * config.getHorizontalPadding();
-            int width = (int) (Math.max(columnNameWidth,contentWidth));
+            columnWidth += 2 * config.getHorizontalPadding();
+            int width = (int) (Math.max(columnNameWidth,columnWidth));
             if(tableData.isShowCount()) {
                 int totalCountWidth = column.getCountFormat() != null ?
                         (int) paint.measureText(column.getTotalNumString()) : 0;
                 width = Math.max(totalCountWidth+2*config.getHorizontalPadding(), width);
             }
             column.setWidth(width);
-            totalWidth+=width;
+            contentWidth+=width;
             columnPos++;
         }
-        config.getYSequenceStyle().fillPaint(paint);
-        int totalSize = tableData.getLineSize();
-        if(config.isShowYSequence()) {
-            int yAxisWidth = (int) paint.measureText(tableData.getYSequenceFormat().format(totalSize)
-                    + 2 * config.getHorizontalPadding());
-            tableData.getTableInfo().setyAxisWidth(yAxisWidth);
-            totalWidth+=yAxisWidth;
+        int minWidth = config.getMinTableWidth();
+        //计算出来的宽度大于最小宽度
+        if(minWidth ==-1 || minWidth- totalWidth < contentWidth){
+            totalWidth += contentWidth;
+        }else{
+            minWidth -=totalWidth;
+            float widthScale = ((float) minWidth)/contentWidth;
+            for(Column column:tableData.getChildColumns()){
+                column.setWidth((int)(widthScale*column.getWidth()));
+            }
+            totalWidth+=minWidth;
         }
         return totalWidth;
     }

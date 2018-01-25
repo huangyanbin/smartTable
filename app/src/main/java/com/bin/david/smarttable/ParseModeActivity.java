@@ -343,6 +343,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                 .setYSequenceBgFormat(backgroundFormat2);
         table.setTableData(tableData);
 
+
     }
 
     @Override
