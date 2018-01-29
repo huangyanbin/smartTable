@@ -16,25 +16,22 @@ import com.bin.david.form.utils.DrawUtils;
 
 public class TextDrawFormat<T> implements IDrawFormat<T> {
 
-    //避免多次计算
-    private int height;
     private CellInfo<T> cellInfo = new CellInfo<>();
-    private boolean isDrawBg =true;
+    private boolean isDrawBg = true;
 
     @Override
     public int measureWidth(Column<T>column, int position, TableConfig config) {
 
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
-        return  (int) config.getPaint().measureText(column.format(position));
+        return DrawUtils.getMultiTextWidth(paint,column.format(position));
     }
 
     @Override
     public int measureHeight(Column<T> column,int position, TableConfig config) {
-        if(height == 0){
-            height = DrawUtils.getTextHeight(config.getContentStyle(),config.getPaint());
-        }
-        return height;
+        Paint paint = config.getPaint();
+        config.getContentStyle().fillPaint(paint);
+        return DrawUtils.getMultiTextHeight(paint,column.format(position));
     }
 
     @Override
@@ -50,7 +47,7 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     }
 
     protected void drawText(Canvas c, String value, Rect rect, Paint paint) {
-        c.drawText(value, DrawUtils.getTextCenterX(rect.left,rect.right,paint), DrawUtils.getTextCenterY((rect.bottom+rect.top)/2,paint) ,paint);
+        DrawUtils.drawMultiText(c,paint,rect,value);
     }
 
 
