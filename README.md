@@ -5,7 +5,6 @@
 * [English README](/README.en.md/)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
-> 下载地址：
 ![下载地址](/img/table.png)
 * [apk version 1.6版本下载地址](/img/smartTable.apk)
 
