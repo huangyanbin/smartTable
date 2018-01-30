@@ -1,13 +1,14 @@
 # SmartTable
-###### 一款android自动生成表格框架
----
+```
+   一款android自动生成表格框架
+```
 ![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
 * [English README](/README.en.md/)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
 * [apk version 1.6版本下载地址](/img/smartTable.apk)
 
-![下载地址](/img/table.png)
+> ![下载地址](/img/table.png)
 
 
 #####  功能介绍
@@ -112,7 +113,7 @@ dependencies {
         table.setData(list);
 ```
 
-> 注解模式就是这么简单，你可以直接运行查看效果了。当然这只是注解基本配置，注解里面还有自动统计，列组合等，如果你想要了解注解更多，请查看demo.
+``` 注解模式就是这么简单，你可以直接运行查看效果了。当然这只是注解基本配置，注解里面还有自动统计，列组合等，如果你想要了解注解更多，请查看demo.```
 
 
 
@@ -261,7 +262,7 @@ fixed |是否固定该列
     5.  设置选中Cell样式 setSelectFormat
     6.  重新计算布局 notifyDataChanged
 
-  >  ```Column```构造方法中还有两个参数 ```IFormat<T>```, ```IDrawFormat<T>```。其中```IFormat<T>```是用于格式化显示文字，比如```User```对象中有更新时间字段```time```时间戳。我们想要显示不同格式，就可以重写该方法。```IDrawFormat<T>```是用于显示绘制格式化，比如```User```对象中有头像字段```portrait```时间戳，就可以使用该方法，框架提供几种```IDrawFormat```包括（文字、Bitmap、Resoure图片、图文结合）。
+  ```Column构造方法中还有两个参数 IFormat<T>, IDrawFormat<T>。其中IFormat<T>是用于格式化显示文字，比如User对象中有更新时间字段time时间戳。我们想要显示不同格式，就可以重写该方法。```IDrawFormat<T>```是用于显示绘制格式化，比如User对象中有头像字段portrait时间戳，就可以使用该方法，框架提供几种IDrawFormat包括（文字、Bitmap、Resoure图片、图文结合）。```
 
 #####   二维数组以及Excel
 
