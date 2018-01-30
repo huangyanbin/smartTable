@@ -55,7 +55,6 @@
 ![日程](/img/progress.jpg)
 ![选票](/img/seat.jpg)
 
----
 ##### 如何使用
 
 - 引用
