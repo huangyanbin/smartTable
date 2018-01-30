@@ -425,12 +425,17 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         return yAxis;
     }
 
+    /**
+     * 释放
+     */
     @Override
     protected void onDetachedFromWindow() {
         matrixHelper.unRegisterAll();
         provider = null;
-        tableData.clear();
-        tableData =null;
+        if(tableData !=null) {
+            tableData.clear();
+            tableData = null;
+        }
         xAxis = null;
         yAxis = null;
         super.onDetachedFromWindow();
