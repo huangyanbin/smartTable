@@ -12,9 +12,8 @@ import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
+import com.bin.david.smarttable.bean.Student;
 import com.bin.david.smarttable.bean.TableStyle;
-import com.bin.david.smarttable.bean.UserInfo;
-import com.bin.david.smarttable.view.BaseCheckDialog;
 import com.bin.david.smarttable.view.QuickChartDialog;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.List;
 
 public class AnnotationModeActivity extends AppCompatActivity {
 
-    private SmartTable<UserInfo> table;
+    private SmartTable<Student> table;
     private QuickChartDialog quickChartDialog;
 
     @Override
@@ -31,12 +30,12 @@ public class AnnotationModeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_annotation);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         quickChartDialog = new QuickChartDialog();
-        List<UserInfo> list = new ArrayList<>();
+        List<Student> list = new ArrayList<>();
         for(int i = 0;i <50; i++) {
-            list.add(new UserInfo("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
-            list.add(new UserInfo("li", 23, System.currentTimeMillis(),false,null));
+            list.add(new Student("楼夕", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
+            list.add(new Student("黄柳", 23, System.currentTimeMillis(),false,null));
         }
-        table = (SmartTable<UserInfo>) findViewById(R.id.table);
+        table = (SmartTable<Student>) findViewById(R.id.table);
         table.setData(list);
         table.getConfig().setShowTableTitle(false);
         table.getConfig().setShowXSequence(false);

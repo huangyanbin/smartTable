@@ -310,7 +310,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(ParseModeActivity.this,"点击了"+columnInfo.column.getColumnName(),Toast.LENGTH_SHORT).show();
             }
         });
-        table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)).setAlign(Paint.Align.LEFT));
+        table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)).setAlign(Paint.Align.CENTER));
         ICellBackgroundFormat<CellInfo> backgroundFormat = new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {

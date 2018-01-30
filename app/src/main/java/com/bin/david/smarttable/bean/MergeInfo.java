@@ -13,7 +13,7 @@ import java.util.List;
 public class MergeInfo {
     @SmartColumn(id =1,name = "姓名",autoCount = true,autoMerge = true)
     private String name;
-    @SmartColumn(id=2,name="年龄",autoCount = true)
+    @SmartColumn(id=2,name="年龄",autoCount = true,autoMerge = true,maxMergeCount = 3)
     private int age;
     @SmartColumn(id =3,name="更新时间")
     private long time;

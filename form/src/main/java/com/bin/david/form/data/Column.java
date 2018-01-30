@@ -1,6 +1,7 @@
 package com.bin.david.form.data;
 
 import android.graphics.Paint;
+import android.util.Log;
 
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.count.DecimalCountFormat;
@@ -321,23 +322,21 @@ public class Column<T> implements Comparable<Column> {
             int size = datas.size();
             String perVal = null;
             int rangeStartPosition= -1;
-            int rangeCount = 0;
+            int rangeCount = 1;
             for (int i = 0; i < size; i++) {
                 String val = format(datas.get(i));
-                if(perVal !=null && val !=null
+                if(rangeCount < maxMergeCount && perVal !=null && val !=null
                         && val.length() != 0 && val.equals(perVal)){
-                    if(rangeCount < maxMergeCount && rangeStartPosition ==-1){
+                    if(rangeStartPosition ==-1){
                         rangeStartPosition = i-1;
-                        rangeCount++;
-                    }else{
-                        rangeCount =0;
                     }
+                    rangeCount++;
                 }else{
                     if(rangeStartPosition !=-1){
                         int[] range = {rangeStartPosition, i-1};
                         ranges.add(range);
                         rangeStartPosition =-1;
-                        rangeCount =0;
+                        rangeCount =1;
                     }
                 }
                 perVal = val;
