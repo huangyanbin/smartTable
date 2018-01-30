@@ -8,15 +8,20 @@
 
     android:layout_height="match_parent"
     tools:context="com.bin.david.smarttable.ParseModeActivity">
-
+   <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+      <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
    <com.bin.david.form.core.SmartTable
        android:id="@+id/table"
-       android:layout_weight="1"
        android:layout_width="match_parent"
-       android:layout_height="0dp"
+       android:layout_height="200dp"
 
       />
-
+      </FrameLayout>
+   </ScrollView>
    <Button
        android:id="@+id/btn2"
        android:layout_width="wrap_content"
