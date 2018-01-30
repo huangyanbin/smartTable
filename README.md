@@ -3,9 +3,11 @@
 ###### 一款android自动生成表格框架
 ---
 * [English README](/README.en.md/)
-* [apk version 1.6版本下载地址](/img/smartTable.apk)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
+> 下载地址：
+![下载地址](/img/table.png)
+* [apk version 1.6版本下载地址](/img/smartTable.apk)
 
 > 功能介绍
 1.  快速配置自动生成表格；
@@ -225,6 +227,9 @@ fixed |是否固定该列
      19. 固定第一列 ```setFixedFirstColumn``` //1.4版本取消了
      20. 固定统计行```setFixedCountRow```
 
+##### 关于混淆
+
+> 不要混淆需要解析数据的类以及SmartTable类。
 
 
 ### 总结
