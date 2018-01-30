@@ -143,7 +143,8 @@ public class TableMeasurer<T> {
         int columnPos =0;
         int contentWidth = 0;
         for(Column column:tableData.getChildColumns()){
-            float columnNameWidth =tableData.getTitleDrawFormat().measureWidth(column,config);
+            float columnNameWidth =tableData.getTitleDrawFormat().measureWidth(column,config)
+                    +config.getColumnTitleHorizontalPadding()*2;
             int columnWidth =0;
             int size = column.getDatas().size();
             for(int position = 0;position < size;position++) {
