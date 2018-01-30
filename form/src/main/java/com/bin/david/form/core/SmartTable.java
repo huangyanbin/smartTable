@@ -49,6 +49,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     private AnnotationParser<T> annotationParser;
     protected Paint paint;
     private MatrixHelper matrixHelper;
+    private Object lockObject = new Object();
 
     public SmartTable(Context context) {
         super(context);
@@ -185,11 +186,13 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    parser.parse(tableData, config);
-                    TableInfo info = measurer.measure(tableData, config);
-                    xAxis.setHeight(info.getTopHeight());
-                    yAxis.setWidth(info.getyAxisWidth());
-                    postInvalidate();
+                    synchronized (lockObject) {
+                        parser.parse(tableData, config);
+                        TableInfo info = measurer.measure(tableData, config);
+                        xAxis.setHeight(info.getTopHeight());
+                        yAxis.setWidth(info.getyAxisWidth());
+                        postInvalidate();
+                    }
                 }
             }).start();
 
@@ -258,7 +261,6 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
             column.setReverseSort(isReverse);
             tableData.setSortColumn(column);
             setTableData(tableData);
-            invalidate();
         }
     }
 
