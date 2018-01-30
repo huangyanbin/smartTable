@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -226,7 +227,6 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                 avatarColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
         tableData.setShowCount(true);
         table.getConfig().setShowTableTitle(true);
-        table.getTableTitle().setDirection(com.bin.david.form.component.IComponent.LEFT);
         table.getConfig().setColumnTitleBackgroundColor(getResources().getColor(R.color.windows_bg));
         table.getConfig().setCountBackgroundColor(getResources().getColor(R.color.windows_bg));
         tableData.setTitleDrawFormat(new TitleImageDrawFormat(size,size, TitleImageDrawFormat.RIGHT,10) {
@@ -310,7 +310,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(ParseModeActivity.this,"点击了"+columnInfo.column.getColumnName(),Toast.LENGTH_SHORT).show();
             }
         });
-        table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
+        table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)).setAlign(Paint.Align.LEFT));
         ICellBackgroundFormat<CellInfo> backgroundFormat = new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
