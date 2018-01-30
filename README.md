@@ -95,7 +95,6 @@ dependencies {
 
 ```
 @SmartTable(name="表名")
-
 ```
 
 > 在你需要显示的字段增加注解
@@ -109,8 +108,8 @@ dependencies {
 > 设置表格数据
 
 ```
-        table = findViewById(R.id.table);
-        table.setData(list);
+  table = findViewById(R.id.table);
+  table.setData(list);
 ```
 
 ``` 注解模式就是这么简单，你可以直接运行查看效果了。当然这只是注解基本配置，注解里面还有自动统计，列组合等，如果你想要了解注解更多，请查看demo.```
@@ -125,19 +124,17 @@ dependencies {
    Column<String> column1 = new Column<>("姓名", "name");
    Column<Integer> column2 = new Column<>("年龄", "age");
    Column<Long> column3 = new Column<>("更新时间", "time");
-    Column<String> column4 = new Column<>("头像", "portrait");
+   Column<String> column4 = new Column<>("头像", "portrait");
     //如果是多层，可以通过.来实现多级查询
-      Column<String> column5 = new Column<>("班级", "class.className");
+   Column<String> column5 = new Column<>("班级", "class.className");
    //组合列
-  Column totalColumn1 = new Column("组合列名",column1,column2);
-
-  //表格数据 datas是需要填充的数据
+   Column totalColumn1 = new Column("组合列名",column1,column2);
+   //表格数据 datas是需要填充的数据
    final TableData<User> tableData = new TableData<>("表格名",userList,totalColumn1,column3);
    //设置数据
-    table = findViewById(R.id.table);
-    //table.setZoom(true,3);是否缩放
-    table.setTableData(tableData);
-
+   table = findViewById(R.id.table);
+   //table.setZoom(true,3);是否缩放
+   table.setTableData(tableData);
 ```
 
 ##### 注解模式更多功能
