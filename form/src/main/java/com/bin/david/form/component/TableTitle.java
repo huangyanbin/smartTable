@@ -40,7 +40,7 @@ public class TableTitle implements ITableTitle {
                 int textWidth = (int)paint.measureText(tableName);
                 path.moveTo(startX,rect.top);
                 path.lineTo(startX,rect.bottom);
-                canvas.drawTextOnPath(tableName,path,(rect.height()-textWidth)/2,0,paint);
+                canvas.drawTextOnPath(tableName,path,0,0,paint);
                 break;
         }
     }
@@ -50,7 +50,7 @@ public class TableTitle implements ITableTitle {
         rect.left = showRect.left;
         rect.right = showRect.right;
         rect.top = showRect.top;
-        rect.bottom = showRect.bottom;
+        rect.bottom = Math.min(showRect.bottom,scaleRect.bottom);
         int h =  size;
         int w =size;
         switch (direction){

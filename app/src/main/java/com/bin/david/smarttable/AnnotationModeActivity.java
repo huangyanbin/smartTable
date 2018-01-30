@@ -32,7 +32,7 @@ public class AnnotationModeActivity extends AppCompatActivity {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         quickChartDialog = new QuickChartDialog();
         List<UserInfo> list = new ArrayList<>();
-        for(int i = 0;i <1; i++) {
+        for(int i = 0;i <50; i++) {
             list.add(new UserInfo("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
             list.add(new UserInfo("li", 23, System.currentTimeMillis(),false,null));
         }
