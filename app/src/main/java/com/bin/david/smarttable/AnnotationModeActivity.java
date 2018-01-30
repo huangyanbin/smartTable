@@ -32,13 +32,15 @@ public class AnnotationModeActivity extends AppCompatActivity {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         quickChartDialog = new QuickChartDialog();
         List<UserInfo> list = new ArrayList<>();
-        for(int i = 0;i <100; i++) {
+        for(int i = 0;i <1; i++) {
             list.add(new UserInfo("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
             list.add(new UserInfo("li", 23, System.currentTimeMillis(),false,null));
         }
         table = (SmartTable<UserInfo>) findViewById(R.id.table);
         table.setData(list);
         table.getConfig().setShowTableTitle(false);
+        table.getConfig().setShowXSequence(false);
+        table.getConfig().setShowYSequence(false);
         table.setZoom(true,2,0.2f);
         //设置单个格子背景颜色
         table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {

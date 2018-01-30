@@ -116,7 +116,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                     tableTitle.onMeasure(scaleRect, showRect, config);
                     tableTitle.onDraw(canvas, showRect, tableData.getTableName(), config);
                 }
-                drawGridBackground(canvas);
+                drawGridBackground(canvas,showRect,scaleRect);
                 if(config.isShowYSequence()) {
                     yAxis.onMeasure(scaleRect, showRect, config);
                     yAxis.onDraw(canvas, showRect, tableData, config);
@@ -136,9 +136,10 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
      * 绘制网格背景
      * @param canvas
      */
-    private void drawGridBackground(Canvas canvas) {
+    private void drawGridBackground(Canvas canvas,Rect showRect,Rect scaleRect) {
         config.getGridStyle().fillPaint(paint);
-        canvas.drawRect(showRect,paint);
+        canvas.drawRect(showRect.left,showRect.top,showRect.right,
+                Math.min(scaleRect.bottom,showRect.bottom),paint);
     }
 
     /**
@@ -175,6 +176,11 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         this.tableData = tableData;
         notifyDataChanged();
     }
+
+    public ITableTitle getTableTitle() {
+        return tableTitle;
+    }
+
 
     /**
      * 通知更新

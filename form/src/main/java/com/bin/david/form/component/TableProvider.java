@@ -129,7 +129,7 @@ public class TableProvider<T> implements TableClickObserver {
     private void drawCount(Canvas canvas) {
         if (tableData.isShowCount()) {
             float left = scaleRect.left;
-            float bottom = config.isFixedCountRow() ? showRect.bottom : scaleRect.bottom;
+            float bottom = config.isFixedCountRow() ? Math.min(scaleRect.bottom,showRect.bottom) : scaleRect.bottom;
             int countHeight = tableData.getTableInfo().getCountHeight();
             float top = bottom - countHeight;
             int backgroundColor = config.getCountBackgroundColor();

@@ -101,7 +101,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         }
         int tempBottom =  showRect.bottom;
         if(tableData.isShowCount() && isFixedCount){
-            int bottom = showRect.bottom;
+            int bottom = Math.min(showRect.bottom,scaleRect.bottom);
             tempBottom = bottom-info.getCountHeight();
             tempRect.set(rect.left, tempBottom,
                     rect.right, bottom);
