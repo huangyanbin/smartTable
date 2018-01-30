@@ -5,10 +5,13 @@
 * [English README](/README.en.md/)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
-![下载地址](/img/table.png)
-* [apk version 1.6版本下载地址](/img/smartTable.apk)
 
-> 功能介绍
+* [apk version 1.6版本下载地址](/img/smartTable.apk)
+* ![下载地址](/img/table.png)
+
+
+#####  功能介绍
+
 1.  快速配置自动生成表格；
 2.  自动计算表格宽高；
 3.  表格列标题组合；
@@ -28,8 +31,9 @@
 17. 导入excel(支持颜色，字体，背景，批注，对齐，图片等基本Excel属性)
 18. 表格合并单元(支持注解合并，支持自动合并)
 19. 支持其他刷新框架SmartRefreshLayout
+20. 可配置表格最小宽度(小于该宽度自动适配)
 
-> 基本功能展示
+##### 功能展示
 
 ![基本功能](/img/table.gif)
 
@@ -52,7 +56,7 @@
 ![选票](/img/seat.jpg)
 
 ---
-> 如何使用
+##### 如何使用
 
 - 引用
 
@@ -71,7 +75,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.6.8'
+	        compile 'com.github.huangyanbin:SmartTable:1.7.0'
 	}
 ```
 
@@ -111,9 +115,35 @@ dependencies {
 
 > 注解模式就是这么简单，你可以直接运行查看效果了。当然这只是注解基本配置，注解里面还有自动统计，列组合等，如果你想要了解注解更多，请查看demo.
 
+
+
+
+
+**- 基本模式**
+```
+    //普通列
+   Column<String> column1 = new Column<>("姓名", "name");
+   Column<Integer> column2 = new Column<>("年龄", "age");
+   Column<Long> column3 = new Column<>("更新时间", "time");
+    Column<String> column4 = new Column<>("头像", "portrait");
+    //如果是多层，可以通过.来实现多级查询
+      Column<String> column5 = new Column<>("班级", "class.className");
+   //组合列
+  Column totalColumn1 = new Column("组合列名",column1,column2);
+
+  //表格数据 datas是需要填充的数据
+   final TableData<User> tableData = new TableData<>("表格名",userList,totalColumn1,column3);
+   //设置数据
+    table = findViewById(R.id.table);
+    //table.setZoom(true,3);是否缩放
+    table.setTableData(tableData);
+
+```
+
+##### 注解模式高级功能
 ######  ```@SmartTable```表格注解，用于生成表格。
 
-header 1 | header 2
+注解 | 作用
 ---|---
 name | 表格名
 count | 是否显示统计行
@@ -157,74 +187,86 @@ fixed |是否固定该列
 
 > fixed设置为true，该列滚动到最左边时，可以自动固定住。
 
-
-
-**- 基本模式**
-```
-    //普通列
-   Column<String> column1 = new Column<>("姓名", "name");
-   Column<Integer> column2 = new Column<>("年龄", "age");
-   Column<Long> column3 = new Column<>("更新时间", "time");
-    Column<String> column4 = new Column<>("头像", "portrait");
-    //如果是多层，可以通过.来实现多级查询
-      Column<String> column5 = new Column<>("班级", "class.className");
-   //组合列
-  Column totalColumn1 = new Column("组合列名",column1,column2);
-
-  //表格数据 datas是需要填充的数据
-   final TableData<User> tableData = new TableData<>("表格名",userList,totalColumn1,column3);
-   //设置数据
-    table = findViewById(R.id.table);
-    //table.setZoom(true,3);是否缩放
-    table.setTableData(tableData);
-
-```
-**- 基本方法介绍**
-
-  >  ```Column```构造方法中还有两个参数 ```IFormat<T>```, ```IDrawFormat<T>```。其中```IFormat<T>```是用于格式化显示文字，比如```User```对象中有更新时间字段```time```时间戳。我们想要显示不同格式，就可以重写该方法。```IDrawFormat<T>```是用于显示绘制格式化，比如```User```对象中有头像字段```portrait```时间戳，就可以使用该方法，框架提供几种```IDrawFormat```包括（文字、Bitmap、Resoure图片、图文结合）。
+#####  基本方法介绍
 
 
   >  ```Column```提供了
 
-   1. 是否自动排序```setAutoCount(boolean isAutoCount)```
-   2. 是否反序排列```isReverseSort```
-   3. 设置排序比较```setComparator```
-   4. 统计格式化```setCountFormat```
-   5. 点击事件```OnColumnItemClickListener```
-
-
- >  ```TableData```中基本方法
-
-1.    设置排序列```setSortColumn```
-    2. 设置列标题格式化```settitleDrawFormat```
-    3. 设置顶部序列号格式化```setXSequenceFormat```
-    4. 设置左边序列号格式化```setYSequenceFormat```
-    5. 设置是否显示统计```setShowCount```
+    1. 是否自动排序 setAutoCount(boolean isAutoCount)
+    2. 是否反序排列 isReverseSort
+    3. 设置排序比较 setComparator
+    4. 统计格式化 setCountFormat
+    5. 列内容点击事件 OnColumnItemClickListener
+    6. 滑动到表格左边时固定列 setFixed
+    7.  设置列对齐 setTextAlign
+    8. 设置开启自动合并 setAutoMerge
+    9. 设置开启最大数量 setMaxMergeCount
+    10. 设置绘制样式格式化 setDrawFormat
+    11. 设置文字格式化 setFormat
 
 
 
- >  ```TableConfig```中基本方法
+ >  ```TableData```中常用方法
 
-1.    设置内容文字样式 ```setContentStyle```
-     2. 设置左边序列文字样式 ```setYSequenceStyle```
-     3. 设置顶部序列文字样式 ```setXSequenceStyle```
-     4. 设置列标题文字样式 ```setColumnTitleStyle```
-     5. 设置表格标题文字样式 ```setTableTitleStyle```
-     6. 设置统计行样式 ```setCountStyle```
-     7. 设置列标题网格样式 ```setColumnTitleGridStyle```
-     8. 设置表格网格样式 ```setGridStyle```
-     9. 设置网格列padding ```setVerticalPadding```
-     10. 设置网格行padding ```setHorizontalPadding```
-     11. 设置左序列背景 ```setYSequenceBackgroundColor```
-     12. 设置右序列背景 ```setXSequenceBackgroundColor```
-     13. 设置列标题背景 ```setColumnTitleBackgroundColor```
-     14. 设置内容背景 ```setContentBackgroundColor```
-     15. 设置统计行背景 ```setCountBackgroundColor```
-     16. 固定左侧 ```setFixedYSequence```
-     17. 固定顶部  ```setFixedXSequence```
-     18. 固定列标题  ```setFixedTitle ```
-     19. 固定第一列 ```setFixedFirstColumn``` //1.4版本取消了
-     20. 固定统计行```setFixedCountRow```
+    1. 设置排序列 setSortColumn
+    2. 设置列标题格式化 settitleDrawFormat
+    3. 设置顶部序列号格式化 setXSequenceFormat
+    4. 设置左边序列号格式化 setYSequenceFormat
+    5. 设置是否显示统计 setShowCount
+    6. 设置列标题绘制格式化 setTitleDrawFormat
+    7. 设置X序号行文字格式化 setXSequenceFormat
+    8. 设置Y序号列文字格式化 setYSequenceFormat
+    9. 设置添加自定义合并规则setUserCellRange(List<CellRange> userCellRange)
+
+
+
+
+ >  ```TableConfig```中常用方法
+
+     1.  设置内容文字样式  setContentStyle
+     2.  设置左边序列文字样式 ```setYSequenceStyle
+     3.  设置顶部序列文字样式 ```setXSequenceStyle
+     4.  设置列标题文字样式 ```setColumnTitleStyle
+     5.  设置表格标题文字样式 ```setTableTitleStyle
+     6.  设置统计行样式  setCountStyle
+     7.  设置列标题网格样式 ```setColumnTitleGridStyle
+     8.  设置内容网格样式 setGridStyle
+     9.  设置网格列padding ```setVerticalPadding
+     10. 设置网格行padding setHorizontalPadding
+     11. 设置左序列背景 setYSequenceBackgroundColor
+     12. 设置横序行背景 setXSequenceBackgroundColor
+     13. 设置列标题背景 setColumnTitleBackgroundColor
+     14. 设置内容背景 ```setContentBackgroundColor
+     15. 设置统计行背景 setCountBackgroundColor
+     16. 固定左侧 setFixedYSequence
+     17. 固定顶部  setFixedXSequence
+     18. 固定列标题  setFixedTitle
+     19. 固定第一列 setFixedFirstColumn//1.4版本取消了 可以使用Column.setFixed 固定任意列。
+     20. 固定统计行  setFixedCountRow
+     21. 列标题上下padding setColumnTitleVerticalPadding
+     22. 增加列标题左右padding setColumnTitleHorizontalPadding
+     22. 序列网格样式 setSequenceGridStyle
+     23. 列标题网格样式 columnTitleGridStyle
+     24. 设置是否显示顶部序号列 setShowXSequence
+     35. 设置是否显示左侧序号列 setShowYSequence
+     36. 设置是否显示表格标题 setShowTableTitle
+     37. 设置是否显示列标题 isShowColumnTitle
+     38. 设置表格最小宽度 setMinTableWidth
+
+> ```SmartTable```中常用方法
+
+    1.  设置列标题点击事件   setOnColumnClickListener
+    2.  设置排序列 setSortColumn
+    3.  设置是否开启缩放 setZoom(boolean zoom,float maxZoom,float minZoom)
+    4.  添加新数据 addData(List<T> t, boolean isFoot)
+    5.  设置选中Cell样式 setSelectFormat
+    6.  重新计算布局 notifyDataChanged
+
+  >  ```Column```构造方法中还有两个参数 ```IFormat<T>```, ```IDrawFormat<T>```。其中```IFormat<T>```是用于格式化显示文字，比如```User```对象中有更新时间字段```time```时间戳。我们想要显示不同格式，就可以重写该方法。```IDrawFormat<T>```是用于显示绘制格式化，比如```User```对象中有头像字段```portrait```时间戳，就可以使用该方法，框架提供几种```IDrawFormat```包括（文字、Bitmap、Resoure图片、图文结合）。
+
+#####   二维数组以及Excel
+
+> 请参考demo和[文章介绍](https://juejin.im/post/5a5dce7651882573256bd043)
 
 ##### 关于混淆
 
@@ -233,9 +275,9 @@ fixed |是否固定该列
 
 ### 总结
 
-> 写完SmartChart之后，对android 绘图有了进一步的理解。开始了做SmartTable，开始只是一个小demo,经过一星期的上班偷着写，基本完成表格主要功能，本来还有合并等功能，由于后面没有采用，便只做了开始设计功能，已经满足日常需求。
+> 这次写了SmartTable,本来没想写那么多，结果越写越多。功能也很完善了，好多新的想法由于之前没有考虑到，无法进一步实现。但对基础的Excel支持我觉得已经很完美了，甚至可以展示Excel中图表（使用SmartChart）。
 
-> android中使用表格的场景很少，主要屏幕一页放不下，用户体验不好。在实现过程中，尽量做到体验感好些，我感觉通过固定标题和第一行体验最好，所以默认设置固定。当然你可以自己设置。里面还有不少的坑，希望有需要的朋友可以使用它。
+> 如果你在android端需要使用表格，这个肯定可以满足你的需求，希望有需要的同学可以使用它。
 
 ## *License*
 

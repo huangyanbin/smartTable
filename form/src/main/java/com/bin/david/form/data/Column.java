@@ -52,7 +52,6 @@ public class Column<T> implements Comparable<Column> {
     private int id;
     private boolean isParent;
     private List<int[]> ranges; //合并数据
-    private boolean isArray;
 
     /**列构造方法
      * 用于构造组合列
@@ -698,11 +697,4 @@ public class Column<T> implements Comparable<Column> {
         this.maxMergeCount = maxMergeCount;
     }
 
-    public boolean isArray() {
-        return isArray;
-    }
-
-    public void setArray(boolean array) {
-        isArray = array;
-    }
 }
