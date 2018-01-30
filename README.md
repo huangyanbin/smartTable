@@ -5,7 +5,6 @@
 * [English README](/README.en.md/)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
-
 * [apk version 1.6版本下载地址](/img/smartTable.apk)
 ![下载地址](/img/table.png)
 
@@ -59,7 +58,7 @@
 
 - 引用
 
-> * Step 1. 添加 JitPack repository 到你的build文件
+>   添加 JitPack repository 到你的build文件
 
 ```gradle
 allprojects {
@@ -70,7 +69,7 @@ allprojects {
 	}
 ```
 
-> * Step 2. 增加依赖
+> 增加依赖
 
 ```gradle
 dependencies {
@@ -78,7 +77,7 @@ dependencies {
 	}
 ```
 
-> * 使用表格View
+>  使用表格View
 
 ```
  <com.bin.david.form.core.SmartTable
@@ -88,16 +87,16 @@ dependencies {
       />
  ```
 
-**- 注解模式**
+##### 注解模式
 
-> *  在您需要生成的表格的类增加注解
+>  在您需要生成的表格的类增加注解
 
 ```
 @SmartTable(name="表名")
 
 ```
 
-> *  在你需要显示的字段增加注解
+> 在你需要显示的字段增加注解
 
 ```
 // id为该字段所在表格排序位置
@@ -105,7 +104,7 @@ dependencies {
  //如果需要查询到该成员变量里面去，通过设置type实现
  @SmartColumn(type = ColumnType.Child)
 ```
-> * 设置表格数据
+> 设置表格数据
 
 ```
         table = findViewById(R.id.table);
@@ -118,7 +117,7 @@ dependencies {
 
 
 
-**- 基本模式**
+#####  基本模式
 ```
     //普通列
    Column<String> column1 = new Column<>("姓名", "name");
@@ -139,7 +138,7 @@ dependencies {
 
 ```
 
-##### 注解模式高级功能
+##### 注解模式更多功能
 ######  ```@SmartTable```表格注解，用于生成表格。
 
 注解 | 作用
@@ -189,7 +188,7 @@ fixed |是否固定该列
 #####  基本方法介绍
 
 
-  >  ```Column```提供了
+  >  ```Column```类常用方法
 
     1. 是否自动排序 setAutoCount(boolean isAutoCount)
     2. 是否反序排列 isReverseSort
@@ -205,7 +204,7 @@ fixed |是否固定该列
 
 
 
- >  ```TableData```中常用方法
+ >  ```TableData```类常用方法
 
     1. 设置排序列 setSortColumn
     2. 设置列标题格式化 settitleDrawFormat
@@ -220,7 +219,7 @@ fixed |是否固定该列
 
 
 
- >  ```TableConfig```中常用方法
+ >  ```TableConfig```类常用方法
 
      1.  设置内容文字样式  setContentStyle
      2.  设置左边序列文字样式 ```setYSequenceStyle
@@ -252,7 +251,7 @@ fixed |是否固定该列
      37. 设置是否显示列标题 isShowColumnTitle
      38. 设置表格最小宽度 setMinTableWidth
 
-> ```SmartTable```中常用方法
+> ```SmartTable```类常用方法
 
     1.  设置列标题点击事件   setOnColumnClickListener
     2.  设置排序列 setSortColumn
@@ -269,7 +268,7 @@ fixed |是否固定该列
 
 ##### 关于混淆
 
-> 不要混淆需要解析数据的类以及SmartTable类。
+> keep解析数据的类以及SmartTable类。
 
 
 ### 总结
