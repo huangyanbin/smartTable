@@ -224,19 +224,19 @@ fixed |是否固定该列
  >  ```TableConfig```类常用方法
 
      1.  设置内容文字样式  setContentStyle
-     2.  设置左边序列文字样式 ```setYSequenceStyle
-     3.  设置顶部序列文字样式 ```setXSequenceStyle
-     4.  设置列标题文字样式 ```setColumnTitleStyle
-     5.  设置表格标题文字样式 ```setTableTitleStyle
+     2.  设置左边序列文字样式 setYSequenceStyle
+     3.  设置顶部序列文字样式 setXSequenceStyle
+     4.  设置列标题文字样式 setColumnTitleStyle
+     5.  设置表格标题文字样式 setTableTitleStyle
      6.  设置统计行样式  setCountStyle
-     7.  设置列标题网格样式 ```setColumnTitleGridStyle
+     7.  设置列标题网格样式 setColumnTitleGridStyle
      8.  设置内容网格样式 setGridStyle
-     9.  设置网格列padding ```setVerticalPadding
+     9.  设置网格列padding setVerticalPadding
      10. 设置网格行padding setHorizontalPadding
      11. 设置左序列背景 setYSequenceBackgroundColor
      12. 设置横序行背景 setXSequenceBackgroundColor
      13. 设置列标题背景 setColumnTitleBackgroundColor
-     14. 设置内容背景 ```setContentBackgroundColor
+     14. 设置内容背景 setContentBackgroundColor
      15. 设置统计行背景 setCountBackgroundColor
      16. 固定左侧 setFixedYSequence
      17. 固定顶部  setFixedXSequence
