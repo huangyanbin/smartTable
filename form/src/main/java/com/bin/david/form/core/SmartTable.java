@@ -138,7 +138,9 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
      */
     private void drawGridBackground(Canvas canvas,Rect showRect,Rect scaleRect) {
         config.getGridStyle().fillPaint(paint);
-        canvas.drawRect(showRect.left,showRect.top,showRect.right,
+        canvas.drawRect(Math.max(showRect.left,scaleRect.left),
+                Math.max(showRect.top,scaleRect.top),
+                Math.min(showRect.right,scaleRect.right),
                 Math.min(scaleRect.bottom,showRect.bottom),paint);
     }
 
