@@ -1,8 +1,8 @@
 # SmartTable
 ```
-   一款android自动生成表格框架
+ 一款android自动生成表格框架
 ```
-[![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)] [![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
 * [English README](/README.en.md/)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
@@ -115,9 +115,6 @@ dependencies {
 ``` 注解模式就是这么简单，你可以直接运行查看效果了。当然这只是注解基本配置，注解里面还有自动统计，列组合等，如果你想要了解注解更多，请查看demo.```
 
 
-
-
-
 #####  基本模式
 ```
     //普通列
@@ -138,6 +135,7 @@ dependencies {
 ```
 
 ##### 注解模式更多功能
+
 ######  ```@SmartTable```表格注解，用于生成表格。
 
 注解 | 作用
