@@ -2,7 +2,8 @@
 ```
  一款android自动生成表格框架
 ```
-[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)] [![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
 * [English README](/README.en.md/)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
