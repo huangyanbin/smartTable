@@ -1,6 +1,6 @@
 # SmartTable
 ```
- 一款android自动生成表格框架
+ android自动生成表格框架
 ```
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
@@ -113,7 +113,7 @@ dependencies {
   table.setData(list);
 ```
 
-``` 注解模式就是这么简单，你可以直接运行查看效果了。当然这只是注解基本配置，注解里面还有自动统计，列组合等，如果你想要了解注解更多，请查看demo.```
+    注解模式就是这么简单，你可以直接运行查看效果了。当然这只是注解基本配置，注解里面还有自动统计，列组合等，如果你想要了解注解更多，请查看demo.
 
 
 #####  基本模式
@@ -137,7 +137,7 @@ dependencies {
 
 ##### 注解模式更多功能
 
-######  ```@SmartTable```表格注解，用于生成表格。
+>  ```@SmartTable```表格注解，用于生成表格。
 
 注解 | 作用
 ---|---
@@ -146,7 +146,7 @@ count | 是否显示统计行
 pageSize | 页数量
 currentPage | 当前页
 
-###### ```@SmartColumn```列，用于注解列。
+> ```@SmartColumn```列，用于注解列。
 
 注解 | 作用
 ---|---
@@ -165,23 +165,23 @@ fixed |是否固定该列
 
 - align
 
-> 设置该列对齐方式，默认居中
+      设置该列对齐方式，默认居中
 
 - type
 
-> 有ColumnType.Own,ColumnType.Child,两个值可以设置，假设UserInfo 有个属性是Family family对象，你想解析faily对象的属性monther,father两个属性，则需要设置Child，并在monther,father下添加相对应的注解@SmartColumn，否则只解析到Family，默认是Own。
+      有ColumnType.Own,ColumnType.Child,两个值可以设置，假设UserInfo 有个属性是Family family对象，你想解析faily对象的属性monther,father两个属性，则需要设置Child，并在monther,father下添加相对应的注解@SmartColumn，否则只解析到Family，默认是Own。
 
 - autoMerge
 
-> 假设你返回的数据格式化之后该列附近数据有相同，则会自动合并成一个单元格，默认不开启合并。
+      假设你返回的数据格式化之后该列附近数据有相同，则会自动合并成一个单元格，默认不开启合并。
 
 - autoCount
 
-> table 开启显示统计行，设置autoCount为true，则该列可以自动统计，默认为false。
+       table 开启显示统计行，设置autoCount为true，则该列可以自动统计，默认为false。
 
 - fixed
 
-> fixed设置为true，该列滚动到最左边时，可以自动固定住。
+       fixed设置为true，该列滚动到最左边时，可以自动固定住。
 
 #####  基本方法介绍
 
@@ -258,7 +258,7 @@ fixed |是否固定该列
     5.  设置选中Cell样式 setSelectFormat
     6.  重新计算布局 notifyDataChanged
 
-  ```Column构造方法中还有两个参数 IFormat<T>, IDrawFormat<T>。其中IFormat<T>是用于格式化显示文字，比如User对象中有更新时间字段time时间戳。我们想要显示不同格式，就可以重写该方法。```IDrawFormat<T>```是用于显示绘制格式化，比如User对象中有头像字段portrait时间戳，就可以使用该方法，框架提供几种IDrawFormat包括（文字、Bitmap、Resoure图片、图文结合）。```
+  ```Column构造方法中还有两个参数 IFormat<T>, IDrawFormat<T>。其中IFormat<T>是用于格式化显示文字，比如User对象中有更新时间字段time时间戳。我们想要显示不同格式，就可以重写该方法。IDrawFormat<T>是用于显示绘制格式化，比如User对象中有头像字段portrait时间戳，就可以使用该方法，框架提供几种IDrawFormat包括（文字、Bitmap、Resoure图片、图文结合）。```
 
 #####   二维数组以及Excel
 
@@ -266,14 +266,12 @@ fixed |是否固定该列
 
 ##### 关于混淆
 
-> keep解析数据的类以及SmartTable类。
+    keep解析数据的类以及SmartTable类。
 
 
 ### 总结
 
-> 这次写了SmartTable,本来没想写那么多，结果越写越多。功能也很完善了，好多新的想法由于之前没有考虑到，无法进一步实现。但对基础的Excel支持我觉得已经很完美了，甚至可以展示Excel中图表（使用SmartChart）。
-
-> 如果你在android端需要使用表格，这个肯定可以满足你的需求，希望有需要的同学可以使用它。
+    这次写了SmartTable,本来没想写那么多，结果越写越多。功能也很完善了，好多新的想法由于之前没有考虑到，无法进一步实现。但对基础的Excel支持我觉得已经很完美了，甚至可以展示Excel中图表（使用SmartChart）。如果你在android端需要使用表格，这个肯定可以满足你的需求，希望有需要的同学可以使用它。
 
 ## *License*
 
