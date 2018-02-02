@@ -34,6 +34,7 @@ public class TableParser<T> {
         tableInfo.setColumnSize(tableData.getChildColumns().size());
         tableInfo.setMaxLevel(maxLevel);
         tableData.clearCellRangeAddresses();
+        addArrayNode(tableInfo,tableData.getChildColumns());
         if(!(tableData instanceof ArrayTableData)){
             sort(tableData);
             try {
@@ -47,9 +48,6 @@ public class TableParser<T> {
                         for(int[] range:ranges){
                             tableData.addCellRange(new CellRange(range[0],range[1],i,i));
                         }
-                    }
-                    if(column instanceof ArrayColumn){
-                        addArrayNode(tableInfo,(ArrayColumn) column);
                     }
                     i++;
                 }
@@ -69,35 +67,39 @@ public class TableParser<T> {
      * 添加到数组节点
      * 用于数组Column 统计
      *
-     * @param tableInfo
-     * @param column
      */
-    private void addArrayNode(TableInfo tableInfo, ArrayColumn column) {
-        ColumnNode topNode = tableInfo.getTopNode();
-        if (topNode == null) {
-            topNode = new ColumnNode("top", null);
-            tableInfo.setTopNode(topNode);
-        }
-        String[] nodeNames = column.getFieldName().split("\\.");
-        loop1:
-        for (int i = 0; i < nodeNames.length; i++) {
-            String nodeName = nodeNames[i];
-            for (ColumnNode node : topNode.getChildren()) {
-                if (node.getName().equals(nodeName)) {
-                    topNode = node;
-                    continue loop1;
+    private void addArrayNode(TableInfo tableInfo, List<Column> childColumns) {
+
+        for (Column child : childColumns) {
+            if (child instanceof ArrayColumn) {
+                ArrayColumn column = (ArrayColumn) child;
+                ColumnNode topNode = tableInfo.getTopNode();
+                if (topNode == null) {
+                    topNode = new ColumnNode("top", null);
+                    tableInfo.setTopNode(topNode);
+                }
+                String[] nodeNames = column.getFieldName().split("\\.");
+                loop1:
+                for (int i = 0; i < nodeNames.length; i++) {
+                    String nodeName = nodeNames[i];
+                    for (ColumnNode node : topNode.getChildren()) {
+                        if (node.getName().equals(nodeName)) {
+                            topNode = node;
+                            continue loop1;
+                        }
+                    }
+                    ColumnNode childNode;
+                    if (i == nodeNames.length - 1) {
+                        childNode = new ColumnNode(nodeName, topNode, column);
+                        column.setNode(childNode);
+                    } else {
+                        childNode = new ColumnNode(nodeName, topNode);
+                    }
+                    topNode.getChildren().add(childNode);
+                    topNode = childNode;
+
                 }
             }
-            ColumnNode childNode;
-            if (i == nodeNames.length - 1) {
-                childNode = new ColumnNode(nodeName, topNode, column);
-                column.setNode(childNode);
-            } else {
-                childNode = new ColumnNode(nodeName, topNode);
-            }
-            topNode.getChildren().add(childNode);
-            topNode = childNode;
-
         }
     }
 

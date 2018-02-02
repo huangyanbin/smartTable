@@ -52,7 +52,6 @@ public class XSequence<T> implements IComponent<TableData<T>>{
             showRect.top +=clipHeight;
             scaleRect.top += scaleHeight;
         }
-
     }
 
     @Override

@@ -24,7 +24,11 @@ import java.util.Map;
 
 public class AnnotationParser<T>  {
 
-
+    /**
+     * 解析注解
+     * @param dataList
+     * @return
+     */
     public PageTableData<T> parse(List<T> dataList){
         if(dataList!= null && dataList.size() >0) {
             T firstData = dataList.get(0);
@@ -49,6 +53,14 @@ public class AnnotationParser<T>  {
         return null;
     }
 
+    /**
+     * 递归创建列
+     * @param clazz 查找类
+     * @param parentFieldName 列前缀名
+     * @param columns  所有列
+     * @param parentMap 组合列map
+     * @param isArray 是否是数组列
+     */
     private  void getColumnAnnotation(Class clazz, String parentFieldName, List<Column> columns, Map<String, Column> parentMap,boolean isArray) {
         Field[] fields = clazz.getDeclaredFields();
         for(Field field:fields){
@@ -59,72 +71,111 @@ public class AnnotationParser<T>  {
                SmartColumn smartColumn = (SmartColumn) fieldAnnotation;
                ColumnType type = smartColumn.type();
                if(type == ColumnType.Own) {
-                   String name = smartColumn.name();
-                   int id = smartColumn.id();
-                   String parent = smartColumn.parent();
-                   boolean isAutoCount = smartColumn.autoCount();
-                   boolean isFast = smartColumn.fast();
-                   if (name.equals("")) {
-                       name = field.getName();
-                   }
                    String fieldName =parentFieldName != null? (parentFieldName+field.getName()) :field.getName();
-                   Column<?> column = getGenericColumn(name, fieldName,isArray);
-                   column.setId(id);
-                   column.setFast(isFast);
-                   column.setTextAlign(smartColumn.align());
-                   column.setAutoMerge(smartColumn.autoMerge());
-                   if(smartColumn.maxMergeCount() !=-1) {
-                       column.setMaxMergeCount(smartColumn.maxMergeCount());
-                   }
-                   column.setAutoCount(isAutoCount);
-                   column.setFixed(smartColumn.fixed());
-                   if (!parent.equals("")) {
-                       Column parentColumn = parentMap.get(parent);
-                       if (parentColumn == null) {
-                           List<Column> childColumns = new ArrayList<>();
-                           childColumns.add(column);
-                           parentColumn = new Column(parent, childColumns);
-                           parentColumn.setId(id);
-                           columns.add(parentColumn);
-                           parentMap.put(parent, parentColumn);
-                       }
-                       parentColumn.addChildren(column);
-                       if (id < parentColumn.getId()) {
-                           parentColumn.setId(id);
-                       }
-                   }else{
-                       columns.add(column);
-                   }
+                   createColumn(fieldName,field, columns, parentMap, isArray, smartColumn);
                }else if(type == ColumnType.Child){
-                   String fieldName = (parentFieldName != null ?parentFieldName:"")
+                   String fieldName = (parentFieldName != null ?parentFieldName:Column.INVAL_VALUE)
                            +field.getName()+".";
                    getColumnAnnotation(fieldClass,fieldName,columns,parentMap,isArray);
                }else if(type == ColumnType.Array){
                    fieldClass = getParameterizedType(field);
-                   String fieldName = (parentFieldName != null ?parentFieldName:"")
-                           +field.getName()+".";
-                   getColumnAnnotation(fieldClass,fieldName,columns,parentMap,true);
+                   String fieldName = (parentFieldName != null ?parentFieldName:Column.INVAL_VALUE)
+                           +field.getName();
+                   if(isBaseType(fieldClass)) {
+                       createColumn(fieldName, field, columns, parentMap, true, smartColumn);
+                   }else {
+                       getColumnAnnotation(fieldClass, fieldName + ".", columns, parentMap, true);
+                   }
                }
            }
 
         }
     }
 
+    /**
+     * 判断是否是基本类型、包装类型、String类型
+     * @param type 类名
+     * @return 是否是基本类型、包装类型、String类型
+     */
+    private boolean isBaseType(Class type){
+        String[] baseTypes = {"java.lang.Integer",
+                "java.lang.Double",
+                "java.lang.Float",
+                "java.lang.Long",
+                "java.lang.Short",
+                "java.lang.Byte",
+                "java.lang.Boolean",
+                "java.lang.Character",
+                "java.lang.String",
+                "int","double","long","short","byte","boolean","char","float"};
+        for(String baseType : baseTypes) {
+            if (type.getName().equals(baseType)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 创建列
+     */
+    private void createColumn(String fieldName,Field field, List<Column> columns, Map<String, Column> parentMap, boolean isArray, SmartColumn smartColumn) {
+        String name = smartColumn.name();
+        int id = smartColumn.id();
+        String parent = smartColumn.parent();
+        boolean isAutoCount = smartColumn.autoCount();
+        boolean isFast = smartColumn.fast();
+        if (name.equals(Column.INVAL_VALUE)) {
+            name = field.getName();
+        }
+
+        Column<?> column = getGenericColumn(name, fieldName,isArray);
+        column.setId(id);
+        column.setFast(isFast);
+        column.setTextAlign(smartColumn.align());
+        column.setAutoMerge(smartColumn.autoMerge());
+        if(smartColumn.maxMergeCount() !=-1) {
+            column.setMaxMergeCount(smartColumn.maxMergeCount());
+        }
+        column.setAutoCount(isAutoCount);
+        column.setFixed(smartColumn.fixed());
+        if (!parent.equals(Column.INVAL_VALUE)) {
+            Column parentColumn = parentMap.get(parent);
+            if (parentColumn == null) {
+                List<Column> childColumns = new ArrayList<>();
+                childColumns.add(column);
+                parentColumn = new Column(parent, childColumns);
+                parentColumn.setId(id);
+                columns.add(parentColumn);
+                parentMap.put(parent, parentColumn);
+            }
+            parentColumn.addChildren(column);
+            if (id < parentColumn.getId()) {
+                parentColumn.setId(id);
+            }
+        }else{
+            columns.add(column);
+        }
+    }
+
     private Class<?> getParameterizedType(Field field){
 
-        if(field.getType() == java.util.List.class){
+        if(field.getType() == java.util.List.class) {
             Type genericType = field.getGenericType();
-            if(genericType == null){
+            if (genericType == null) {
                 throw new TableException("ColumnType Array field List  must be with generics");
             }
             // 如果是泛型参数的类型
-            if(genericType instanceof ParameterizedType){
+            if (genericType instanceof ParameterizedType) {
                 ParameterizedType pt = (ParameterizedType) genericType;
-                Class<?> genericClazz = (Class<?>)pt.getActualTypeArguments()[0];
+                Class<?> genericClazz = (Class<?>) pt.getActualTypeArguments()[0];
                 return genericClazz;
-            }else{
+            } else {
                 throw new TableException("ColumnType Array field List  must be with generics");
             }
+        }else if(field.getType().isArray()){
+                return field.getType().getComponentType();
         }else{
             throw new TableException("ColumnType Array field  must be List or Array");
         }

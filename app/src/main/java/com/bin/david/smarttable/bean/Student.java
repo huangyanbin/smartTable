@@ -24,6 +24,8 @@ public class Student {
     private String url;
     @SmartColumn(type = ColumnType.Array)
     private List<Lesson> lessons;
+    @SmartColumn(type = ColumnType.Array)
+    private Lesson[] lessonsArray;
 
     public Student(String name, int age, long time, boolean isCheck, ChildData childData) {
         this.name = name;
@@ -87,5 +89,13 @@ public class Student {
 
     public void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
+    }
+
+    public Lesson[] getLessonsArray() {
+        return lessonsArray;
+    }
+
+    public void setLessonsArray(Lesson[] lessonsArray) {
+        this.lessonsArray = lessonsArray;
     }
 }

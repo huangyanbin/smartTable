@@ -13,10 +13,13 @@ import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
 import com.bin.david.smarttable.bean.Lesson;
+import com.bin.david.smarttable.bean.LessonPoint;
 import com.bin.david.smarttable.bean.Student;
 import com.bin.david.smarttable.bean.TableStyle;
 import com.bin.david.smarttable.bean.TanBean;
 import com.bin.david.smarttable.view.QuickChartDialog;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +42,23 @@ public class AnnotationModeActivity extends AppCompatActivity {
         lessons.add(new Lesson("英语",false));
         lessons.add(new Lesson("物理",false));
         lessons.add(new Lesson("化学",true));
-
+       List<String> texts =  new ArrayList<>();
+        texts.add("测试哈1");
+        texts.add("测试哈2");
+        texts.add("测试哈3");
         List<Lesson> lessons2 = new ArrayList<>();
-        lessons2.add(new Lesson("软件",true));
-        lessons2.add(new Lesson("生物",true));
+        Lesson lesson1 = new Lesson("软件",true);
+
+        lesson1.setTest(texts);
+        lesson1.setLessonPoints(new LessonPoint[]{new LessonPoint("软件工程"),new LessonPoint("离散数学")});
+        Lesson lesson2 = new Lesson("生物",true);
+        lesson2.setLessonPoints(new LessonPoint[]{new LessonPoint("医学构造"),new LessonPoint("生物科技")});
+        lesson2.setTest(texts);
+        lessons2.add(lesson1);
+        lessons2.add(lesson2);
         lessons2.add(new Lesson("微积分",false));
         Random random = new Random();
+        Lesson[] lessonArray = new Lesson[]{new Lesson("政治",false),new Lesson("法学",false)};
         List<TanBean> tanBeans = TanBean.initDatas();
         final List<Student> students = new ArrayList<>();
         //测试 从其他地方获取url
@@ -54,13 +68,14 @@ public class AnnotationModeActivity extends AppCompatActivity {
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             student.setUrl(tanBeans.get(i%urlSize).getUrl());
             student.setLessons(i%3 ==0?lessons2:lessons);
+            student.setLessonsArray(lessonArray);
             students.add(student);
         }
         table = (SmartTable<Student>) findViewById(R.id.table);
         table.setData(students);
-        table.getConfig().setShowTableTitle(false);
-        table.getConfig().setShowXSequence(false);
-        table.getConfig().setShowYSequence(false);
+        table.getConfig().setShowTableTitle(true);
+        table.getConfig().setShowXSequence(true);
+        table.getConfig().setShowYSequence(true);
         table.setZoom(true,2,0.2f);
         //设置单个格子背景颜色
         table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {

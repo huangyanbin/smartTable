@@ -147,7 +147,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
      */
     private void drawLeftAndTop(Canvas canvas,Rect showRect,Rect rect,TableConfig config){
         canvas.save();
-        canvas.clipRect(rect.left,showRect.top,
+        canvas.clipRect(Math.max(this.rect.left,rect.left),showRect.top,
                 showRect.left,rect.bottom);
         Paint paint = config.getPaint();
         if(config.getLeftAndTopBackgroundColor() !=0){

@@ -26,6 +26,7 @@ import java.util.List;
 
 public class Column<T> implements Comparable<Column> {
 
+    public static final String INVAL_VALUE = "";
     /**
      * 列名
      */
@@ -54,6 +55,7 @@ public class Column<T> implements Comparable<Column> {
     private boolean isParent;
     private List<int[]> ranges; //合并数据
     private boolean isFast;
+
 
     /**列构造方法
      * 用于构造组合列
@@ -354,7 +356,7 @@ public class Column<T> implements Comparable<Column> {
        if(position >=0 && position< datas.size()){
           return format(datas.get(position));
        }
-       return "";
+       return INVAL_VALUE;
     }
 
 
@@ -396,7 +398,7 @@ public class Column<T> implements Comparable<Column> {
         if (format != null) {
             value = format.format(t);
         } else {
-            value = t == null ? "" : t.toString();
+            value = t == null ? INVAL_VALUE : t.toString();
         }
         return value;
     }

@@ -1,6 +1,7 @@
 package com.bin.david.form.data;
 
 import android.graphics.Rect;
+import android.util.Log;
 
 /**
  * Created by huang on 2017/11/1.
@@ -196,11 +197,15 @@ public class TableInfo {
                 ArrayColumn arrayColumn = ((ArrayColumn) column);
                 int[] lastPositionArray = arrayColumn.getLastPositionArray();
                 int index = 0;
+                int lineCount;
                 for (int lastPosition :lastPositionArray){
                     if(position <= lastPosition){
-                        int multiple =arrayColumn.getLineCount(index)/arrayLineSize[index];
+                        lineCount = arrayColumn.getLineCount(index);
+                        int multiple =arrayLineSize[index]/lineCount;
                         if(position == lastPosition){
-                            return arrayLineSize[index]%arrayColumn.getLineCount(index)+multiple;
+                            multiple = arrayLineSize[index]%lineCount+multiple;
+                             return multiple;
+
                         }
                         return multiple;
                     }
