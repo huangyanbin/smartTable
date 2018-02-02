@@ -22,6 +22,8 @@ public class Student {
     @SmartColumn(id =4,name="选中")
     private boolean isCheck;
     private String url;
+    @SmartColumn(type = ColumnType.Array)
+    private List<Lesson> lessons;
 
     public Student(String name, int age, long time, boolean isCheck, ChildData childData) {
         this.name = name;
@@ -77,5 +79,13 @@ public class Student {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public List<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
     }
 }

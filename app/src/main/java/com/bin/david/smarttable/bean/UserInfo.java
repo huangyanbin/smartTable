@@ -17,7 +17,7 @@ public class UserInfo {
     private ChildData childData;
     private boolean isCheck;
     private String url;
-    private List<PM25> weather;
+
 
     public UserInfo(String name, int age, long time, boolean isCheck, ChildData childData) {
         this.name = name;
@@ -74,4 +74,5 @@ public class UserInfo {
     public void setUrl(String url) {
         this.url = url;
     }
+
 }

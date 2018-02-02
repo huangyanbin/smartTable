@@ -1,13 +1,13 @@
 package com.bin.david.form.data;
 
 import android.graphics.Paint;
-import android.util.Log;
 
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.format.count.DecimalCountFormat;
 import com.bin.david.form.data.format.count.ICountFormat;
 import com.bin.david.form.data.format.count.NumberCountFormat;
 import com.bin.david.form.data.format.count.StringCountFormat;
+import com.bin.david.form.data.format.draw.FastTextDrawFormat;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.draw.TextDrawFormat;
@@ -53,6 +53,7 @@ public class Column<T> implements Comparable<Column> {
     private int id;
     private boolean isParent;
     private List<int[]> ranges; //合并数据
+    private boolean isFast;
 
     /**列构造方法
      * 用于构造组合列
@@ -112,7 +113,7 @@ public class Column<T> implements Comparable<Column> {
         this.format = format;
         this.fieldName = fieldName;
         //默认给一个TextDrawFormat
-        this.drawFormat = (drawFormat == null ? new TextDrawFormat<T>() : drawFormat);
+        this.drawFormat =drawFormat;
         datas = new ArrayList<>();
     }
 
@@ -171,6 +172,9 @@ public class Column<T> implements Comparable<Column> {
      * @return 绘制格式化
      */
     public IDrawFormat<T> getDrawFormat() {
+        if(drawFormat== null){
+            drawFormat = isFast ? new FastTextDrawFormat<T>() : new TextDrawFormat<T>();
+        }
         return drawFormat;
     }
     /**
@@ -218,15 +222,9 @@ public class Column<T> implements Comparable<Column> {
      * @throws IllegalAccessException
      */
     public T getData(Object o) throws NoSuchFieldException, IllegalAccessException {
-        Class clazz = o.getClass();
         String[] fieldNames = fieldName.split("\\.");
-        String firstFieldName = fieldNames.length == 0 ? fieldName : fieldNames[0];
-        Field field = clazz.getDeclaredField(firstFieldName);
-        if (field != null) {
+        if (fieldNames.length >0) {
             Object child = o;
-            if (fieldNames.length == 0 || fieldNames.length == 1) {
-                return getFieldValue(field, o,true);
-            }
             for (int i = 0; i < fieldNames.length; i++) {
                 if (child == null) {
                     return null;
@@ -237,10 +235,11 @@ public class Column<T> implements Comparable<Column> {
                     return null;
                 }
                 if (i == fieldNames.length - 1) {
-                    return getFieldValue(childField, child,true);
+                    return (T) childField.get(child);
+
                 } else {
-                    field.setAccessible(true);
-                    child = field.get(child);
+                    childField.setAccessible(true);
+                    child = childField.get(child);
                 }
             }
 
@@ -248,61 +247,51 @@ public class Column<T> implements Comparable<Column> {
         return  null;
     }
 
-        /**
-         * 填充数据
-         * @param objects 对象列表
-         * @param tableInfo 表格信息
-         * @param config 配置
-         * @return 返回需要合并的单元
-         * @throws NoSuchFieldException
-         * @throws IllegalAccessException
-         */
+    /**
+     * 填充数据
+     * @param objects 对象列表
+     * @return 返回需要合并的单元
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
 
-    public void fillData(List<Object> objects, TableInfo tableInfo, TableConfig config) throws NoSuchFieldException, IllegalAccessException {
+    public void fillData(List<Object> objects) throws NoSuchFieldException, IllegalAccessException {
         if(countFormat != null){
             countFormat.clearCount();
         }
         if (objects.size() > 0) {
-            int[] lineHeightArray = tableInfo.getLineHeightArray();
-            Object firstObject = objects.get(0);
-            Class clazz = firstObject.getClass();
             String[] fieldNames = fieldName.split("\\.");
-            String firstFieldName = fieldNames.length == 0 ? fieldName : fieldNames[0];
-            Field field = clazz.getDeclaredField(firstFieldName);
-            if (field != null) {
+            if (fieldNames.length>  0) {
+                Field[] fields = new Field[fieldNames.length];
                 int size = objects.size();
                 for (int k = 0; k < size; k++) {
-                    Object o = objects.get(k);
-                    Object child = o;
-                    if (o == null) {
-                        addData(null,true);
-                        setRowHeight(config, lineHeightArray, k,null);
-                        continue;
-                    }
-                    if (fieldNames.length == 0 || fieldNames.length == 1) {
-                        T t = getFieldValue(field, o,true);
-                        setRowHeight(config, lineHeightArray, k,t);
-                        continue;
-                    }
+                    Object child= objects.get(k);
                     for (int i = 0; i < fieldNames.length; i++) {
                         if (child == null) {
                             addData(null,true);
-                            setRowHeight(config, lineHeightArray, k,null);
+                            countColumnValue(null);
                             break;
                         }
-                        Class childClazz = child.getClass();
-                        Field childField = childClazz.getDeclaredField(fieldNames[i]);
+                        Field childField;
+                        if(fields[i] != null){
+                            childField = fields[i];
+                        }else {
+                            Class childClazz = child.getClass();
+                            childField = childClazz.getDeclaredField(fieldNames[i]);
+                            childField.setAccessible(true);
+                            fields[i] = childField;
+                        }
                         if (childField == null) {
                             addData(null,true);
-                            setRowHeight(config, lineHeightArray, k,null);
+                            countColumnValue(null);
                             break;
                         }
                         if (i == fieldNames.length - 1) {
-                            T t = getFieldValue(childField, child,true);
-                            setRowHeight(config, lineHeightArray, k,t);
+                            T t = (T) childField.get(child);
+                            addData(t, true);
+                            countColumnValue(t);
                         } else {
-                            field.setAccessible(true);
-                            child = field.get(child);
+                            child = childField.get(child);
                         }
                     }
 
@@ -311,6 +300,63 @@ public class Column<T> implements Comparable<Column> {
         }
 
     }
+
+
+    /**
+     * 填充数据
+     * @param objects 对象列表
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+
+    public void addData(List<Object> objects, int startPosition,boolean isFoot) throws NoSuchFieldException, IllegalAccessException {
+        if(objects.size()+ startPosition == datas.size()){
+            return;
+        }
+        if (objects.size() > 0) {
+            String[] fieldNames = fieldName.split("\\.");
+            if (fieldNames.length >0) {
+                int size = objects.size();
+                for (int k = 0; k < size; k++) {
+                    Object child= objects.get(isFoot ? k:(size-1-k));
+                    for (int i = 0; i < fieldNames.length; i++) {
+                        if (child == null) {
+                            addData(null,isFoot);
+                            countColumnValue(null);
+                            break;
+                        }
+                        Class childClazz = child.getClass();
+                        Field childField = childClazz.getDeclaredField(fieldNames[i]);
+                        if (childField == null) {
+                            addData(null,isFoot);
+                            countColumnValue(null);
+                            break;
+                        }
+                        if (i == fieldNames.length - 1) {
+                            T t = (T) childField.get(child);
+                            addData(t, isFoot);
+                            countColumnValue(t);
+                        } else {
+                            childField.setAccessible(true);
+                            child = childField.get(child);
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+
+
+
+    public String format(int position){
+       if(position >=0 && position< datas.size()){
+          return format(datas.get(position));
+       }
+       return "";
+    }
+
 
     public List<int[]> parseRanges(){
         if(isAutoMerge && maxMergeCount> 1 &&datas != null) {
@@ -345,24 +391,6 @@ public class Column<T> implements Comparable<Column> {
         return ranges;
     }
 
-
-    public void parseData(TableInfo tableInfo, TableConfig config){
-        if(datas != null) {
-            int size = datas.size();
-            int[] lineHeightArray = tableInfo.getLineHeightArray();
-            for (int i = 0; i < size; i++) {
-                setRowHeight(config, lineHeightArray, i,null);
-            }
-        }
-    }
-
-    public String format(int position){
-       if(position >=0 && position< datas.size()){
-          return format(datas.get(position));
-       }
-       return "";
-    }
-
     public String format(T t){
         String value;
         if (format != null) {
@@ -374,14 +402,10 @@ public class Column<T> implements Comparable<Column> {
     }
 
     /**
-     * 设置每行的高度
-     * 以及计算总数
+     * 统计数据
      *
-     * @param config          配置
-     * @param lineHeightArray 储存高度数组
-     * @param position        位置
      */
-    private void setRowHeight(TableConfig config, int[] lineHeightArray, int position,T t) {
+    protected void countColumnValue(T t) {
         if(t != null && isAutoCount && countFormat ==null){
             if(LetterUtils.isBasicType(t)){
                 if(LetterUtils.isNumber(this)) {
@@ -396,82 +420,15 @@ public class Column<T> implements Comparable<Column> {
         if(countFormat != null){
             countFormat.count(t);
         }
-        int height = drawFormat.measureHeight(this, position, config)
-                +2*config.getVerticalPadding();
-        if (height > lineHeightArray[position]) {
-            lineHeightArray[position] = height;
-        }
     }
 
-    /**
-     * 填充数据
-     * @param objects 对象列表
-     * @param tableInfo 表格信息
-     * @param config 配置
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
-     */
-
-    public void addData(List<Object> objects, TableInfo tableInfo, TableConfig config,int startPosition,boolean isFoot) throws NoSuchFieldException, IllegalAccessException {
-        if(objects.size()+ startPosition == datas.size()){
-            return;
-        }
-        if (objects.size() > 0) {
-            int[] lineHeightArray = tableInfo.getLineHeightArray();
-            Object firstObject = objects.get(0);
-            Class clazz = firstObject.getClass();
-            String[] fieldNames = fieldName.split("\\.");
-            String firstFieldName = fieldNames.length == 0 ? fieldName : fieldNames[0];
-            Field field = clazz.getDeclaredField(firstFieldName);
-            if (field != null) {
-                int size = objects.size();
-                for (int k = 0; k < size; k++) {
-                    Object o = objects.get(isFoot ? k:(size-1-k));
-                    Object child = o;
-                    if (o == null) {
-                        addData(null,isFoot);
-                        setRowHeight(config, lineHeightArray, k+startPosition,null);
-                        continue;
-                    }
-                    if (fieldNames.length == 0 || fieldNames.length == 1) {
-                        T t = getFieldValue(field, o,isFoot);
-
-                        setRowHeight(config, lineHeightArray, k+startPosition,t);
-                        continue;
-                    }
-                    for (int i = 0; i < fieldNames.length; i++) {
-                        if (child == null) {
-                            addData(null,isFoot);
-                            setRowHeight(config, lineHeightArray, k+startPosition,null);
-                            break;
-                        }
-                        Class childClazz = child.getClass();
-                        Field childField = childClazz.getDeclaredField(fieldNames[i]);
-                        if (childField == null) {
-                            addData(null,isFoot);
-                            setRowHeight(config, lineHeightArray, k+startPosition,null);
-                            break;
-                        }
-                        if (i == fieldNames.length - 1) {
-                            T t = getFieldValue(childField, child,isFoot);
-                            setRowHeight(config, lineHeightArray, k+startPosition,t);
-                        } else {
-                            field.setAccessible(true);
-                            child = field.get(child);
-                        }
-                    }
-
-                }
-            }
-        }
-    }
 
     /**
      * 动态添加数据
      * @param t 数据
      * @param isFoot 是否添加到尾部
      */
-    private void addData(T t,boolean isFoot){
+    protected void addData(T t,boolean isFoot){
         if(isFoot) {
             datas.add(t);
         }else {
@@ -481,20 +438,7 @@ public class Column<T> implements Comparable<Column> {
     }
 
 
-    /**
-     * 反射得到值
-     *
-     * @param field 成员变量
-     * @param o     对象
-     * @throws IllegalAccessException
-     */
-    private T getFieldValue(Field field, Object o,boolean isFoot) throws IllegalAccessException {
-        field.setAccessible(true);
-        T t = (T) field.get(o);
-        addData(t, isFoot);
 
-        return t;
-    }
 
     /**
      * 获取等级 如果上面没有parent 则为1，否则等于parent 递归+1
@@ -696,4 +640,21 @@ public class Column<T> implements Comparable<Column> {
         this.maxMergeCount = maxMergeCount;
     }
 
+    /**
+     * 是否快速显示
+     * 当所显示为单行，且列字体大小不变，可以使用isFast来更快加载
+     * @return 是否快速显示
+     */
+    public boolean isFast() {
+        return isFast;
+    }
+
+    /**
+     * 设置是否快速显示
+     * 当所显示为单行，且列字体大小不变，可以使用isFast来更快加载
+     */
+    public void setFast(boolean fast) {
+        isFast = fast;
+        drawFormat = isFast ? new FastTextDrawFormat<T>() : new TextDrawFormat<T>();
+    }
 }

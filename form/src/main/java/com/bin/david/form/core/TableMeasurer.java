@@ -2,10 +2,10 @@ package com.bin.david.form.core;
 
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.bin.david.form.component.IComponent;
 import com.bin.david.form.component.ITableTitle;
+import com.bin.david.form.data.ArrayColumn;
 import com.bin.david.form.data.Cell;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.ColumnInfo;
@@ -142,27 +142,37 @@ public class TableMeasurer<T> {
         Cell[][] rangeCells = tableData.getTableInfo().getRangeCells();
         int columnPos =0;
         int contentWidth = 0;
+        int[] lineHeightArray = tableData.getTableInfo().getLineHeightArray();
+        TableInfo tableInfo = tableData.getTableInfo();
+        int currentPosition,size;
         for(Column column:tableData.getChildColumns()){
             float columnNameWidth =tableData.getTitleDrawFormat().measureWidth(column,config)
                     +config.getColumnTitleHorizontalPadding()*2;
             int columnWidth =0;
-            int size = column.getDatas().size();
+             size = column.getDatas().size();
+            currentPosition=0;
+            boolean isArrayColumn = column instanceof ArrayColumn;
             for(int position = 0;position < size;position++) {
-                int width = column.getDrawFormat().measureWidth(column,position,config);
+                int width = column.getDrawFormat().measureWidth(column, position, config);
+                measureRowHeight(config, lineHeightArray, column, currentPosition, position);
+                int skipPosition = tableInfo.skipColumnSize(column, position);
+                currentPosition += skipPosition;
                 /**
-                 * 为了解决合并单元宽度过大问题
+                 *Todo 为了解决合并单元宽度过大问题
                  */
-                Cell cell  = rangeCells[position][columnPos];
-                if(cell != null){
-                    if(cell.row != Cell.INVALID && cell.col != Cell.INVALID) {
-                        cell.width = width;
-                        width = width/cell.col;
-                    }else if(cell.realCell !=null){
-                        width = cell.realCell.width/cell.realCell.col;
+                if (!isArrayColumn) {
+                    Cell cell = rangeCells[position][columnPos];
+                    if (cell != null) {
+                        if (cell.row != Cell.INVALID && cell.col != Cell.INVALID) {
+                            cell.width = width;
+                            width = width / cell.col;
+                        } else if (cell.realCell != null) {
+                            width = cell.realCell.width / cell.realCell.col;
+                        }
                     }
-                }
-                if(columnWidth < width){
-                    columnWidth = width;
+                    if (columnWidth < width) {
+                        columnWidth = width;
+                    }
                 }
             }
             columnWidth += 2 * config.getHorizontalPadding();
@@ -189,6 +199,21 @@ public class TableMeasurer<T> {
             totalWidth+=minWidth;
         }
         return totalWidth;
+    }
+
+
+    /**
+     * 测量行高
+     * @param config
+     * @param lineHeightArray
+     * @param column
+     * @param position
+     */
+    private void measureRowHeight(TableConfig config, int[] lineHeightArray, Column column, int currentPosition,int position) {
+        int height = column.getDrawFormat().measureHeight(column,position,config) +2*config.getVerticalPadding();
+        if (height > lineHeightArray[currentPosition]) {
+            lineHeightArray[currentPosition] = height;
+        }
     }
 
     /**

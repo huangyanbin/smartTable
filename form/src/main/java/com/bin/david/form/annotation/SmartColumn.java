@@ -59,4 +59,11 @@ public @interface SmartColumn {
     boolean fixed() default false;
 
 
+    /**
+     * 是否开启快速显示
+     * 当列的字体大小不变且为单行，可以开启快速显示
+     */
+    boolean fast() default false;
+
+
 }

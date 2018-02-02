@@ -186,6 +186,11 @@ public class GridDrawer<T>{
                     }
                     if (set.size() > 0) {
                         for (int i = hMinPosition; i <= hMaxPosition; i++) {
+                            if(i == 0 && set.contains(i)){
+                                path.moveTo(vGrid, horizontalGrids.get(0));
+                                isLineTo = false;
+                                continue;
+                            }
                             if (set.contains(i) && i - hMinPosition - 1 >= 0) {
                                 if (!isLineTo) {
                                     path.lineTo(vGrid, horizontalGrids.get(i - hMinPosition - 1));
@@ -220,23 +225,25 @@ public class GridDrawer<T>{
 
     //矫正格子大小
     public Rect correctCellRect(int row, int col, Rect rect, float zoom) {
-        Cell point = rangePoints[row][col];
-        if (point != null) {
-            if (point.col !=Cell.INVALID && point.row != Cell.INVALID ) {
-                List<Column> childColumns = tableData.getChildColumns();
-                int[] lineHeights = tableData.getTableInfo().getLineHeightArray();
-                int width = 0, height = 0;
-                for (int i = col; i < Math.min(childColumns.size(),col + point.col); i++) {
-                    width += childColumns.get(i).getWidth() * zoom;
+        if(rangePoints.length >row){
+            Cell point = rangePoints[row][col];
+            if (point != null) {
+                if (point.col != Cell.INVALID && point.row != Cell.INVALID) {
+                    List<Column> childColumns = tableData.getChildColumns();
+                    int[] lineHeights = tableData.getTableInfo().getLineHeightArray();
+                    int width = 0, height = 0;
+                    for (int i = col; i < Math.min(childColumns.size(), col + point.col); i++) {
+                        width += childColumns.get(i).getWidth() * zoom;
+                    }
+                    for (int i = row; i < Math.min(lineHeights.length, row + point.row); i++) {
+                        height += lineHeights[i] * zoom;
+                     }
+                    rect.right = rect.left + width;
+                    rect.bottom = rect.top + height;
+                    return rect;
                 }
-                for (int i = row; i < Math.min(lineHeights.length,row + point.row); i++) {
-                    height += lineHeights[i] * zoom;
-                }
-                rect.right = rect.left + width;
-                rect.bottom = rect.top + height;
-                return rect;
+                return null;
             }
-            return null;
         }
         return rect;
     }

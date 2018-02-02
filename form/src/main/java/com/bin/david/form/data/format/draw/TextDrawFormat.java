@@ -21,7 +21,6 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
     @Override
     public int measureWidth(Column<T>column, int position, TableConfig config) {
-
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
         return DrawUtils.getMultiTextWidth(paint,column.format(position));

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     private AnnotationParser<T> annotationParser;
     protected Paint paint;
     private MatrixHelper matrixHelper;
-    private Object lockObject = new Object();
+    private final Object lockObject = new Object();
 
     public SmartTable(Context context) {
         super(context);
@@ -195,11 +196,14 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                 @Override
                 public void run() {
                     synchronized (lockObject) {
-                        parser.parse(tableData, config);
+                        long start = System.currentTimeMillis();
+                        parser.parse(tableData);
                         TableInfo info = measurer.measure(tableData, config);
                         xAxis.setHeight(info.getTopHeight());
                         yAxis.setWidth(info.getyAxisWidth());
                         postInvalidate();
+                        long end = System.currentTimeMillis();
+                        Log.e("huang","notifyDataChanged timeMillis="+(end-start));
                     }
                 }
             }).start();
@@ -340,13 +344,19 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
      * @param t 新增数据
      * @param isFoot 是否在尾部添加
      */
-    public void addData(List<T> t, boolean isFoot){
+    public void addData(final List<T> t, final boolean isFoot){
         if(t != null && t.size() >0) {
-            int size = tableData.getLineSize();
-            parser.addData(tableData, t,isFoot,config);
-            measurer.addTableHeight(tableData, size);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (lockObject) {
+                        parser.addData(tableData, t, isFoot);
+                        measurer.measure(tableData, config);
+                        postInvalidate();
+                    }
+                }
+            }).start();
         }
-        invalidate();
     }
 
 
@@ -433,11 +443,12 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         return yAxis;
     }
 
+
+
     /**
-     * 释放
+     * 可以在Activity onDestroy释放
      */
-    @Override
-    protected void onDetachedFromWindow() {
+    public void release(){
         matrixHelper.unRegisterAll();
         provider = null;
         if(tableData !=null) {
@@ -446,9 +457,6 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         }
         xAxis = null;
         yAxis = null;
-        super.onDetachedFromWindow();
     }
-
-
 }
 

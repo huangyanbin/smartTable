@@ -5,5 +5,5 @@ package com.bin.david.form.annotation;
  */
 
 public enum  ColumnType {
-    Own,Child;
+    Own,Child,Array;
 }

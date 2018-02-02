@@ -281,6 +281,7 @@ public class TableProvider<T> implements TableClickObserver {
         boolean isPerFixed = false;
         int clipCount = 0;
         Rect correctCellRect;
+        TableInfo tableInfo = tableData.getTableInfo();
         for (int i = 0; i < columnSize; i++) {
             top = scaleRect.top;
             Column column = columns.get(i);
@@ -304,9 +305,16 @@ public class TableProvider<T> implements TableClickObserver {
             float right = left + width;
             if (left < showRect.right) {
                 int size = column.getDatas().size();
+                int realPosition = 0;
                 for (int j = 0; j < size; j++) {
                     String value = column.format(j);
-                    float bottom = top + info.getLineHeightArray()[j]*config.getZoom();
+                    int skip = tableInfo.skipColumnSize(column,j);
+                    int totalLineHeight =0;
+                    for(int k = realPosition;k<realPosition+skip;k++){
+                        totalLineHeight += info.getLineHeightArray()[k];
+                    }
+                    realPosition+=skip;
+                    float bottom = top + totalLineHeight*config.getZoom();
                     tempRect.set((int) left, (int) top, (int) right, (int) bottom);
                     correctCellRect = gridDrawer.correctCellRect(j, i, tempRect, config.getZoom()); //矫正格子的大小
                     if (correctCellRect != null) {
@@ -404,15 +412,8 @@ public class TableProvider<T> implements TableClickObserver {
 
     @Override
     public void onClick(float x, float y) {
-       /* if(gridDrawer.isClickXSequence(y)){
-            int position = gridDrawer.getClickXSequence(x);
-
-        }else if(gridDrawer.isClickYSequence(x)) {
-            int position =gridDrawer.getClickYSequence(y);
-        }else{*/
-            clickPoint.x = x;
-            clickPoint.y = y;
-        /*}*/
+        clickPoint.x = x;
+        clickPoint.y = y;
     }
 
     public OnColumnClickListener getOnColumnClickListener() {

@@ -2,11 +2,15 @@ package com.bin.david.form.core;
 
 
 import com.bin.david.form.annotation.*;
+import com.bin.david.form.data.ArrayColumn;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.table.PageTableData;
+import com.bin.david.form.exception.TableException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,9 +38,8 @@ public class AnnotationParser<T>  {
                     tableData.setCurrentPage(table.currentPage());
                     tableData.setPageSize(table.pageSize());
                     tableData.setShowCount(table.count());
-                    FieldGenericHandler genericHandler = new FieldGenericHandler();
                     Map<String,Column> parentMap = new HashMap<>();
-                    getColumnAnnotation(clazz, null,columns, genericHandler, parentMap);
+                    getColumnAnnotation(clazz, null,columns, parentMap,false);
                     Collections.sort(columns);
                     return tableData;
                 }
@@ -46,7 +49,7 @@ public class AnnotationParser<T>  {
         return null;
     }
 
-    private void getColumnAnnotation(Class clazz, String parentFieldName, List<Column> columns, FieldGenericHandler genericHandler, Map<String, Column> parentMap) {
+    private  void getColumnAnnotation(Class clazz, String parentFieldName, List<Column> columns, Map<String, Column> parentMap,boolean isArray) {
         Field[] fields = clazz.getDeclaredFields();
         for(Field field:fields){
             field.setAccessible(true);
@@ -60,12 +63,14 @@ public class AnnotationParser<T>  {
                    int id = smartColumn.id();
                    String parent = smartColumn.parent();
                    boolean isAutoCount = smartColumn.autoCount();
+                   boolean isFast = smartColumn.fast();
                    if (name.equals("")) {
                        name = field.getName();
                    }
                    String fieldName =parentFieldName != null? (parentFieldName+field.getName()) :field.getName();
-                   Column<?> column = genericHandler.getGenericColumn(fieldClass, name, fieldName);
+                   Column<?> column = getGenericColumn(name, fieldName,isArray);
                    column.setId(id);
+                   column.setFast(isFast);
                    column.setTextAlign(smartColumn.align());
                    column.setAutoMerge(smartColumn.autoMerge());
                    if(smartColumn.maxMergeCount() !=-1) {
@@ -93,10 +98,47 @@ public class AnnotationParser<T>  {
                }else if(type == ColumnType.Child){
                    String fieldName = (parentFieldName != null ?parentFieldName:"")
                            +field.getName()+".";
-                   getColumnAnnotation(fieldClass,fieldName,columns,genericHandler,parentMap);
+                   getColumnAnnotation(fieldClass,fieldName,columns,parentMap,isArray);
+               }else if(type == ColumnType.Array){
+                   fieldClass = getParameterizedType(field);
+                   String fieldName = (parentFieldName != null ?parentFieldName:"")
+                           +field.getName()+".";
+                   getColumnAnnotation(fieldClass,fieldName,columns,parentMap,true);
                }
            }
 
         }
+    }
+
+    private Class<?> getParameterizedType(Field field){
+
+        if(field.getType() == java.util.List.class){
+            Type genericType = field.getGenericType();
+            if(genericType == null){
+                throw new TableException("ColumnType Array field List  must be with generics");
+            }
+            // 如果是泛型参数的类型
+            if(genericType instanceof ParameterizedType){
+                ParameterizedType pt = (ParameterizedType) genericType;
+                Class<?> genericClazz = (Class<?>)pt.getActualTypeArguments()[0];
+                return genericClazz;
+            }else{
+                throw new TableException("ColumnType Array field List  must be with generics");
+            }
+        }else{
+            throw new TableException("ColumnType Array field  must be List or Array");
+        }
+
+    }
+
+    private Column<?> getGenericColumn(String name, String fieldName, boolean isArray) {
+
+        Column<?> column;
+        if (isArray) {
+            column = new ArrayColumn<>(name, fieldName);
+        } else {
+            column = new Column<>(name, fieldName);
+        }
+        return column;
     }
 }

@@ -36,7 +36,6 @@ public class TableData<T> {
     private ITitleDrawFormat titleDrawFormat;
     private ISequenceFormat XSequenceFormat;
     private ISequenceFormat YSequenceFormat;
-    private int lineSize;
     private List<CellRange> cellRangeAddresses;
     //用户设置的 不能清除
     private List<CellRange> userSetRangeAddress;
@@ -70,8 +69,7 @@ public class TableData<T> {
         this.tableName = tableName;
         this.columns = columns;
         this.t = t;
-        lineSize = t.size();
-        tableInfo.setLineSize(lineSize);
+        tableInfo.setLineSize(t.size());
         childColumns = new ArrayList<>();
         columnInfos = new ArrayList<>();
         childColumnInfos = new ArrayList<>();
@@ -119,8 +117,7 @@ public class TableData<T> {
      */
     public void setT(List<T> t) {
         this.t = t;
-        lineSize = t.size();
-        tableInfo.setLineSize(lineSize);
+        tableInfo.setLineSize( t.size());
     }
 
 
@@ -201,9 +198,6 @@ public class TableData<T> {
         return showCount;
     }
 
-    public void setLineSize(int lineSize) {
-        this.lineSize = lineSize;
-    }
 
     /**
      * 设置是否显示统计总数
@@ -295,7 +289,7 @@ public class TableData<T> {
      * @return 行数
      */
     public int getLineSize() {
-        return lineSize;
+        return tableInfo.getLineHeightArray().length;
     }
 
     private void addCellRange(int firstRow,int lastRow,int firstCol,int lastCol){

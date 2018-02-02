@@ -1,6 +1,8 @@
 package com.bin.david.form.core;
 
+import com.bin.david.form.data.ArrayColumn;
 import com.bin.david.form.data.CellRange;
+import com.bin.david.form.data.ColumnNode;
 import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.Column;
 import com.bin.david.form.data.table.TableData;
@@ -23,7 +25,7 @@ public class TableParser<T> {
     /**
      * 解析数据
      */
-    public List<Column> parse(TableData<T> tableData, TableConfig config){
+    public List<Column> parse(TableData<T> tableData){
 
         tableData.getChildColumns().clear();
         tableData.getColumnInfos().clear();
@@ -32,26 +34,26 @@ public class TableParser<T> {
         tableInfo.setColumnSize(tableData.getChildColumns().size());
         tableInfo.setMaxLevel(maxLevel);
         tableData.clearCellRangeAddresses();
-        if(tableData instanceof ArrayTableData){
-            for (Column column : tableData.getChildColumns()) {
-                column.parseData(tableInfo,config);
-            }
-        }else {
+        if(!(tableData instanceof ArrayTableData)){
             sort(tableData);
             try {
                 List<T> dataList = tableData.getT();
                 int i = 0;
                 for (Column column : tableData.getChildColumns()) {
                     column.getDatas().clear();
-                    column.fillData(dataList, tableInfo, config);
+                    column.fillData(dataList);
                     List<int[]> ranges = column.parseRanges();
                     if(ranges !=null && ranges.size()>0){
                         for(int[] range:ranges){
                             tableData.addCellRange(new CellRange(range[0],range[1],i,i));
                         }
                     }
+                    if(column instanceof ArrayColumn){
+                        addArrayNode(tableInfo,(ArrayColumn) column);
+                    }
                     i++;
                 }
+                tableInfo.initTotalSize();
             } catch (NoSuchFieldException e) {
                 throw new TableException(
                         "NoSuchFieldException :Please check whether field name is correct!");
@@ -64,9 +66,45 @@ public class TableParser<T> {
     }
 
     /**
+     * 添加到数组节点
+     * 用于数组Column 统计
+     *
+     * @param tableInfo
+     * @param column
+     */
+    private void addArrayNode(TableInfo tableInfo, ArrayColumn column) {
+        ColumnNode topNode = tableInfo.getTopNode();
+        if (topNode == null) {
+            topNode = new ColumnNode("top", null);
+            tableInfo.setTopNode(topNode);
+        }
+        String[] nodeNames = column.getFieldName().split("\\.");
+        loop1:
+        for (int i = 0; i < nodeNames.length; i++) {
+            String nodeName = nodeNames[i];
+            for (ColumnNode node : topNode.getChildren()) {
+                if (node.getName().equals(nodeName)) {
+                    topNode = node;
+                    continue loop1;
+                }
+            }
+            ColumnNode childNode;
+            if (i == nodeNames.length - 1) {
+                childNode = new ColumnNode(nodeName, topNode, column);
+                column.setNode(childNode);
+            } else {
+                childNode = new ColumnNode(nodeName, topNode);
+            }
+            topNode.getChildren().add(childNode);
+            topNode = childNode;
+
+        }
+    }
+
+    /**
      * 添加数据
      */
-    public void addData(TableData<T> tableData, List<T> addData,boolean isFoot, TableConfig config){
+    public void addData(TableData<T> tableData, List<T> addData,boolean isFoot){
 
         try {
 
@@ -76,13 +114,12 @@ public class TableParser<T> {
             }else{
                 tableData.getT().addAll(0,addData);
             }
-            tableData.setLineSize(tableData.getT().size());
             TableInfo tableInfo =  tableData.getTableInfo();
             tableInfo.addLine(addData.size());
             tableData.clearCellRangeAddresses();
             int i =0;
             for (Column column : tableData.getChildColumns()) {
-                column.addData(addData,tableInfo,config,size,isFoot);
+                column.addData(addData,size,isFoot);
                 List<int[]> ranges = column.parseRanges();
                 if(ranges !=null && ranges.size()>0){
                     for(int[] range:ranges){

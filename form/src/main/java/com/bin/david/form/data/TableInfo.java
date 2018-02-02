@@ -20,6 +20,9 @@ public class TableInfo {
     private int[] lineHeightArray;
     private float zoom =1;
     private Cell[][] rangeCells;
+    private int lineSize;
+    private ColumnNode topNode;
+    private int[] arrayLineSize;
 
     /**
      * 获取最大层级
@@ -47,7 +50,7 @@ public class TableInfo {
 
     public void setColumnSize(int columnSize) {
         this.columnSize = columnSize;
-        rangeCells = new Cell[lineHeightArray.length][columnSize];
+        rangeCells = new Cell[lineSize][columnSize];
 
     }
 
@@ -87,7 +90,8 @@ public class TableInfo {
 
 
     public void setLineSize(int lineSize) {
-        lineHeightArray = new int[lineSize];
+        this.lineSize = lineSize;
+        this.lineHeightArray = new int[lineSize];
 
     }
 
@@ -101,9 +105,11 @@ public class TableInfo {
         //数组复制
         System.arraycopy(lineHeightArray,0,tempArray,0,size);
         lineHeightArray = tempArray;
-        Cell[][] tempPoints = new Cell[size+count][columnSize];
-        System.arraycopy(rangeCells,0,tempPoints,0,size);
-        rangeCells = tempPoints;
+        Cell[][] tempRangeCells = new Cell[size+count][columnSize];
+        for(int i = 0;i <size;i++){
+            tempRangeCells[i] = rangeCells[i];
+        }
+        rangeCells = tempRangeCells;
     }
     public int getCountHeight() {
         return (int) (zoom*countHeight);
@@ -161,6 +167,50 @@ public class TableInfo {
         rangeCells = null;
         lineHeightArray = null;
         tableRect = null;
+    }
+
+    public ColumnNode getTopNode() {
+        return topNode;
+    }
+
+    public void setTopNode(ColumnNode topNode) {
+        this.topNode = topNode;
+    }
+
+    public void initTotalSize(){
+       if(topNode !=null) {
+           arrayLineSize = new int[lineSize];
+           int totalSize = 0;
+           for (int i = 0; i < lineSize; i++) {
+               int lineSize = topNode.getTotalLine(i);
+               arrayLineSize[i] = lineSize;
+               totalSize += lineSize;
+           }
+           lineHeightArray = new int[totalSize];
+       }
+    }
+
+    public int skipColumnSize(Column column, int position){
+        if(topNode !=null) {
+            if(column instanceof ArrayColumn){
+                ArrayColumn arrayColumn = ((ArrayColumn) column);
+                int[] lastPositionArray = arrayColumn.getLastPositionArray();
+                int index = 0;
+                for (int lastPosition :lastPositionArray){
+                    if(position <= lastPosition){
+                        int multiple =arrayColumn.getLineCount(index)/arrayLineSize[index];
+                        if(position == lastPosition){
+                            return arrayLineSize[index]%arrayColumn.getLineCount(index)+multiple;
+                        }
+                        return multiple;
+                    }
+                    index++;
+                }
+            }else {
+                return arrayLineSize[position];
+            }
+        }
+        return 1;
     }
 
 }

@@ -96,6 +96,13 @@ public class DrawUtils {
         return maxWidth;
     }
 
+    /**
+     * 绘制多行文字
+     * @param canvas
+     * @param paint
+     * @param rect
+     * @param value
+     */
     public static void drawMultiText(Canvas canvas,Paint paint,Rect rect,String value){
         String[] values = value.split("\n");
         for(int i =0;i <values.length;i++) {
@@ -103,6 +110,18 @@ public class DrawUtils {
             canvas.drawText(values[i], DrawUtils.getTextCenterX(rect.left, rect.right, paint),
                     DrawUtils.getTextCenterY(centerY, paint), paint);
         }
+    }
+
+    /**
+     * 绘制单行文字
+     * @param canvas
+     * @param paint
+     * @param rect
+     * @param value
+     */
+    public static void drawSingleText(Canvas canvas,Paint paint,Rect rect,String value){
+        canvas.drawText(value, DrawUtils.getTextCenterX(rect.left, rect.right, paint),
+                DrawUtils.getTextCenterY(rect.centerY(), paint), paint);
     }
 
 }

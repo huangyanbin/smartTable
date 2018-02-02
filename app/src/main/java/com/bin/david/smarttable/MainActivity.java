@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.bin.david.form.data.ArrayColumn;
 import com.bin.david.smarttable.adapter.ItemAdapter;
 import com.bin.david.smarttable.bean.MainItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(ArrayModeActivity.class,"数组模式1(日程表)"));
         items.add(new MainItem(SeatModeActivity.class,"数组模式2(选座)"));
         items.add(new MainItem(PagerModeActivity.class,"分页模式"));
+        items.add(new MainItem(ArrayColumnModeActivity.class,"List column"));
         items.add(new MainItem(MultParseModeActivity.class,"多行解析模式"));
         items.add(new MainItem(ExcelModeActivity.class,"JXL Excel模式"));
         items.add(new MainItem(POIExcelModeActivity.class,"POI Excel模式"));
