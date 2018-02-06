@@ -170,9 +170,9 @@ public class TableMeasurer<T> {
                             width = cell.realCell.width / cell.realCell.col;
                         }
                     }
-                    if (columnWidth < width) {
-                        columnWidth = width;
-                    }
+                }
+                if (columnWidth < width) {
+                    columnWidth = width;
                 }
             }
             columnWidth += 2 * config.getHorizontalPadding();

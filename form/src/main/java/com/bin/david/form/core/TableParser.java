@@ -1,6 +1,7 @@
 package com.bin.david.form.core;
 
 import com.bin.david.form.data.ArrayColumn;
+import com.bin.david.form.data.ArrayStructure;
 import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.ColumnNode;
 import com.bin.david.form.data.table.ArrayTableData;
@@ -9,6 +10,7 @@ import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.exception.TableException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -51,6 +53,7 @@ public class TableParser<T> {
                     }
                     i++;
                 }
+               calculateArrayCellSize(tableData.getChildColumns());
                 tableInfo.initTotalSize();
             } catch (NoSuchFieldException e) {
                 throw new TableException(
@@ -63,13 +66,14 @@ public class TableParser<T> {
        return tableData.getColumns();
     }
 
+
+
     /**
      * 添加到数组节点
      * 用于数组Column 统计
      *
      */
     private void addArrayNode(TableInfo tableInfo, List<Column> childColumns) {
-
         for (Column child : childColumns) {
             if (child instanceof ArrayColumn) {
                 ArrayColumn column = (ArrayColumn) child;
@@ -97,11 +101,46 @@ public class TableParser<T> {
                     }
                     topNode.getChildren().add(childNode);
                     topNode = childNode;
+                }
+            }
+        }
 
+    }
+
+    private void calculateArrayCellSize( List<Column> childColumns){
+        int maxLevel = 0;
+        ArrayColumn bottomColumn = null;
+        for (Column child : childColumns) {
+            if (child instanceof ArrayColumn) {
+                ArrayColumn column = (ArrayColumn) child;
+                int level = column.getStructure().getMaxLevel();
+                if (maxLevel <= level) {
+                    maxLevel = level;
+                    bottomColumn = column;
+                }
+            }
+        }
+        if(bottomColumn !=null){
+            ArrayStructure bottomStructure = bottomColumn.getStructure();
+            for (Column child : childColumns) {
+                if (child instanceof ArrayColumn) {
+                    ArrayColumn column = (ArrayColumn) child;
+                    int level = column.getStructure().getMaxLevel();
+                    column.getStructure().setCellSizes(new ArrayList<Integer>());
+                    int size = column.getDatas().size();
+                    for(int i =0; i <size;i++ ){
+                        int cellSize = bottomStructure.getLevelCellSize(level,i);
+                        column.getStructure().getCellSizes().add(cellSize);
+                    }
                 }
             }
         }
     }
+
+
+
+
+
 
     /**
      * 添加数据

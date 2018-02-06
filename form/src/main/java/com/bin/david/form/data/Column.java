@@ -329,6 +329,7 @@ public class Column<T> implements Comparable<Column> {
                         }
                         Class childClazz = child.getClass();
                         Field childField = childClazz.getDeclaredField(fieldNames[i]);
+                        childField.setAccessible(true);
                         if (childField == null) {
                             addData(null,isFoot);
                             countColumnValue(null);
@@ -339,7 +340,6 @@ public class Column<T> implements Comparable<Column> {
                             addData(t, isFoot);
                             countColumnValue(t);
                         } else {
-                            childField.setAccessible(true);
                             child = childField.get(child);
                         }
                     }

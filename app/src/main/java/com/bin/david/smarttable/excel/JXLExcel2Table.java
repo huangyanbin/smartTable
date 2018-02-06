@@ -54,7 +54,7 @@ public class JXLExcel2Table extends BaseExcel2Table<Cell> {
             public void draw(Canvas canvas,Rect scaleRect, Rect showRect, TableConfig config) {
                 if(imgPointSet.size() >0){
                     for(ImagePoint point :imgPointSet){
-                        if(table.getProvider().getGridDrawer().maybeContain(point.row,point.col)) {
+                       /* if(table.getProvider().getGridDrawer().maybeContain(point.row,point.col)) {*/
                             Bitmap bitmap = cache.get(point);
                             int[] location = table.getProvider().getPointLocation(point.row,point.col);
                             int[] size = table.getProvider().getPointSize((int)Math.ceil(point.row),(int)Math.ceil(point.col));
@@ -62,7 +62,7 @@ public class JXLExcel2Table extends BaseExcel2Table<Cell> {
                             int height = (int)(size[1]*point.height);
                             Rect imgBitmap = new Rect(location[0],location[1],location[0]+width,location[1]+height);
                             DrawHelper.drawBitmap(canvas,imgBitmap,bitmap,config);
-                        }
+                        /*}*/
                     }
                 }
             }

@@ -13,19 +13,17 @@ import java.util.List;
 public class Student {
     @SmartColumn(id =1,name = "姓名",autoCount = true)
     private String name;
-    @SmartColumn(id=2,name="年龄",autoCount = true)
+    @SmartColumn(id=8,name="年龄",autoCount = true)
     private int age;
-    @SmartColumn(id =3,name="更新时间")
+    @SmartColumn(id =7,name="更新时间")
     private long time;
     @SmartColumn(type= ColumnType.Child)
     private ChildData childData;
-    @SmartColumn(id =4,name="选中")
+    @SmartColumn(id =6,name="选中")
     private boolean isCheck;
     private String url;
-    @SmartColumn(type = ColumnType.Array)
+    @SmartColumn(type = ColumnType.ArrayChild)
     private List<Lesson> lessons;
-    @SmartColumn(type = ColumnType.Array)
-    private Lesson[] lessonsArray;
 
     public Student(String name, int age, long time, boolean isCheck, ChildData childData) {
         this.name = name;
@@ -91,11 +89,4 @@ public class Student {
         this.lessons = lessons;
     }
 
-    public Lesson[] getLessonsArray() {
-        return lessonsArray;
-    }
-
-    public void setLessonsArray(Lesson[] lessonsArray) {
-        this.lessonsArray = lessonsArray;
-    }
 }

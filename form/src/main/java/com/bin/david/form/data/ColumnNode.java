@@ -1,4 +1,5 @@
 package com.bin.david.form.data;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,39 +69,21 @@ public class ColumnNode {
         return maxLineSize;
     }
 
-    /**
-     * 判断节点位置
-     * @param node
-     * @param level
-     * @return
-     */
-    public static int getNodeLevel(ColumnNode node,int level){
-        ColumnNode parent = node.getParent();
-        if(parent != null) {
-            if (parent.arrayColumn != null) {
-                level += 1;
-            }
-            getNodeLevel(parent, level);
+    public static  int getLevel(ColumnNode node,int level){
+        if(node.arrayColumn != null && !node.arrayColumn.isThoroughArray()){
+            level++;
         }
-        return level;
+        if(node.getParent() !=null){
+            if(node.getParent().arrayColumn == null){
+                level++;
+            }
+            return getLevel(node.getParent(),level);
+
+        }
+        return level-1;
     }
 
-    public static int getPositionReize(ColumnNode node,int position){
-        int total = 1;
-        if(node.getChildren().size() >0){
-            for(ColumnNode child: node.getChildren()){
-                if(child.arrayColumn !=null){
-                    int[] result = child.arrayColumn.getPerStartAndEnd(position);
-                    for(int i = result[0]; i < result[1];i++){
-                        total +=  getPositionReize(child,i);
-                    }
-                }
-            }
-        }else if(node.arrayColumn !=null){
-            return getPositionReize(node.getParent(),position);
-        }
-        return total;
-    }
+
 
 
 }

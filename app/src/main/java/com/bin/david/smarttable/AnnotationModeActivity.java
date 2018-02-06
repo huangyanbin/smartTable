@@ -36,12 +36,12 @@ public class AnnotationModeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_annotation);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         quickChartDialog = new QuickChartDialog();
-        List<Lesson> lessons = new ArrayList<>();
+     /*   List<Lesson> lessons = new ArrayList<>();
         lessons.add(new Lesson("语文",true));
         lessons.add(new Lesson("数学",true));
         lessons.add(new Lesson("英语",false));
         lessons.add(new Lesson("物理",false));
-        lessons.add(new Lesson("化学",true));
+        lessons.add(new Lesson("化学",true));*/
        List<String> texts =  new ArrayList<>();
         texts.add("测试哈1");
         texts.add("测试哈2");
@@ -53,22 +53,23 @@ public class AnnotationModeActivity extends AppCompatActivity {
         lesson1.setLessonPoints(new LessonPoint[]{new LessonPoint("软件工程"),new LessonPoint("离散数学")});
         Lesson lesson2 = new Lesson("生物",true);
         lesson2.setLessonPoints(new LessonPoint[]{new LessonPoint("医学构造"),new LessonPoint("生物科技")});
-        lesson2.setTest(texts);
+        //lesson2.setTest(texts);
         lessons2.add(lesson1);
         lessons2.add(lesson2);
         lessons2.add(new Lesson("微积分",false));
         Random random = new Random();
-        Lesson[] lessonArray = new Lesson[]{new Lesson("政治",false),new Lesson("法学",false)};
+      //  Lesson[] lessonArray = new Lesson[]{new Lesson("政治",false),new Lesson("法学",false)};
         List<TanBean> tanBeans = TanBean.initDatas();
         final List<Student> students = new ArrayList<>();
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
-        for(int i = 0;i <50; i++) {
+        for(int i = 0;i <2; i++) {
             Student student = new Student("用户"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             student.setUrl(tanBeans.get(i%urlSize).getUrl());
-            student.setLessons(i%3 ==0?lessons2:lessons);
-            student.setLessonsArray(lessonArray);
+            //student.setLessons(i%3 ==0?lessons2:lessons);
+            student.setLessons(lessons2);
+           // student.setLessonsArray(lessonArray);
             students.add(student);
         }
         table = (SmartTable<Student>) findViewById(R.id.table);
@@ -77,7 +78,7 @@ public class AnnotationModeActivity extends AppCompatActivity {
         table.getConfig().setShowXSequence(true);
         table.getConfig().setShowYSequence(true);
         table.setZoom(true,2,0.2f);
-        //设置单个格子背景颜色
+       /* //设置单个格子背景颜色
         table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
@@ -98,7 +99,7 @@ public class AnnotationModeActivity extends AppCompatActivity {
                     return super.getTextColor(cellInfo);
                 }
             }
-        });
+        });*/
     }
 
     public void onClick(View view) {

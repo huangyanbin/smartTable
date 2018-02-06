@@ -99,7 +99,7 @@ public class TableProvider<T> implements TableClickObserver {
         isClickPoint = false;
         clickColumnInfo = null;
         tipColumn = null;
-        gridDrawer.reset();
+        //gridDrawer.reset();
         operation.reset();
         this.scaleRect = scaleRect;
         this.showRect = showRect;
@@ -308,7 +308,7 @@ public class TableProvider<T> implements TableClickObserver {
                 int realPosition = 0;
                 for (int j = 0; j < size; j++) {
                     String value = column.format(j);
-                    int skip = tableInfo.skipColumnSize(column,j);
+                    int skip =tableInfo.skipColumnSize(column,j);
                     int totalLineHeight =0;
                     for(int k = realPosition;k<realPosition+skip;k++){
                         totalLineHeight += info.getLineHeightArray()[k];
@@ -332,6 +332,8 @@ public class TableProvider<T> implements TableClickObserver {
                                     clickPoint.set(-Integer.MAX_VALUE, -Integer.MAX_VALUE);
                                 }
                                 operation.checkSelectedPoint(i, j, correctCellRect);
+                                config.getGridStyle().fillPaint(paint);
+                                canvas.drawRect(correctCellRect,paint);
                                 config.getContentStyle().fillPaint(paint);
                                 column.getDrawFormat().draw(canvas, column, data, value, correctCellRect, j, config);
                             }
@@ -339,15 +341,8 @@ public class TableProvider<T> implements TableClickObserver {
                             break;
                         }
                     }
-                    if (i == 0) {
-                        gridDrawer.addHorizontalGrid(j, Math.max(scaleRect.left, showRect.left),
-                                 Math.min(scaleRect.right, showRect.right), (int)bottom);
-                    }
                     top = bottom;
                 }
-                config.getGridStyle().fillPaint(paint);
-                gridDrawer.addVerticalGrid(i,Math.max(scaleRect.top, showRect.top)
-                        , Math.min(showRect.bottom,scaleRect.bottom),isPerFixed?clipRect.left:(int)left,!topColumn.isFixed()&&left<clipRect.left);
                 left = tempLeft + width;
             } else {
                 break;
@@ -356,7 +351,6 @@ public class TableProvider<T> implements TableClickObserver {
         for(int i = 0;i < clipCount;i++){
             canvas.restore();
         }
-        gridDrawer.drawGrid(canvas,config);
         if (config.isFixedCountRow()) {
             canvas.restore();
         }

@@ -3,6 +3,8 @@ package com.bin.david.form.data;
 import android.graphics.Rect;
 import android.util.Log;
 
+import org.w3c.dom.Node;
+
 /**
  * Created by huang on 2017/11/1.
  */
@@ -191,31 +193,20 @@ public class TableInfo {
        }
     }
 
+
     public int skipColumnSize(Column column, int position){
         if(topNode !=null) {
             if(column instanceof ArrayColumn){
                 ArrayColumn arrayColumn = ((ArrayColumn) column);
-                int[] lastPositionArray = arrayColumn.getLastPositionArray();
-                int index = 0;
-                int lineCount;
-                for (int lastPosition :lastPositionArray){
-                    if(position <= lastPosition){
-                        lineCount = arrayColumn.getLineCount(index);
-                        int multiple =arrayLineSize[index]/lineCount;
-                        if(position == lastPosition){
-                            multiple = arrayLineSize[index]%lineCount+multiple;
-                             return multiple;
-
-                        }
-                        return multiple;
-                    }
-                    index++;
-                }
+                return arrayColumn.getStructure().getCellSizes().get(position);
             }else {
                 return arrayLineSize[position];
             }
         }
         return 1;
     }
+
+
+
 
 }

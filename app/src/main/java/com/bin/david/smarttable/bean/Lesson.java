@@ -14,9 +14,9 @@ public class Lesson {
     private String name;
     @SmartColumn(id = 5,name="是否喜欢")
     private  boolean isFav;
-    @SmartColumn(type = ColumnType.Array)
+    @SmartColumn(type = ColumnType.ArrayChild)
     private LessonPoint[] lessonPoints;
-    @SmartColumn(id= 5,type = ColumnType.Array,name = "测试")
+    //@SmartColumn(type = ColumnType.ArrayOwn)
     private List<String> test;
 
     public Lesson(String name, boolean isFav) {

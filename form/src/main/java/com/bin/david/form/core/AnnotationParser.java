@@ -72,17 +72,17 @@ public class AnnotationParser<T>  {
                ColumnType type = smartColumn.type();
                if(type == ColumnType.Own) {
                    String fieldName =parentFieldName != null? (parentFieldName+field.getName()) :field.getName();
-                   createColumn(fieldName,field, columns, parentMap, isArray, smartColumn);
+                   createColumn(fieldName,field, columns, parentMap, isArray, true,smartColumn);
                }else if(type == ColumnType.Child){
                    String fieldName = (parentFieldName != null ?parentFieldName:Column.INVAL_VALUE)
                            +field.getName()+".";
                    getColumnAnnotation(fieldClass,fieldName,columns,parentMap,isArray);
-               }else if(type == ColumnType.Array){
+               }else if(type == ColumnType.ArrayChild || type == ColumnType.ArrayOwn){
                    fieldClass = getParameterizedType(field);
                    String fieldName = (parentFieldName != null ?parentFieldName:Column.INVAL_VALUE)
                            +field.getName();
-                   if(isBaseType(fieldClass)) {
-                       createColumn(fieldName, field, columns, parentMap, true, smartColumn);
+                   if(type == ColumnType.ArrayOwn) {
+                       createColumn(fieldName, field, columns, parentMap, true,false, smartColumn);
                    }else {
                        getColumnAnnotation(fieldClass, fieldName + ".", columns, parentMap, true);
                    }
@@ -120,7 +120,7 @@ public class AnnotationParser<T>  {
     /**
      * 创建列
      */
-    private void createColumn(String fieldName,Field field, List<Column> columns, Map<String, Column> parentMap, boolean isArray, SmartColumn smartColumn) {
+    private void createColumn(String fieldName,Field field, List<Column> columns, Map<String, Column> parentMap, boolean isArray,boolean isThoroughArray, SmartColumn smartColumn) {
         String name = smartColumn.name();
         int id = smartColumn.id();
         String parent = smartColumn.parent();
@@ -129,8 +129,10 @@ public class AnnotationParser<T>  {
         if (name.equals(Column.INVAL_VALUE)) {
             name = field.getName();
         }
-
         Column<?> column = getGenericColumn(name, fieldName,isArray);
+        if(column instanceof ArrayColumn){
+            ((ArrayColumn)column).setThoroughArray(isThoroughArray);
+        }
         column.setId(id);
         column.setFast(isFast);
         column.setTextAlign(smartColumn.align());
@@ -138,6 +140,7 @@ public class AnnotationParser<T>  {
         if(smartColumn.maxMergeCount() !=-1) {
             column.setMaxMergeCount(smartColumn.maxMergeCount());
         }
+
         column.setAutoCount(isAutoCount);
         column.setFixed(smartColumn.fixed());
         if (!parent.equals(Column.INVAL_VALUE)) {

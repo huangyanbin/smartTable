@@ -36,7 +36,7 @@ public class TableData<T> {
     private ITitleDrawFormat titleDrawFormat;
     private ISequenceFormat XSequenceFormat;
     private ISequenceFormat YSequenceFormat;
-    private List<CellRange> cellRangeAddresses;
+   // private List<CellRange> cellRangeAddresses;
     //用户设置的 不能清除
     private List<CellRange> userSetRangeAddress;
     /**
@@ -73,7 +73,7 @@ public class TableData<T> {
         childColumns = new ArrayList<>();
         columnInfos = new ArrayList<>();
         childColumnInfos = new ArrayList<>();
-        cellRangeAddresses = new ArrayList<>();
+        //cellRangeAddresses = new ArrayList<>();
         this.titleDrawFormat = titleDrawFormat == null?new TitleDrawFormat() :titleDrawFormat;
     }
 
@@ -321,14 +321,14 @@ public class TableData<T> {
     public void addCellRange(CellRange range) {
         addCellRange(range.getFirstRow(),range.getLastRow(),
                 range.getFirstCol(),range.getLastCol());
-        cellRangeAddresses.add(range);
+        //cellRangeAddresses.add(range);
     }
 
     /**
      * 清除自动合并的规则
      */
     public void clearCellRangeAddresses(){
-        cellRangeAddresses.clear();
+        //cellRangeAddresses.clear();
         if(userSetRangeAddress !=null) {
             for(CellRange range:userSetRangeAddress) {
                 addCellRange(range);
@@ -368,10 +368,10 @@ public class TableData<T> {
             childColumnInfos.clear();
             childColumnInfos = null;
         }
-        if(cellRangeAddresses !=null){
+  /*      if(cellRangeAddresses !=null){
             cellRangeAddresses.clear();
             cellRangeAddresses =null;
-        }
+        }*/
         if(userSetRangeAddress !=null){
             userSetRangeAddress.clear();
             userSetRangeAddress =null;
@@ -387,7 +387,7 @@ public class TableData<T> {
 
     }
 
-    public List<CellRange> getCellRangeAddresses() {
+   /* public List<CellRange> getCellRangeAddresses() {
         return cellRangeAddresses;
-    }
+    }*/
 }

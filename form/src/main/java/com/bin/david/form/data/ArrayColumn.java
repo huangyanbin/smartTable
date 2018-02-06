@@ -1,6 +1,8 @@
 package com.bin.david.form.data;
 
 
+import android.util.Log;
+
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 
@@ -18,36 +20,48 @@ public class ArrayColumn<T> extends Column<T> {
     public static final int ARRAY = 1;
     public static final int LIST = 2;
     private int[] lastPositionArray;
-    private List<Integer> perSizeList;
     private ColumnNode node;
+    private ArrayStructure structure;
+    /**
+     * 数组类型
+     */
     private int arrayType;
-
+    /**
+     * 是否查询到Array object 内部
+     */
+    private boolean isThoroughArray = false;
 
     public ArrayColumn(String columnName, String fieldName) {
-        this(columnName, fieldName,null,null);
+        this(columnName, fieldName,false,null,null);
+    }
+    public ArrayColumn(String columnName, String fieldName,boolean isThoroughArray) {
+        this(columnName, fieldName,isThoroughArray,null,null);
     }
 
-    public ArrayColumn(String columnName, String fieldName, IFormat<T> format) {
-        this(columnName, fieldName, format,null);
+    public ArrayColumn(String columnName, String fieldName,boolean isThoroughArray, IFormat<T> format) {
+        this(columnName, fieldName, isThoroughArray,format,null);
     }
 
-    public ArrayColumn(String columnName, String fieldName, IDrawFormat<T> drawFormat) {
-        this(columnName, fieldName, null,drawFormat);
+    public ArrayColumn(String columnName, String fieldName,boolean isThoroughArray, IDrawFormat<T> drawFormat) {
+        this(columnName, fieldName,isThoroughArray, null,drawFormat);
     }
 
-    public ArrayColumn(String columnName, String fieldName, IFormat<T> format, IDrawFormat<T> drawFormat) {
+    public ArrayColumn(String columnName, String fieldName,boolean isThoroughArray, IFormat<T> format, IDrawFormat<T> drawFormat) {
         super(columnName, fieldName, format, drawFormat);
-        perSizeList = new ArrayList<>();
-
+        structure = new ArrayStructure();
+        this.isThoroughArray = isThoroughArray;
     }
+
 
 
     @Override
     public void fillData(List<Object> objects) throws NoSuchFieldException, IllegalAccessException {
+        int level = ColumnNode.getLevel(node,0)-1;
+        structure.clear();
+        structure.setMaxLevel(level);
         if(getCountFormat() != null){
             getCountFormat().clearCount();
         }
-        perSizeList.clear();
         if (objects.size() > 0) {
             lastPositionArray = new int[objects.size()];
             String[] fieldNames = getFieldName().split("\\.");
@@ -55,7 +69,7 @@ public class ArrayColumn<T> extends Column<T> {
                 int size = objects.size();
                 for (int k = 0; k < size; k++) {
                     Object child= objects.get(k);
-                    getFieldData(fieldNames,0,child);
+                    getFieldData(fieldNames,0,child,0,true);
                     lastPositionArray[k] = getDatas().size()-1;
                 }
             }
@@ -63,29 +77,30 @@ public class ArrayColumn<T> extends Column<T> {
         }
     }
 
-    private void getFieldData( String[] fieldNames,int start,Object child) throws NoSuchFieldException, IllegalAccessException {
-        int level = ColumnNode.getNodeLevel(node,1);
-        int tempLevel;
+    private void getFieldData( String[] fieldNames,int start,Object child,int level,boolean isFoot) throws NoSuchFieldException, IllegalAccessException {
+
         for (int i = start; i < fieldNames.length; i++) {
             if (child == null) {
-                addData(null,true);
+                addData(null,isFoot);
                 countColumnValue(null);
-                recordPerSizeList(1);
+                structure.putNull(level);
                 break;
             }
-            tempLevel = level;
             Class childClazz = child.getClass();
             Field childField = childClazz.getDeclaredField(fieldNames[i]);
             childField.setAccessible(true);
             child = childField.get(child);
             if(!isList(child)) {
                 if (i == fieldNames.length - 1) {
+                    if(child == null){
+                        structure.putNull(level);
+                    }
                     T t = (T) child;
                     addData(t, true);
                     countColumnValue(t);
                 }
             }else{
-               tempLevel--;
+               level++;
               if(child.getClass().isArray()){
                   T[] data = (T[]) child;
                   arrayType = ARRAY;
@@ -93,12 +108,10 @@ public class ArrayColumn<T> extends Column<T> {
                       if (i == fieldNames.length - 1) {
                           addData((T)d, true);
                       } else {
-                          getFieldData(fieldNames, i + 1, d);
+                          getFieldData(fieldNames, i + 1, d,level,true);
                       }
                   }
-                  if(tempLevel == 0){
-                      recordPerSizeList(data.length);
-                  }
+                  structure.put(level-1,data.length);
               }else {
                   List data = (List) child;
                   arrayType = LIST;
@@ -107,28 +120,16 @@ public class ArrayColumn<T> extends Column<T> {
                           T t = (T) d;
                           addData(t, true);
                       } else {
-                          getFieldData(fieldNames, i + 1, d);
+                          getFieldData(fieldNames, i + 1, d,level,true);
                       }
-                      if(tempLevel == 0){
-                          recordPerSizeList(data.size());
-                      }
+
                   }
+                  structure.put(level-1,data.size());
               }
               break;
             }
         }
     }
-
-    private void recordPerSizeList(int size){
-        int perListSize = perSizeList.size();
-        if( perListSize== 0){
-            perSizeList.add(size-1);
-        }else{
-            int per = perSizeList.get(perListSize-1);
-            perSizeList.add(per+size-1);
-        }
-    }
-
 
 
     private boolean isList(Object o){
@@ -174,20 +175,21 @@ public class ArrayColumn<T> extends Column<T> {
         this.arrayType = arrayType;
     }
 
-    public List<Integer> getPerSizeList() {
-        return perSizeList;
+    public ArrayStructure getStructure() {
+        return structure;
     }
 
-    public int[] getPerStartAndEnd(int position){
-        int end=  perSizeList.get(position);
-        int start =0;
-        if(position>=0){
-            perSizeList.get(position-1);
-        }
-        return new int[]{start,end};
+    public void setStructure(ArrayStructure structure) {
+        this.structure = structure;
     }
 
-    public void setPerSizeList(List<Integer> perSizeList) {
-        this.perSizeList = perSizeList;
+    public boolean isThoroughArray() {
+        return isThoroughArray;
     }
+
+    public void setThoroughArray(boolean thoroughArray) {
+        isThoroughArray = thoroughArray;
+    }
+
+
 }
