@@ -77,14 +77,17 @@ public class TableMeasurer<T> {
      * @param tableData
      * @return
      */
-    public void addTableHeight(TableData<T> tableData,int startPosition){
-        TableInfo tableInfo = tableData.getTableInfo();
+    public void addTableHeight(TableData<T> tableData,TableConfig config){
+        /*TableInfo tableInfo = tableData.getTableInfo();
         Rect tableRect = tableInfo.getTableRect();
         int[] lineArray = tableInfo.getLineHeightArray();
         for(int i = startPosition;i<lineArray.length;i++){
-
            tableRect.bottom+= lineArray[i];
-        }
+        }*/
+        TableInfo tableInfo = tableData.getTableInfo();
+        int width = getTableWidth(tableData,config);
+        int height = getTableHeight(tableData,config);
+        tableInfo.setTableRect(new Rect(0,0,width,height));
     }
 
 

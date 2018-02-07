@@ -28,9 +28,10 @@ import okhttp3.Call;
 
 public class NetHttpActivity extends AppCompatActivity {
 
-    private SmartTable<PM25> table;
+    public SmartTable<PM25> table;
     private Handler mHandler = new Handler();
     private boolean isFrist = true;
+    private String response;
     private Runnable AddDataRunnable = new Runnable() {
         @Override
         public void run() {
@@ -79,7 +80,13 @@ public class NetHttpActivity extends AppCompatActivity {
     }
 
     public void getData(){
-        String url = "http://www.pm25.in/api/querys/pm10.json?city=%E4%B8%8A%E6%B5%B7&token=5j1znBVAsnSf5xQyNQyq&avg";
+        if(response !=null){
+            parseData(response);
+            return;
+        }
+        response = "[{\"aqi\":27,\"area\":\"上海\",\"pm10\":27,\"pm10_24h\":58,\"position_name\":\" 徐汇上师大\",\"quality\":\"优\",\"station_code\":\"1144 A\",\"time_point\":\"2017 - 11 - 04 T13: 00: 00 Z\"}]";
+        parseData(response);
+       /* String url = "http://www.pm25.in/api/querys/pm10.json?city=%E4%B8%8A%E6%B5%B7&token=5j1znBVAsnSf5xQyNQyq&avg";
         OkHttpUtils
                 .get()
                 .url(url)
@@ -92,28 +99,32 @@ public class NetHttpActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-
-                        Gson gson = new Gson();
-                        try {
-                            Type type = new TypeToken<ArrayList<PM25>>() {}.getType();
-                            List<PM25> pm25List = gson.fromJson(response,type);
-                            if(isFrist) {
-                                table.setData(pm25List);
-                                isFrist = false;
-                            }else{
-                                table.addData(pm25List,true);
-                                table.getMatrixHelper().flingBottom(200);
-                                table.getMatrixHelper().flingLeft(200);
-                            }
-                            mHandler.postDelayed(AddDataRunnable,1000);
-                        }catch (Exception e){
-
-                        }
+                        NetHttpActivity.this.response = response;
+                        parseData(response);
 
 
                     }
 
-                });
+                });*/
+    }
+
+    private void parseData(String response) {
+        Gson gson = new Gson();
+        try {
+            Type type = new TypeToken<ArrayList<PM25>>() {}.getType();
+            List<PM25> pm25List = gson.fromJson(response,type);
+            if(isFrist) {
+                table.setData(pm25List);
+                isFrist = false;
+            }else{
+                table.addData(pm25List,true);
+                table.getMatrixHelper().flingBottom(200);
+                table.getMatrixHelper().flingLeft(200);
+            }
+            mHandler.postDelayed(AddDataRunnable,500);
+        }catch (Exception e){
+
+        }
     }
 
     @Override

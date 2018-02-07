@@ -5,10 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.bin.david.form.component.IComponent;
 import com.bin.david.form.component.ITableTitle;
@@ -45,12 +45,14 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     private TableConfig config;
     private TableParser<T> parser;
     private TableData<T> tableData;
-
+    private int defaultHeight = 300;
+    private int defaultWidth = 300;
     private TableMeasurer<T> measurer;
     private AnnotationParser<T> annotationParser;
     protected Paint paint;
     private MatrixHelper matrixHelper;
     private final Object lockObject = new Object();
+    private boolean isExactly = true; //是否是测量精准模式
 
     public SmartTable(Context context) {
         super(context);
@@ -201,9 +203,10 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                         TableInfo info = measurer.measure(tableData, config);
                         xAxis.setHeight(info.getTopHeight());
                         yAxis.setWidth(info.getyAxisWidth());
+                        requestReMeasure();
                         postInvalidate();
                         //long end = System.currentTimeMillis();
-                        //Log.e("huang","notifyDataChanged timeMillis="+(end-start));
+                        //Log.e("smartTable","notifyDataChanged timeMillis="+(end-start));
                     }
                 }
             }).start();
@@ -211,7 +214,107 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         }
     }
 
+    /**
+     * 添加数据
+     * 通过这个方法可以实现动态添加数据，参数isFoot可以实现首尾添加
+     * @param t 新增数据
+     * @param isFoot 是否在尾部添加
+     */
+    public void addData(final List<T> t, final boolean isFoot){
+        if(t != null && t.size() >0) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (lockObject) {
+                        parser.addData(tableData, t, isFoot);
+                        measurer.measure(tableData,config);
+                        requestReMeasure();
+                        postInvalidate();
+                    }
+                }
+            }).start();
+        }
+    }
 
+    /**
+     * 通知重绘
+     * 增加锁机制，避免闪屏和数据更新异常
+     */
+    @Override
+    public void invalidate() {
+        synchronized (lockObject) {
+            super.invalidate();
+        }
+    }
+
+    /**
+     * 通知重新测量大小
+     */
+    private void requestReMeasure(){
+        //不是精准模式 且已经测量了
+        if(!isExactly && getMeasuredHeight() !=0){
+            defaultHeight = tableData.getTableInfo().getTableRect().height();
+            defaultWidth = tableData.getTableInfo().getTableRect().width();
+            int[] realSize = new int[2];
+            getLocationInWindow(realSize);
+            DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
+            int screenWidth = dm.widthPixels;
+            int screenHeight = dm.heightPixels;
+            int maxWidth = screenWidth - realSize[0];
+            int maxHeight = screenHeight - realSize[1];
+            defaultHeight = Math.min(defaultHeight,maxHeight);
+            defaultWidth = Math.min(defaultWidth,maxWidth);
+            requestLayout();
+        }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
+        requestReMeasure();
+    }
+/**
+ * 计算组件宽度
+ */
+
+    private int measureWidth(int widthMeasureSpec) {
+        int result;
+        int specMode = MeasureSpec.getMode(widthMeasureSpec);
+        int specSize = MeasureSpec.getSize(widthMeasureSpec);
+        if (specMode == MeasureSpec.EXACTLY) {//精确模式
+            result = specSize;
+        } else {
+            isExactly = false;
+            result = defaultWidth;//最大尺寸模式，getDefaultWidth方法需要我们根据控件实际需要自己实现
+            if (specMode == MeasureSpec.AT_MOST) {
+                result = Math.min(result, specSize);
+            }
+        }
+        return result;
+    }
+
+    /**
+     *
+     * 计算组件高度
+     *
+     */
+
+    private int measureHeight(int measureSpec) {
+
+        int result;
+        int specMode = MeasureSpec.getMode(measureSpec);
+        int specSize = MeasureSpec.getSize(measureSpec);
+        if (specMode == MeasureSpec.EXACTLY) {
+            result = specSize;
+        } else {
+            isExactly = false;
+            result = defaultHeight;
+            if (specMode == MeasureSpec.AT_MOST) {
+                result = Math.min(result, specSize);
+            }
+        }
+        return result;
+    }
 
     /**
      *将触摸事件交给Iouch处理
@@ -340,26 +443,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         return matrixHelper;
     }
 
-    /**
-     * 添加数据
-     * 通过这个方法可以实现动态添加数据，参数isFoot可以实现首尾添加
-     * @param t 新增数据
-     * @param isFoot 是否在尾部添加
-     */
-    public void addData(final List<T> t, final boolean isFoot){
-        if(t != null && t.size() >0) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (lockObject) {
-                        parser.addData(tableData, t, isFoot);
-                        measurer.measure(tableData, config);
-                        postInvalidate();
-                    }
-                }
-            }).start();
-        }
-    }
+
 
 
     /**

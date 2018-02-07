@@ -47,20 +47,20 @@ public class MinModeActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table);
+        setContentView(R.layout.activity_scroll_table);
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
         table = (SmartTable<UserInfo>) findViewById(R.id.table);
 
         WindowManager wm = this.getWindowManager();
         int screenWith = wm.getDefaultDisplay().getWidth();
-        //table.getConfig().setMinTableWidth(screenWith); //设置最小宽度 屏幕宽度
+        table.getConfig().setMinTableWidth(screenWith); //设置最小宽度 屏幕宽度
         //生成数据
         final List<UserInfo> testData = new ArrayList<>();
         Random random = new Random();
         List<TanBean> tanBeans = TanBean.initDatas();
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
-        for(int i = 0;i <50; i++) {
+        for(int i = 0;i <3; i++) {
             UserInfo userData = new UserInfo("用户"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             userData.setUrl(tanBeans.get(i%urlSize).getUrl());
