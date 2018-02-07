@@ -1,5 +1,8 @@
 package com.bin.david.smarttable.bean;
 
+import com.bin.david.form.annotation.ColumnType;
+import com.bin.david.form.annotation.SmartColumn;
+
 import java.util.List;
 
 /**
@@ -7,10 +10,12 @@ import java.util.List;
  */
 
 public class Week {
+    @SmartColumn(id=2,name ="星期")
     private String name;
-    private List<Time> times;
+    @SmartColumn(type = ColumnType.ArrayChild)
+    private List<DayTime> times;
 
-    public Week(String name, List<Time> times) {
+    public Week(String name, List<DayTime> times) {
         this.name = name;
         this.times = times;
     }

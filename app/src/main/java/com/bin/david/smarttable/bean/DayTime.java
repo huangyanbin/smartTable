@@ -1,20 +1,24 @@
 package com.bin.david.smarttable.bean;
 
+import com.bin.david.form.annotation.ColumnType;
+import com.bin.david.form.annotation.SmartColumn;
+
 import java.util.List;
 
 /**
  * Created by huang on 2018/2/6.
  */
 
-public class Time {
-
+public class DayTime {
+    @SmartColumn(id=3,name ="时间")
     private String time;
+    @SmartColumn(type = ColumnType.ArrayChild)
     private List<Lesson> lessons;
 
-    public Time() {
+    public DayTime() {
     }
 
-    public Time(String time, List<Lesson> lessons) {
+    public DayTime(String time, List<Lesson> lessons) {
         this.time = time;
         this.lessons = lessons;
     }

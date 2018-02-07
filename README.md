@@ -34,6 +34,7 @@
 18. 表格合并单元(支持注解合并，支持自动合并)
 19. 支持其他刷新框架SmartRefreshLayout
 20. 可配置表格最小宽度(小于该宽度自动适配)
+21. 支持直接List或数组字段转列
 
 ##### 功能展示
 
@@ -55,7 +56,10 @@
 > 导入二维数组
 
 ![日程](/img/progress.jpg)
-![选票](/img/seat.jpg)
+
+> List或数组转列
+
+![课表表](/img/arrayColumn.gif)
 
 ##### 如何使用
 
@@ -76,9 +80,10 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.7.0'
+	        compile 'com.github.huangyanbin:SmartTable:1.7.1'
 	}
 ```
+     如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本1.8
 
 >  使用表格View
 

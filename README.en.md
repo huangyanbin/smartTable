@@ -2,7 +2,7 @@
 [![](https://jitpack.io/v/huangyanbin/smartTable.svg)](https://jitpack.io/#huangyanbin/smartTable)
 ###### An Andr oid automatically generated table framework
 * [Chinese README](/README.md/)
-* [Apk download version1.6](/img/smartTable.apk)
+* [Apk download version1.7](/img/smartTable.apk)
 * [Version of history](/README_old_version_en.md/)
 > function introduction
 1. fast configuration automatic generation of tables;
@@ -24,7 +24,9 @@
 17. import excel (support color, font, background, annotation, alignment, picture and other basic Excel attributes)
 18. form merge unit (supporting annotating merge, supporting auto merge)
 19. support the other refresh framework SmartRefreshLayout
+20. the minimum width of a configurable table (less than the width of this width)
 
+21. support direct List or array field columns
 > Basic function display
 
 ![Basic](/img/table.gif)
@@ -33,7 +35,7 @@
 
 ![Zoom](/img/zoom.gif)
 
-> refresh function(使用SmartRefreshLayout)
+> refresh function(Use SmartRefreshLayout)
 
 ![refresh](/img/refresh.gif)
 
@@ -46,6 +48,10 @@
 
 ![schedule](/img/progress.jpg)
 ![Vote](/img/seat.jpg)
+
+> List or array column
+
+![课表表](/img/arrayColumn.gif)
 > How Use
 
 - Quote
@@ -65,7 +71,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.6.6'
+	        compile 'com.github.huangyanbin:SmartTable:1.8'
 	}
 ```
 

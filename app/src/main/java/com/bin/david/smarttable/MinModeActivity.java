@@ -53,7 +53,7 @@ public class MinModeActivity extends AppCompatActivity{
 
         WindowManager wm = this.getWindowManager();
         int screenWith = wm.getDefaultDisplay().getWidth();
-        table.getConfig().setMinTableWidth(screenWith); //设置最小宽度 屏幕宽度
+        //table.getConfig().setMinTableWidth(screenWith); //设置最小宽度 屏幕宽度
         //生成数据
         final List<UserInfo> testData = new ArrayList<>();
         Random random = new Random();
