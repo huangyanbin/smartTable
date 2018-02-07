@@ -76,16 +76,20 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
         }
         int imgWidth = (int) (getImageWidth()*config.getZoom());
         int imgHeight = (int) (getImageHeight()*config.getZoom());
+        rect.left +=config.getHorizontalPadding();
+        rect.right-=config.getHorizontalPadding();
+        rect.top +=config.getVerticalPadding();
+        rect.bottom -=config.getVerticalPadding();
         switch (direction){
             case LEFT:
-                this.rect.set(rect.left+(imgWidth+drawPadding)/2,rect.top,rect.right,rect.bottom);
+                this.rect.set(rect.left+(imgWidth+drawPadding),rect.top,rect.right,rect.bottom);
                 textDrawFormat.draw(c,column,t,value,this.rect,position,config);
-                int imgRight = (rect.right+rect.left)/2- textDrawFormat.measureWidth(column,position,config)/2 - drawPadding;
+                int imgRight = (rect.right+rect.left)/2- textDrawFormat.measureWidth(column,position,config)/2+drawPadding;
                 this.rect.set(imgRight-imgWidth,rect.top,imgRight,rect.bottom);
                 super.draw(c,column,t,value,this.rect,position,config);
                 break;
             case RIGHT:
-                this.rect.set(rect.left,rect.top,rect.right-(imgWidth+drawPadding)/2,rect.bottom);
+                this.rect.set(rect.left,rect.top,rect.right-(imgWidth+drawPadding),rect.bottom);
                 textDrawFormat.draw(c,column,t,value,rect,position,config);
                 int imgLeft = (rect.right+rect.left)/2+ textDrawFormat.measureWidth(column,position,config)/2 + drawPadding;
                 this.rect.set(imgLeft,rect.top,imgLeft+imgWidth,rect.bottom);

@@ -114,6 +114,37 @@ public class ArrayColumnModeActivity extends AppCompatActivity implements View.O
 
         ArrayColumn<String> pointNameColumn = new ArrayColumn<>("知识点","weeks.times.lessons.lessonPoints.name");
        ArrayColumn<Boolean> lessonFavColumn = new ArrayColumn<>("是否喜欢","weeks.times.lessons.isFav");
+       int imgSize = DensityUtils.dp2px(this,20);
+       timeNameColumn.setDrawFormat(new TextImageDrawFormat<String>(imgSize,imgSize,TextImageDrawFormat.LEFT,10) {
+           @Override
+           protected Context getContext() {
+               return ArrayColumnModeActivity.this;
+           }
+
+           @Override
+           protected int getResourceID(String s, String value, int position) {
+               if(value.equals("上午")){
+                   return R.mipmap.morning;
+               }else if(value.equals("下午")){
+                   return R.mipmap.noon;
+               }
+               return R.mipmap.night ;
+           }
+       });
+       lessonFavColumn.setDrawFormat(new ImageResDrawFormat<Boolean>(imgSize,imgSize) {
+           @Override
+           protected Context getContext() {
+               return ArrayColumnModeActivity.this;
+           }
+
+           @Override
+           protected int getResourceID(Boolean val, String value, int position) {
+               if(val){
+                   return R.mipmap.check;
+               }
+               return TableConfig.INVALID_COLOR;
+           }
+       });
         TableData<CollegeStudent> tableData = new TableData<>("课程表",students,studentNameColumn,
                 weekNameColumn,timeNameColumn,lessonNameColumn,pointNameColumn,lessonFavColumn);
         table.setTableData(tableData);
