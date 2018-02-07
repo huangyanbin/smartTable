@@ -33,10 +33,14 @@ import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.OnColumnItemClickListener;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
+import com.bin.david.smarttable.bean.CollegeStudent;
 import com.bin.david.smarttable.bean.Lesson;
+import com.bin.david.smarttable.bean.LessonPoint;
 import com.bin.david.smarttable.bean.Student;
 import com.bin.david.smarttable.bean.TableStyle;
 import com.bin.david.smarttable.bean.TanBean;
+import com.bin.david.smarttable.bean.Time;
+import com.bin.david.smarttable.bean.Week;
 import com.bin.david.smarttable.view.BaseCheckDialog;
 import com.bin.david.smarttable.view.BaseDialog;
 import com.bin.david.smarttable.view.QuickChartDialog;
@@ -67,10 +71,9 @@ import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class ArrayColumnModeActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private SmartTable<Student> table;
+    private SmartTable<CollegeStudent> table;
     private BaseCheckDialog<TableStyle> chartDialog;
     private QuickChartDialog quickChartDialog;
-    private Map<String,Bitmap> map = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,171 +81,41 @@ public class ArrayColumnModeActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_table);
         quickChartDialog = new QuickChartDialog();
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
-        table = (SmartTable<Student>) findViewById(R.id.table);
-        final List<Student> testData = new ArrayList<>();
-        Random random = new Random();
-        List<TanBean> tanBeans = TanBean.initDatas();
-        //测试 从其他地方获取url
-        List<Lesson> lessons = new ArrayList<>();
-        lessons.add(new Lesson("语文",true));
-        lessons.add(new Lesson("数学",true));
-        lessons.add(new Lesson("英语",false));
-        lessons.add(new Lesson("物理",false));
-        lessons.add(new Lesson("化学",true));
-        int urlSize = tanBeans.size();
-        for(int i = 0;i <50; i++) {
-            Student userData = new Student("用户"+i, random.nextInt(70), System.currentTimeMillis()
-                    - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
-            userData.setUrl(tanBeans.get(i%urlSize).getUrl());
-            userData.setLessons(lessons);
-            testData.add(userData);
+        table = (SmartTable<CollegeStudent>) findViewById(R.id.table);
+        List<CollegeStudent> students  = new ArrayList<>();
+        List<Lesson> lessons2 = new ArrayList<>();
+        Lesson lesson1 = new Lesson("软件",true);
+        lesson1.setLessonPoints(new LessonPoint[]{new LessonPoint("软件工程"),new LessonPoint("离散数学")});
+        Lesson lesson2 = new Lesson("生物",true);
+        lesson2.setLessonPoints(new LessonPoint[]{new LessonPoint("医学构造"),new LessonPoint("生物科技")});
+        //lesson2.setTest(texts);
+        lessons2.add(lesson1);
+        lessons2.add(lesson2);
+        lessons2.add(new Lesson("微积分",false));
+        for(int i = 0; i < 20;i++){
+            List<Week> weeks = new ArrayList<>();
+            for (int j = 0; j< 7;j++){
+                List<Time> times = new ArrayList<>();
+                for(int k =0;k < 3; k++){
+                    Time time = new Time(k==0?"上午": k==1?"下午":"晚上",lessons2);
+                    times.add(time);
+                }
+                Week week = new Week("星期"+(j+1),times);
+                weeks.add(week);
+            }
+            CollegeStudent student = new CollegeStudent("学生"+i,(int)(20+Math.random()*10),weeks);
+            students.add(student);
         }
+        Column<String> studentNameColumn = new Column<>("姓名","name");
+        //Column<Integer> studentAgeColumn = new Column<>("年龄","age");
+        ArrayColumn<String> weekNameColumn = new ArrayColumn<>("星期","weeks.name");
+        ArrayColumn<String> timeNameColumn = new ArrayColumn<>("时间","weeks.times.time");
+        ArrayColumn<String> lessonNameColumn = new ArrayColumn<>("课程","weeks.times.lessons.name");
 
-        final Column<String> nameColumn = new Column<>("姓名", "name");
-        nameColumn.setAutoCount(true);
-        final Column<Integer> ageColumn = new Column<>("年龄", "age");
-        ageColumn.setFixed(true);
-        ageColumn.setAutoCount(true);
-        int imgSize = DensityUtils.dp2px(this,25);
-        final Column<String> avatarColumn = new Column<>("头像", "url", new BitmapDrawFormat<String>(imgSize,imgSize) {
-            @Override
-            protected Bitmap getBitmap(final String s, String value, int position) {
-                if(map.get(s)== null) {
-                    Glide.with(ArrayColumnModeActivity.this).asBitmap().load(s)
-                            .apply(bitmapTransform(new CenterCrop())).into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
-                            map.put(s, bitmap);
-                            table.invalidate();
-                        }
-                    });
-                }
-                return map.get(s);
-            }
-        });
-        avatarColumn.setFixed(true);
-        final IFormat<Long> format =  new IFormat<Long>() {
-            @Override
-            public String format(Long aLong) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(aLong);
-                return calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH);
-            }
-        };
-        final Column<Long> timeColumn = new Column<>("时间", "time",format);
-        timeColumn.setCountFormat(new ICountFormat<Long, Long>() {
-            private long maxTime;
-            @Override
-            public void count(Long aLong) {
-                if(aLong > maxTime){
-                    maxTime = aLong;
-                }
-            }
-
-            @Override
-            public Long getCount() {
-                return maxTime;
-            }
-
-            @Override
-            public String getCountString() {
-                return format.format(maxTime);
-            }
-
-            @Override
-            public void clearCount() {
-                maxTime =0;
-            }
-        });
-        int size = DensityUtils.dp2px(this,15);
-        ArrayColumn<String> lessonColumn = new ArrayColumn<>("课程","lessons.name");
-
-
-
-        final TableData<Student> tableData = new TableData<>("测试List column",testData,nameColumn,
-                lessonColumn,avatarColumn,timeColumn);
-        tableData.setShowCount(true);
-        table.getConfig().setShowTableTitle(true);
-        table.getConfig().setColumnTitleBackgroundColor(getResources().getColor(R.color.windows_bg));
-        table.getConfig().setCountBackgroundColor(getResources().getColor(R.color.windows_bg));
-        tableData.setTitleDrawFormat(new TitleImageDrawFormat(size,size, TitleImageDrawFormat.RIGHT,10) {
-            @Override
-            protected Context getContext() {
-                return ArrayColumnModeActivity.this;
-            }
-
-            @Override
-            protected int getResourceID(Column column) {
-                if(!column.isParent()){
-                    if(tableData.getSortColumn() == column){
-                        setDirection(TextImageDrawFormat.RIGHT);
-                        if(column.isReverseSort()){
-                            return R.mipmap.sort_up;
-                        }
-                        return R.mipmap.sort_down;
-
-                    }else{
-                        setDirection(TextImageDrawFormat.LEFT);
-                        if(column == nameColumn){
-                            return R.mipmap.name;
-                        }else if(column == ageColumn){
-                            return R.mipmap.age;
-                        }else if(column == timeColumn){
-                            return R.mipmap.update;
-                        }
-                    }
-                    return 0;
-                }
-                setDirection(TextImageDrawFormat.LEFT);
-                int level = tableData.getTableInfo().getMaxLevel()-column.getLevel();
-                if(level ==0){
-                    return R.mipmap.level1;
-                }else if(level ==1){
-                    return R.mipmap.level2;
-                }
-                return 0;
-            }
-        });
-
-        FontStyle fontStyle = new FontStyle();
-        fontStyle.setTextColor(getResources().getColor(android.R.color.white));
-
-
-        table.setOnColumnClickListener(new OnColumnClickListener() {
-            @Override
-            public void onClick(ColumnInfo columnInfo) {
-                if(!columnInfo.column.isParent()) {
-
-                    if(columnInfo.column == ageColumn){
-                        showChartDialog(tableData.getTableName(),nameColumn.getDatas(),ageColumn.getDatas());
-                    }else{
-                        table.setSortColumn(columnInfo.column, !columnInfo.column.isReverseSort());
-                    }
-                }
-                Toast.makeText(ArrayColumnModeActivity.this,"点击了"+columnInfo.column.getColumnName(),Toast.LENGTH_SHORT).show();
-            }
-        });
-        table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)).setAlign(Paint.Align.CENTER));
-        ICellBackgroundFormat<Integer> backgroundFormat2 = new BaseCellBackgroundFormat<Integer>() {
-            @Override
-            public int getBackGroundColor(Integer position) {
-                if(position%2 == 0){
-                    return ContextCompat.getColor(ArrayColumnModeActivity.this,R.color.arc1);
-                }
-                return TableConfig.INVALID_COLOR;
-
-            }
-
-
-            @Override
-            public int getTextColor(Integer position) {
-                if(position%2 == 0) {
-                    return ContextCompat.getColor(ArrayColumnModeActivity.this, R.color.white);
-                }
-                return TableConfig.INVALID_COLOR;
-            }
-        };
-        table.getConfig().setYSequenceBgFormat(backgroundFormat2);
+        ArrayColumn<String> pointNameColumn = new ArrayColumn<>("知识点","weeks.times.lessons.lessonPoints.name");
+       ArrayColumn<Boolean> lessonFavColumn = new ArrayColumn<>("是否喜欢","weeks.times.lessons.isFav");
+        TableData<CollegeStudent> tableData = new TableData<>("课程表",students,studentNameColumn,
+                weekNameColumn,timeNameColumn,lessonNameColumn,pointNameColumn,lessonFavColumn);
         table.setTableData(tableData);
 
 

@@ -62,7 +62,7 @@ public class ArrayStructure {
         int[] startAndEnd = getPerStartAndEnd(level+1,position);
         if(startAndEnd !=null){
             startAndEnd= getStartAndEnd(level+2,startAndEnd[0],startAndEnd[1]);
-            return startAndEnd[1]- startAndEnd[0];
+            return startAndEnd[1]- startAndEnd[0]+1;
         }
         return 1;
     }
@@ -71,7 +71,7 @@ public class ArrayStructure {
 
 
     private int[] getStartAndEnd(int level,int start,int end){
-        if(structureArray.get(level) == null) {
+        if(structureArray.get(level) != null) {
             int[] starts =getPerStartAndEnd(level, start);
             int[] ends = getPerStartAndEnd(level, end);
             if(starts == null || ends ==null){
@@ -86,9 +86,9 @@ public class ArrayStructure {
         List<Integer> structures  = structureArray.get(level);
         if(structures !=null &&structures.size() >position) {
             int end = structures.get(position);
-            int start = -1;
+            int start = 0;
             if (position > 0) {
-                start = structures.get(position - 1);
+                start = structures.get(position - 1)+1;
             }
             return new int[]{start, end};
         }

@@ -32,7 +32,7 @@ public class ArrayColumn<T> extends Column<T> {
     private boolean isThoroughArray = false;
 
     public ArrayColumn(String columnName, String fieldName) {
-        this(columnName, fieldName,false,null,null);
+        this(columnName, fieldName,true,null,null);
     }
     public ArrayColumn(String columnName, String fieldName,boolean isThoroughArray) {
         this(columnName, fieldName,isThoroughArray,null,null);
@@ -77,7 +77,7 @@ public class ArrayColumn<T> extends Column<T> {
         }
     }
 
-    private void getFieldData( String[] fieldNames,int start,Object child,int level,boolean isFoot) throws NoSuchFieldException, IllegalAccessException {
+    private void getFieldData(String[] fieldNames,int start,Object child,int level,boolean isFoot) throws NoSuchFieldException, IllegalAccessException {
 
         for (int i = start; i < fieldNames.length; i++) {
             if (child == null) {
