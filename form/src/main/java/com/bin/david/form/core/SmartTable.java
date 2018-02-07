@@ -196,20 +196,22 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                 @Override
                 public void run() {
                     synchronized (lockObject) {
-                        long start = System.currentTimeMillis();
+                        //long start = System.currentTimeMillis();
                         parser.parse(tableData);
                         TableInfo info = measurer.measure(tableData, config);
                         xAxis.setHeight(info.getTopHeight());
                         yAxis.setWidth(info.getyAxisWidth());
                         postInvalidate();
-                        long end = System.currentTimeMillis();
-                        Log.e("huang","notifyDataChanged timeMillis="+(end-start));
+                        //long end = System.currentTimeMillis();
+                        //Log.e("huang","notifyDataChanged timeMillis="+(end-start));
                     }
                 }
             }).start();
 
         }
     }
+
+
 
     /**
      *将触摸事件交给Iouch处理

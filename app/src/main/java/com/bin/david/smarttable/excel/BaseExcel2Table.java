@@ -286,7 +286,10 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
                     }
                 });
                 loadDataSuc(softReference.get());
+                smartTable.getMatrixHelper().reset();
                 ((SmartTable<K>)smartTable).setTableData(tableData);
+
+
             }
         }
     }

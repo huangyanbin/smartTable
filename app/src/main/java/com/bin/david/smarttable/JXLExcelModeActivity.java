@@ -23,12 +23,12 @@ import java.util.List;
 import jxl.Cell;
 
 
-public class ExcelModeActivity extends AppCompatActivity implements ExcelCallback {
+public class JXLExcelModeActivity extends AppCompatActivity implements ExcelCallback {
 
     private SmartTable<Cell> table;
 
     private RecyclerView recyclerView;
-    private String fileName = "ic_class.xls";
+    private String fileName = "c.xls";
     private IExcel2Table<Cell> iExcel2Table;
 
 
@@ -67,11 +67,11 @@ public class ExcelModeActivity extends AppCompatActivity implements ExcelCallbac
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     sheetAdapter.setSelectPosition(position);
-                    iExcel2Table.loadSheetContent(ExcelModeActivity.this,fileName,position);
+                    iExcel2Table.loadSheetContent(JXLExcelModeActivity.this,fileName,position);
                 }
             });
             recyclerView.setAdapter(sheetAdapter);
-            iExcel2Table.loadSheetContent(ExcelModeActivity.this,fileName,0);
+            iExcel2Table.loadSheetContent(JXLExcelModeActivity.this,fileName,0);
         }
     }
 }

@@ -34,7 +34,7 @@
         <activity android:name=".ArrayModeActivity"/>
         <activity android:name=".MultParseModeActivity"/>
         <activity android:name=".SeatModeActivity"/>
-        <activity android:name=".ExcelModeActivity"/>
+        <activity android:name=".JXLExcelModeActivity"/>
         <activity android:name=".POIExcelModeActivity"/>
         <activity android:name=".MergeModeActivity"/>
         <activity android:name=".RefreshActivity"/>

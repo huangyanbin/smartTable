@@ -576,6 +576,13 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         this.maxZoom = maxZoom;
     }
 
+    public void reset(){
+        this.zoom =1;
+        this.translateX =0;
+        this.translateY =0;
+        notifyViewChanged();
+    }
+
     /**
      * 飞滚到最左边
      */
