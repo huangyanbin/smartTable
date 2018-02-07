@@ -60,7 +60,7 @@ public class MinModeActivity extends AppCompatActivity{
         List<TanBean> tanBeans = TanBean.initDatas();
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
-        for(int i = 0;i <3; i++) {
+        for(int i = 0;i <50; i++) {
             UserInfo userData = new UserInfo("用户"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             userData.setUrl(tanBeans.get(i%urlSize).getUrl());
