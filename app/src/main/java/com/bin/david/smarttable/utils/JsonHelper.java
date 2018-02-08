@@ -11,7 +11,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Json转换Map-List集合辅助类
@@ -44,7 +46,7 @@ public class JsonHelper {
         try {
             if(getJSONType(json) == JSON_TYPE_OBJECT){
                 JSONObject jsonObject = new JSONObject(json);
-                HashMap<String,Object> objects = JsonHelper.reflect(jsonObject);
+                Map<String,Object> objects = JsonHelper.reflect(jsonObject);
                 mapList = new ArrayList<>();
                 mapList.add(objects);
             }else if(getJSONType(json) == JSON_TYPE_ARRAY){
@@ -87,8 +89,8 @@ public class JsonHelper {
      * @param json
      * @return
      */
-    public static HashMap<String, Object> reflect(JSONObject json){
-        HashMap<String, Object> map = new HashMap<>();
+    public static Map<String, Object> reflect(JSONObject json){
+        HashMap<String, Object> map = new LinkedHashMap<>();
         Iterator<String> keys = json.keys();
         try {
         for ( ;keys.hasNext();) {

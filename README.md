@@ -7,7 +7,7 @@
 * [English README](/README.en.md/)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
-* [apk version 1.6版本下载地址](/img/smartTable.apk)
+* [apk version 1.8.2版本下载地址](/img/smartTable.apk)
 
 > ![下载地址](/img/table.png)
 
@@ -35,6 +35,7 @@
 19. 支持其他刷新框架SmartRefreshLayout
 20. 可配置表格最小宽度(小于该宽度自动适配)
 21. 支持直接List或数组字段转列
+22. 支持Json数据直接转换成表格
 
 ##### 功能展示
 
@@ -80,10 +81,10 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.8.1'
+	        compile 'com.github.huangyanbin:SmartTable:1.8.2'
 	}
 ```
-     如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本1.8.1
+     如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本1.8.2
 
 >  使用表格View
 
@@ -266,8 +267,23 @@ fixed |是否固定该列
   ```Column构造方法中还有两个参数 IFormat<T>, IDrawFormat<T>。其中IFormat<T>是用于格式化显示文字，比如User对象中有更新时间字段time时间戳。我们想要显示不同格式，就可以重写该方法。IDrawFormat<T>是用于显示绘制格式化，比如User对象中有头像字段portrait时间戳，就可以使用该方法，框架提供几种IDrawFormat包括（文字、Bitmap、Resoure图片、图文结合）。```
 
 #####   二维数组以及Excel
+> 你只需要用ArrayTableData 代替TableData就可以。设置想要展示的二维数组和列标题。
 
-> 请参考demo和[文章介绍](https://juejin.im/post/5a5dce7651882573256bd043)
+```
+  String[] week = {"日","一","二","三","四","五","六"};
+        Integer[][] infos = {{0,1,2,1,1,0,1,1,0,1,1,2,3}, {4,2,1,1,0,1,1,0,1,1,2,2,3},
+                {2,2,0,1,2,4,1,0,1,3,0,1,1},{2,1,1,0,1,4,0,1,1,2,2,0,3},
+                {0,1,2,4,1,0,1,4,0,1,1,2,2}, {1,0,1,3,2,2,0,1,2,1,1,0,4},
+                {3,1,2,4,0,1,2,1,1,0,1,1,0}};
+  ArrayTableData<Integer> tableData = ArrayTableData.create("日程表",week,infos,new IDrawFormat<Integer>(){...});
+
+```
+> 请参考demo和[好用漂亮的Android 表格框架2](https://juejin.im/post/5a5dce7651882573256bd043)
+
+#####  数组或者List转列以及Json表格
+
+> 请参考demo和[好用漂亮的Android 表格框架3]https://juejin.im/post/5a7a8eef5188257a84621eda
+
 
 ##### 关于混淆
 

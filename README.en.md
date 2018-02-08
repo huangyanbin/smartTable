@@ -25,8 +25,8 @@
 18. form merge unit (supporting annotating merge, supporting auto merge)
 19. support the other refresh framework SmartRefreshLayout
 20. the minimum width of a configurable table (less than the width of this width)
-
 21. support direct List or array field columns
+22. JSON data direct conversion table
 > Basic function display
 
 ![Basic](/img/table.gif)
