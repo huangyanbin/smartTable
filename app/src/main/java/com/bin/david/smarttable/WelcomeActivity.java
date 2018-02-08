@@ -51,9 +51,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 .setShowYSequence(false)
                 .setShowTableTitle(false)
                 .setGridStyle(new LineStyle(-1,ContextCompat.getColor(this,android.R.color.transparent)));
-        tableData= ArrayTableData.create(table, "动画", data, null);
-        table.setTableData(tableData);
-        startAnim0();
+        //tableData= ArrayTableData.create(table, "动画", data, null);
+        //table.setTableData(tableData);
+        //startAnim0();
     }
 
 

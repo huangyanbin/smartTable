@@ -253,7 +253,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
      */
     private void requestReMeasure(){
         //不是精准模式 且已经测量了
-        if(!isExactly && getMeasuredHeight() !=0){
+        if(!isExactly && getMeasuredHeight() !=0 && tableData !=null){
             defaultHeight = tableData.getTableInfo().getTableRect().height();
             defaultWidth = tableData.getTableInfo().getTableRect().width();
             int[] realSize = new int[2];
