@@ -102,7 +102,15 @@ public class ArrayTableData<T> extends TableData<T> {
             column.setFormat(format);
         }
     }
-
+    /**
+     * 设置绘制格式化
+     * @param format
+     */
+    public void setDrawFormat(IDrawFormat<T> format){
+        for(Column<T> column:arrayColumns){
+            column.setDrawFormat(format);
+        }
+    }
 
 
     /**

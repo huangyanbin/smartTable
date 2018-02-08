@@ -41,6 +41,7 @@
         <activity android:name=".MinModeActivity"/>
         <activity android:name=".ArrayColumnModeActivity"/>
         <activity android:name=".MapModeActivity"/>
+        <activity android:name=".WelcomeActivity"/>
     </application>
 
 </manifest>
