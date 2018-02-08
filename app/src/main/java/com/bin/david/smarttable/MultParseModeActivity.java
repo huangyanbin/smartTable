@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
-import com.bin.david.form.data.Column;
-import com.bin.david.form.data.ColumnInfo;
+import com.bin.david.form.data.column.Column;
+import com.bin.david.form.data.column.ColumnInfo;
 import com.bin.david.form.data.format.draw.MultiLineDrawFormat;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.format.IFormat;

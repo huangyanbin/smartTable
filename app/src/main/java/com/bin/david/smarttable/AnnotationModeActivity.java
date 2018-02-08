@@ -63,7 +63,7 @@ public class AnnotationModeActivity extends AppCompatActivity {
         final List<Student> students = new ArrayList<>();
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
-        for(int i = 0;i <2; i++) {
+        for(int i = 0;i <30; i++) {
             Student student = new Student("用户"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             student.setUrl(tanBeans.get(i%urlSize).getUrl());

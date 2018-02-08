@@ -2,7 +2,7 @@ package com.bin.david.form.data.table;
 
 
 import com.bin.david.form.core.SmartTable;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 import com.bin.david.form.listener.OnColumnItemClickListener;
@@ -76,10 +76,10 @@ public class ArrayTableData<T> extends TableData<T> {
         }
         ArrayList<T> arrayList = new ArrayList<>(Arrays.asList(data[0]));
         ArrayTableData<T> tableData =  new ArrayTableData<>(tableName,arrayList,columns);
-
         tableData.setData(data);
         return tableData;
     }
+
     /**
      * 创建不需要显示列名的二维数组表格数据
      * 如果数据不是数组[row][col]，可以使用transformColumnArray方法转换

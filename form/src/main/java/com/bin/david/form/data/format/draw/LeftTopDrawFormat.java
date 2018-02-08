@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 
 /**
  * Created by huang on 2017/10/30.

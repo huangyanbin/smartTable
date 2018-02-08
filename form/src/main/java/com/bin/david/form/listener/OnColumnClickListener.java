@@ -1,6 +1,6 @@
 package com.bin.david.form.listener;
 
-import com.bin.david.form.data.ColumnInfo;
+import com.bin.david.form.data.column.ColumnInfo;
 
 /**
  * Created by huang on 2017/11/4.

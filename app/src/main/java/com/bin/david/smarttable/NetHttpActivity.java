@@ -10,21 +10,17 @@ import android.view.View;
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.PM25;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Call;
 
 public class NetHttpActivity extends AppCompatActivity {
 

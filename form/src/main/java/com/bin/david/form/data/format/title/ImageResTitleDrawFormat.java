@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.LruCache;
 
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 
 /**
  * Created by huang on 2017/10/30.

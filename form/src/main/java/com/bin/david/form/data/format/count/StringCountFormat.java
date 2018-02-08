@@ -1,8 +1,6 @@
 package com.bin.david.form.data.format.count;
 
-import android.util.Log;
-
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,5 +1,7 @@
 package com.bin.david.form.data;
 
+import com.bin.david.form.data.column.Column;
+
 /**
  * Created by huang on 2017/11/15.
  * 单元格数据

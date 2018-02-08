@@ -4,9 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.ColumnInfo;
+import com.bin.david.form.data.column.ColumnInfo;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;

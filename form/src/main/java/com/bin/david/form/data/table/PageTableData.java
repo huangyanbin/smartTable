@@ -1,8 +1,7 @@
 package com.bin.david.form.data.table;
 
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.title.ITitleDrawFormat;
-import com.bin.david.form.data.table.TableData;
 
 import java.util.ArrayList;
 import java.util.Arrays;

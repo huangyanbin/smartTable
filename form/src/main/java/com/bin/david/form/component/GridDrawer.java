@@ -2,7 +2,7 @@ package com.bin.david.form.component;
 
 
 import android.graphics.Rect;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.Cell;
 import com.bin.david.form.data.table.TableData;
 

@@ -3,7 +3,7 @@ package com.bin.david.form.core;
 import android.graphics.Paint;
 
 import com.bin.david.form.data.CellInfo;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.style.FontStyle;

@@ -1,12 +1,10 @@
 package com.bin.david.form.data.table;
 
 
-import android.util.Log;
-
 import com.bin.david.form.data.Cell;
 import com.bin.david.form.data.CellRange;
-import com.bin.david.form.data.Column;
-import com.bin.david.form.data.ColumnInfo;
+import com.bin.david.form.data.column.Column;
+import com.bin.david.form.data.column.ColumnInfo;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
 import com.bin.david.form.data.format.sequence.LetterSequenceFormat;

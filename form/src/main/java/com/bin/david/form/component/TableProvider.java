@@ -5,11 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.Column;
-import com.bin.david.form.data.ColumnInfo;
+import com.bin.david.form.data.column.Column;
+import com.bin.david.form.data.column.ColumnInfo;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.selected.IDrawOver;
@@ -308,7 +307,7 @@ public class TableProvider<T> implements TableClickObserver {
                 int realPosition = 0;
                 for (int j = 0; j < size; j++) {
                     String value = column.format(j);
-                    int skip =tableInfo.skipColumnSize(column,j);
+                    int skip =tableInfo.getSeizeCellSize(column,j);
                     int totalLineHeight =0;
                     for(int k = realPosition;k<realPosition+skip;k++){
                         totalLineHeight += info.getLineHeightArray()[k];

@@ -9,7 +9,7 @@ import android.view.View;
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;

@@ -10,7 +10,7 @@ import android.text.TextPaint;
 
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.form.utils.DrawUtils;
 

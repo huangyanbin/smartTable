@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.table.ArrayTableData;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.style.FontStyle;

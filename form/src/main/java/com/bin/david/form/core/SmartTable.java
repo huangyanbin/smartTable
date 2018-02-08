@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -16,7 +15,7 @@ import com.bin.david.form.component.TableProvider;
 import com.bin.david.form.component.TableTitle;
 import com.bin.david.form.component.XSequence;
 import com.bin.david.form.component.YSequence;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.table.PageTableData;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
@@ -178,8 +177,10 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
      * @param tableData
      */
     public void setTableData(TableData<T> tableData){
-        this.tableData = tableData;
-        notifyDataChanged();
+        if(tableData !=null) {
+            this.tableData = tableData;
+            notifyDataChanged();
+        }
     }
 
     public ITableTitle getTableTitle() {

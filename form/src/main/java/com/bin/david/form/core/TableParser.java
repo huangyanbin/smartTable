@@ -1,11 +1,11 @@
 package com.bin.david.form.core;
 
-import com.bin.david.form.data.ArrayColumn;
+import com.bin.david.form.data.column.ArrayColumn;
 import com.bin.david.form.data.ArrayStructure;
 import com.bin.david.form.data.CellRange;
-import com.bin.david.form.data.ColumnNode;
+import com.bin.david.form.data.column.ColumnNode;
 import com.bin.david.form.data.table.ArrayTableData;
-import com.bin.david.form.data.Column;
+import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.exception.TableException;
@@ -54,7 +54,7 @@ public class TableParser<T> {
                     i++;
                 }
                calculateArrayCellSize(tableData.getChildColumns());
-                tableInfo.initTotalSize();
+                tableInfo.countTotalLineSize();
             } catch (NoSuchFieldException e) {
                 throw new TableException(
                         "NoSuchFieldException :Please check whether field name is correct!");

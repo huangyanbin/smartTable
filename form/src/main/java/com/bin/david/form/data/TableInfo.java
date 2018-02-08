@@ -1,9 +1,10 @@
 package com.bin.david.form.data;
 
 import android.graphics.Rect;
-import android.util.Log;
 
-import org.w3c.dom.Node;
+import com.bin.david.form.data.column.ArrayColumn;
+import com.bin.david.form.data.column.Column;
+import com.bin.david.form.data.column.ColumnNode;
 
 /**
  * Created by huang on 2017/11/1.
@@ -180,7 +181,10 @@ public class TableInfo {
         this.topNode = topNode;
     }
 
-    public void initTotalSize(){
+    /**
+     * 统计表格行数
+     */
+    public void countTotalLineSize(){
        if(topNode !=null) {
            arrayLineSize = new int[lineSize];
            int totalSize = 0;
@@ -193,20 +197,22 @@ public class TableInfo {
        }
     }
 
-
-    public int skipColumnSize(Column column, int position){
+    /**
+     * 所有每列Position位置所占格子数
+     * @param column 列
+     * @param position 位置
+     * @return 格子数
+     */
+    public int getSeizeCellSize(Column column, int position){
         if(topNode !=null) {
-            if(column instanceof ArrayColumn){
-                ArrayColumn arrayColumn = ((ArrayColumn) column);
-                return arrayColumn.getStructure().getCellSizes().get(position);
-            }else {
-                return arrayLineSize[position];
-            }
+           return column.getSeizeCellSize(this,position);
         }
         return 1;
     }
 
 
-
+    public int[] getArrayLineSize() {
+        return arrayLineSize;
+    }
 
 }

@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(MultParseModeActivity.class,"多行解析模式"));
         items.add(new MainItem(JXLExcelModeActivity.class,"JXL Excel"));
         items.add(new MainItem(POIExcelModeActivity.class,"POI Excel"));
+        items.add(new MainItem(MapModeActivity.class,"Json 转表格"));
         items.add(new MainItem(MergeModeActivity.class,"自动合并单元"));
         items.add(new MainItem(AlignActivity.class,"文字Align测试"));
         items.add(new MainItem(ManyActivity.class,"测试大量列"));

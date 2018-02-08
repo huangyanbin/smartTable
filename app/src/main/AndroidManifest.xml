@@ -40,6 +40,7 @@
         <activity android:name=".RefreshActivity"/>
         <activity android:name=".MinModeActivity"/>
         <activity android:name=".ArrayColumnModeActivity"/>
+        <activity android:name=".MapModeActivity"/>
     </application>
 
 </manifest>

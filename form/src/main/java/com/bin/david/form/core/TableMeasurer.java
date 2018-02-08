@@ -5,10 +5,10 @@ import android.graphics.Rect;
 
 import com.bin.david.form.component.IComponent;
 import com.bin.david.form.component.ITableTitle;
-import com.bin.david.form.data.ArrayColumn;
+import com.bin.david.form.data.column.ArrayColumn;
 import com.bin.david.form.data.Cell;
-import com.bin.david.form.data.Column;
-import com.bin.david.form.data.ColumnInfo;
+import com.bin.david.form.data.column.Column;
+import com.bin.david.form.data.column.ColumnInfo;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.TableInfo;
 import com.bin.david.form.utils.DrawUtils;
@@ -158,7 +158,7 @@ public class TableMeasurer<T> {
             for(int position = 0;position < size;position++) {
                 int width = column.getDrawFormat().measureWidth(column, position, config);
                 measureRowHeight(config, lineHeightArray, column, currentPosition, position);
-                int skipPosition = tableInfo.skipColumnSize(column, position);
+                int skipPosition = tableInfo.getSeizeCellSize(column, position);
                 currentPosition += skipPosition;
                 /**
                  *Todo 为了解决合并单元宽度过大问题
