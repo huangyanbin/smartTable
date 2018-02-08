@@ -81,10 +81,10 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.8.2'
+	        compile 'com.github.huangyanbin:SmartTable:1.8.3'
 	}
 ```
-     如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本1.8.2
+     如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本1.8.3
 
 >  使用表格View
 

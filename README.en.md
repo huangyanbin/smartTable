@@ -71,7 +71,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.8'
+	        compile 'com.github.huangyanbin:SmartTable:1.8.3'
 	}
 ```
 
