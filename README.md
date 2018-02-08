@@ -282,7 +282,7 @@ fixed |是否固定该列
 
 #####  数组或者List转列以及Json表格
 
-> 请参考demo和[好用漂亮的Android 表格框架3]https://juejin.im/post/5a7a8eef5188257a84621eda
+> 请参考demo和[好用漂亮的Android 表格框架3](https://juejin.im/post/5a7a8eef5188257a84621eda)
 
 
 ##### 关于混淆
