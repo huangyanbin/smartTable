@@ -103,17 +103,24 @@ public class TableInfo {
      * 动态添加列，数组重新创建Copy
      * @param count 添加数量
      */
-    public void addLine(int count){
+    public void addLine(int count,boolean isFoot){
+        lineSize += count;
         int size = lineHeightArray.length;
         int[] tempArray = new int[size+count];
         //数组复制
-        System.arraycopy(lineHeightArray,0,tempArray,0,size);
-        lineHeightArray = tempArray;
-        Cell[][] tempRangeCells = new Cell[size+count][columnSize];
-        for(int i = 0;i <size;i++){
-            tempRangeCells[i] = rangeCells[i];
+        if(isFoot) {
+            System.arraycopy(lineHeightArray, 0, tempArray, 0, size);
+        }else{
+            System.arraycopy(lineHeightArray, 0, tempArray, count, size);
         }
-        rangeCells = tempRangeCells;
+        lineHeightArray = tempArray;
+        if(size == rangeCells.length) {
+            Cell[][] tempRangeCells = new Cell[size + count][columnSize];
+            for (int i = 0; i < size; i++) {
+                tempRangeCells[i + (isFoot ? 0 : count)] = rangeCells[i];
+            }
+            rangeCells = tempRangeCells;
+        }
     }
     public int getCountHeight() {
         return (int) (zoom*countHeight);
@@ -184,16 +191,16 @@ public class TableInfo {
     /**
      * 统计表格行数
      */
-    public void countTotalLineSize(){
+    public void countTotalLineSize(ArrayColumn bottomColumn){
        if(topNode !=null) {
            arrayLineSize = new int[lineSize];
            int totalSize = 0;
            for (int i = 0; i < lineSize; i++) {
-               int lineSize = topNode.getTotalLine(i);
-               arrayLineSize[i] = lineSize;
-               totalSize += lineSize;
+               arrayLineSize[i]= bottomColumn.getStructure().getLevelCellSize(-1,i);
+               totalSize+= arrayLineSize[i];
            }
            lineHeightArray = new int[totalSize];
+           rangeCells= new Cell[totalSize][columnSize];
        }
     }
 

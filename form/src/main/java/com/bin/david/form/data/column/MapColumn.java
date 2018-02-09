@@ -46,7 +46,7 @@ public class MapColumn<T> extends ArrayColumn<T> {
             if (child == null) {
                 addData(null, isFoot);
                 countColumnValue(null);
-                getStructure().putNull(level);
+                getStructure().putNull(level,isFoot);
                 break;
             }
             if (child instanceof Map) {
@@ -54,7 +54,7 @@ public class MapColumn<T> extends ArrayColumn<T> {
                 if (!isList(child)) {
                     if (i == fieldNames.length - 1) {
                         if (child == null) {
-                            getStructure().putNull(level);
+                            getStructure().putNull(level,isFoot);
                         }
                         T t = (T) child;
                         addData(t, true);
@@ -73,7 +73,7 @@ public class MapColumn<T> extends ArrayColumn<T> {
                                 getFieldData(fieldNames, i + 1, d, level, true);
                             }
                         }
-                        getStructure().put(level - 1, data.length);
+                        getStructure().put(level - 1, data.length,isFoot);
                     } else {
                         List data = (List) child;
                         setArrayType(LIST);
@@ -87,13 +87,15 @@ public class MapColumn<T> extends ArrayColumn<T> {
                             }
 
                         }
-                        getStructure().put(level - 1, data.size());
+                        getStructure().put(level - 1, data.size(),isFoot);
                     }
                     break;
                 }
             }
         }
     }
+
+
 
 
 

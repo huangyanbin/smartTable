@@ -22,22 +22,23 @@ import java.util.List;
 
 public class TableParser<T> {
 
+    private ArrayColumn bottomColumn;
 
 
     /**
      * 解析数据
      */
-    public List<Column> parse(TableData<T> tableData){
+    public List<Column> parse(TableData<T> tableData) {
 
         tableData.getChildColumns().clear();
         tableData.getColumnInfos().clear();
         int maxLevel = getChildColumn(tableData);
-        TableInfo tableInfo =  tableData.getTableInfo();
+        TableInfo tableInfo = tableData.getTableInfo();
         tableInfo.setColumnSize(tableData.getChildColumns().size());
         tableInfo.setMaxLevel(maxLevel);
         tableData.clearCellRangeAddresses();
-        addArrayNode(tableInfo,tableData.getChildColumns());
-        if(!(tableData instanceof ArrayTableData)){
+        addArrayNode(tableInfo, tableData.getChildColumns());
+        if (!(tableData instanceof ArrayTableData)) {
             sort(tableData);
             try {
                 List<T> dataList = tableData.getT();
@@ -46,15 +47,14 @@ public class TableParser<T> {
                     column.getDatas().clear();
                     column.fillData(dataList);
                     List<int[]> ranges = column.parseRanges();
-                    if(ranges !=null && ranges.size()>0){
-                        for(int[] range:ranges){
-                            tableData.addCellRange(new CellRange(range[0],range[1],i,i));
+                    if (ranges != null && ranges.size() > 0) {
+                        for (int[] range : ranges) {
+                            tableData.addCellRange(new CellRange(range[0], range[1], i, i));
                         }
                     }
                     i++;
                 }
-               calculateArrayCellSize(tableData.getChildColumns());
-                tableInfo.countTotalLineSize();
+                calculateArrayCellSize(tableInfo, tableData.getChildColumns());
             } catch (NoSuchFieldException e) {
                 throw new TableException(
                         "NoSuchFieldException :Please check whether field name is correct!");
@@ -63,15 +63,13 @@ public class TableParser<T> {
                         "IllegalAccessException :Please make sure that access objects are allowed!");
             }
         }
-       return tableData.getColumns();
+        return tableData.getColumns();
     }
-
 
 
     /**
      * 添加到数组节点
      * 用于数组Column 统计
-     *
      */
     private void addArrayNode(TableInfo tableInfo, List<Column> childColumns) {
         for (Column child : childColumns) {
@@ -104,75 +102,80 @@ public class TableParser<T> {
                 }
             }
         }
-
-    }
-
-    private void calculateArrayCellSize( List<Column> childColumns){
         int maxLevel = 0;
-        ArrayColumn bottomColumn = null;
         for (Column child : childColumns) {
             if (child instanceof ArrayColumn) {
                 ArrayColumn column = (ArrayColumn) child;
-                int level = column.getStructure().getMaxLevel();
+                int level = column.getLevel();
                 if (maxLevel <= level) {
                     maxLevel = level;
                     bottomColumn = column;
+                    bottomColumn.getStructure().setEffective(true);
                 }
             }
+
         }
-        if(bottomColumn !=null){
+
+    }
+
+    private void calculateArrayCellSize(TableInfo tableInfo, List<Column> childColumns) {
+        if (bottomColumn != null) {
             ArrayStructure bottomStructure = bottomColumn.getStructure();
             for (Column child : childColumns) {
                 if (child instanceof ArrayColumn) {
                     ArrayColumn column = (ArrayColumn) child;
+                    ArrayStructure structure = column.getStructure();
                     int level = column.getStructure().getMaxLevel();
-                    column.getStructure().setCellSizes(new ArrayList<Integer>());
+                    if (structure.getCellSizes() == null) {
+                        structure.setCellSizes(new ArrayList<Integer>());
+                    } else {
+                        structure.getCellSizes().clear();
+                    }
                     int size = column.getDatas().size();
-                    for(int i =0; i <size;i++ ){
-                        int cellSize = bottomStructure.getLevelCellSize(level,i);
+                    for (int i = 0; i < size; i++) {
+                        int cellSize = bottomStructure.getLevelCellSize(level, i);
                         column.getStructure().getCellSizes().add(cellSize);
                     }
                 }
             }
+            tableInfo.countTotalLineSize(bottomColumn);
         }
     }
-
-
-
-
 
 
     /**
      * 添加数据
      */
-    public void addData(TableData<T> tableData, List<T> addData,boolean isFoot){
+    public void addData(TableData<T> tableData, List<T> addData, boolean isFoot) {
 
         try {
 
             int size = tableData.getLineSize();
-            if(isFoot) {
+            if (isFoot) {
                 tableData.getT().addAll(addData);
-            }else{
-                tableData.getT().addAll(0,addData);
+            } else {
+                tableData.getT().addAll(0, addData);
             }
-            TableInfo tableInfo =  tableData.getTableInfo();
-            tableInfo.addLine(addData.size());
+            TableInfo tableInfo = tableData.getTableInfo();
+            tableInfo.addLine(addData.size(), isFoot);
             tableData.clearCellRangeAddresses();
-            int i =0;
+            int i = 0;
             for (Column column : tableData.getChildColumns()) {
-                column.addData(addData,size,isFoot);
+                column.addData(addData, size, isFoot);
                 List<int[]> ranges = column.parseRanges();
-                if(ranges !=null && ranges.size()>0){
-                    for(int[] range:ranges){
-                        tableData.addCellRange(new CellRange(range[0],range[1],i,i));
+                if (ranges != null && ranges.size() > 0) {
+                    for (int[] range : ranges) {
+                        tableData.addCellRange(new CellRange(range[0], range[1], i, i));
                     }
                 }
                 i++;
             }
-        }catch (NoSuchFieldException e){
+            calculateArrayCellSize(tableInfo, tableData.getChildColumns());
+
+        } catch (NoSuchFieldException e) {
             throw new TableException(
                     "NoSuchFieldException :Please check whether field name is correct!");
-        }catch (IllegalAccessException e){
+        } catch (IllegalAccessException e) {
             throw new TableException(
                     "IllegalAccessException :Please make sure that access objects are allowed!");
         }
@@ -181,48 +184,49 @@ public class TableParser<T> {
 
     /**
      * 排序
+     *
      * @param tableData 表格数据
      * @return
      */
-    public List<Column> sort(TableData<T> tableData){
+    public List<Column> sort(TableData<T> tableData) {
 
         final Column sortColumn = tableData.getSortColumn();
-        if(sortColumn !=null) {
+        if (sortColumn != null) {
             List<T> dataList = tableData.getT();
             Collections.sort(dataList, new Comparator<T>() {
                 @Override
                 public int compare(T o1, T o2) {
 
                     try {
-                        if(o1 == null){
-                            return sortColumn.isReverseSort() ?1:-1;
+                        if (o1 == null) {
+                            return sortColumn.isReverseSort() ? 1 : -1;
                         }
-                        if(o2 == null){
-                            return sortColumn.isReverseSort() ?-1:1;
+                        if (o2 == null) {
+                            return sortColumn.isReverseSort() ? -1 : 1;
                         }
                         Object data = sortColumn.getData(o1);
                         Object compareData = sortColumn.getData(o2);
-                        if(data == null){
-                            return sortColumn.isReverseSort() ?1:-1;
+                        if (data == null) {
+                            return sortColumn.isReverseSort() ? 1 : -1;
                         }
-                        if(compareData == null){
-                            return sortColumn.isReverseSort() ?-1:1;
+                        if (compareData == null) {
+                            return sortColumn.isReverseSort() ? -1 : 1;
                         }
                         int compare;
-                        if(sortColumn.getComparator() != null){
-                            compare=  sortColumn.getComparator().compare(data,compareData);
-                            return sortColumn.isReverseSort()?-compare:compare;
-                        }else {
-                            if(data instanceof Comparable){
-                                compare= ((Comparable) data).compareTo(compareData);
-                                return sortColumn.isReverseSort()?-compare:compare;
+                        if (sortColumn.getComparator() != null) {
+                            compare = sortColumn.getComparator().compare(data, compareData);
+                            return sortColumn.isReverseSort() ? -compare : compare;
+                        } else {
+                            if (data instanceof Comparable) {
+                                compare = ((Comparable) data).compareTo(compareData);
+                                return sortColumn.isReverseSort() ? -compare : compare;
                             }
                             return 0;
                         }
-                    } catch (NoSuchFieldException e){
+                    } catch (NoSuchFieldException e) {
                         throw new TableException(
                                 "NoSuchFieldException :Please check whether field name is correct!");
-                    }catch (IllegalAccessException e){
+                    } catch (IllegalAccessException e) {
                         throw new TableException(
                                 "IllegalAccessException :Please make sure that access objects are allowed!");
                     }
@@ -233,44 +237,44 @@ public class TableParser<T> {
     }
 
 
-    private int  getChildColumn(TableData<T> tableData){
+    private int getChildColumn(TableData<T> tableData) {
         int maxLevel = 0;
         for (Column column : tableData.getColumns()) {
-                int level = getColumnLevel(tableData,column,0);
-                if(level >maxLevel){
-                    maxLevel = level;
-                }
+            int level = getColumnLevel(tableData, column, 0);
+            if (level > maxLevel) {
+                maxLevel = level;
+            }
         }
         return maxLevel;
     }
 
     /**
      * 得到列的层级
+     *
      * @param tableData 表格数据
-     * @param column 列
-     * @param level 层级
+     * @param column    列
+     * @param level     层级
      * @return
      */
-    private int getColumnLevel(TableData<T> tableData,Column column,int level){
+    private int getColumnLevel(TableData<T> tableData, Column column, int level) {
         level++;
-        if(column.isParent()){
+        if (column.isParent()) {
             List<Column> children = column.getChildren();
-            int maxLevel =0;
-            for(Column child :children){
-                int childLevel = getColumnLevel(tableData,child,level);
-                if(maxLevel < childLevel){
+            int maxLevel = 0;
+            for (Column child : children) {
+                int childLevel = getColumnLevel(tableData, child, level);
+                if (maxLevel < childLevel) {
                     maxLevel = childLevel;
                     column.setLevel(maxLevel);
                 }
             }
             level = maxLevel;
             return level;
-        }else{
-           tableData.getChildColumns().add(column);
-           return level;
+        } else {
+            tableData.getChildColumns().add(column);
+            return level;
         }
     }
-
 
 
 }

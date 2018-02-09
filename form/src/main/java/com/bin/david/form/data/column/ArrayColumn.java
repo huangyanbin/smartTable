@@ -18,7 +18,6 @@ public class ArrayColumn<T> extends Column<T> {
 
     public static final int ARRAY = 1;
     public static final int LIST = 2;
-    private int[] lastPositionArray;
     private ColumnNode node;
     private ArrayStructure structure;
     /**
@@ -55,24 +54,43 @@ public class ArrayColumn<T> extends Column<T> {
 
     @Override
     public void fillData(List<Object> objects) throws NoSuchFieldException, IllegalAccessException {
-        int level = ColumnNode.getLevel(node,0)-1;
         structure.clear();
-        structure.setMaxLevel(level);
+        structure.setMaxLevel(getLevel());
         if(getCountFormat() != null){
             getCountFormat().clearCount();
         }
         if (objects.size() > 0) {
-            lastPositionArray = new int[objects.size()];
             String[] fieldNames = getFieldName().split("\\.");
             if (fieldNames.length > 0) {
                 int size = objects.size();
                 for (int k = 0; k < size; k++) {
                     Object child= objects.get(k);
                     getFieldData(fieldNames,0,child,0,true);
-                    lastPositionArray[k] = getDatas().size()-1;
                 }
             }
 
+        }
+    }
+
+
+
+    /**
+     * 填充数据
+     * @param objects 对象列表
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+
+    public void addData(List<Object> objects, int startPosition,boolean isFoot) throws NoSuchFieldException, IllegalAccessException {
+        if (objects.size() > 0) {
+            String[] fieldNames = getFieldName().split("\\.");
+            if (fieldNames.length >0) {
+                int size = objects.size();
+                for (int k = 0; k < size; k++) {
+                    Object child= objects.get(isFoot ? k:(size-1-k));
+                    getFieldData(fieldNames,0,child,0,true);
+                }
+            }
         }
     }
 
@@ -82,7 +100,7 @@ public class ArrayColumn<T> extends Column<T> {
             if (child == null) {
                 addData(null,isFoot);
                 countColumnValue(null);
-                structure.putNull(level);
+                structure.putNull(level,isFoot);
                 break;
             }
             Class childClazz = child.getClass();
@@ -92,7 +110,7 @@ public class ArrayColumn<T> extends Column<T> {
             if(!isList(child)) {
                 if (i == fieldNames.length - 1) {
                     if(child == null){
-                        structure.putNull(level);
+                        structure.putNull(level,isFoot);
                     }
                     T t = (T) child;
                     addData(t, true);
@@ -110,7 +128,7 @@ public class ArrayColumn<T> extends Column<T> {
                           getFieldData(fieldNames, i + 1, d,level,true);
                       }
                   }
-                  structure.put(level-1,data.length);
+                  structure.put(level-1,data.length,isFoot);
               }else {
                   List data = (List) child;
                   arrayType = LIST;
@@ -123,7 +141,7 @@ public class ArrayColumn<T> extends Column<T> {
                       }
 
                   }
-                  structure.put(level-1,data.size());
+                  structure.put(level-1,data.size(),isFoot);
               }
               break;
             }
@@ -137,17 +155,8 @@ public class ArrayColumn<T> extends Column<T> {
 
 
 
-    public int getLineCount(int position){
-        if(lastPositionArray == null){
-            return 1;
-        }
-        int size;
-        if(position == 0){
-            size = lastPositionArray[position]+1;
-        }else{
-            size = lastPositionArray[position] - lastPositionArray[position-1];
-        }
-        return size;
+    public int getLevel(){
+        return  ColumnNode.getLevel(node,0)-1;
     }
 
     public ColumnNode getNode() {
@@ -158,13 +167,6 @@ public class ArrayColumn<T> extends Column<T> {
         this.node = node;
     }
 
-    public int[] getLastPositionArray() {
-        return lastPositionArray;
-    }
-
-    public void setLastPositionArray(int[] lastPositionArray) {
-        this.lastPositionArray = lastPositionArray;
-    }
 
     public int getArrayType() {
         return arrayType;

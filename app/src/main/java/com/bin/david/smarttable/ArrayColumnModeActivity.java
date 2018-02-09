@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.DashPathEffect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -53,7 +54,7 @@ public class ArrayColumnModeActivity extends AppCompatActivity implements View.O
         quickChartDialog = new QuickChartDialog();
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
         table = (SmartTable<CollegeStudent>) findViewById(R.id.table);
-        List<CollegeStudent> students  = new ArrayList<>();
+        final List<CollegeStudent> students  = new ArrayList<>();
         List<Lesson> lessons2 = new ArrayList<>();
         Lesson lesson1 = new Lesson("软件",true);
         lesson1.setLessonPoints(new LessonPoint[]{new LessonPoint("软件工程"),new LessonPoint("离散数学")});
@@ -63,7 +64,7 @@ public class ArrayColumnModeActivity extends AppCompatActivity implements View.O
         lessons2.add(lesson1);
         lessons2.add(lesson2);
         lessons2.add(new Lesson("微积分",false));
-        for(int i = 0; i < 20;i++){
+        for(int i = 0; i < 1;i++){
             List<Week> weeks = new ArrayList<>();
             for (int j = 0; j< 7;j++){
                 List<DayTime> times = new ArrayList<>();
@@ -122,6 +123,7 @@ public class ArrayColumnModeActivity extends AppCompatActivity implements View.O
 
 
     }
+
 
     @Override
     public void onClick(View view) {

@@ -54,22 +54,9 @@ public class ColumnNode {
         this.parent = parent;
     }
 
-    public int getTotalLine(int position){
-        int maxLineSize = 1;
-        for(ColumnNode child :children){
-            int childLineSize = child.getTotalLine(position);
-            if(maxLineSize < childLineSize){
-                maxLineSize = childLineSize;
-            }
-        }
-        if(arrayColumn !=null){
-            int count = arrayColumn.getLineCount(position);
-            maxLineSize = Math.max(count,maxLineSize);
-        }
-        return maxLineSize;
-    }
 
-    public static  int getLevel(ColumnNode node,int level){
+
+    public static int getLevel(ColumnNode node,int level){
         if(node.arrayColumn != null && !node.arrayColumn.isThoroughArray()){
             level++;
         }

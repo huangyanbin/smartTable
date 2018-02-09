@@ -19,7 +19,7 @@ public abstract class BaseCellBackgroundFormat<T> implements ICellBackgroundForm
         if(color != TableConfig.INVALID_COLOR) {
             paint.setColor(color);
             paint.setStyle(Paint.Style.FILL);
-            canvas.drawRect(rect.left, rect.top, rect.right, rect.bottom, paint);
+            canvas.drawRect(rect, paint);
         }
     }
 

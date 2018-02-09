@@ -237,7 +237,14 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         }
     }
 
-    /**
+    @Override
+    public void postInvalidate() {
+        synchronized (lockObject) {
+            super.postInvalidate();
+        }
+    }
+
+  /**
      * 通知重绘
      * 增加锁机制，避免闪屏和数据更新异常
      */
@@ -246,6 +253,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         synchronized (lockObject) {
             super.invalidate();
         }
+
     }
 
     /**

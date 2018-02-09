@@ -1,5 +1,7 @@
 package com.bin.david.smarttable;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -51,9 +53,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 .setShowYSequence(false)
                 .setShowTableTitle(false)
                 .setGridStyle(new LineStyle(-1,ContextCompat.getColor(this,android.R.color.transparent)));
-        //tableData= ArrayTableData.create(table, "动画", data, null);
-        //table.setTableData(tableData);
-        //startAnim0();
+        tableData= ArrayTableData.create(table, "动画", data, null);
+        table.setTableData(tableData);
+        startAnim0();
     }
 
 
@@ -125,12 +127,12 @@ public class WelcomeActivity extends AppCompatActivity {
         IDrawFormat<Integer> format = new IDrawFormat<Integer>() {
             @Override
             public int measureWidth(Column<Integer> column, int position, TableConfig config) {
-                return size*3/4;
+                return size;
             }
 
             @Override
             public int measureHeight(Column<Integer> column, int position, TableConfig config) {
-                return size*3/4;
+                return size;
             }
 
             @Override
@@ -143,7 +145,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 if(val == points[rotatePosition]) {
                     c.rotate(rotateAngle1, rect.centerX(), rect.centerY());
                 }
-                c.drawRect(rect.left+5,rect.top+5,rect.right-5,rect.bottom-5,paint);
+                c.drawRect(rect.left+10,rect.top+10,rect.right-10,rect.bottom-10,paint);
                 c.restore();
             }
         };
@@ -152,19 +154,24 @@ public class WelcomeActivity extends AppCompatActivity {
             valueAnimator.cancel();
         }
          valueAnimator = ValueAnimator.ofInt(0,180).setDuration(1000);
-        valueAnimator.setRepeatMode(ValueAnimator.RESTART);
-        valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        valueAnimator.addListener(new AnimatorListenerAdapter() {
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                rotatePosition++;
+                if(rotatePosition ==8){
+                    rotatePosition = 0;
+                }
+                valueAnimator.setStartDelay(50);
+                valueAnimator.start();
+            }
+        });
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
 
                 rotateAngle1 = (int) animation.getAnimatedValue();
-                if(rotateAngle1 >=179){
-                    rotatePosition++;
-                    if(rotatePosition ==8){
-                        rotatePosition=0;
-                    }
-                }
+
                 table.invalidate();
             }
         });

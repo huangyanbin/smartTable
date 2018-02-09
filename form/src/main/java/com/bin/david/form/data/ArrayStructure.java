@@ -13,40 +13,56 @@ public class ArrayStructure {
     private SparseArray<List<Integer>> structureArray; //结构
     private int maxLevel;
     private List<Integer> cellSizes;
+    private boolean isEffective; //是否是有效的
+
 
     public ArrayStructure(){
         structureArray = new SparseArray<>();
     }
 
-    public void putNull(int level){
-        if(level <= maxLevel){
+    public void putNull(int level,boolean isFoot){
+        if(isEffective&& level <= maxLevel){
             for(int i = level;i <=maxLevel;i++){
-                put(i,1);
+                put(i,1,isFoot);
             }
         }
     }
 
 
-    public void put(int level,int arraySize){
-
-        List<Integer> structures = structureArray.get(level);
-        if(structures == null){
-            structures = new ArrayList<>();
-            structureArray.put(level,structures);
+    public void put(int level,int arraySize,boolean isFoot){
+        if(isEffective) {
+            List<Integer> structures = structureArray.get(level);
+            if (structures == null) {
+                structures = new ArrayList<>();
+                structureArray.put(level, structures);
+            }
+            recordPerSizeList(structures,arraySize,isFoot);
         }
-
-       recordPerSizeList(structures,arraySize);
     }
 
 
 
-    private void recordPerSizeList(List<Integer> structure,int size){
+    private void recordPerSizeList(List<Integer> structure,int size,boolean isFoot){
         int perListSize = structure.size();
         if( perListSize== 0){
             structure.add(size-1);
         }else{
             int per = structure.get(perListSize-1);
-            structure.add(per+size);
+            if(isFoot) {
+                structure.add(per + size);
+            }else{
+                moveArrayPosition(structure,size);
+                structure.add(0,size-1);
+            }
+        }
+    }
+
+    private void moveArrayPosition(List<Integer> structure,int moveSize){
+        int totalSize = structure.size();
+        for(int i =0;i <totalSize;i++){
+            Integer perSize = structure.get(i);
+            perSize+=moveSize;
+            structure.set(i,perSize);
         }
     }
 
@@ -109,5 +125,13 @@ public class ArrayStructure {
 
     public void setMaxLevel(int maxLevel) {
         this.maxLevel = maxLevel;
+    }
+
+    public boolean isEffective() {
+        return isEffective;
+    }
+
+    public void setEffective(boolean effective) {
+        isEffective = effective;
     }
 }
