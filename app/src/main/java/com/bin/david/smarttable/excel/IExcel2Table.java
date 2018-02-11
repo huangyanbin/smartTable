@@ -34,13 +34,16 @@ public interface IExcel2Table<T> {
     /**
      * 加载表格Sheet内容
      * @param context
-     * @param fileName
      * @param position
      */
-    void loadSheetContent(Context context, String fileName, int position);
+    void loadSheetContent(Context context, int position);
 
     /**
      * 清理数据
      */
     void clear();
+
+    void setIsAssetsFile(boolean isAssetsFile);
+
+
 }

@@ -13,7 +13,8 @@ import java.util.Map;
 
 /**
  * Created by huang on 2018/1/14.
- * Map图表数据
+ * Map表格数据
+ * 可用于Json数据展示
  */
 
 public class MapTableData extends TableData<Object> {
@@ -108,6 +109,26 @@ public class MapTableData extends TableData<Object> {
     }
 
     /**
+     * 设置最小宽度
+     * @param minWidth
+     */
+    public void setMinWidth(int minWidth){
+        for (Column column : getColumns()) {
+            column.setMinWidth(minWidth);
+        }
+    }
+
+    /**
+     * 设置最小高度
+     * @param minHeight
+     */
+    public void setMinHeight(int minHeight){
+        for (Column column : getColumns()) {
+            column.setMinHeight(minHeight);
+        }
+    }
+
+    /**
      * 过滤列拦截器
      * 拦截则不会表格显示出来该列
      */
@@ -146,5 +167,7 @@ public class MapTableData extends TableData<Object> {
             }
         }
     }
+
+
 
 }

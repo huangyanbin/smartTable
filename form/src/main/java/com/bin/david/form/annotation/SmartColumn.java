@@ -65,5 +65,15 @@ public @interface SmartColumn {
      */
     boolean fast() default false;
 
+    /**
+     * 最小宽度
+     */
+    int minWidth() default 0;
+
+    /**
+     * 最小高度
+     */
+    int minHeight() default 0;
+
 
 }

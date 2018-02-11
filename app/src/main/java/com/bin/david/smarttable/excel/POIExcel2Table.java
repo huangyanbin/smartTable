@@ -291,13 +291,13 @@ public class POIExcel2Table extends BaseExcel2Table<Cell> {
         return false;
     }
 
-    public static HSSFWorkbook getWorkBook(Context context,String fileName)throws Exception {
+    public  HSSFWorkbook getWorkBook(Context context,String fileName)throws Exception {
 
         //创建Workbook工作薄对象，表示整个excel
         HSSFWorkbook workbook = null;
         try {
             //获取excel文件的io流
-            InputStream is =context.getAssets().open(fileName);
+            InputStream is = getInputStream(context,fileName);
             if(fileName.endsWith("xls")){
                 //2003
                 workbook = new HSSFWorkbook(is);

@@ -112,6 +112,26 @@ public class ArrayTableData<T> extends TableData<T> {
         }
     }
 
+    /**
+     * 设置最小宽度
+     * @param minWidth
+     */
+    public void setMinWidth(int minWidth){
+        for(Column<T> column:arrayColumns){
+            column.setMinWidth(minWidth);
+        }
+    }
+
+    /**
+     * 设置最小高度
+     * @param minHeight
+     */
+    public void setMinHeight(int minHeight){
+        for(Column<T> column:arrayColumns){
+            column.setMinHeight(minHeight);
+        }
+    }
+
 
     /**
      * 二维数组的构造方法

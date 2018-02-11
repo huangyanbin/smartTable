@@ -188,6 +188,7 @@ public class TableMeasurer<T> {
                         (int) paint.measureText(column.getTotalNumString()) : 0;
                 width = Math.max(totalCountWidth+2*config.getHorizontalPadding(), width);
             }
+            width = Math.max(column.getMinWidth(),width);
             column.setWidth(width);
             contentWidth+=width;
             columnPos++;
@@ -217,6 +218,7 @@ public class TableMeasurer<T> {
      */
     private void measureRowHeight(TableConfig config, int[] lineHeightArray, Column column, int currentPosition,int position) {
         int height = column.getDrawFormat().measureHeight(column,position,config) +2*config.getVerticalPadding();
+        height = Math.max(column.getMinHeight(),height);
         if (height > lineHeightArray[currentPosition]) {
             lineHeightArray[currentPosition] = height;
         }

@@ -484,6 +484,8 @@ public class TableProvider<T> implements TableClickObserver {
         int[] lineHeights =  tableData.getTableInfo().getLineHeightArray();
         col= col < childColumns.size() ? col:childColumns.size()-1;//列
         row = row< lineHeights.length ? row:lineHeights.length;//行
+        col = col< 0 ? 0 : col;
+        row = row< 0 ? 0 : row;
         return new int[]{(int) (childColumns.get(col).getWidth()*config.getZoom()),
                 (int) (lineHeights[row]*config.getZoom())};
 

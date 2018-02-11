@@ -137,6 +137,8 @@ public class AnnotationParser<T>  {
         column.setFast(isFast);
         column.setTextAlign(smartColumn.align());
         column.setAutoMerge(smartColumn.autoMerge());
+        column.setMinWidth(smartColumn.minWidth());
+        column.setMinHeight(smartColumn.minHeight());
         if(smartColumn.maxMergeCount() !=-1) {
             column.setMaxMergeCount(smartColumn.maxMergeCount());
         }

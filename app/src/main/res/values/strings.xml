@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">smartTable</string>
     <integer name="animation_default_duration">400</integer>
+    <string name="title_activity_choice_excel">ChoiceExcelActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

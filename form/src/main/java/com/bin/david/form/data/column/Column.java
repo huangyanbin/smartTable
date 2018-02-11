@@ -55,7 +55,8 @@ public class Column<T> implements Comparable<Column> {
     private boolean isParent;
     private List<int[]> ranges; //合并数据
     private boolean isFast;
-    private int maxWidth;
+    private int minWidth;
+    private int minHeight;
 
 
     /**列构造方法
@@ -669,4 +670,19 @@ public class Column<T> implements Comparable<Column> {
         return tableInfo.getArrayLineSize()[position];
     }
 
+    public int getMinWidth() {
+        return minWidth;
+    }
+
+    public void setMinWidth(int minWidth) {
+        this.minWidth = minWidth;
+    }
+
+    public int getMinHeight() {
+        return minHeight;
+    }
+
+    public void setMinHeight(int minHeight) {
+        this.minHeight = minHeight;
+    }
 }

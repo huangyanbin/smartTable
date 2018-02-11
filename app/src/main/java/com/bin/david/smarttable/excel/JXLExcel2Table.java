@@ -84,8 +84,7 @@ public class JXLExcel2Table extends BaseExcel2Table<Cell> {
     public List<String> getSheetName(Context context,String fileName)throws Exception {
 
             List<String> list = new ArrayList<>();
-            InputStream is = context.getAssets().open(fileName);
-            Workbook workbook = Workbook.getWorkbook(is);
+            Workbook workbook = Workbook.getWorkbook(getInputStream(context,fileName));
             int sheetNum = workbook.getNumberOfSheets();
             for (int i = 0; i < sheetNum; i++) {
                 Sheet sheet = workbook.getSheet(i);
@@ -101,8 +100,8 @@ public class JXLExcel2Table extends BaseExcel2Table<Cell> {
         cache.evictAll();
         imgPointSet.clear();
         int maxRow, maxColumn;
-        InputStream is = context.getAssets().open(fileName);
-        Workbook workbook = Workbook.getWorkbook(is);
+
+        Workbook workbook = Workbook.getWorkbook(getInputStream(context,fileName));
         Sheet sheet = workbook.getSheet(position);
         Range[] ranges = sheet.getMergedCells();
         if(ranges !=null) {

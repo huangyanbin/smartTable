@@ -24,6 +24,10 @@ import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.form.utils.DrawUtils;
 import com.bin.david.smarttable.R;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +48,7 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
     private List<CellRange> ranges;
     private float fontScale =  1.7f;
     protected SmartTable<T> smartTable;
-
-
+    private boolean isAssetsFile = true; //默认从Assets文件读取
     /**
      * 初始化默认配置
      * @param context
@@ -122,6 +125,9 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
     }
 
 
+    protected String getFileName(){
+        return fileName;
+    }
 
     @Override
     public void setCallback(ExcelCallback excelCallback) {
@@ -132,11 +138,12 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
     public void loadSheetList(Context context,String fileName) {
         sheetAsyncTask = new SheetAsyncTask(context,callback);
         sheetAsyncTask.execute(fileName);
+        this.fileName = fileName;
     }
 
     @Override
-    public void loadSheetContent(Context context, String fileName, int position) {
-        this.fileName = fileName;
+    public void loadSheetContent(Context context,int position) {
+
         excelAsyncTask = new ExcelAsyncTask<>(context);
         excelAsyncTask.execute(position);
     }
@@ -197,7 +204,26 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
     public abstract T[][]  getEmptyTableData();
     public void loadDataSuc(Context context){}
 
+    /**
+     * 获取输出流
+     * @param context
+     * @return
+     * @throws IOException
+     */
+    public InputStream getInputStream(Context context,String fileName) throws IOException {
+        InputStream is;
+        if(isAssetsFile)
+            is = context.getAssets().open(fileName);
+        else
+            is = new FileInputStream(fileName);
+        return is;
+    }
 
+
+    @Override
+    public void setIsAssetsFile(boolean isAssetsFile) {
+        this.isAssetsFile = isAssetsFile;
+    }
 
     public class ExcelAsyncTask<K> extends AsyncTask<Integer,Void, K[][]>{
 
@@ -232,6 +258,9 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
                     //Excel 因为每格的大小都不一样，所以需要重新计算高度和宽度
                     @Override
                     public int measureWidth(Column<K> column, int position, TableConfig config) {
+                        if(softReference.get() == null){
+                            return 0;
+                        }
                         int width = 0;
                         K cell = column.getDatas().get(position);
                         if (cell != null) {
@@ -244,6 +273,9 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
 
                     @Override
                     public int measureHeight(Column<K> column, int position, TableConfig config) {
+                        if(softReference.get() == null){
+                            return 0;
+                        }
                         K cell = column.getDatas().get(position);
                         if (cell != null) {
 
@@ -261,6 +293,9 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
 
                     @Override
                     public void setTextPaint(TableConfig config, K cell, Paint paint) {
+                        if(softReference.get() == null){
+                            return;
+                        }
                         super.setTextPaint(config, cell, paint);
                         if (cell != null) {
                             config.getPaint().setTextAlign(getAlign((T) cell));
@@ -283,6 +318,9 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
                         return "";
                     }
                 });
+                int defaultCellSize = DensityUtils.dp2px(softReference.get(),30);
+                tableData.setMinWidth(defaultCellSize);
+                tableData.setMinWidth(defaultCellSize);
                 loadDataSuc(softReference.get());
                 smartTable.getMatrixHelper().reset();
                 ((SmartTable<K>)smartTable).setTableData(tableData);

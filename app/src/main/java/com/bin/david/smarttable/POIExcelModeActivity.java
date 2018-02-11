@@ -72,11 +72,11 @@ public class POIExcelModeActivity extends AppCompatActivity implements ExcelCall
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     sheetAdapter.setSelectPosition(position);
-                    iExcel2Table.loadSheetContent(POIExcelModeActivity.this,fileName,position);
+                    iExcel2Table.loadSheetContent(POIExcelModeActivity.this,position);
                 }
             });
             recyclerView.setAdapter(sheetAdapter);
-            iExcel2Table.loadSheetContent(POIExcelModeActivity.this,fileName,0);
+            iExcel2Table.loadSheetContent(POIExcelModeActivity.this,0);
         }
     }
 
