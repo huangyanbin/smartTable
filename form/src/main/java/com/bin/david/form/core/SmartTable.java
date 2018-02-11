@@ -1,5 +1,6 @@
 package com.bin.david.form.core;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -104,7 +105,9 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     @Override
     protected void onDraw(Canvas canvas) {
         setScrollY(0);
-        showRect.set(0,0,getWidth(),getHeight());
+        showRect.set(getPaddingLeft(),getPaddingTop(),
+                getWidth() -getPaddingRight(),
+                getHeight()-getPaddingBottom());
         if(tableData != null) {
             Rect rect = tableData.getTableInfo().getTableRect();
             if(rect != null) {
@@ -538,13 +541,25 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         return yAxis;
     }
 
-
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if(tableData !=null && getContext()!=null){
+            if(((Activity)getContext()).isFinishing()){
+               release();
+            }
+        }
+    }
 
     /**
      * 可以在Activity onDestroy释放
      */
-    public void release(){
+    private void release(){
         matrixHelper.unRegisterAll();
+        annotationParser =null;
+        measurer = null;
+        provider = null;
+        matrixHelper = null;
         provider = null;
         if(tableData !=null) {
             tableData.clear();

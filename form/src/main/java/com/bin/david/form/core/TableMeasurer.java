@@ -142,7 +142,7 @@ public class TableMeasurer<T> {
             tableData.getTableInfo().setyAxisWidth(yAxisWidth);
             totalWidth+=yAxisWidth;
         }
-        Cell[][] rangeCells = tableData.getTableInfo().getRangeCells();
+
         int columnPos =0;
         int contentWidth = 0;
         int[] lineHeightArray = tableData.getTableInfo().getLineHeightArray();
@@ -155,6 +155,7 @@ public class TableMeasurer<T> {
              size = column.getDatas().size();
             currentPosition=0;
             boolean isArrayColumn = column instanceof ArrayColumn;
+            Cell[][] rangeCells = tableData.getTableInfo().getRangeCells();
             for(int position = 0;position < size;position++) {
                 int width = column.getDrawFormat().measureWidth(column, position, config);
                 measureRowHeight(config, lineHeightArray, column, currentPosition, position);
@@ -164,13 +165,15 @@ public class TableMeasurer<T> {
                  *Todo 为了解决合并单元宽度过大问题
                  */
                 if (!isArrayColumn) {
-                    Cell cell = rangeCells[position][columnPos];
-                    if (cell != null) {
-                        if (cell.row != Cell.INVALID && cell.col != Cell.INVALID) {
-                            cell.width = width;
-                            width = width / cell.col;
-                        } else if (cell.realCell != null) {
-                            width = cell.realCell.width / cell.realCell.col;
+                    if(rangeCells !=null) {
+                        Cell cell = rangeCells[position][columnPos];
+                        if (cell != null) {
+                            if (cell.row != Cell.INVALID && cell.col != Cell.INVALID) {
+                                cell.width = width;
+                                width = width / cell.col;
+                            } else if (cell.realCell != null) {
+                                width = cell.realCell.width / cell.realCell.col;
+                            }
                         }
                     }
                 }

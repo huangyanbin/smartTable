@@ -335,5 +335,10 @@ public class ManyActivity extends AppCompatActivity implements View.OnClickListe
         BaseDialog dialog = new  BaseDialog.Builder(this).setFillWidth(true).setContentView(chartView).create();
         dialog.show();
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        chartDialog = null;
+        quickChartDialog = null;
+    }
 }

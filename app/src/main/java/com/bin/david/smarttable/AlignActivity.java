@@ -250,5 +250,10 @@ public class AlignActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        chartDialog = null;
+        quickChartDialog = null;
+    }
 }

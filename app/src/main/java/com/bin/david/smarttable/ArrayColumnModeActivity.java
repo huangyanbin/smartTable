@@ -46,6 +46,7 @@ public class ArrayColumnModeActivity extends AppCompatActivity implements View.O
     private SmartTable<CollegeStudent> table;
     private BaseCheckDialog<TableStyle> chartDialog;
     private QuickChartDialog quickChartDialog;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,10 +118,16 @@ public class ArrayColumnModeActivity extends AppCompatActivity implements View.O
                return TableConfig.INVALID_COLOR;
            }
        });
-        TableData<CollegeStudent> tableData = new TableData<>("课程表",students,studentNameColumn,
+        final TableData<CollegeStudent> tableData = new TableData<>("课程表",students,studentNameColumn,
                 weekNameColumn,timeNameColumn,lessonNameColumn,pointNameColumn,lessonFavColumn);
         table.setTableData(tableData);
-
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mHandler.postDelayed(this,5000);
+                table.addData(students,true);
+            }
+        },5000);
 
     }
 
@@ -343,5 +350,10 @@ public class ArrayColumnModeActivity extends AppCompatActivity implements View.O
         BaseDialog dialog = new  BaseDialog.Builder(this).setFillWidth(true).setContentView(chartView).create();
         dialog.show();
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        chartDialog = null;
+        quickChartDialog = null;
+    }
 }

@@ -55,6 +55,7 @@ public class Column<T> implements Comparable<Column> {
     private boolean isParent;
     private List<int[]> ranges; //合并数据
     private boolean isFast;
+    private int maxWidth;
 
 
     /**列构造方法
@@ -236,11 +237,11 @@ public class Column<T> implements Comparable<Column> {
                 if (childField == null) {
                     return null;
                 }
+                childField.setAccessible(true);
                 if (i == fieldNames.length - 1) {
                     return (T) childField.get(child);
 
                 } else {
-                    childField.setAccessible(true);
                     child = childField.get(child);
                 }
             }
@@ -667,4 +668,5 @@ public class Column<T> implements Comparable<Column> {
     public int getSeizeCellSize(TableInfo tableInfo,int position){
         return tableInfo.getArrayLineSize()[position];
     }
+
 }

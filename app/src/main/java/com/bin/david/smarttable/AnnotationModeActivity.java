@@ -126,5 +126,9 @@ public class AnnotationModeActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        quickChartDialog = null;
+    }
 }

@@ -27,6 +27,7 @@ public class TableInfo {
     private int lineSize;
     private ColumnNode topNode;
     private int[] arrayLineSize;
+    private boolean isHasArrayColumn; //含有数组列暂不支持合并
 
     /**
      * 获取最大层级
@@ -114,12 +115,14 @@ public class TableInfo {
             System.arraycopy(lineHeightArray, 0, tempArray, count, size);
         }
         lineHeightArray = tempArray;
-        if(size == rangeCells.length) {
-            Cell[][] tempRangeCells = new Cell[size + count][columnSize];
-            for (int i = 0; i < size; i++) {
-                tempRangeCells[i + (isFoot ? 0 : count)] = rangeCells[i];
+        if(!isHasArrayColumn) {
+            if (size == rangeCells.length) {
+                Cell[][] tempRangeCells = new Cell[size + count][columnSize];
+                for (int i = 0; i < size; i++) {
+                    tempRangeCells[i + (isFoot ? 0 : count)] = rangeCells[i];
+                }
+                rangeCells = tempRangeCells;
             }
-            rangeCells = tempRangeCells;
         }
     }
     public int getCountHeight() {
@@ -178,6 +181,7 @@ public class TableInfo {
         rangeCells = null;
         lineHeightArray = null;
         tableRect = null;
+        topNode = null;
     }
 
     public ColumnNode getTopNode() {
@@ -186,6 +190,10 @@ public class TableInfo {
 
     public void setTopNode(ColumnNode topNode) {
         this.topNode = topNode;
+        if( this.topNode !=null){
+            isHasArrayColumn = true;
+            rangeCells = null;
+        }
     }
 
     /**
@@ -200,7 +208,7 @@ public class TableInfo {
                totalSize+= arrayLineSize[i];
            }
            lineHeightArray = new int[totalSize];
-           rangeCells= new Cell[totalSize][columnSize];
+            rangeCells = null;
        }
     }
 

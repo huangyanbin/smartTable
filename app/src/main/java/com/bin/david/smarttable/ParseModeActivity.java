@@ -567,4 +567,10 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         dialog.show();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        chartDialog = null;
+        quickChartDialog = null;
+    }
 }

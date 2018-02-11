@@ -83,4 +83,6 @@ public class ArrayModeActivity extends AppCompatActivity {
         });
         table.setTableData(tableData);
     }
+
+
 }

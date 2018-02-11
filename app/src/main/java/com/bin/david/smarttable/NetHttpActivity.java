@@ -80,7 +80,7 @@ public class NetHttpActivity extends AppCompatActivity {
             parseData(response);
             return;
         }
-        response = "[{\"aqi\":27,\"area\":\"上海\",\"pm10\":27,\"pm10_24h\":58,\"position_name\":\" 徐汇上师大\",\"quality\":\"优\",\"station_code\":\"1144 A\",\"time_point\":\"2017 - 11 - 04 T13: 00: 00 Z\"}]";
+        response = "[{\"aqi\":27,\"area\":\"上海\",\"pm10\":27,\"position_name\":\" 徐汇上师大\",\"quality\":\"优\",\"station_code\":\"1144 A\",\"time_point\":\"2017 - 11 - 04 T13: 00: 00 Z\"}]";
         parseData(response);
        /* String url = "http://www.pm25.in/api/querys/pm10.json?city=%E4%B8%8A%E6%B5%B7&token=5j1znBVAsnSf5xQyNQyq&avg";
         OkHttpUtils
@@ -113,11 +113,12 @@ public class NetHttpActivity extends AppCompatActivity {
                 table.setData(pm25List);
                 isFrist = false;
             }else{
+                pm25List.get(0).setArea(null);
                 table.addData(pm25List,true);
                 table.getMatrixHelper().flingBottom(200);
                 table.getMatrixHelper().flingLeft(200);
             }
-            mHandler.postDelayed(AddDataRunnable,500);
+            mHandler.postDelayed(AddDataRunnable,4500);
         }catch (Exception e){
 
         }

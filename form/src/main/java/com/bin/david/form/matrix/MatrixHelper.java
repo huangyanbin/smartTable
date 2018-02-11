@@ -456,8 +456,8 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
             } else {
                 isFullShowY = true;
             }
-            scaleRect.left = providerRect.left - offsetX - translateX;
-            scaleRect.top = providerRect.top - offsetY - translateY;
+            scaleRect.left = providerRect.left - offsetX - translateX+showRect.left;
+            scaleRect.top = providerRect.top - offsetY - translateY+showRect.top;
             if (isFullShowX) {
                 if (isZooming) {
                     scaleRect.left = scaleRect.left < showRect.left ? showRect.left : scaleRect.left;

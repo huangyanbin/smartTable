@@ -293,19 +293,21 @@ public class TableData<T> {
     private void addCellRange(int firstRow,int lastRow,int firstCol,int lastCol){
         Cell[][] tableCells = tableInfo.getRangeCells();
         Cell realCell = null;
-        for(int i = firstRow; i <= lastRow;i++){
-            if(i < tableCells.length)
-            for(int j = firstCol; j <= lastCol;j++){
-               if(j < tableCells[i].length) {
-                   if (i == firstRow && j == firstCol) {
-                       int rowCount = Math.min(lastRow+1,tableCells.length) - firstRow;
-                       int colCount = Math.min(lastCol+1,tableCells[i].length) - firstCol;
-                       realCell = new Cell(colCount,rowCount);
-                       tableCells[i][j] = realCell;
-                       continue;
-                   }
-                   tableCells[i][j] = new Cell(realCell);
-               }
+        if(tableCells !=null) {
+            for (int i = firstRow; i <= lastRow; i++) {
+                if (i < tableCells.length)
+                    for (int j = firstCol; j <= lastCol; j++) {
+                        if (j < tableCells[i].length) {
+                            if (i == firstRow && j == firstCol) {
+                                int rowCount = Math.min(lastRow + 1, tableCells.length) - firstRow;
+                                int colCount = Math.min(lastCol + 1, tableCells[i].length) - firstCol;
+                                realCell = new Cell(colCount, rowCount);
+                                tableCells[i][j] = realCell;
+                                continue;
+                            }
+                            tableCells[i][j] = new Cell(realCell);
+                        }
+                    }
             }
         }
     }
