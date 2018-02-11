@@ -51,7 +51,13 @@ public class ArrayColumn<T> extends Column<T> {
     }
 
 
-
+    /**
+     * 填充数据
+     * @param objects 对象列表
+     * @return 返回需要合并的单元
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     @Override
     public void fillData(List<Object> objects) throws NoSuchFieldException, IllegalAccessException {
         structure.clear();
@@ -75,7 +81,7 @@ public class ArrayColumn<T> extends Column<T> {
 
 
     /**
-     * 填充数据
+     * 添加数据
      * @param objects 对象列表
      * @throws NoSuchFieldException
      * @throws IllegalAccessException
@@ -94,6 +100,16 @@ public class ArrayColumn<T> extends Column<T> {
         }
     }
 
+    /**
+     * 递归解析
+     * @param fieldNames
+     * @param start
+     * @param child
+     * @param level
+     * @param isFoot
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
     protected void getFieldData(String[] fieldNames,int start,Object child,int level,boolean isFoot) throws NoSuchFieldException, IllegalAccessException {
 
         for (int i = start; i < fieldNames.length; i++) {
@@ -148,13 +164,20 @@ public class ArrayColumn<T> extends Column<T> {
         }
     }
 
-
+    /**
+     * 判断是否是数组或者List
+     * @param o
+     * @return
+     */
     public static boolean isList(Object o){
         return o !=null && (o instanceof List  || o.getClass().isArray());
     }
 
 
-
+    /**
+     * 获取当前层级
+     * @return
+     */
     public int getLevel(){
         return  ColumnNode.getLevel(node,0)-1;
     }
@@ -163,11 +186,17 @@ public class ArrayColumn<T> extends Column<T> {
         return node;
     }
 
+    /**
+     * 设置Array结构节点
+     * @param node  结构节点
+     */
     public void setNode(ColumnNode node) {
         this.node = node;
     }
 
-
+    /**
+     * 获取Array类型
+     */
     public int getArrayType() {
         return arrayType;
     }
@@ -177,13 +206,15 @@ public class ArrayColumn<T> extends Column<T> {
     }
 
     /**
-     * 数据结构
-     * @return
+     * 获取Array结构
+     * @return Array结构
      */
     public ArrayStructure getStructure() {
         return structure;
     }
-
+    /**
+     * 设置Array结构
+     */
     public void setStructure(ArrayStructure structure) {
         this.structure = structure;
     }

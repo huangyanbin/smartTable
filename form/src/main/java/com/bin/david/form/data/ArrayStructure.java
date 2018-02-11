@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * Created by huang on 2018/2/5.
+ * 数组结构
+ * 用于处理数组解析所占格子数量计算
  */
 
 public class ArrayStructure {
@@ -20,6 +22,11 @@ public class ArrayStructure {
         structureArray = new SparseArray<>();
     }
 
+    /**
+     * 放入null对象结构数量
+     * @param level
+     * @param isFoot
+     */
     public void putNull(int level,boolean isFoot){
         if(isEffective&& level <= maxLevel){
             for(int i = level;i <=maxLevel;i++){
@@ -28,7 +35,11 @@ public class ArrayStructure {
         }
     }
 
-
+    /**
+     * 放入Array数量
+     * @param level 层级
+     * @param isFoot 是否插入尾部
+     */
     public void put(int level,int arraySize,boolean isFoot){
         if(isEffective) {
             List<Integer> structures = structureArray.get(level);
@@ -41,7 +52,9 @@ public class ArrayStructure {
     }
 
 
-
+    /**
+     * 记录当前ArraySize数量
+     */
     private void recordPerSizeList(List<Integer> structure,int size,boolean isFoot){
         int perListSize = structure.size();
         if( perListSize== 0){
@@ -56,7 +69,10 @@ public class ArrayStructure {
             }
         }
     }
-
+    /**
+     * 移动Array结构数量位置
+     * 插入head需要移动
+     */
     private void moveArrayPosition(List<Integer> structure,int moveSize){
         int totalSize = structure.size();
         for(int i =0;i <totalSize;i++){
@@ -66,11 +82,19 @@ public class ArrayStructure {
         }
     }
 
+    /**
+     * 清空
+     */
     public void clear(){
         structureArray.clear();
     }
 
-
+    /**
+     * 获取指定层级位置占格子数量
+     * @param level 层级
+     * @param position 位置
+     * @return 占格子数量
+     */
     public int getLevelCellSize(int level,int position){
         if(maxLevel <= level){
             return 1;
@@ -111,6 +135,10 @@ public class ArrayStructure {
         return null;
     }
 
+    /**
+     * 当前结构位置每个位置所占格子数
+     * @return 格子数
+     */
     public List<Integer> getCellSizes() {
         return cellSizes;
     }
@@ -118,19 +146,31 @@ public class ArrayStructure {
     public void setCellSizes(List<Integer> cellSizes) {
         this.cellSizes = cellSizes;
     }
-
+    /**
+     * 获取保存最大层级
+     */
     public int getMaxLevel() {
         return maxLevel;
     }
 
+    /**
+     * 设置保存最大层级
+     * @param maxLevel 最大层级
+     */
     public void setMaxLevel(int maxLevel) {
         this.maxLevel = maxLevel;
     }
 
+    /**
+     * 是否是有效的数据结构
+     * @return 有效的数据结构
+     */
     public boolean isEffective() {
         return isEffective;
     }
-
+    /**
+     * 设置是否是有效的数据结构
+     */
     public void setEffective(boolean effective) {
         isEffective = effective;
     }
