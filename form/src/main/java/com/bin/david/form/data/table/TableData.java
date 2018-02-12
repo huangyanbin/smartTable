@@ -11,6 +11,7 @@ import com.bin.david.form.data.format.sequence.LetterSequenceFormat;
 import com.bin.david.form.data.format.sequence.NumberSequenceFormat;
 import com.bin.david.form.data.format.title.ITitleDrawFormat;
 import com.bin.david.form.data.format.title.TitleDrawFormat;
+import com.bin.david.form.listener.OnColumnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,9 +35,9 @@ public class TableData<T> {
     private ITitleDrawFormat titleDrawFormat;
     private ISequenceFormat XSequenceFormat;
     private ISequenceFormat YSequenceFormat;
-   // private List<CellRange> cellRangeAddresses;
     //用户设置的 不能清除
     private List<CellRange> userSetRangeAddress;
+    private OnItemClickListener onItemClickListener;
     /**
      *
      * @param tableName 表名
@@ -387,7 +388,39 @@ public class TableData<T> {
 
     }
 
-   /* public List<CellRange> getCellRangeAddresses() {
-        return cellRangeAddresses;
-    }*/
+    /**
+     * 获取表格单元格Cell点击事件
+     */
+    public OnItemClickListener getOnItemClickListener() {
+        return onItemClickListener;
+
+    }
+
+    /**
+     * 设置表格单元格Cell点击事件
+     * @param onItemClickListener 点击事件
+     */
+    public void setOnItemClickListener(final OnItemClickListener<T> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+        for(Column<T> column: columns){
+            if(!column.isParent()) {
+                column.setOnColumnItemClickListener(new OnColumnItemClickListener<T>() {
+                    @Override
+                    public void onClick(Column<T> column, String value, T t, int position) {
+                        if (onItemClickListener != null) {
+                            int index = childColumns.indexOf(column);
+                            onItemClickListener.onClick(column, value, t, index, position);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * 表格单元格Cell点击事件接口
+     */
+    public interface  OnItemClickListener<T>{
+        void onClick(Column<T> column,String value, T t, int col,int row);
+    }
 }

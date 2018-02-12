@@ -28,10 +28,12 @@ import com.bin.david.smarttable.R;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 /**
@@ -229,6 +231,7 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
 
         WeakReference<Context> softReference;
 
+
         public ExcelAsyncTask(Context context) {
             softReference=new WeakReference<>(context);
         }
@@ -254,7 +257,6 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
                 //设置字体
                 ArrayTableData<K> tableData = ArrayTableData.create((SmartTable<K>) smartTable, "", data, new TextDrawFormat<K>() {
 
-
                     //Excel 因为每格的大小都不一样，所以需要重新计算高度和宽度
                     @Override
                     public int measureWidth(Column<K> column, int position, TableConfig config) {
@@ -266,7 +268,7 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
                         if (cell != null) {
                             int fontSize = (int) (getFontSize(softReference.get(),(T) cell) * fontScale); //增加字体，效果更好看
                             config.getPaint().setTextSize(DensityUtils.sp2px(softReference.get(), fontSize));
-                            width = DrawUtils.getMultiTextWidth(config.getPaint(), column.format(position));
+                            width = DrawUtils.getMultiTextWidth(config.getPaint(),getSplitString(column.format(position)));
                         }
                         return width;
                     }
@@ -281,14 +283,14 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
 
                             int fontSize = (int) (getFontSize(softReference.get(),(T) cell) * fontScale); //增加字体，效果更好看
                             config.getPaint().setTextSize(DensityUtils.sp2px(softReference.get(), fontSize));
-                            return DrawUtils.getMultiTextHeight(config.getPaint(), column.format(position));
+                            return DrawUtils.getMultiTextHeight(config.getPaint(), getSplitString(column.format(position)));
                         }
                         return super.measureHeight(column, position, config);
                     }
 
                     @Override
                     protected void drawText(Canvas c, String value, Rect rect, Paint paint) {
-                        DrawUtils.drawMultiText(c, paint, rect, value);
+                        DrawUtils.drawMultiText(c, paint, rect, getSplitString(value));
                     }
 
                     @Override

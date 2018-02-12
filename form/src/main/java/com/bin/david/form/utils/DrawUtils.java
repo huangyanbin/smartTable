@@ -74,9 +74,9 @@ public class DrawUtils {
      * @param paint
      * @return
      */
-    public static int getMultiTextHeight(Paint paint,String value){
+    public static int getMultiTextHeight(Paint paint,String[] values){
 
-        return getTextHeight(paint)* value.split("\n").length;
+        return getTextHeight(paint)* values.length;
     }
 
     /**
@@ -84,8 +84,8 @@ public class DrawUtils {
      * @param paint
      * @return
      */
-    public static int getMultiTextWidth(Paint paint,String value){
-        String[] values = value.split("\n");
+    public static int getMultiTextWidth(Paint paint,String[] values){
+
         int maxWidth  =0;
         for(String val :values){
             int width = (int) paint.measureText(val);
@@ -101,10 +101,8 @@ public class DrawUtils {
      * @param canvas
      * @param paint
      * @param rect
-     * @param value
      */
-    public static void drawMultiText(Canvas canvas,Paint paint,Rect rect,String value){
-        String[] values = value.split("\n");
+    public static void drawMultiText(Canvas canvas,Paint paint,Rect rect,String[] values){
         for(int i =0;i <values.length;i++) {
             int centerY = (int) ((rect.bottom + rect.top) / 2+ (values.length/2f-i-0.5)*getTextHeight(paint));
             canvas.drawText(values[i], DrawUtils.getTextCenterX(rect.left, rect.right, paint),

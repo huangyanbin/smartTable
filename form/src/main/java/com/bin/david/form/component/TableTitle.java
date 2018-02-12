@@ -31,7 +31,7 @@ public class TableTitle implements ITableTitle {
         switch (direction) {
             case TOP:
             case BOTTOM:
-                DrawUtils.drawMultiText(canvas,paint,rect,tableName);
+                DrawUtils.drawMultiText(canvas,paint,rect,tableName.split("\n"));
                 break;
             case LEFT:
             case RIGHT:

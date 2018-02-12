@@ -38,7 +38,7 @@ public class FastTextDrawFormat<T> extends TextDrawFormat<T> {
         if(height ==0) {
             Paint paint = config.getPaint();
             config.getContentStyle().fillPaint(paint);
-            height =  DrawUtils.getMultiTextHeight(paint, column.format(position));
+            height =  DrawUtils.getTextHeight(paint);
         }
         return height;
     }

@@ -21,7 +21,7 @@ public class ArrayTableData<T> extends TableData<T> {
 
     private  T[][] data;
     private List<Column<T>> arrayColumns;
-    private OnItemClickListener onItemClickListener;
+
 
     /**
      * 提供将数组[col][row]转换成数组[row][col]
@@ -45,8 +45,7 @@ public class ArrayTableData<T> extends TableData<T> {
                 for (int i = 0; i < rowArray.length; i++) { //转换一下
                     for (int j = 0; j < rowArray[i].length; j++) {
                         if(newData[j] == null) {
-                            T[] column = (T[]) Array.newInstance(row.getClass().getComponentType(),rowArray.length);
-                            newData[j] = column;
+                            newData[j] = (T[]) Array.newInstance(row.getClass().getComponentType(),rowArray.length);
                         }
                         newData[j][i] = rowArray[i][j];
                     }
@@ -168,36 +167,6 @@ public class ArrayTableData<T> extends TableData<T> {
 
 
 
-    /**
-     * 获取表格单元格Cell点击事件
-     */
-    public OnItemClickListener getOnItemClickListener() {
-        return onItemClickListener;
 
-    }
 
-    /**
-     * 设置表格单元格Cell点击事件
-     * @param onItemClickListener 点击事件
-     */
-    public void setOnItemClickListener(final OnItemClickListener<T> onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-        for(Column<T> column: arrayColumns){
-            column.setOnColumnItemClickListener(new OnColumnItemClickListener<T>() {
-                @Override
-                public void onClick(Column<T> column, String value, T t, int position) {
-                    if(onItemClickListener !=null){
-                        int index = arrayColumns.indexOf(column);
-                        onItemClickListener.onClick(column,value,t,index,position);
-                    }
-                }
-            });
-        }
-    }
-    /**
-     * 表格单元格Cell点击事件接口
-     */
-    public interface  OnItemClickListener<T>{
-        void onClick(Column<T> column,String value, T t, int col,int row);
-    }
 }
