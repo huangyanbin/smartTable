@@ -7,7 +7,7 @@
 * [English README](/README.en.md/)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
-* [apk version 1.8.2版本下载地址](/img/smartTable.apk)
+* [apk version 1.8.7版本下载地址](/img/smartTable.apk)
 
 > ![下载地址](/img/table.png)
 
@@ -81,7 +81,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.8.3'
+	        compile 'com.github.huangyanbin:SmartTable:1.8.7'
 	}
 ```
      如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本1.8.3
