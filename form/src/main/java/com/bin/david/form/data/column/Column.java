@@ -57,6 +57,7 @@ public class Column<T> implements Comparable<Column> {
     private boolean isFast;
     private int minWidth;
     private int minHeight;
+    private int maxWidth = Integer.MAX_VALUE;
 
 
     /**列构造方法
@@ -116,7 +117,6 @@ public class Column<T> implements Comparable<Column> {
         this.columnName = columnName;
         this.format = format;
         this.fieldName = fieldName;
-        //默认给一个TextDrawFormat
         this.drawFormat =drawFormat;
         datas = new ArrayList<>();
     }
@@ -685,4 +685,13 @@ public class Column<T> implements Comparable<Column> {
     public void setMinHeight(int minHeight) {
         this.minHeight = minHeight;
     }
+
+    public int getMaxWidth() {
+        return maxWidth;
+    }
+
+   /*暂未开放
+    public void setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+    }*/
 }

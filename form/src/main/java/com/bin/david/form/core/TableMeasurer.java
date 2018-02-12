@@ -189,6 +189,7 @@ public class TableMeasurer<T> {
                 width = Math.max(totalCountWidth+2*config.getHorizontalPadding(), width);
             }
             width = Math.max(column.getMinWidth(),width);
+            width = Math.min(column.getMaxWidth(), width);
             column.setWidth(width);
             contentWidth+=width;
             columnPos++;

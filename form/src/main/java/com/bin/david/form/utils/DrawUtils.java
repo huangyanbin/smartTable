@@ -96,6 +96,8 @@ public class DrawUtils {
         return maxWidth;
     }
 
+
+
     /**
      * 绘制多行文字
      * @param canvas

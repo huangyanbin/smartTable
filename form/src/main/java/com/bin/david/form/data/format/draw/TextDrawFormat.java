@@ -24,6 +24,7 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     private CellInfo<T> cellInfo = new CellInfo<>();
     private boolean isDrawBg = true;
     private Map<String,SoftReference<String[]>> valueMap; //避免产生大量对象
+    private short maxLength = 0;
 
     public TextDrawFormat() {
         valueMap = new HashMap<>();
@@ -31,10 +32,16 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
     @Override
     public int measureWidth(Column<T>column, int position, TableConfig config) {
+
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
+        if(maxLength == 0 && column.getMaxWidth() != Integer.MAX_VALUE){
+            short length = (short) (paint.measureText("1")*2);
+            maxLength = (short) (column.getMaxWidth()/length);
+        }
         return DrawUtils.getMultiTextWidth(paint,getSplitString(column.format(position)));
     }
+
 
     @Override
     public int measureHeight(Column<T> column,int position, TableConfig config) {
@@ -58,6 +65,7 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     protected void drawText(Canvas c, String value, Rect rect, Paint paint) {
         DrawUtils.drawMultiText(c,paint,rect,getSplitString(value));
     }
+
 
 
     public void setTextPaint(TableConfig config,T t, Paint paint) {
@@ -100,6 +108,7 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
         }
         if(values == null){
             values = val.split("\n");
+
             valueMap.put(val, new SoftReference<>(values));
         }
         return values;
