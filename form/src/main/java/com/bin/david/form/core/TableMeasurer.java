@@ -233,6 +233,8 @@ public class TableMeasurer<T> {
         List<Column> columnList = tableData.getColumns();
         int left = 0;
         int maxLevel =tableData.getTableInfo().getMaxLevel();
+        tableData.getColumnInfos().clear();
+        tableData.getChildColumnInfos().clear();
         for(int i = 0;i < columnList.size();i++){
             int top = 0;
             Column column = columnList.get(i);

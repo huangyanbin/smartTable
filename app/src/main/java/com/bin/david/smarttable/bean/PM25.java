@@ -25,19 +25,19 @@ public class PM25 {
      */
 
     private int aqi;
-    @SmartColumn(id =1,name="地区",align = Paint.Align.LEFT)
+    @SmartColumn(id =1,name="地区",align = Paint.Align.LEFT,fixed = true)
     private String area;
     @SmartColumn(parent = "PM",id =3,name="PM10",align = Paint.Align.RIGHT)
     private int pm10;
     @SmartColumn(parent = "PM",id =2,name="PM10 24小时")
     private int pm10_24h;
-    @SmartColumn(id=4,name = "地址",fixed = true)
+    @SmartColumn(id=4,name = "地址")
     private String position_name;
     @SmartColumn(id=6,name="首要污染物")
     private Object primary_pollutant;
-    @SmartColumn(id=5,name = "空气质量",fixed = true)
+    @SmartColumn(id=5,name = "空气质量")
     private String quality;
-    @SmartColumn(id=3,name = "坐标代码",fixed = true)
+    @SmartColumn(id=3,name = "坐标代码")
     private String station_code;
     @SmartColumn(id=7,name = "更新时间")
     private String time_point;
