@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -77,9 +78,9 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         showRect = new Rect();
         tableRect = new Rect();
-         config = new TableConfig();
-         xAxis = new XSequence<>();
-         yAxis = new YSequence<>();
+        config = new TableConfig();
+        xAxis = new XSequence<>();
+        yAxis = new YSequence<>();
         parser = new TableParser<>();
         provider = new TableProvider<>();
         config.setPaint(paint);
@@ -265,18 +266,33 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     private void requestReMeasure(){
         //不是精准模式 且已经测量了
         if(!isExactly && getMeasuredHeight() !=0 && tableData !=null){
-            defaultHeight = tableData.getTableInfo().getTableRect().height();
-            defaultWidth = tableData.getTableInfo().getTableRect().width();
-            int[] realSize = new int[2];
-            getLocationInWindow(realSize);
-            DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
-            int screenWidth = dm.widthPixels;
-            int screenHeight = dm.heightPixels;
-            int maxWidth = screenWidth - realSize[0];
-            int maxHeight = screenHeight - realSize[1];
-            defaultHeight = Math.min(defaultHeight,maxHeight);
-            defaultWidth = Math.min(defaultWidth,maxWidth);
-            requestLayout();
+            if(tableData.getTableInfo().getTableRect() !=null) {
+                int defaultHeight = tableData.getTableInfo().getTableRect().height();
+                int defaultWidth = tableData.getTableInfo().getTableRect().width();
+                int[] realSize = new int[2];
+                getLocationInWindow(realSize);
+                DisplayMetrics dm = getContext().getResources().getDisplayMetrics();
+                int screenWidth = dm.widthPixels;
+                int screenHeight = dm.heightPixels;
+                int maxWidth = screenWidth - realSize[0];
+                int maxHeight = screenHeight - realSize[1];
+                defaultHeight = Math.min(defaultHeight, maxHeight);
+                defaultWidth = Math.min(defaultWidth, maxWidth);
+                //Log.e("SmartTable","old defaultHeight"+this.defaultHeight+"defaultWidth"+this.defaultWidth);
+                if(this.defaultHeight != defaultHeight
+                        || this.defaultWidth != defaultWidth) {
+                    this.defaultHeight = defaultHeight;
+                    this.defaultWidth = defaultWidth;
+                   // Log.e("SmartTable","new defaultHeight"+defaultHeight+"defaultWidth"+defaultWidth);
+                   post(new Runnable() {
+                       @Override
+                       public void run() {
+                           requestLayout();
+                       }
+                   });
+
+                }
+            }
         }
     }
 

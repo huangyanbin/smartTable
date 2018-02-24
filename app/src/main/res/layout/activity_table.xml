@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,25 +11,32 @@
 
    <com.bin.david.form.core.SmartTable
        android:id="@+id/table"
-       android:layout_weight="1"
        android:layout_width="match_parent"
        android:layout_height="0dp"
 
-      />
+       android:layout_marginBottom="8dp"
+       android:layout_marginTop="24dp"
+       android:layout_weight="1"
+       app:layout_constraintBottom_toTopOf="@+id/btn2"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.119"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
 
    <Button
        android:id="@+id/btn2"
        android:layout_width="wrap_content"
-       android:paddingLeft="10dp"
-       android:paddingRight="10dp"
-       android:layout_marginTop="10dp"
-       android:layout_marginBottom="10dp"
+       android:layout_height="45dp"
+       android:layout_marginEnd="8dp"
+       android:layout_marginStart="8dp"
        android:background="@drawable/dialog_btn_bg"
-       android:text="表格配置"
-       android:onClick="onClick"
        android:clickable="true"
+       android:onClick="onClick"
+       android:text="表格配置"
        android:textColor="#fff"
-       android:layout_height="45dp" />
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent" />
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

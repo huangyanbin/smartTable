@@ -22,7 +22,6 @@ public class NumberCountFormat<T> implements ICountFormat<T,Long> {
 
         }else if(number instanceof Short){
             totalLongCount+=number.shortValue();
-
         }
     }
 

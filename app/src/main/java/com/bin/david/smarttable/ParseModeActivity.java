@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -83,7 +84,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         List<TanBean> tanBeans = TanBean.initDatas();
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
-        for(int i = 0;i <50; i++) {
+        for(int i = 0;i <100; i++) {
             UserInfo userData = new UserInfo("用户"+i, random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             userData.setUrl(tanBeans.get(i%urlSize).getUrl());
@@ -227,6 +228,12 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                 avatarColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
         tableData.setShowCount(true);
         table.getConfig().setShowTableTitle(true);
+        tableData.setOnItemClickListener(new TableData.OnItemClickListener() {
+            @Override
+            public void onClick(Column column, String value, Object o, int col, int row) {
+                Log.e("smartTable","val"+value);
+            }
+        });
         table.getConfig().setColumnTitleBackgroundColor(getResources().getColor(R.color.windows_bg));
         table.getConfig().setCountBackgroundColor(getResources().getColor(R.color.windows_bg));
         tableData.setTitleDrawFormat(new TitleImageDrawFormat(size,size, TitleImageDrawFormat.RIGHT,10) {

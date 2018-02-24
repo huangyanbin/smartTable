@@ -22,8 +22,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
+
+
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
@@ -37,6 +38,7 @@ task sourcesJar(type: Jar) {
 
 task javadoc(type: Javadoc) {
     failOnError  false
+    javadoc.options.encoding = "UTF-8"
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     classpath += configurations.compile

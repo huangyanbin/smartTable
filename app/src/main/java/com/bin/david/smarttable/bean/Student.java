@@ -21,6 +21,8 @@ public class Student {
     private ChildData childData;
     @SmartColumn(id =6,name="选中")
     private boolean isCheck;
+    @SmartColumn(id=8,name="测试Double",autoCount = true)
+    private double data =5;
     private String url;
     @SmartColumn(type = ColumnType.ArrayChild)
     private List<Lesson> lessons;

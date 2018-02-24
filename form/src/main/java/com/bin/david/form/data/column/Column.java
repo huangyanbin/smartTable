@@ -412,7 +412,7 @@ public class Column<T> implements Comparable<Column> {
     protected void countColumnValue(T t) {
         if(t != null && isAutoCount && countFormat ==null){
             if(LetterUtils.isBasicType(t)){
-                if(LetterUtils.isNumber(this)) {
+                if(LetterUtils.isNumber(t)) {
                     countFormat = new NumberCountFormat<>();
                 }else{
                     countFormat = new DecimalCountFormat<>();

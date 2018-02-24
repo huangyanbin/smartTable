@@ -400,13 +400,13 @@ public class TableData<T> {
      * 设置表格单元格Cell点击事件
      * @param onItemClickListener 点击事件
      */
-    public void setOnItemClickListener(final OnItemClickListener<T> onItemClickListener) {
+    public void setOnItemClickListener(final OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-        for(Column<T> column: columns){
+        for(Column column: columns){
             if(!column.isParent()) {
-                column.setOnColumnItemClickListener(new OnColumnItemClickListener<T>() {
+                column.setOnColumnItemClickListener(new OnColumnItemClickListener() {
                     @Override
-                    public void onClick(Column<T> column, String value, T t, int position) {
+                    public void onClick(Column column, String value, Object t, int position) {
                         if (onItemClickListener != null) {
                             int index = childColumns.indexOf(column);
                             onItemClickListener.onClick(column, value, t, index, position);
