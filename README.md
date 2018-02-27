@@ -11,7 +11,7 @@
 
 > ![下载地址](/img/table.png)
 
-> ![QQ群](/img/SmartTable Code.png)
+> ![QQ群](/img/SmartTableCode.png)
 
 
 #####  功能介绍
