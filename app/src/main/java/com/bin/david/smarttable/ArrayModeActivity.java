@@ -34,6 +34,7 @@ public class ArrayModeActivity extends AppCompatActivity {
         FontStyle fontStyle = new FontStyle(this,10,ContextCompat.getColor(this,R.color.arc_text));
         table.getConfig().setColumnTitleStyle(fontStyle);
         table.getConfig().setHorizontalPadding(0);
+
         table.getConfig().setVerticalPadding(0);
         table.getConfig().setGridStyle(new LineStyle());
 
