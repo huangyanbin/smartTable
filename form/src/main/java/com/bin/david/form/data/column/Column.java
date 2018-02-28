@@ -381,6 +381,13 @@ public class Column<T> implements Comparable<Column> {
                         rangeStartPosition = i-1;
                     }
                     rangeCount++;
+                    //修复最后一列没有合并
+                    if(i == size-1){
+                        int[] range = {rangeStartPosition, i};
+                        ranges.add(range);
+                        rangeStartPosition =-1;
+                        rangeCount =1;
+                    }
                 }else{
                     if(rangeStartPosition !=-1){
                         int[] range = {rangeStartPosition, i-1};
