@@ -61,6 +61,29 @@ public class MapModeActivity extends AppCompatActivity {
     }
 
     public void getData(){
+        //直接设置Map
+       /* List<Object> list = new ArrayList<>();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("资产名称", "台式机");
+        map.put("账面数量", 1);
+        map.put("扫描数量", 1);
+        map.put("单位", "台");
+        map.put("规格型号", "45*50");
+        list.add(map);
+
+        map = new HashMap<>();
+        map.put("资产名称", "笔记本");
+        map.put("账面数量", 2);
+        map.put("扫描数量", 3);
+        map.put("单位", "台");
+        map.put("规格型号", "45*50");
+        list.add(map);
+
+        MapTableData tableData = MapTableData.create("测试", list);
+        table.setTableData(tableData);*/
+
+        //Json
         String json="{\"name\":\"BeJson\",\"url\":\"http://www.bejson.com\",\"page\":88,\"isNonProfit\":true,\"links\":[{\"name\":\"Google\",\"url\":\"http://www.google.com\"},{\"name\":\"Baidu\",\"url\":\"http://www.baidu.com\"},{\"name\":\"SoSo\",\"url\":\"http://www.SoSo.com\"},{\"name\":\"Google\",\"url\":\"http://www.google.com\"},{\"name\":\"Baidu\",\"url\":\"http://www.baidu.com\"},{\"name\":\"SoSo\",\"url\":\"http://www.SoSo.com\"},{\"name\":\"Google\",\"url\":\"http://www.google.com\"},{\"name\":\"Baidu\",\"url\":\"http://www.baidu.com\"},{\"name\":\"SoSo\",\"url\":\"http://www.SoSo.com\"},{\"name\":\"Google\",\"url\":\"http://www.google.com\"},{\"name\":\"Baidu\",\"url\":\"http://www.baidu.com\"},{\"name\":\"SoSo\",\"url\":\"http://www.SoSo.com\"}]}";
         MapTableData tableData = MapTableData.create("Json表格",JsonHelper.jsonToMapList(json));
         table.setTableData(tableData);

@@ -15,6 +15,7 @@ import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
+import com.bin.david.form.matrix.MatrixHelper;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.smarttable.bean.ChildData;
 import com.bin.david.smarttable.bean.TableStyle;
@@ -114,8 +115,13 @@ public class ManyActivity extends AppCompatActivity implements View.OnClickListe
                 .setYSequenceBgFormat(backgroundFormat2);
         table.getConfig().setFixedYSequence(true);
         table.setTableData(tableData);
+        table.getMatrixHelper().flingRight(200);
+
+
 
     }
+
+
 
     @Override
     public void onClick(View view) {
@@ -166,6 +172,7 @@ public class ManyActivity extends AppCompatActivity implements View.OnClickListe
         items.add(TableStyle.FIXED_COUNT_ROW);
         items.add(TableStyle.ZOOM);
         chartDialog.show(this, true, items);
+
     }
 
     private void zoom(TableStyle item) {

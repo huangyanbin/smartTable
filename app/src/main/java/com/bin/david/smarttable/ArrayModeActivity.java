@@ -38,7 +38,7 @@ public class ArrayModeActivity extends AppCompatActivity {
         table.getConfig().setVerticalPadding(0);
         table.getConfig().setGridStyle(new LineStyle());
 
-        ArrayTableData<Integer> tableData = ArrayTableData.create("日程表",week,infos,new IDrawFormat<Integer>(){
+        final ArrayTableData<Integer> tableData = ArrayTableData.create("日程表",week,infos,new IDrawFormat<Integer>(){
 
             @Override
             public int measureWidth(Column<Integer> column, int position,TableConfig config) {
@@ -79,11 +79,14 @@ public class ArrayModeActivity extends AppCompatActivity {
         tableData.setOnItemClickListener(new ArrayTableData.OnItemClickListener<Integer>() {
             @Override
             public void onClick(Column column, String value, Integer o, int col, int row) {
+                tableData.getArrayColumns().get(col).getDatas().get(row);
                 Toast.makeText(ArrayModeActivity.this,"列:"+col+ " 行："+row + "数据："+value,Toast.LENGTH_SHORT).show();
             }
         });
         table.setTableData(tableData);
     }
+
+
 
 
 }

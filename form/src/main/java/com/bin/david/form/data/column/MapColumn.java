@@ -104,6 +104,9 @@ public class MapColumn<T> extends ArrayColumn<T> {
         if(isArrayColumn) {
             return super.getSeizeCellSize(tableInfo, position);
         }else {
+            if(tableInfo.getArrayLineSize() == null){
+                return 1;
+            }
             return tableInfo.getArrayLineSize()[position];
         }
     }
