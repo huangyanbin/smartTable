@@ -54,6 +54,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     private MatrixHelper matrixHelper;
     private final Object lockObject = new Object();
     private boolean isExactly = true; //是否是测量精准模式
+    private boolean isNotifying = false; //是否正在更新数据
 
     public SmartTable(Context context) {
         super(context);
@@ -105,34 +106,36 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
      */
     @Override
     protected void onDraw(Canvas canvas) {
-        setScrollY(0);
-        showRect.set(getPaddingLeft(),getPaddingTop(),
-                getWidth() -getPaddingRight(),
-                getHeight()-getPaddingBottom());
-        if(tableData != null) {
-            Rect rect = tableData.getTableInfo().getTableRect();
-            if(rect != null) {
-                if(config.isShowTableTitle()) {
-                    measurer.measureTableTitle(tableData, tableTitle, showRect);
-                }
-                tableRect.set(rect);
-                Rect scaleRect = matrixHelper.getZoomProviderRect(showRect,tableRect,
-                        tableData.getTableInfo());
-                if(config.isShowTableTitle()) {
-                    tableTitle.onMeasure(scaleRect, showRect, config);
-                    tableTitle.onDraw(canvas, showRect, tableData.getTableName(), config);
-                }
-                drawGridBackground(canvas,showRect,scaleRect);
-                if(config.isShowYSequence()) {
-                    yAxis.onMeasure(scaleRect, showRect, config);
-                    yAxis.onDraw(canvas, showRect, tableData, config);
-                }
-                if(config.isShowXSequence()) {
-                    xAxis.onMeasure(scaleRect, showRect, config);
-                    xAxis.onDraw(canvas, showRect, tableData, config);
+        if(!isNotifying) {
+            setScrollY(0);
+            showRect.set(getPaddingLeft(), getPaddingTop(),
+                    getWidth() - getPaddingRight(),
+                    getHeight() - getPaddingBottom());
+            if (tableData != null) {
+                Rect rect = tableData.getTableInfo().getTableRect();
+                if (rect != null) {
+                    if (config.isShowTableTitle()) {
+                        measurer.measureTableTitle(tableData, tableTitle, showRect);
+                    }
+                    tableRect.set(rect);
+                    Rect scaleRect = matrixHelper.getZoomProviderRect(showRect, tableRect,
+                            tableData.getTableInfo());
+                    if (config.isShowTableTitle()) {
+                        tableTitle.onMeasure(scaleRect, showRect, config);
+                        tableTitle.onDraw(canvas, showRect, tableData.getTableName(), config);
+                    }
+                    drawGridBackground(canvas, showRect, scaleRect);
+                    if (config.isShowYSequence()) {
+                        yAxis.onMeasure(scaleRect, showRect, config);
+                        yAxis.onDraw(canvas, showRect, tableData, config);
+                    }
+                    if (config.isShowXSequence()) {
+                        xAxis.onMeasure(scaleRect, showRect, config);
+                        xAxis.onDraw(canvas, showRect, tableData, config);
 
+                    }
+                    provider.onDraw(canvas, scaleRect, showRect, tableData, config);
                 }
-                provider.onDraw(canvas, scaleRect, showRect, tableData, config);
             }
         }
 
@@ -203,12 +206,14 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                 @Override
                 public void run() {
                     synchronized (lockObject) {
+                        isNotifying = true;
                         //long start = System.currentTimeMillis();
                         parser.parse(tableData);
                         TableInfo info = measurer.measure(tableData, config);
                         xAxis.setHeight(info.getTopHeight());
                         yAxis.setWidth(info.getyAxisWidth());
                         requestReMeasure();
+                        isNotifying = false;
                         postInvalidate();
                         //long end = System.currentTimeMillis();
                         //Log.e("smartTable","notifyDataChanged timeMillis="+(end-start));
@@ -241,12 +246,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         }
     }
 
-    @Override
-    public void postInvalidate() {
-        synchronized (lockObject) {
-            super.postInvalidate();
-        }
-    }
+
 
   /**
      * 通知重绘

@@ -107,7 +107,7 @@ public class DrawUtils {
     public static void drawMultiText(Canvas canvas,Paint paint,Rect rect,String[] values){
         for(int i =0;i <values.length;i++) {
             int centerY = (int) ((rect.bottom + rect.top) / 2+ (values.length/2f-i-0.5)*getTextHeight(paint));
-            canvas.drawText(values[i], DrawUtils.getTextCenterX(rect.left, rect.right, paint),
+            canvas.drawText(values[values.length-i-1], DrawUtils.getTextCenterX(rect.left, rect.right, paint),
                     DrawUtils.getTextCenterY(centerY, paint), paint);
         }
     }
