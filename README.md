@@ -298,7 +298,7 @@ fixed |是否固定该列
 ### 打赏
      如果你觉得对你有帮助，客官打个赏！
 
-     ![打赏](/img/dashang.jpg)
+###    ![打赏](/img/dashang.jpg)
 
 
 ## *License*

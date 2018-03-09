@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
@@ -18,6 +19,7 @@ import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.utils.DensityUtils;
+import com.bin.david.form.utils.DrawUtils;
 
 public class SeatModeActivity extends AppCompatActivity {
 
@@ -82,10 +84,20 @@ public class SeatModeActivity extends AppCompatActivity {
             }
         });
         int size = DensityUtils.dp2px(this,20);
-        final ArrayTableData<Integer> tableData = ArrayTableData.create(table, "选座表", data, new ImageResDrawFormat<Integer>(size,size) {
+        final ArrayTableData<Integer> tableData = ArrayTableData.create(table, "选座表", data,
+                new ImageResDrawFormat<Integer>(size,size) {
             @Override
             protected Context getContext() {
                 return SeatModeActivity.this;
+            }
+
+            @Override
+            public void draw(Canvas c, Column<Integer> column, Integer integer, String value, Rect rect, int position, TableConfig config) {
+                super.draw(c, column, integer, value, rect, position, config);
+                Paint paint = config.getPaint();
+                paint.setColor(ContextCompat.getColor(SeatModeActivity.this,R.color.cal_sign_color));
+                paint.setTextSize(DensityUtils.sp2px(SeatModeActivity.this,13));
+                DrawUtils.drawSingleText(c,paint,rect,value);
             }
 
             @Override

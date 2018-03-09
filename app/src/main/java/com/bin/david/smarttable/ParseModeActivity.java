@@ -19,6 +19,7 @@ import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.column.ColumnInfo;
 import com.bin.david.form.data.format.IFormat;
+import com.bin.david.form.data.format.draw.MultiLineDrawFormat;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
@@ -85,7 +86,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         //测试 从其他地方获取url
         int urlSize = tanBeans.size();
         for(int i = 0;i <100; i++) {
-            UserInfo userData = new UserInfo("用户"+i, random.nextInt(70), System.currentTimeMillis()
+            UserInfo userData = new UserInfo("用户\n"+i+"\nceh", random.nextInt(70), System.currentTimeMillis()
                     - random.nextInt(70)*3600*1000*24,true,new ChildData("测试"+i));
             userData.setUrl(tanBeans.get(i%urlSize).getUrl());
             testData.add(userData);
@@ -93,7 +94,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
 
         final Column<String> nameColumn = new Column<>("姓名", "name");
         nameColumn.setAutoCount(true);
-        final Column<Integer> ageColumn = new Column<>("年龄", "age");
+        final Column<Integer> ageColumn = new Column<>("年龄", "age",new MultiLineDrawFormat<Integer>(100));
         ageColumn.setFixed(true);
         ageColumn.setAutoCount(true);
         int imgSize = DensityUtils.dp2px(this,25);
