@@ -7,7 +7,7 @@
 * [English README](/README.en.md/)
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
-* [apk version 1.9.0版本下载地址](/img/smartTable.apk)
+* [apk version 2.0版本下载地址](/img/smartTable.apk)
 
 > ![下载地址](/img/table.png)
 
@@ -31,13 +31,14 @@
 13. 分页模式；
 14. 首尾动态添加数据;
 15. 丰富的格式化;
-16. 支持二维数组展示（用于类似日程表，电影选票等）
-17. 导入excel(支持颜色，字体，背景，批注，对齐，图片等基本Excel属性)
-18. 表格合并单元(支持注解合并，支持自动合并)
-19. 支持其他刷新框架SmartRefreshLayout
-20. 可配置表格最小宽度(小于该宽度自动适配)
-21. 支持直接List或数组字段转列
-22. 支持Json数据直接转换成表格
+16. 支持二维数组展示（用于类似日程表，电影选票等）；
+17. 导入excel(支持颜色，字体，背景，批注，对齐，图片等基本Excel属性)；
+18. 表格合并单元(支持注解合并，支持自动合并)；
+19. 支持其他刷新框架SmartRefreshLayout；
+20. 可配置表格最小宽度(小于该宽度自动适配)；
+21. 支持直接List或数组字段转列；
+22. 支持Json数据直接转换成表格；
+23. 支持表格网格指定行列显示；
 
 ##### 功能展示
 
@@ -83,10 +84,11 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:1.9.0'
+	        compile 'com.github.huangyanbin:SmartTable:2.0'
 	}
 ```
-     如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本1.9.0
+     如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本2.0
+     2.0格式化配置有所变化，文档还没写，如果要需求，可以在QQ群询问。
 
 >  使用表格View
 
