@@ -13,7 +13,6 @@ import com.bin.david.form.utils.DrawUtils;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
 
 /**
  * Created by huang on 2017/10/30.
@@ -21,8 +20,7 @@ import java.util.SortedMap;
 
 public class TextDrawFormat<T> implements IDrawFormat<T> {
 
-    private CellInfo<T> cellInfo = new CellInfo<>();
-    private boolean isDrawBg = true;
+
     private Map<String,SoftReference<String[]>> valueMap; //避免产生大量对象
     private short maxLength = 0;
 
@@ -51,15 +49,13 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
     }
 
     @Override
-    public void draw(Canvas c, Column<T> column, T t, String value, Rect rect, int position, TableConfig config) {
-        cellInfo.set(column,t,value,position);
-        drawBackground(c,cellInfo,rect,config);
+    public void draw(Canvas c,Rect rect, CellInfo<T> cellInfo, TableConfig config) {
         Paint paint = config.getPaint();
-        setTextPaint(config,t, paint);
-        if(column.getTextAlign() !=null) {
-            paint.setTextAlign(column.getTextAlign());
+        setTextPaint(config,cellInfo, paint);
+        if(cellInfo.column.getTextAlign() !=null) {
+            paint.setTextAlign(cellInfo.column.getTextAlign());
         }
-        drawText(c, value, rect, paint);
+        drawText(c, cellInfo.value, rect, paint);
     }
 
     protected void drawText(Canvas c, String value, Rect rect, Paint paint) {
@@ -68,37 +64,14 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
 
 
-    public void setTextPaint(TableConfig config,T t, Paint paint) {
+    public void setTextPaint(TableConfig config,CellInfo<T> cellInfo, Paint paint) {
         config.getContentStyle().fillPaint(paint);
-        ICellBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
+        ICellBackgroundFormat<CellInfo> backgroundFormat = config.getContentCellBackgroundFormat();
         if(backgroundFormat!=null && backgroundFormat.getTextColor(cellInfo) != TableConfig.INVALID_COLOR){
             paint.setColor(backgroundFormat.getTextColor(cellInfo));
         }
         paint.setTextSize(paint.getTextSize()*config.getZoom());
 
-    }
-
-    public void drawBackground(Canvas c, CellInfo<T> cellInfo, Rect rect,TableConfig config) {
-        ICellBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
-        if(isDrawBg && backgroundFormat != null){
-            backgroundFormat.drawBackground(c,rect,cellInfo,config.getPaint());
-        }
-    }
-
-    public boolean isDrawBg() {
-        return isDrawBg;
-    }
-
-    public void setDrawBg(boolean drawBg) {
-        isDrawBg = drawBg;
-    }
-
-    public CellInfo<T> getCellInfo() {
-        return cellInfo;
-    }
-
-    public void setCellInfo(CellInfo<T> cellInfo) {
-        this.cellInfo = cellInfo;
     }
 
     protected String[] getSplitString(String val){

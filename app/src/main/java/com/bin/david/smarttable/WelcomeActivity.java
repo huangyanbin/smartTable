@@ -5,17 +5,16 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 import com.bin.david.form.data.style.LineStyle;
@@ -52,7 +51,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 .setShowXSequence(false)
                 .setShowYSequence(false)
                 .setShowTableTitle(false)
-                .setGridStyle(new LineStyle(-1,ContextCompat.getColor(this,android.R.color.transparent)));
+                .setContentGridStyle(new LineStyle(-1,ContextCompat.getColor(this,android.R.color.transparent)));
         tableData= ArrayTableData.create(table, "动画", data, null);
         table.setTableData(tableData);
         startAnim0();
@@ -91,7 +90,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void draw(Canvas c, Column<Integer> column, Integer integer, String value, Rect rect, int position, TableConfig config) {
+            public void draw(Canvas c, Rect rect, CellInfo<Integer> cellInfo, TableConfig config) {
                 Paint paint = config.getPaint();
                 paint.setStyle(Paint.Style.FILL);
                 paint.setColor(ContextCompat.getColor(WelcomeActivity.this, R.color.arc1));
@@ -101,6 +100,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 c.drawRect(rect.left+5,rect.top+5,rect.right-5,rect.bottom-5,paint);
                 c.restore();
             }
+
         };
         tableData.setDrawFormat(format);
         if(valueAnimator != null){
@@ -136,18 +136,18 @@ public class WelcomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void draw(Canvas c, Column<Integer> column, Integer val, String value, Rect rect, int position, TableConfig config) {
-
+            public void draw(Canvas c, Rect rect, CellInfo<Integer> cellInfo, TableConfig config) {
                 Paint paint = config.getPaint();
                 paint.setStyle(Paint.Style.FILL);
                 paint.setColor(ContextCompat.getColor(WelcomeActivity.this, R.color.arc1));
                 c.save();
-                if(val == points[rotatePosition]) {
+                if(cellInfo.data == points[rotatePosition]) {
                     c.rotate(rotateAngle1, rect.centerX(), rect.centerY());
                 }
                 c.drawRect(rect.left+10,rect.top+10,rect.right-10,rect.bottom-10,paint);
                 c.restore();
             }
+
         };
         tableData.setDrawFormat(format);
         if(valueAnimator != null){

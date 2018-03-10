@@ -174,9 +174,9 @@ public class TableListAdapter extends BaseQuickAdapter<String,BaseViewHolder> {
         // ageColumn.setAutoCount(true);
         //table.getConfig().setYSequenceBackgroundColor(mContext.getResources().getColor(R.color.arc1));
         //table.getConfig().setXSequenceBackgroundColor(mContext.getResources().getColor(R.color.arc2));
-        table.getConfig().setColumnTitleBackgroundColor(mContext.getResources().getColor(R.color.windows_bg));
+
         //table.getConfig().setContentBackgroundColor(mContext.getResources().getColor(R.color.arc21));
-        table.getConfig().setCountBackgroundColor(mContext.getResources().getColor(R.color.windows_bg));
+
         tableData.setTitleDrawFormat(new TitleImageDrawFormat(size,size, TitleImageDrawFormat.RIGHT,10) {
             @Override
             protected Context getContext() {

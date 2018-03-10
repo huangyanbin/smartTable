@@ -1,6 +1,10 @@
 package com.bin.david.form.utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.NinePatch;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -94,6 +98,19 @@ public class DrawUtils {
             }
         }
         return maxWidth;
+    }
+
+    /**
+     * 绘制.9图片
+     * @param canvas 画布
+     * @param context 上下文
+     * @param drawableID Res资源ID
+     * @param rect 矩形
+     */
+    public static void drawPatch(Canvas canvas,Context context,int drawableID,Rect rect){
+        Bitmap bmp_9 = BitmapFactory.decodeResource(context.getResources(), drawableID);
+        NinePatch ninePatch  = new NinePatch(bmp_9, bmp_9.getNinePatchChunk(), null);
+        ninePatch.draw(canvas, rect);
     }
 
 

@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.grid.BaseGridFormat;
+import com.bin.david.form.data.format.title.TitleDrawFormat;
 import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
@@ -20,6 +23,7 @@ import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.form.utils.DrawUtils;
+
 
 public class SeatModeActivity extends AppCompatActivity {
 
@@ -64,18 +68,32 @@ public class SeatModeActivity extends AppCompatActivity {
         table.getConfig().setVerticalPadding(10);
         LineStyle lineStyle = new LineStyle();
         lineStyle.setColor(ContextCompat.getColor(this,android.R.color.transparent));
-        table.getConfig().setGridStyle(lineStyle);
+        table.getConfig().setContentGridStyle(lineStyle);
         table.getConfig().setShowXSequence(false);
         table.getConfig().setFixedYSequence(true);//暂时有问题 ，后面修复
         table.setZoom(true,1,0.5f);
+        table.getConfig().setTableGridFormat(new BaseGridFormat(){
+            @Override
+            protected boolean isShowYSequenceHorizontalLine(int row) {
+                return false;
+            }
+
+            @Override
+            protected boolean isShowYSequenceVerticalLine(int row) {
+                return false;
+            }
+        });
         final  int roundSize = DensityUtils.dp2px(SeatModeActivity.this,5);
-        table.getConfig().setYSequenceBgFormat(new ICellBackgroundFormat<Integer>() {
+        table.getConfig().setYSequenceBackground(new IBackgroundFormat() {
+            @Override
+            public void drawBackground(Canvas canvas, Rect rect, Paint paint) {
+                DrawUtils.drawPatch(canvas,SeatModeActivity.this,R.mipmap.set_bg,rect);
+            }
+        });
+        table.getConfig().setYSequenceCellBgFormat(new ICellBackgroundFormat<Integer>() {
             @Override
             public void drawBackground(Canvas canvas, Rect rect, Integer position, Paint paint) {
 
-                paint.setStyle(Paint.Style.FILL);
-                paint.setColor(ContextCompat.getColor(SeatModeActivity.this,R.color.seat_y_bg));
-                canvas.drawRect(rect,paint);
             }
 
             @Override
@@ -91,14 +109,7 @@ public class SeatModeActivity extends AppCompatActivity {
                 return SeatModeActivity.this;
             }
 
-            @Override
-            public void draw(Canvas c, Column<Integer> column, Integer integer, String value, Rect rect, int position, TableConfig config) {
-                super.draw(c, column, integer, value, rect, position, config);
-                Paint paint = config.getPaint();
-                paint.setColor(ContextCompat.getColor(SeatModeActivity.this,R.color.cal_sign_color));
-                paint.setTextSize(DensityUtils.sp2px(SeatModeActivity.this,13));
-                DrawUtils.drawSingleText(c,paint,rect,value);
-            }
+
 
             @Override
             protected int getResourceID(Integer status, String value, int position) {
@@ -123,6 +134,16 @@ public class SeatModeActivity extends AppCompatActivity {
                     tableData.getData()[col][row] = checked == 1?0:1;
                 }
                 table.invalidate();
+            }
+        });
+        tableData.setTitleDrawFormat(new TitleDrawFormat(){
+            @Override
+            public void draw(Canvas c, Column column, Rect rect, TableConfig config) {
+                Paint paint = config.getPaint();
+                paint.setTextSize(paint.getTextSize()*config.getZoom());
+                //在这里设置对齐
+                paint.setTextAlign(Paint.Align.CENTER);
+                DrawUtils.drawSingleText(c,paint,rect,column.getColumnName());
             }
         });
         table.setTableData(tableData);

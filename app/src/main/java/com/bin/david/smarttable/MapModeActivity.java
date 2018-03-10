@@ -13,21 +13,8 @@ import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.table.MapTableData;
 import com.bin.david.form.utils.DensityUtils;
-import com.bin.david.smarttable.bean.PM25;
 import com.bin.david.smarttable.utils.JsonHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import okhttp3.Call;
 
 import static com.bin.david.smarttable.utils.JsonHelper.reflect;
 
@@ -42,10 +29,10 @@ public class MapModeActivity extends AppCompatActivity {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         table = (SmartTable) findViewById(R.id.table);
 
-        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
+        table.getConfig().setContentCellBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
-                if(cellInfo.position%2 == 1) {
+                if(cellInfo.row %2 == 1) {
                     return ContextCompat.getColor(MapModeActivity.this, R.color.content_bg);
                 }
                 return TableConfig.INVALID_COLOR;

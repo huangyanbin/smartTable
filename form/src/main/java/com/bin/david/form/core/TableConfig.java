@@ -4,13 +4,19 @@ import android.graphics.Paint;
 
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
+import com.bin.david.form.data.format.grid.BaseAbstractGridFormat;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
+import com.bin.david.form.data.format.grid.BaseGridFormat;
+import com.bin.david.form.data.format.grid.IGridFormat;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 
 /**
  * Created by huang on 2017/11/1.
+ * 表格配置
+ * 表格90%配置都在这里
  */
 
 public class TableConfig {
@@ -61,7 +67,7 @@ public class TableConfig {
     /**
      * 表格网格
      */
-    private LineStyle gridStyle;
+    private LineStyle contentGridStyle;
     /**
      * 上下padding(为了表格的美观，暂只支持统一的padding)
      */
@@ -79,26 +85,36 @@ public class TableConfig {
      * 左右padding(为了表格的美观，暂只支持统一的padding)
      */
     private int horizontalPadding= 40;
-    /**
-     * 左侧序号列背景
-     */
-    private int YSequenceBackgroundColor=INVALID_COLOR;
-    /**
-     * 顶部序号列背景
-     */
-    private int XSequenceBackgroundColor =INVALID_COLOR;
+
     /**
      * 组标题背景
      */
-    private int columnTitleBackgroundColor =INVALID_COLOR;
+    private IBackgroundFormat columnTitleBackground;
     /**
      * 内容背景
      */
-    private int contentBackgroundColor=INVALID_COLOR;
+    private IBackgroundFormat contentBackground;
     /**
      * 统计行背景
      */
-    private int countBackgroundColor=INVALID_COLOR;
+    private IBackgroundFormat countBackground;
+    /**
+     *
+     * 左侧序号列背景
+     *
+     */
+    private IBackgroundFormat YSequenceBackground;
+    /**
+     * 顶部序号列背景
+     */
+    private IBackgroundFormat XSequenceBackground;
+
+    /**
+     * 网格格式化
+     */
+    private IGridFormat tableGridFormat = new BaseGridFormat();
+
+
 
     /**
      * 是否显示顶部序号列
@@ -117,23 +133,25 @@ public class TableConfig {
      */
     private boolean isShowColumnTitle = true;
     /**
-     * 格子进行背景格式化
+     * 内容格子进行背景格式化
      */
-    private ICellBackgroundFormat<CellInfo> contentBackgroundFormat;
+    private ICellBackgroundFormat<CellInfo> contentCellBackgroundFormat;
     /**
      * 标题格子背景格式化
      */
-    private ICellBackgroundFormat<Column> columnBackgroundFormat;
+    private ICellBackgroundFormat<Column> columnCellBackgroundFormat;
     /**
-     * 顶部序号背景格式化
+     * 顶部序号格子背景格式化
      */
-    private ICellBackgroundFormat<Integer> XSequenceBgFormat;
+    private ICellBackgroundFormat<Integer> XSequenceCellBgFormat;
     /**
-     * 左序号背景格式化
+     * 左序号格子背景格式化
      */
-    private ICellBackgroundFormat<Integer> YSequenceBgFormat;
-
-    private ICellBackgroundFormat<Column> countBgFormat;
+    private ICellBackgroundFormat<Integer> YSequenceCellBgFormat;
+    /**
+     * 统计行格子背景格式化
+     */
+    private ICellBackgroundFormat<Column> countBgCellFormat;
     /**
      * 是否固定左侧
      *
@@ -251,11 +269,11 @@ public class TableConfig {
         this.paint = paint;
     }
 
-    public LineStyle getGridStyle() {
-        if(gridStyle == null){
+    public LineStyle getContentGridStyle() {
+        if(contentGridStyle == null){
             return defaultGridStyle;
         }
-        return gridStyle;
+        return contentGridStyle;
     }
 
     public LineStyle getColumnTitleGridStyle() {
@@ -320,69 +338,19 @@ public class TableConfig {
         return countStyle;
     }
 
-    public int getYSequenceBackgroundColor() {
-        return YSequenceBackgroundColor;
-    }
 
-    public TableConfig setYSequenceBackgroundColor(int YSequenceBackgroundColor) {
-        this.YSequenceBackgroundColor = YSequenceBackgroundColor;
-        return this;
-    }
-
-    public int getXSequenceBackgroundColor() {
-        return XSequenceBackgroundColor;
-    }
-
-    public TableConfig setXSequenceBackgroundColor(int XSequenceBackgroundColor) {
-        this.XSequenceBackgroundColor = XSequenceBackgroundColor;
-        return this;
-    }
-
-    public int getColumnTitleBackgroundColor() {
-        return columnTitleBackgroundColor;
-    }
-
-    public TableConfig setColumnTitleBackgroundColor(int columnTitleBackgroundColor) {
-        this.columnTitleBackgroundColor = columnTitleBackgroundColor;
-        return this;
-    }
-
-    public int getColumnTitleVerticalPadding() {
-        return columnTitleVerticalPadding;
-    }
-
-    public TableConfig setColumnTitleVerticalPadding(int columnTitleVerticalPadding) {
-        this.columnTitleVerticalPadding = columnTitleVerticalPadding;
-        return this;
-    }
-
-    public int getContentBackgroundColor() {
-        return contentBackgroundColor;
-    }
-
-    public TableConfig setContentBackgroundColor(int contentBackgroundColor) {
-        this.contentBackgroundColor = contentBackgroundColor;
-        return this;
-    }
 
     public TableConfig setCountStyle(FontStyle countStyle) {
         this.countStyle = countStyle;
         return this;
     }
 
-    public TableConfig setGridStyle(LineStyle gridStyle) {
-        this.gridStyle = gridStyle;
+    public TableConfig setContentGridStyle(LineStyle contentGridStyle) {
+        this.contentGridStyle = contentGridStyle;
         return this;
     }
 
-    public int getCountBackgroundColor() {
-        return countBackgroundColor;
-    }
 
-    public TableConfig setCountBackgroundColor(int countBackgroundColor) {
-        this.countBackgroundColor = countBackgroundColor;
-        return this;
-    }
 
     public boolean isFixedCountRow() {
         return fixedCountRow;
@@ -423,48 +391,48 @@ public class TableConfig {
         return this;
     }
 
-    public ICellBackgroundFormat<CellInfo> getContentBackgroundFormat() {
-        return contentBackgroundFormat;
+    public ICellBackgroundFormat<CellInfo> getContentCellBackgroundFormat() {
+        return contentCellBackgroundFormat;
     }
 
-    public TableConfig setContentBackgroundFormat(ICellBackgroundFormat<CellInfo> contentBackgroundFormat) {
-        this.contentBackgroundFormat = contentBackgroundFormat;
+    public TableConfig setContentCellBackgroundFormat(ICellBackgroundFormat<CellInfo> contentCellBackgroundFormat) {
+        this.contentCellBackgroundFormat = contentCellBackgroundFormat;
         return this;
     }
 
-    public ICellBackgroundFormat<Column> getColumnBackgroundFormat() {
-        return columnBackgroundFormat;
+    public ICellBackgroundFormat<Column> getColumnCellBackgroundFormat() {
+        return columnCellBackgroundFormat;
     }
 
-    public TableConfig setColumnBackgroundFormat(ICellBackgroundFormat<Column> columnBackgroundFormat) {
-        this.columnBackgroundFormat = columnBackgroundFormat;
+    public TableConfig setColumnCellBackgroundFormat(ICellBackgroundFormat<Column> columnCellBackgroundFormat) {
+        this.columnCellBackgroundFormat = columnCellBackgroundFormat;
         return this;
     }
 
-    public ICellBackgroundFormat<Integer> getXSequenceBgFormat() {
-        return XSequenceBgFormat;
+    public ICellBackgroundFormat<Integer> getXSequenceCellBgFormat() {
+        return XSequenceCellBgFormat;
     }
 
-    public TableConfig setXSequenceBgFormat(ICellBackgroundFormat<Integer> XSequenceBgFormat) {
-        this.XSequenceBgFormat = XSequenceBgFormat;
+    public TableConfig setXSequenceCellBgFormat(ICellBackgroundFormat<Integer> XSequenceCellBgFormat) {
+        this.XSequenceCellBgFormat = XSequenceCellBgFormat;
         return this;
     }
 
-    public ICellBackgroundFormat<Integer> getYSequenceBgFormat() {
-        return YSequenceBgFormat;
+    public ICellBackgroundFormat<Integer> getYSequenceCellBgFormat() {
+        return YSequenceCellBgFormat;
     }
 
-    public TableConfig setYSequenceBgFormat(ICellBackgroundFormat<Integer> YSequenceBgFormat) {
-        this.YSequenceBgFormat = YSequenceBgFormat;
+    public TableConfig setYSequenceCellBgFormat(ICellBackgroundFormat<Integer> YSequenceCellBgFormat) {
+        this.YSequenceCellBgFormat = YSequenceCellBgFormat;
         return this;
     }
 
-    public ICellBackgroundFormat<Column> getCountBgFormat() {
-        return countBgFormat;
+    public ICellBackgroundFormat<Column> getCountBgCellFormat() {
+        return countBgCellFormat;
     }
 
-    public TableConfig setCountBgFormat(ICellBackgroundFormat<Column> countBgFormat) {
-        this.countBgFormat = countBgFormat;
+    public TableConfig setCountBgCellFormat(ICellBackgroundFormat<Column> countBgCellFormat) {
+        this.countBgCellFormat = countBgCellFormat;
         return this;
     }
 
@@ -542,5 +510,69 @@ public class TableConfig {
 
     public int getMinTableWidth() {
         return minTableWidth;
+    }
+
+    public IBackgroundFormat getYSequenceBackground() {
+        return YSequenceBackground;
+    }
+
+    public TableConfig setYSequenceBackground(IBackgroundFormat YSequenceBackground) {
+        this.YSequenceBackground = YSequenceBackground;
+        return this;
+    }
+
+    public int getColumnTitleVerticalPadding() {
+        return columnTitleVerticalPadding;
+    }
+
+    public TableConfig setColumnTitleVerticalPadding(int columnTitleVerticalPadding) {
+        this.columnTitleVerticalPadding = columnTitleVerticalPadding;
+        return this;
+    }
+
+    public IBackgroundFormat getColumnTitleBackground() {
+        return columnTitleBackground;
+    }
+
+    public TableConfig setColumnTitleBackground(IBackgroundFormat columnTitleBackground) {
+        this.columnTitleBackground = columnTitleBackground;
+        return this;
+
+    }
+
+    public IBackgroundFormat getContentBackground() {
+        return contentBackground;
+    }
+
+    public TableConfig setContentBackground(IBackgroundFormat contentBackground) {
+        this.contentBackground = contentBackground;
+        return this;
+    }
+
+    public IBackgroundFormat getCountBackground() {
+        return countBackground;
+    }
+
+    public TableConfig setCountBackground(IBackgroundFormat countBackground) {
+        this.countBackground = countBackground;
+        return this;
+    }
+
+    public IBackgroundFormat getXSequenceBackground() {
+        return XSequenceBackground;
+    }
+
+    public TableConfig setXSequenceBackground(IBackgroundFormat XSequenceBackground) {
+        this.XSequenceBackground = XSequenceBackground;
+        return this;
+    }
+
+    public IGridFormat getTableGridFormat() {
+        return tableGridFormat;
+    }
+
+    public TableConfig setTableGridFormat(IGridFormat tableGridFormat) {
+        this.tableGridFormat = tableGridFormat;
+        return this;
     }
 }

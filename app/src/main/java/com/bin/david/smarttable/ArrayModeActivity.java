@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.draw.IDrawFormat;
@@ -36,7 +37,7 @@ public class ArrayModeActivity extends AppCompatActivity {
         table.getConfig().setHorizontalPadding(0);
 
         table.getConfig().setVerticalPadding(0);
-        table.getConfig().setGridStyle(new LineStyle());
+        table.getConfig().setContentGridStyle(new LineStyle());
 
         final ArrayTableData<Integer> tableData = ArrayTableData.create("日程表",week,infos,new IDrawFormat<Integer>(){
 
@@ -51,10 +52,10 @@ public class ArrayModeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void draw(Canvas c, Column<Integer> column, Integer integer, String value, Rect rect, int position, TableConfig config) {
+            public void draw(Canvas c, Rect rect, CellInfo<Integer> cellInfo, TableConfig config) {
                 Paint paint = config.getPaint();
                 int color;
-                switch (integer){
+                switch (cellInfo.data){
                     case 1:
                         color =R.color.github_con_1;
                         break;

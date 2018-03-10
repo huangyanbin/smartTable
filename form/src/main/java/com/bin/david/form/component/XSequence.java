@@ -27,6 +27,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
     private ISequenceFormat format;
     private Rect clipRect;
     private Rect tempRect; //临时使用
+    private Rect scaleRect;
 
     public XSequence() {
         this.rect = new Rect();
@@ -52,6 +53,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
             showRect.top +=clipHeight;
             scaleRect.top += scaleHeight;
         }
+        this.scaleRect =scaleRect;
     }
 
     @Override
@@ -64,8 +66,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         int showTop = showRect.top-clipHeight;
         canvas.save();
         canvas.clipRect(showRect.left,showTop,showRect.right, showRect.top);
-        DrawUtils.fillBackground(canvas, showRect.left, showTop, showRect.right, showRect.top,
-                config.getXSequenceBackgroundColor(),config.getPaint());
+        drawBackground(canvas, showRect, config, showTop);
         clipRect.set(showRect);
         boolean isPerColumnFixed = false;
         int clipCount = 0;
@@ -100,6 +101,20 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         canvas.restore();
     }
 
+    /**
+     * 绘制背景
+     * @param canvas
+     * @param showRect
+     * @param config
+     * @param showTop
+     */
+    protected void drawBackground(Canvas canvas, Rect showRect, TableConfig config, int showTop) {
+        if(config.getXSequenceBackground() !=null){
+            tempRect.set(Math.max(scaleRect.left,showRect.left), showTop, Math.min(showRect.right,scaleRect.right), showRect.top);
+            config.getXSequenceBackground().drawBackground(canvas,tempRect,config.getPaint());
+        }
+    }
+
     private float showTextNum(Canvas canvas, Rect showRect, TableConfig config, float left, int i, float right) {
         if(DrawUtils.isMixHorizontalRect(showRect,(int)left,(int)right)) {
             String text = format.format(i+1);
@@ -111,13 +126,15 @@ public class XSequence<T> implements IComponent<TableData<T>>{
 
     private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,int position,TableConfig config){
         Paint paint= config.getPaint();
-        config.getSequenceGridStyle().fillPaint(paint);
-        canvas.drawRect(left,top,right,bottom,paint);
+        tempRect.set(left,top,right,bottom);
         //绘制背景
-        ICellBackgroundFormat<Integer> backgroundFormat = config.getXSequenceBgFormat();
+        ICellBackgroundFormat<Integer> backgroundFormat = config.getXSequenceCellBgFormat();
         if(backgroundFormat != null){
-            tempRect.set(left,top,right,bottom);
-            backgroundFormat.drawBackground(canvas, tempRect,position,config.getPaint());
+            backgroundFormat.drawBackground(canvas, tempRect,position,paint);
+        }
+        if(config.getTableGridFormat() !=null){
+            config.getSequenceGridStyle().fillPaint(paint);
+            config.getTableGridFormat().drawXSequenceGrid(canvas,position,tempRect,paint);
         }
         config.getXSequenceStyle().fillPaint(paint);
         //字体颜色跟随背景变化

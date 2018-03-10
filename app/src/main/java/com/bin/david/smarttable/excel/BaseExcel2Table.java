@@ -13,6 +13,7 @@ import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.CellRange;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.IFormat;
+import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.format.draw.TextDrawFormat;
@@ -28,12 +29,9 @@ import com.bin.david.smarttable.R;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -67,8 +65,8 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
         //配置
         table.getConfig().setHorizontalPadding(DensityUtils.dp2px(context,10))
                 .setColumnTitleHorizontalPadding(DensityUtils.dp2px(context,5))
-                .setXSequenceBackgroundColor(backgroundColor)
-                .setYSequenceBackgroundColor(backgroundColor)
+                .setXSequenceBackground(new BaseBackgroundFormat(backgroundColor))
+                .setYSequenceBackground(new BaseBackgroundFormat(backgroundColor))
                 .setLeftAndTopBackgroundColor(backgroundColor)
                 .setSequenceGridStyle(new LineStyle().setColor(xyGridColor))
                 .setLeftTopDrawFormat(new LeftTopDrawFormat() { //设置左上角三角形
@@ -83,7 +81,7 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
                     }
                 });
         //设置表格背景颜色
-        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
+        table.getConfig().setContentCellBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
                if(cellInfo.data !=null) {
@@ -294,19 +292,21 @@ public abstract class BaseExcel2Table<T> implements IExcel2Table<T> {
                     }
 
                     @Override
-                    public void setTextPaint(TableConfig config, K cell, Paint paint) {
+                    public void setTextPaint(TableConfig config, CellInfo<K> cellInfo, Paint paint) {
                         if(softReference.get() == null){
                             return;
                         }
-                        super.setTextPaint(config, cell, paint);
-                        if (cell != null) {
-                            config.getPaint().setTextAlign(getAlign((T) cell));
-                            int fontSize = (int) (getFontSize(softReference.get(),(T) cell) * fontScale); //增加字体，效果更好看
+                        super.setTextPaint(config, cellInfo, paint);
+                        if (cellInfo.data != null) {
+                            config.getPaint().setTextAlign(getAlign((T) cellInfo.data));
+                            int fontSize = (int) (getFontSize(softReference.get(),(T) cellInfo.data) * fontScale); //增加字体，效果更好看
                             config.getPaint().setTextSize(DensityUtils.sp2px(softReference.get(), fontSize)*config.getZoom());
-                            paint.setColor(getTextColor(softReference.get(),(T) cell));
+                            paint.setColor(getTextColor(softReference.get(),(T) cellInfo.data));
 
                         }
                     }
+
+
                 });
                 if (ranges != null) {
                     tableData.setUserCellRange(ranges); //设置自定义规则

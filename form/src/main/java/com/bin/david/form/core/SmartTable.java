@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -142,15 +141,17 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     }
 
     /**
-     * 绘制网格背景
+     * 绘制表格边框背景
      * @param canvas
      */
     private void drawGridBackground(Canvas canvas,Rect showRect,Rect scaleRect) {
-        config.getGridStyle().fillPaint(paint);
-        canvas.drawRect(Math.max(showRect.left,scaleRect.left),
-                Math.max(showRect.top,scaleRect.top),
-                Math.min(showRect.right,scaleRect.right),
-                Math.min(scaleRect.bottom,showRect.bottom),paint);
+        config.getContentGridStyle().fillPaint(paint);
+        if(config.getTableGridFormat() !=null) {
+            config.getTableGridFormat().drawTableBorderGrid(canvas,Math.max(showRect.left, scaleRect.left),
+                    Math.max(showRect.top, scaleRect.top),
+                    Math.min(showRect.right, scaleRect.right),
+                    Math.min(scaleRect.bottom, showRect.bottom),paint);
+        }
     }
 
     /**

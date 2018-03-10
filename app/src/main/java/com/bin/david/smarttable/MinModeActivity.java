@@ -13,6 +13,7 @@ import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.column.ColumnInfo;
+import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.draw.BitmapDrawFormat;
@@ -92,8 +93,8 @@ public class MinModeActivity extends AppCompatActivity{
         final TableData<UserInfo> tableData = new TableData<>("测试",testData,nameColumn,
                 avatarColumn);
         tableData.setShowCount(true);
-        table.getConfig().setColumnTitleBackgroundColor(getResources().getColor(R.color.windows_bg));
-        table.getConfig().setCountBackgroundColor(getResources().getColor(R.color.windows_bg));
+        table.getConfig().setColumnTitleBackground(new BaseBackgroundFormat(getResources().getColor(R.color.windows_bg)));
+        table.getConfig().setCountBackground(new BaseBackgroundFormat(getResources().getColor(R.color.windows_bg)));
         int size = DensityUtils.dp2px(this,15);
         tableData.setTitleDrawFormat(new TitleImageDrawFormat(size,size, TitleImageDrawFormat.RIGHT,10) {
             @Override
@@ -153,7 +154,7 @@ public class MinModeActivity extends AppCompatActivity{
         ICellBackgroundFormat<CellInfo> backgroundFormat = new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
-                if(cellInfo.position%2 == 0) {
+                if(cellInfo.row %2 == 0) {
                     return ContextCompat.getColor(MinModeActivity.this, R.color.content_bg);
                 }
                 return TableConfig.INVALID_COLOR;
@@ -180,8 +181,8 @@ public class MinModeActivity extends AppCompatActivity{
                 return TableConfig.INVALID_COLOR;
             }
         };
-        table.getConfig().setContentBackgroundFormat(backgroundFormat)
-                .setYSequenceBgFormat(backgroundFormat2);
+        table.getConfig().setContentCellBackgroundFormat(backgroundFormat)
+                .setYSequenceCellBgFormat(backgroundFormat2);
         table.setTableData(tableData);
 
 

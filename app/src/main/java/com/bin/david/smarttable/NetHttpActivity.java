@@ -41,16 +41,16 @@ public class NetHttpActivity extends AppCompatActivity {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         table = (SmartTable<PM25>) findViewById(R.id.table);
 
-        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
+        table.getConfig().setContentCellBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
-                if(cellInfo.position%2 == 1) {
+                if(cellInfo.row %2 == 1) {
                     return ContextCompat.getColor(NetHttpActivity.this, R.color.content_bg);
                 }
                 return TableConfig.INVALID_COLOR;
             }
 
-        }).setColumnBackgroundFormat(new BaseCellBackgroundFormat<Column>() {
+        }).setColumnCellBackgroundFormat(new BaseCellBackgroundFormat<Column>() {
             @Override
             public int getBackGroundColor(Column column) {
                 if("area".equals(column.getFieldName())) {

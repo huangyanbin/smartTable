@@ -3,6 +3,7 @@ package com.bin.david.form.data.format.draw;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.exception.TableException;
@@ -63,14 +64,10 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
     }
 
     @Override
-    public void draw(Canvas c, Column<T> column, T t, String value, Rect rect, int position, TableConfig config) {
-        setDrawBg(true);
-        cellInfo.set(column,t,value,position);
-        drawBackground(c,cellInfo,rect,config);
-        setDrawBg(false);
-        textDrawFormat.setDrawBg(false);
-        if(getBitmap(t,value,position) == null){
-            textDrawFormat.draw(c,column,t,value,rect,position,config);
+    public void draw(Canvas c, Rect rect, CellInfo<T> cellInfo, TableConfig config) {
+
+        if(getBitmap(cellInfo.data,cellInfo.value,cellInfo.row) == null){
+            textDrawFormat.draw(c,rect,cellInfo,config);
             return;
         }
         int imgWidth = (int) (getImageWidth()*config.getZoom());
@@ -82,31 +79,31 @@ public abstract class TextImageDrawFormat<T> extends ImageResDrawFormat<T> {
         switch (direction){
             case LEFT:
                 this.rect.set(rect.left+(imgWidth+drawPadding),rect.top,rect.right,rect.bottom);
-                textDrawFormat.draw(c,column,t,value,this.rect,position,config);
-                int imgRight = (rect.right+rect.left)/2- textDrawFormat.measureWidth(column,position,config)/2+drawPadding;
+                textDrawFormat.draw(c,this.rect,cellInfo,config);
+                int imgRight = (rect.right+rect.left)/2- textDrawFormat.measureWidth(cellInfo.column,cellInfo.row,config)/2+drawPadding;
                 this.rect.set(imgRight-imgWidth,rect.top,imgRight,rect.bottom);
-                super.draw(c,column,t,value,this.rect,position,config);
+                super.draw(c,this.rect,cellInfo,config);
                 break;
             case RIGHT:
                 this.rect.set(rect.left,rect.top,rect.right-(imgWidth+drawPadding),rect.bottom);
-                textDrawFormat.draw(c,column,t,value,rect,position,config);
-                int imgLeft = (rect.right+rect.left)/2+ textDrawFormat.measureWidth(column,position,config)/2 + drawPadding;
+                textDrawFormat.draw(c,this.rect,cellInfo,config);
+                int imgLeft = (rect.right+rect.left)/2+ textDrawFormat.measureWidth(cellInfo.column,cellInfo.row,config)/2 + drawPadding;
                 this.rect.set(imgLeft,rect.top,imgLeft+imgWidth,rect.bottom);
-                super.draw(c,column,t,value,this.rect,position,config);
+                super.draw(c,this.rect,cellInfo,config);
                 break;
             case TOP:
                 this.rect.set(rect.left,rect.top+(imgHeight+drawPadding)/2,rect.right,rect.bottom);
-                textDrawFormat.draw(c,column,t,value,this.rect,position,config);
-                int imgBottom = (rect.top+rect.bottom)/2- textDrawFormat.measureHeight(column,position,config)/2+drawPadding;
+                textDrawFormat.draw(c,this.rect,cellInfo,config);
+                int imgBottom = (rect.top+rect.bottom)/2- textDrawFormat.measureHeight(cellInfo.column,cellInfo.row,config)/2+drawPadding;
                 this.rect.set(rect.left,imgBottom -imgHeight,rect.right,imgBottom);
-                super.draw(c,column,t,value,this.rect,position,config);
+                super.draw(c,this.rect,cellInfo,config);
                 break;
             case BOTTOM:
                 this.rect.set(rect.left,rect.top,rect.right,rect.bottom-(imgHeight+drawPadding)/2);
-                textDrawFormat.draw(c,column,t,value,this.rect,position,config);
-                int imgTop = (rect.top+rect.bottom)/2+ textDrawFormat.measureHeight(column,position,config)/2-drawPadding ;
+                textDrawFormat.draw(c,this.rect,cellInfo,config);
+                int imgTop = (rect.top+rect.bottom)/2+ textDrawFormat.measureHeight(cellInfo.column,cellInfo.row,config)/2-drawPadding ;
                 this.rect.set(rect.left,imgTop,rect.right,imgTop +imgHeight);
-                super.draw(c,column,t,value, this.rect,position,config);
+                super.draw(c,this.rect,cellInfo,config);
                 break;
 
         }

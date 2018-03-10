@@ -48,6 +48,7 @@ public class Column<T> implements Comparable<Column> {
     private boolean isReverseSort;
     private OnColumnItemClickListener<T> onColumnItemClickListener;
     private Paint.Align textAlign;
+    private Paint.Align titleAlign;
     private boolean isAutoCount =false;
     private boolean isAutoMerge = false; //是否自动合并单元格
     private int maxMergeCount = Integer.MAX_VALUE;
@@ -58,6 +59,7 @@ public class Column<T> implements Comparable<Column> {
     private int minWidth;
     private int minHeight;
     private int maxWidth = Integer.MAX_VALUE;
+
 
 
     /**列构造方法
@@ -448,9 +450,6 @@ public class Column<T> implements Comparable<Column> {
 
     }
 
-
-
-
     /**
      * 获取等级 如果上面没有parent 则为1，否则等于parent 递归+1
      * @return
@@ -697,7 +696,19 @@ public class Column<T> implements Comparable<Column> {
         return maxWidth;
     }
 
-   /*暂未开放
+    public Paint.Align getTitleAlign() {
+        return titleAlign;
+    }
+
+    /**
+     * 设置标题对齐方式
+     * @param titleAlign
+     */
+    public void setTitleAlign(Paint.Align titleAlign) {
+        this.titleAlign = titleAlign;
+    }
+
+    /*暂未开放
     public void setMaxWidth(int maxWidth) {
         this.maxWidth = maxWidth;
     }*/

@@ -38,10 +38,10 @@ public class RefreshActivity extends AppCompatActivity {
         FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15));
         table = (SmartTable<PM25>) findViewById(R.id.table);
         refreshLayout = (RefreshLayout)findViewById(R.id.refreshLayout);
-        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
+        table.getConfig().setContentCellBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
-                if(cellInfo.position%2 == 1) {
+                if(cellInfo.row %2 == 1) {
                     return ContextCompat.getColor(RefreshActivity.this, R.color.content_bg);
                 }
                 return TableConfig.INVALID_COLOR;

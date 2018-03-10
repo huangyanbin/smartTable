@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(MinModeActivity.class,"设置表格最小宽度(嵌入ScrollView)"));
         items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
         items.add(new MainItem(WelcomeActivity.class,"表格动画") );
-        //items.add(new MainItem(TanTanActivity.class,"探探效果"));
+        items.add(new MainItem(GridModeActivity.class,"网格配置"));
 
 
         itemAdapter = new ItemAdapter(items);

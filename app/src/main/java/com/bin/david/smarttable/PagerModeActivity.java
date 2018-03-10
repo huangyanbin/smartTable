@@ -15,6 +15,7 @@ import com.bin.david.form.core.TableConfig;
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.column.ColumnInfo;
+import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.table.PageTableData;
 import com.bin.david.form.data.format.IFormat;
 import com.bin.david.form.data.format.bg.BaseCellBackgroundFormat;
@@ -227,7 +228,7 @@ public class PagerModeActivity extends AppCompatActivity implements View.OnClick
             }
         });
         tableData.setShowCount(true);
-        table.getConfig().setCountBackgroundColor(getResources().getColor(R.color.windows_bg))
+        table.getConfig().setCountBackground(new BaseBackgroundFormat(getResources().getColor(R.color.windows_bg)))
                 .setShowXSequence(false).setShowYSequence(false);
         FontStyle fontStyle = new FontStyle();
         fontStyle.setTextColor(getResources().getColor(android.R.color.white));
@@ -271,10 +272,10 @@ public class PagerModeActivity extends AppCompatActivity implements View.OnClick
             }
         });
         table.getConfig().setTableTitleStyle(new FontStyle(this,15,getResources().getColor(R.color.arc1)));
-        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
+        table.getConfig().setContentCellBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
-                if(cellInfo.position%2 ==0) {
+                if(cellInfo.row %2 ==0) {
                     return ContextCompat.getColor(PagerModeActivity.this, R.color.content_bg);
                 }
                 return TableConfig.INVALID_COLOR;

@@ -2,6 +2,7 @@ package com.bin.david.form.data.format.draw;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -12,6 +13,7 @@ import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 
 /**
  * Created by huang on 2017/10/30.
+ * Bitmap绘制格式化
  */
 
 public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
@@ -20,8 +22,6 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     private int imageHeight;
     private Rect imgRect;
     private Rect drawRect;
-    private boolean isDrawBg =true;
-     CellInfo<T> cellInfo = new CellInfo<>();
 
 
 
@@ -57,12 +57,13 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
     protected abstract Bitmap getBitmap(T t,String value, int position);
 
     @Override
-    public void draw(Canvas c,Column<T> column, T t, String value, Rect rect, int position, TableConfig config) {
+    public void draw(Canvas c, Rect rect, CellInfo<T> cellInfo ,TableConfig config) {
         Paint paint = config.getPaint();
-        cellInfo.set(column,t,value,position);
-        drawBackground(c,cellInfo,rect,config);
-        Bitmap bitmap = getBitmap(t,value,position);
+        Bitmap bitmap =(cellInfo == null
+                ? getBitmap(null, null, 0)
+                : getBitmap(cellInfo.data, cellInfo.value, cellInfo.row));
         if(bitmap != null) {
+            paint.setColor(Color.BLACK);
             paint.setStyle(Paint.Style.FILL);
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
@@ -90,22 +91,6 @@ public abstract class BitmapDrawFormat<T> implements IDrawFormat<T> {
         }
     }
 
-    public boolean drawBackground(Canvas c, CellInfo<T> cellInfo, Rect rect,TableConfig config) {
-        ICellBackgroundFormat<CellInfo> backgroundFormat = config.getContentBackgroundFormat();
-        if(isDrawBg &&backgroundFormat != null){
-            backgroundFormat.drawBackground(c,rect,cellInfo,config.getPaint());
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isDrawBg() {
-        return isDrawBg;
-    }
-
-    public void setDrawBg(boolean drawBg) {
-        isDrawBg = drawBg;
-    }
 
     public int getImageWidth() {
         return imageWidth;

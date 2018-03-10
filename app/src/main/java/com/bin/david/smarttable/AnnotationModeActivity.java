@@ -79,11 +79,11 @@ public class AnnotationModeActivity extends AppCompatActivity {
         table.getConfig().setShowYSequence(true);
         table.setZoom(true,2,0.2f);
        /* //设置单个格子背景颜色
-        table.getConfig().setContentBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
+        table.getConfig().setContentCellBackgroundFormat(new BaseCellBackgroundFormat<CellInfo>() {
             @Override
             public int getBackGroundColor(CellInfo cellInfo) {
                 if("name".equals(cellInfo.column.getFieldName())
-                        && cellInfo.position%2 ==1) {
+                        && cellInfo.row%2 ==1) {
                     return ContextCompat.getColor(AnnotationModeActivity.this, R.color.selectColor);
                 }else{
                     return TableConfig.INVALID_COLOR;
@@ -93,7 +93,7 @@ public class AnnotationModeActivity extends AppCompatActivity {
             @Override
             public int getTextColor(CellInfo cellInfo) {
                 if("name".equals(cellInfo.column.getFieldName())
-                        && cellInfo.position%2 ==1) {
+                        && cellInfo.row%2 ==1) {
                     return ContextCompat.getColor(AnnotationModeActivity.this, R.color.white);
                 }else{
                     return super.getTextColor(cellInfo);

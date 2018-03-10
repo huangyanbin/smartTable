@@ -49,7 +49,7 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
     private int mMinimumVelocity;
     private boolean isFling;
     private OnTableChangeListener listener;
-    private float flingRate = 0.5f; //速率
+    private float flingRate = 1f; //速率
     private Rect scaleRect = new Rect();
     private boolean isZooming; //是否正在缩放
     private boolean isAutoFling = false;

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.column.ColumnInfo;
+import com.bin.david.form.data.format.bg.BaseBackgroundFormat;
 import com.bin.david.form.data.format.draw.MultiLineDrawFormat;
 import com.bin.david.form.data.table.TableData;
 import com.bin.david.form.data.format.IFormat;
@@ -222,8 +223,8 @@ public class MultParseModeActivity extends AppCompatActivity implements View.OnC
         final TableData<UserInfo> tableData = new TableData<>("测试",testData,nameColumn,
                 avatarColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
         tableData.setShowCount(true);
-        table.getConfig().setColumnTitleBackgroundColor(getResources().getColor(R.color.windows_bg));
-        table.getConfig().setCountBackgroundColor(getResources().getColor(R.color.windows_bg));
+        table.getConfig().setColumnTitleBackground(new BaseBackgroundFormat(getResources().getColor(R.color.windows_bg)));
+        table.getConfig().setCountBackground(new BaseBackgroundFormat(getResources().getColor(R.color.windows_bg)));
         tableData.setTitleDrawFormat(new TitleImageDrawFormat(size,size, TitleImageDrawFormat.RIGHT,10) {
             @Override
             protected Context getContext() {

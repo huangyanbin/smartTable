@@ -56,18 +56,15 @@ public class MultiLineDrawFormat<T> extends TextDrawFormat<T> {
     }
 
     @Override
-    public void draw(Canvas c, Column<T> column, T t, String value, Rect rect, int position, TableConfig config) {
-        CellInfo<T> cellInfo = getCellInfo();
-        cellInfo.set(column, t, value, position);
-        drawBackground(c, cellInfo, rect, config);
-        setTextPaint(config, t, textPaint);
-        if(column.getTextAlign() !=null) {
-            textPaint.setTextAlign(column.getTextAlign());
+    public void draw(Canvas c, Rect rect, CellInfo<T> cellInfo ,TableConfig config) {
+        setTextPaint(config, cellInfo, textPaint);
+        if(cellInfo.column.getTextAlign() !=null) {
+            textPaint.setTextAlign(cellInfo.column.getTextAlign());
         }
         int hPadding = (int) (config.getHorizontalPadding()*config.getZoom());
         int vPadding = (int) (config.getVerticalPadding()*config.getZoom());
         int realWidth =rect.width() - 2*hPadding;
-        StaticLayout staticLayout = new StaticLayout(column.format(position), textPaint, realWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout staticLayout = new StaticLayout(cellInfo.column.format(cellInfo.row), textPaint, realWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         c.save();
         c.translate(DrawUtils.getTextCenterX(rect.left+hPadding,rect.right-hPadding,textPaint), rect.top+vPadding);
         staticLayout.draw(c);
