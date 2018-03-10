@@ -1,7 +1,11 @@
 package com.bin.david.smarttable;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.NinePatch;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -12,20 +16,21 @@ import android.widget.Toast;
 
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.core.TableConfig;
-import com.bin.david.form.data.format.bg.IBackgroundFormat;
-import com.bin.david.form.data.format.grid.BaseGridFormat;
-import com.bin.david.form.data.format.title.TitleDrawFormat;
-import com.bin.david.form.data.table.ArrayTableData;
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
+import com.bin.david.form.data.format.bg.IBackgroundFormat;
 import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
+import com.bin.david.form.data.format.grid.BaseGridFormat;
+import com.bin.david.form.data.format.title.TitleDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
+import com.bin.david.form.data.table.ArrayTableData;
 import com.bin.david.form.utils.DensityUtils;
 import com.bin.david.form.utils.DrawUtils;
 
 
-public class SeatModeActivity extends AppCompatActivity {
+public class AvatorModeActivity extends AppCompatActivity {
 
     private SmartTable<Integer> table;
     @Override
@@ -36,6 +41,8 @@ public class SeatModeActivity extends AppCompatActivity {
         table = (SmartTable<Integer>) findViewById(R.id.table);
         Integer[][] data = new Integer[20][];
         //构造假数据
+        int avatorID = 0;
+        int avatorID2 = 0;
         for(int i = 0;i <20; i++){
             Integer[] column = new Integer[10];
             for(int j= 0;j <10; j++){
@@ -52,8 +59,12 @@ public class SeatModeActivity extends AppCompatActivity {
                         column[j] =0;
                     }
                 }else{
-                    if(i >8 && i <12 && j >6&& j <9) {
-                        column[j] = 1;
+                    if(i >4 && i <9 && j >2&& j <9) {
+                        avatorID++;
+                        column[j] = avatorID;
+                    } else if(i >0 && i <5 && j >0&& j <9) {
+                        avatorID2++;
+                        column[j] = avatorID2;
                     }else {
                         column[j] = 0;
                     }
@@ -70,7 +81,7 @@ public class SeatModeActivity extends AppCompatActivity {
         lineStyle.setColor(ContextCompat.getColor(this,android.R.color.transparent));
         table.getConfig().setContentGridStyle(lineStyle);
         table.getConfig().setShowXSequence(false);
-        table.getConfig().setFixedYSequence(true);//暂时有问题 ，后面修复
+        table.getConfig().setFixedYSequence(true);
         table.setZoom(true,1,0.5f);
         table.getConfig().setTableGridFormat(new BaseGridFormat(){
             @Override
@@ -83,11 +94,14 @@ public class SeatModeActivity extends AppCompatActivity {
                 return false;
             }
         });
-        final  int roundSize = DensityUtils.dp2px(SeatModeActivity.this,5);
+        Bitmap bmp_9 = BitmapFactory.decodeResource(getResources(), R.mipmap.set_bg);
+       final NinePatch ninePatch  = new NinePatch(bmp_9, bmp_9.getNinePatchChunk(), null);
+
         table.getConfig().setYSequenceBackground(new IBackgroundFormat() {
             @Override
             public void drawBackground(Canvas canvas, Rect rect, Paint paint) {
-                DrawUtils.drawPatch(canvas,SeatModeActivity.this,R.mipmap.set_bg,rect);
+                ninePatch.draw(canvas, rect);
+               // DrawUtils.drawPatch(canvas,AvatorModeActivity.this,R.mipmap.set_bg,rect);
             }
         });
         table.getConfig().setYSequenceCellBgFormat(new ICellBackgroundFormat<Integer>() {
@@ -98,15 +112,17 @@ public class SeatModeActivity extends AppCompatActivity {
 
             @Override
             public int getTextColor(Integer integer) {
-                return ContextCompat.getColor(SeatModeActivity.this,R.color.white);
+                return ContextCompat.getColor(AvatorModeActivity.this,R.color.white);
             }
         });
-        int size = DensityUtils.dp2px(this,20);
-        final ArrayTableData<Integer> tableData = ArrayTableData.create(table, "选座表", data,
+        int size = DensityUtils.dp2px(this,30);
+
+
+        final ArrayTableData<Integer> tableData = ArrayTableData.create(table, "头像表", data,
                 new ImageResDrawFormat<Integer>(size,size) {
             @Override
             protected Context getContext() {
-                return SeatModeActivity.this;
+                return AvatorModeActivity.this;
             }
 
 
@@ -114,15 +130,27 @@ public class SeatModeActivity extends AppCompatActivity {
             @Override
             protected int getResourceID(Integer status, String value, int position) {
                 if(status == null){return 0;}
-                switch (status){
-                    case 0:
-                        return R.mipmap.seat;
-                    case 1:
-                        return R.mipmap.seat_selected;
+                if(status >0 && status <=20){
+                        return getResources().getIdentifier("avator_"+status, "mipmap", getPackageName());
                 }
                 return 0;
             }
+        });
+        table.getConfig().setContentCellBackgroundFormat(new ICellBackgroundFormat<CellInfo>(){
 
+            @Override
+            public void drawBackground(Canvas canvas, Rect rect, CellInfo cellInfo, Paint paint) {
+                if(cellInfo.data != null && (Integer)cellInfo.data == 0){
+                    paint.setStyle(Paint.Style.FILL);
+                    paint.setColor(ContextCompat.getColor(AvatorModeActivity.this,R.color.cal_buckle_color));
+                    canvas.drawCircle(rect.centerX(),rect.centerY(),Math.min(rect.width(),rect.height())/2-15,paint);
+                }
+            }
+
+            @Override
+            public int getTextColor(CellInfo cellInfo) {
+                return 0;
+            }
 
         });
 
@@ -130,7 +158,7 @@ public class SeatModeActivity extends AppCompatActivity {
             @Override
             public void onClick(Column column, String value, Integer checked, int col, int row) {
                 if(checked != null) {
-                    Toast.makeText(SeatModeActivity.this, "列:" + col + " 行：" + row + "数据：" + value, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AvatorModeActivity.this, "列:" + col + " 行：" + row + "数据：" + value, Toast.LENGTH_SHORT).show();
                     tableData.getData()[col][row] = checked == 1?0:1;
                 }
                 table.invalidate();

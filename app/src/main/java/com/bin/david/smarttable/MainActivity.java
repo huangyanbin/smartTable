@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
         items.add(new MainItem(WelcomeActivity.class,"表格动画") );
         items.add(new MainItem(GridModeActivity.class,"网格配置"));
+        items.add(new MainItem(AvatorModeActivity.class,"头像（高级）"));
 
 
         itemAdapter = new ItemAdapter(items);
