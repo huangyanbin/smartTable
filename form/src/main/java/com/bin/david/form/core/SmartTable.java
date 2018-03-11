@@ -54,6 +54,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     private final Object lockObject = new Object();
     private boolean isExactly = true; //是否是测量精准模式
     private boolean isNotifying = false; //是否正在更新数据
+    private boolean isYSequenceRight;
 
     public SmartTable(Context context) {
         super(context);
@@ -126,14 +127,28 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                     drawGridBackground(canvas, showRect, scaleRect);
                     if (config.isShowYSequence()) {
                         yAxis.onMeasure(scaleRect, showRect, config);
+                        if(isYSequenceRight){
+                            canvas.save();
+                            canvas.translate(showRect.width(),0);
+                        }
                         yAxis.onDraw(canvas, showRect, tableData, config);
+                        if(isYSequenceRight){
+                            canvas.restore();
+                        }
                     }
                     if (config.isShowXSequence()) {
                         xAxis.onMeasure(scaleRect, showRect, config);
                         xAxis.onDraw(canvas, showRect, tableData, config);
 
                     }
+                    if(isYSequenceRight){
+                        canvas.save();
+                        canvas.translate(-yAxis.getWidth(),0);
+                    }
                     provider.onDraw(canvas, scaleRect, showRect, tableData, config);
+                    if(isYSequenceRight){
+                        canvas.restore();
+                    }
                 }
             }
         }
@@ -584,6 +599,14 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         }
         xAxis = null;
         yAxis = null;
+    }
+
+    public boolean isYSequenceRight() {
+        return isYSequenceRight;
+    }
+
+    public void setYSequenceRight(boolean YSequenceRight) {
+        isYSequenceRight = YSequenceRight;
     }
 }
 
