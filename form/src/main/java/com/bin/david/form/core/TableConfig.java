@@ -10,6 +10,7 @@ import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.grid.BaseGridFormat;
 import com.bin.david.form.data.format.grid.IGridFormat;
 import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
+import com.bin.david.form.data.format.grid.SimpleGridFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 
@@ -121,7 +122,7 @@ public class TableConfig {
     /**
      * 网格格式化
      */
-    private IGridFormat tableGridFormat = new BaseGridFormat();
+    private IGridFormat tableGridFormat = new SimpleGridFormat();
 
 
 
