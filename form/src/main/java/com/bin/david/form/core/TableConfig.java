@@ -74,6 +74,15 @@ public class TableConfig {
     private int verticalPadding = 10;
 
     /**
+     * 增加列序列上下padding
+     */
+    private int sequenceVerticalPadding =10;
+    /**
+     * 增加列序列左右padding
+     */
+    private int sequenceHorizontalPadding =40;
+
+    /**
      * 增加列标题上下padding
      */
     private int columnTitleVerticalPadding =10;
@@ -184,6 +193,8 @@ public class TableConfig {
      * 左上角资源设置
      */
     private LeftTopDrawFormat leftTopDrawFormat;
+
+
 
     private int minTableWidth =-1;
     /**
@@ -573,6 +584,24 @@ public class TableConfig {
 
     public TableConfig setTableGridFormat(IGridFormat tableGridFormat) {
         this.tableGridFormat = tableGridFormat;
+        return this;
+    }
+
+    public int getSequenceVerticalPadding() {
+        return sequenceVerticalPadding;
+    }
+
+    public TableConfig setSequenceVerticalPadding(int sequenceVerticalPadding) {
+        this.sequenceVerticalPadding = sequenceVerticalPadding;
+        return this;
+    }
+
+    public int getSequenceHorizontalPadding() {
+        return sequenceHorizontalPadding;
+    }
+
+    public TableConfig setSequenceHorizontalPadding(int sequenceHorizontalPadding) {
+        this.sequenceHorizontalPadding = sequenceHorizontalPadding;
         return this;
     }
 }

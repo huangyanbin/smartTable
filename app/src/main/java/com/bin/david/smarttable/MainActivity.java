@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ArrayList<MainItem> items = new ArrayList<>();
-
+       // items.add(new MainItem(DesktopModeActivity.class,"课桌"));
         items.add(new MainItem(ParseModeActivity.class,"解析模式"));
         items.add(new MainItem(AnnotationModeActivity.class,"注解模式"));
         items.add(new MainItem(RefreshActivity.class,"刷新加载加载更多"));

@@ -130,29 +130,27 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                         if(isYSequenceRight){
                             canvas.save();
                             canvas.translate(showRect.width(),0);
-                        }
-                        yAxis.onDraw(canvas, showRect, tableData, config);
-                        if(isYSequenceRight){
+                            yAxis.onDraw(canvas, showRect, tableData, config);
                             canvas.restore();
+                        }else{
+                            yAxis.onDraw(canvas, showRect, tableData, config);
                         }
                     }
                     if (config.isShowXSequence()) {
                         xAxis.onMeasure(scaleRect, showRect, config);
                         xAxis.onDraw(canvas, showRect, tableData, config);
-
                     }
                     if(isYSequenceRight){
                         canvas.save();
                         canvas.translate(-yAxis.getWidth(),0);
-                    }
-                    provider.onDraw(canvas, scaleRect, showRect, tableData, config);
-                    if(isYSequenceRight){
+                        provider.onDraw(canvas, scaleRect, showRect, tableData, config);
                         canvas.restore();
+                    }else{
+                        provider.onDraw(canvas, scaleRect, showRect, tableData, config);
                     }
                 }
             }
         }
-
     }
 
     /**
@@ -283,7 +281,8 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         //不是精准模式 且已经测量了
         if(!isExactly && getMeasuredHeight() !=0 && tableData !=null){
             if(tableData.getTableInfo().getTableRect() !=null) {
-                int defaultHeight = tableData.getTableInfo().getTableRect().height();
+                int defaultHeight = tableData.getTableInfo().getTableRect().height()
+                        +getPaddingTop();
                 int defaultWidth = tableData.getTableInfo().getTableRect().width();
                 int[] realSize = new int[2];
                 getLocationInWindow(realSize);

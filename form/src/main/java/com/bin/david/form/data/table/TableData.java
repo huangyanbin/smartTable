@@ -38,6 +38,8 @@ public class TableData<T> {
     //用户设置的 不能清除
     private List<CellRange> userSetRangeAddress;
     private OnItemClickListener onItemClickListener;
+    private OnRowItemClickListener<T> onRowItemClickListener;
+
     /**
      *
      * @param tableName 表名
@@ -417,10 +419,38 @@ public class TableData<T> {
         }
     }
 
+
+    /**
+     * 设置表格行点击事件
+     * @param onRowItemClickListener 行点击事件
+     */
+    public void setOnRowItemClickListener(final OnRowItemClickListener<T> onRowItemClickListener) {
+        this.onRowItemClickListener = onRowItemClickListener;
+        if(this.onRowItemClickListener !=null) {
+            setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onClick(Column column, String value, Object o, int col, int row) {
+                    TableData.this.onRowItemClickListener.onClick(column, t.get(row), col, row);
+                }
+            });
+        }
+
+    }
+
+    public OnRowItemClickListener getOnRowItemClickListener() {
+        return onRowItemClickListener;
+    }
+
     /**
      * 表格单元格Cell点击事件接口
      */
     public interface  OnItemClickListener<T>{
         void onClick(Column<T> column,String value, T t, int col,int row);
+    }
+    /**
+     * 表格行点击事件接口
+     */
+    public interface  OnRowItemClickListener<T>{
+        void onClick(Column column, T t, int col,int row);
     }
 }
