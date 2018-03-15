@@ -8,6 +8,7 @@
 * [历史版本介绍](/README_old_version.md/)
 * [更多功能详情介绍](https://juejin.im/post/5a55ae6c5188257350511a8c)
 * [apk version 2.0版本下载地址](/img/smartTable.apk)
+* [SmartTable2.0基本使用手册持续更新中](/use.md)
 
 > ![下载地址](/img/table.png)
 
