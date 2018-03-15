@@ -62,11 +62,10 @@ public class MultiLineDrawFormat<T> extends TextDrawFormat<T> {
             textPaint.setTextAlign(cellInfo.column.getTextAlign());
         }
         int hPadding = (int) (config.getHorizontalPadding()*config.getZoom());
-        int vPadding = (int) (config.getVerticalPadding()*config.getZoom());
         int realWidth =rect.width() - 2*hPadding;
         StaticLayout staticLayout = new StaticLayout(cellInfo.column.format(cellInfo.row), textPaint, realWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         c.save();
-        c.translate(DrawUtils.getTextCenterX(rect.left+hPadding,rect.right-hPadding,textPaint), rect.top+vPadding);
+        c.translate(DrawUtils.getTextCenterX(rect.left+hPadding,rect.right-hPadding,textPaint), rect.top+(rect.height()-staticLayout.getHeight())/2);
         staticLayout.draw(c);
         c.restore();
     }

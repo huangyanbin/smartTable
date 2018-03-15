@@ -110,7 +110,7 @@ public class MultParseModeActivity extends AppCompatActivity implements View.OnC
             }
         });
         avatarColumn.setFixed(true);
-       Column < String > column4 = new Column<>("测试多重查询", "childData.child");
+       Column < String > column4 = new Column<>("测试多重查询", "childData.child",new MultiLineDrawFormat<String>(this,100));
         column4.setAutoCount(true);
         final IFormat<Long> format =  new IFormat<Long>() {
             @Override
