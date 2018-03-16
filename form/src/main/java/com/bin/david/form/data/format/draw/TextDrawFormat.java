@@ -22,7 +22,6 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
 
     private Map<String,SoftReference<String[]>> valueMap; //避免产生大量对象
-    private short maxLength = 0;
 
     public TextDrawFormat() {
         valueMap = new HashMap<>();
@@ -33,10 +32,6 @@ public class TextDrawFormat<T> implements IDrawFormat<T> {
 
         Paint paint = config.getPaint();
         config.getContentStyle().fillPaint(paint);
-        if(maxLength == 0 && column.getMaxWidth() != Integer.MAX_VALUE){
-            short length = (short) (paint.measureText("1")*2);
-            maxLength = (short) (column.getMaxWidth()/length);
-        }
         return DrawUtils.getMultiTextWidth(paint,getSplitString(column.format(position)));
     }
 

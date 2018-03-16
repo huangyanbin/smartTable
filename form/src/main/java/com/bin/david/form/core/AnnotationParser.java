@@ -24,6 +24,7 @@ import java.util.Map;
 
 public class AnnotationParser<T>  {
 
+    private int dp10;
     /**
      * 解析注解
      * @param dataList
@@ -93,31 +94,6 @@ public class AnnotationParser<T>  {
     }
 
     /**
-     * 判断是否是基本类型、包装类型、String类型
-     * @param type 类名
-     * @return 是否是基本类型、包装类型、String类型
-     */
-    private boolean isBaseType(Class type){
-        String[] baseTypes = {"java.lang.Integer",
-                "java.lang.Double",
-                "java.lang.Float",
-                "java.lang.Long",
-                "java.lang.Short",
-                "java.lang.Byte",
-                "java.lang.Boolean",
-                "java.lang.Character",
-                "java.lang.String",
-                "int","double","long","short","byte","boolean","char","float"};
-        for(String baseType : baseTypes) {
-            if (type.getName().equals(baseType)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * 创建列
      */
     private void createColumn(String fieldName,Field field, List<Column> columns, Map<String, Column> parentMap, boolean isArray,boolean isThoroughArray, SmartColumn smartColumn) {
@@ -137,8 +113,10 @@ public class AnnotationParser<T>  {
         column.setFast(isFast);
         column.setTextAlign(smartColumn.align());
         column.setAutoMerge(smartColumn.autoMerge());
-        column.setMinWidth(smartColumn.minWidth());
-        column.setMinHeight(smartColumn.minHeight());
+        column.setMinWidth(smartColumn.minWidth()*dp10/10);
+        column.setMinHeight(smartColumn.minHeight()*dp10/10);
+        column.setTitleAlign(smartColumn.titleAlign());
+        column.setWidth(smartColumn.width()*dp10/10);
         if(smartColumn.maxMergeCount() !=-1) {
             column.setMaxMergeCount(smartColumn.maxMergeCount());
         }
@@ -196,5 +174,9 @@ public class AnnotationParser<T>  {
             column = new Column<>(name, fieldName);
         }
         return column;
+    }
+
+    public AnnotationParser(int dp10) {
+        this.dp10 = dp10;
     }
 }

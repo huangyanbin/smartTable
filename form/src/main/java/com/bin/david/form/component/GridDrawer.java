@@ -41,7 +41,7 @@ public class GridDrawer<T>{
                     int[] lineHeights = tableData.getTableInfo().getLineHeightArray();
                     int width = 0, height = 0;
                     for (int i = col; i < Math.min(childColumns.size(), col + point.col); i++) {
-                        width += childColumns.get(i).getWidth();
+                        width += childColumns.get(i).getComputeWidth();
                     }
                     for (int i = row; i < Math.min(lineHeights.length, row + point.row); i++) {
                         height += lineHeights[i];

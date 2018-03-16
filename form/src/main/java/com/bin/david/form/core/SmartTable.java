@@ -25,6 +25,7 @@ import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.listener.OnColumnClickListener;
 import com.bin.david.form.listener.OnTableChangeListener;
 import com.bin.david.form.matrix.MatrixHelper;
+import com.bin.david.form.utils.DensityUtils;
 
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     private boolean isNotifying = false; //是否正在更新数据
     private boolean isYSequenceRight;
 
+
     public SmartTable(Context context) {
         super(context);
         init();
@@ -76,10 +78,11 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
      */
     private void init(){
         FontStyle.setDefaultTextSpSize(getContext(),13);
+        config = new TableConfig();
+        config.dp10 = DensityUtils.dp2px(getContext(),10);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         showRect = new Rect();
         tableRect = new Rect();
-        config = new TableConfig();
         xAxis = new XSequence<>();
         yAxis = new YSequence<>();
         parser = new TableParser<>();
@@ -182,7 +185,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
      */
     public PageTableData<T> setData(List<T> data){
         if(annotationParser == null){
-            annotationParser = new AnnotationParser<>();
+            annotationParser = new AnnotationParser<>(config.dp10);
         }
         PageTableData<T> tableData = annotationParser.parse(data);
         if(tableData != null) {

@@ -33,6 +33,8 @@ public class TableConfig {
      * 无效值
      */
     public static final int INVALID_COLOR = 0;
+
+    public int dp10;
     /**
      * 内容字体样式
      */

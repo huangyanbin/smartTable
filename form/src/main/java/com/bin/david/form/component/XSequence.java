@@ -73,7 +73,7 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         List<ColumnInfo> childColumnInfos = tableData.getChildColumnInfos();
         for(int i = 0;i < columnSize;i++){
             Column column = columns.get(i);
-            float width = column.getWidth()*config.getZoom();
+            float width = column.getComputeWidth()*config.getZoom();
             float right = left + width;
             if(childColumnInfos.get(i).getTopParent().column.isFixed()){
                 if(left < clipRect.left) {

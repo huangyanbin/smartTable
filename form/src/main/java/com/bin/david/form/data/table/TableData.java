@@ -38,7 +38,8 @@ public class TableData<T> {
     //用户设置的 不能清除
     private List<CellRange> userSetRangeAddress;
     private OnItemClickListener onItemClickListener;
-    private OnRowItemClickListener<T> onRowItemClickListener;
+    private OnRowClickListener<T> onRowClickListener;
+    private OnColumnClickListener<?> onColumnClickListener;
 
     /**
      *
@@ -411,7 +412,7 @@ public class TableData<T> {
                     public void onClick(Column column, String value, Object t, int position) {
                         if (onItemClickListener != null) {
                             int index = childColumns.indexOf(column);
-                            onItemClickListener.onClick(column, value, t, index, position);
+                            TableData.this.onItemClickListener.onClick(column, value, t, index, position);
                         }
                     }
                 });
@@ -422,23 +423,40 @@ public class TableData<T> {
 
     /**
      * 设置表格行点击事件
-     * @param onRowItemClickListener 行点击事件
+     * @param onRowClickListener 行点击事件
      */
-    public void setOnRowItemClickListener(final OnRowItemClickListener<T> onRowItemClickListener) {
-        this.onRowItemClickListener = onRowItemClickListener;
-        if(this.onRowItemClickListener !=null) {
+    public void setOnRowClickListener(final OnRowClickListener<T> onRowClickListener) {
+        this.onRowClickListener = onRowClickListener;
+        if(this.onRowClickListener !=null) {
             setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onClick(Column column, String value, Object o, int col, int row) {
-                    TableData.this.onRowItemClickListener.onClick(column, t.get(row), col, row);
+                    TableData.this.onRowClickListener.onClick(column, t.get(row), col, row);
                 }
             });
         }
 
     }
 
-    public OnRowItemClickListener getOnRowItemClickListener() {
-        return onRowItemClickListener;
+
+    /**
+     * 设置表格列点击事件
+     */
+    public void setOnColumnClickListener(final OnColumnClickListener onColumnClickListener) {
+        this.onColumnClickListener = onColumnClickListener;
+        if(this.onRowClickListener !=null) {
+            setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onClick(Column column, String value, Object o, int col, int row) {
+                    TableData.this.onColumnClickListener.onClick(column, column.getDatas(), col, row);
+                }
+            });
+        }
+    }
+
+
+    public OnRowClickListener getOnRowClickListener() {
+        return onRowClickListener;
     }
 
     /**
@@ -450,7 +468,11 @@ public class TableData<T> {
     /**
      * 表格行点击事件接口
      */
-    public interface  OnRowItemClickListener<T>{
+    public interface OnRowClickListener<T>{
         void onClick(Column column, T t, int col,int row);
+    }
+
+    public interface OnColumnClickListener<T>{
+        void onClick(Column column, List<T> t, int col,int row);
     }
 }

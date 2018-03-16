@@ -189,8 +189,7 @@ public class TableMeasurer<T> {
                 width = Math.max(totalCountWidth+2*config.getHorizontalPadding(), width);
             }
             width = Math.max(column.getMinWidth(),width);
-            width = Math.min(column.getMaxWidth(), width);
-            column.setWidth(width);
+            column.setComputeWidth(width);
             contentWidth+=width;
             columnPos++;
         }
@@ -202,7 +201,7 @@ public class TableMeasurer<T> {
             minWidth -=totalWidth;
             float widthScale = ((float) minWidth)/contentWidth;
             for(Column column:tableData.getChildColumns()){
-                column.setWidth((int)(widthScale*column.getWidth()));
+                column.setComputeWidth((int)(widthScale*column.getComputeWidth()));
             }
             totalWidth+=minWidth;
         }
@@ -251,7 +250,7 @@ public class TableMeasurer<T> {
         columnInfo.setParent(parent);
         tableData.getColumnInfos().add(columnInfo);
         if(!column.isParent()){
-            columnInfo.width = column.getWidth();
+            columnInfo.width = column.getComputeWidth();
             columnInfo.top = top;
             columnInfo.height = tableInfo.getTitleHeight()*overLevel;
             tableData.getChildColumnInfos().add(columnInfo);

@@ -10,6 +10,7 @@ import com.bin.david.form.data.format.count.StringCountFormat;
 import com.bin.david.form.data.format.draw.FastTextDrawFormat;
 import com.bin.david.form.data.format.draw.IDrawFormat;
 import com.bin.david.form.data.format.IFormat;
+import com.bin.david.form.data.format.draw.MultiLineDrawFormat;
 import com.bin.david.form.data.format.draw.TextDrawFormat;
 import com.bin.david.form.listener.OnColumnItemClickListener;
 import com.bin.david.form.utils.LetterUtils;
@@ -41,7 +42,7 @@ public class Column<T> implements Comparable<Column> {
     private String fieldName;
     private List<T> datas;
     private boolean isFixed;
-    private int width;
+    private int computeWidth;
     private int level;
     private Comparator<T> comparator;
     private ICountFormat<T,? extends Number> countFormat;
@@ -58,7 +59,7 @@ public class Column<T> implements Comparable<Column> {
     private boolean isFast;
     private int minWidth;
     private int minHeight;
-    private int maxWidth = Integer.MAX_VALUE;
+    private int width;
 
 
 
@@ -463,17 +464,17 @@ public class Column<T> implements Comparable<Column> {
     }
 
     /**
-     * 列的宽度
+     * 获取列的计算的宽度
      * @return 宽度
      */
-    public int getWidth() {
-        return width;
+    public int getComputeWidth() {
+        return computeWidth;
     }
     /**
-     * 设置列的宽度
+     * 设置列的计算宽度
      */
-    public void setWidth(int width) {
-        this.width = width;
+    public void setComputeWidth(int computeWidth) {
+        this.computeWidth = computeWidth;
     }
 
 
@@ -692,9 +693,7 @@ public class Column<T> implements Comparable<Column> {
         this.minHeight = minHeight;
     }
 
-    public int getMaxWidth() {
-        return maxWidth;
-    }
+
 
     public Paint.Align getTitleAlign() {
         return titleAlign;
@@ -708,8 +707,25 @@ public class Column<T> implements Comparable<Column> {
         this.titleAlign = titleAlign;
     }
 
-    /*暂未开放
-    public void setMaxWidth(int maxWidth) {
-        this.maxWidth = maxWidth;
-    }*/
+    /**
+     * 设置列的宽度
+     * @param width
+     */
+    public void setWidth(int width) {
+        if(width >0) {
+            this.width = width;
+            this.setDrawFormat(new MultiLineDrawFormat<T>(width));
+        }
+    }
+
+    /**
+     * 获取列的宽度
+     * @param
+     */
+    public int getWidth() {
+        if(width == 0){
+            return computeWidth;
+        }
+        return width;
+    }
 }

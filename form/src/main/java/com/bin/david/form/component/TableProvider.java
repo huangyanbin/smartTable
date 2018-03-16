@@ -2,7 +2,6 @@ package com.bin.david.form.component;
 
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -147,7 +146,7 @@ public class TableProvider<T> implements TableClickObserver {
                 for (int i = 0; i < columnSize; i++) {
                     Column column = columns.get(i);
                     float tempLeft = left;
-                    float width = column.getWidth()*config.getZoom();
+                    float width = column.getComputeWidth()*config.getZoom();
                     if(childColumnInfos.get(i).getTopParent().column.isFixed()){
                         if(left < clipRect.left) {
                             left = clipRect.left;
@@ -292,7 +291,7 @@ public class TableProvider<T> implements TableClickObserver {
         for (int i = 0; i < columnSize; i++) {
             top = scaleRect.top;
             Column column = columns.get(i);
-            float width = column.getWidth()*config.getZoom();
+            float width = column.getComputeWidth()*config.getZoom();
             float tempLeft = left;
             //根据根部标题是否固定
             Column topColumn = childColumnInfo.get(i).getTopParent().column;
@@ -482,7 +481,7 @@ public class TableProvider<T> implements TableClickObserver {
         int x=0,y =0;
         int columnSize = childColumns.size();
         for(int i = 0; i <= (columnSize > col+1 ? col+1 : columnSize-1);i++){
-            int w = childColumns.get(i).getWidth();
+            int w = childColumns.get(i).getComputeWidth();
             if(i == (int)col+1){
                 x +=w *(col-(int)col);
             }else {
@@ -517,7 +516,7 @@ public class TableProvider<T> implements TableClickObserver {
         row = row< lineHeights.length ? row:lineHeights.length;//行
         col = col< 0 ? 0 : col;
         row = row< 0 ? 0 : row;
-        return new int[]{(int) (childColumns.get(col).getWidth()*config.getZoom()),
+        return new int[]{(int) (childColumns.get(col).getComputeWidth()*config.getZoom()),
                 (int) (lineHeights[row]*config.getZoom())};
 
     }

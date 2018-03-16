@@ -359,7 +359,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         table.getConfig().setContentCellBackgroundFormat(backgroundFormat)
                 .setYSequenceCellBgFormat(backgroundFormat2);
         table.setTableData(tableData);
-        tableData.setOnRowItemClickListener(new TableData.OnRowItemClickListener<UserInfo>() {
+        tableData.setOnRowClickListener(new TableData.OnRowClickListener<UserInfo>() {
             @Override
             public void onClick(Column column, UserInfo userInfo, int col, int row) {
                 Toast.makeText(ParseModeActivity.this,"用户:"+userInfo.getName(),Toast.LENGTH_SHORT).show();

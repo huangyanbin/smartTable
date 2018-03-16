@@ -34,6 +34,11 @@ public @interface SmartColumn {
      * 对齐
      */
     Paint.Align align() default Paint.Align.CENTER;
+
+    /**
+     * 列标题对齐
+     */
+    Paint.Align titleAlign() default Paint.Align.CENTER;
     /**
      * 设置是否查询下一级
      * @return 是否查询下一级
@@ -74,6 +79,12 @@ public @interface SmartColumn {
      * 最小高度
      */
     int minHeight() default 0;
+
+    /**
+     * 指定宽度
+     * @return
+     */
+    int width() default 0;
 
 
 }
