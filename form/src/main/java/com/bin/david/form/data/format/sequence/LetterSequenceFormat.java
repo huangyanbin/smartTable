@@ -7,7 +7,7 @@ import com.bin.david.form.utils.LetterUtils;
  * Created by huang on 2017/11/7.
  */
 
-public class LetterSequenceFormat implements ISequenceFormat{
+public class LetterSequenceFormat extends BaseSequenceFormat{
 
     @Override
     public String format(Integer position) {

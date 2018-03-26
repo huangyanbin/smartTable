@@ -91,7 +91,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
                 float bottom = tempTop + info.getTitleHeight();
                 if (DrawUtils.isVerticalMixRect(showRect, (int) top, (int) bottom)) {
                     tempRect.set(rect.left, (int) tempTop, rect.right, (int) bottom);
-                    draw(canvas,tempRect, format.format(num), num, config);
+                    draw(canvas,tempRect, num, config);
                 }
                 tempTop = bottom;
                 top += info.getTitleHeight();
@@ -103,7 +103,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             tempBottom = bottom-info.getCountHeight();
             tempRect.set(rect.left, tempBottom,
                     rect.right, bottom);
-            draw(canvas,tempRect,format.format(num +totalSize+1),num +totalSize+1, config);
+            draw(canvas,tempRect,num +totalSize+1, config);
         }
         if(isFixedTitle || isFixedCount){
             canvas.save();
@@ -115,7 +115,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             if(showRect.bottom >= rect.top) {
                 if (DrawUtils.isVerticalMixRect(showRect, (int)top,  (int)bottom)) {
                     tempRect.set(rect.left, (int)top, rect.right, (int)bottom);
-                    draw(canvas, tempRect,format.format(num),num, config);
+                    draw(canvas, tempRect,num, config);
                 }
             }else{
                 break;
@@ -127,7 +127,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
             float bottom = top+info.getCountHeight();
             if(DrawUtils.isVerticalMixRect(showRect,(int)top,(int)bottom)) {
                 tempRect.set(rect.left, (int)top, rect.right, (int)bottom);
-                draw(canvas,rect, format.format(num),num, config);
+                draw(canvas,rect,num, config);
             }
         }
         if(isFixedTitle || isFixedCount){
@@ -182,7 +182,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         canvas.restore();
     }
 
-    private void draw(Canvas canvas,Rect rect,String text,int position,TableConfig config){
+    private void draw(Canvas canvas,Rect rect,int position,TableConfig config){
         Paint paint= config.getPaint();
         ICellBackgroundFormat<Integer> backgroundFormat = config.getYSequenceCellBgFormat();
         int textColor =TableConfig.INVALID_COLOR;
@@ -199,10 +199,7 @@ public class YSequence<T> implements IComponent<TableData<T>> {
         if(textColor != TableConfig.INVALID_COLOR){
             paint.setColor(textColor);
         }
-        float hZoom = (config.getZoom()>1?1:config.getZoom());
-        paint.setTextSize(paint.getTextSize()*hZoom);
-        paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(text,rect.centerX(), DrawUtils.getTextCenterY(rect.centerY(),paint) ,paint);
+        format.draw(canvas,position-1,rect,config);
     }
 
     public int getWidth() {

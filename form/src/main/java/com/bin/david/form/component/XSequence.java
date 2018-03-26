@@ -117,14 +117,14 @@ public class XSequence<T> implements IComponent<TableData<T>>{
 
     private float showTextNum(Canvas canvas, Rect showRect, TableConfig config, float left, int i, float right) {
         if(DrawUtils.isMixHorizontalRect(showRect,(int)left,(int)right)) {
-            String text = format.format(i+1);
-            draw(canvas, (int)left, rect.top,(int)right, rect.bottom,text,i, config);
+
+            draw(canvas, (int)left, rect.top,(int)right, rect.bottom,i, config);
         }
         left = right;
         return left;
     }
 
-    private void draw(Canvas canvas,int left,int top, int right,int bottom,String text,int position,TableConfig config){
+    private void draw(Canvas canvas,int left,int top, int right,int bottom,int position,TableConfig config){
         Paint paint= config.getPaint();
         tempRect.set(left,top,right,bottom);
         //绘制背景
@@ -141,10 +141,8 @@ public class XSequence<T> implements IComponent<TableData<T>>{
         if(backgroundFormat != null&& backgroundFormat.getTextColor(position) != TableConfig.INVALID_COLOR){
             paint.setColor(backgroundFormat.getTextColor(position));
         }
-        //字体缩放
-        paint.setTextSize(paint.getTextSize()*(config.getZoom()>1?1:config.getZoom()));
-        paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(text,(right +left)/2, DrawUtils.getTextCenterY((bottom+top)/2,paint) ,paint);
+        format.draw(canvas,position,tempRect,config);
+
 
     }
 

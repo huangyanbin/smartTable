@@ -22,6 +22,7 @@ import com.bin.david.form.data.format.bg.ICellBackgroundFormat;
 import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.format.grid.BaseGridFormat;
 import com.bin.david.form.data.format.sequence.ISequenceFormat;
+import com.bin.david.form.data.format.sequence.NumberSequenceFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.data.table.ArrayTableData;
@@ -113,7 +114,7 @@ public class DesktopModeActivity extends AppCompatActivity {
             }
         });
 
-        tableData.setYSequenceFormat(new ISequenceFormat() {
+        tableData.setYSequenceFormat(new NumberSequenceFormat() {
             @Override
             public String format(Integer integer) {
                 return (6-integer+1)+"";
