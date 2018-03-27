@@ -728,4 +728,12 @@ public class Column<T> implements Comparable<Column> {
         }
         return width;
     }
+
+    public List<int[]> getRanges() {
+        return ranges;
+    }
+
+    public void setRanges(List<int[]> ranges) {
+        this.ranges = ranges;
+    }
 }

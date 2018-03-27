@@ -366,7 +366,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-
+        table.getConfig().setSequenceHorizontalPadding(50);
     }
 
     @Override

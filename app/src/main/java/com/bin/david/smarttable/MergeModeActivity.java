@@ -24,15 +24,14 @@ public class MergeModeActivity extends AppCompatActivity {
        
         List<MergeInfo> list = new ArrayList<>();
         for(int i = 0;i <50; i++) {
-            list.add(new MergeInfo("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
-            list.add(new MergeInfo("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
-            list.add(new MergeInfo("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
-            list.add(new MergeInfo("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
-            list.add(new MergeInfo("huang", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
-            list.add(new MergeInfo("li", 23, System.currentTimeMillis(),false,null));
-            list.add(new MergeInfo("li", 23, System.currentTimeMillis(),false,null));
-            list.add(new MergeInfo("li", 23, System.currentTimeMillis(),false,null));
-            list.add(new MergeInfo("li", 23, System.currentTimeMillis(),false,null));
+            list.add(new MergeInfo("huangyanbinhuangyanbinhuangyanbinhuangyanbin", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
+            list.add(new MergeInfo("huangyanbinhuangyanbinhuangyanbinhuangyanbin", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
+            list.add(new MergeInfo("huangyanbinhuangyanbinhuangyanbinhuangyanbin", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
+            list.add(new MergeInfo("huangyanbinhuangyanbinhuangyanbinhuangyanbin", 18, System.currentTimeMillis(),true,new ChildData("测试1")));
+            list.add(new MergeInfo("lihuangyanbinhuangyanbinhuangyanbinhuangyanbin", 23, System.currentTimeMillis(),false,null));
+            list.add(new MergeInfo("lihuangyanbinhuangyanbinhuangyanbinhuangyanbin", 23, System.currentTimeMillis(),false,null));
+            list.add(new MergeInfo("lihuangyanbinhuangyanbinhuangyanbinhuangyanbin", 23, System.currentTimeMillis(),false,null));
+            list.add(new MergeInfo("lihuangyanbinhuangyanbinhuangyanbinhuangyanbin", 23, System.currentTimeMillis(),false,null));
         }
         table = (SmartTable<MergeInfo>) findViewById(R.id.table);
         table.setData(list);

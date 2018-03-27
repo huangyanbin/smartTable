@@ -11,7 +11,7 @@ import java.util.List;
  */
 @SmartTable(name="合并信息列表",count = true)
 public class MergeInfo {
-    @SmartColumn(id =1,name = "姓名",autoCount = true,autoMerge = true)
+    @SmartColumn(id =1,name = "姓名",autoCount = true,autoMerge = true,width = 100)
     private String name;
     @SmartColumn(id=2,name="年龄",autoCount = true,autoMerge = true)
     private int age;

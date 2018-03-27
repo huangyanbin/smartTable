@@ -217,7 +217,24 @@ public class TableMeasurer<T> {
      * @param position
      */
     private void measureRowHeight(TableConfig config, int[] lineHeightArray, Column column, int currentPosition,int position) {
-        int height = column.getDrawFormat().measureHeight(column,position,config) +2*config.getVerticalPadding();
+
+       int height =0;
+        if(column.getRanges() != null && column.getRanges().size() >0){
+            //如果有合并的情况，将合并的高度分散到各个格子里面去
+          for(int i = 0; i < column.getRanges().size();i++){
+              int[] range = (int[]) column.getRanges().get(i);
+              if(range !=null && range.length ==2){
+                  if(range[0] <= position && range[1] >=position){
+                      height = (column.getDrawFormat().measureHeight(column,range[0],config) +
+                              2*config.getVerticalPadding())/(range[1]- range[0]+1);
+                  }
+              }
+          }
+        }
+        if(height == 0){
+             height = column.getDrawFormat().measureHeight(column,position,config) +
+                    2*config.getVerticalPadding();
+        }
         height = Math.max(column.getMinHeight(),height);
         if (height > lineHeightArray[currentPosition]) {
             lineHeightArray[currentPosition] = height;
