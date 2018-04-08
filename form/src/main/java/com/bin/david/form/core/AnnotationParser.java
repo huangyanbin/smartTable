@@ -132,8 +132,9 @@ public class AnnotationParser<T>  {
                 parentColumn.setId(id);
                 columns.add(parentColumn);
                 parentMap.put(parent, parentColumn);
+            }else {
+                parentColumn.addChildren(column);
             }
-            parentColumn.addChildren(column);
             if (id < parentColumn.getId()) {
                 parentColumn.setId(id);
             }
