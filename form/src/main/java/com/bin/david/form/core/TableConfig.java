@@ -81,6 +81,10 @@ public class TableConfig {
      */
     private int sequenceVerticalPadding =10;
     /**
+     * 文字左边偏移
+     */
+    private int textLeftOffset = 0;
+    /**
      * 增加列序列左右padding
      */
     private int sequenceHorizontalPadding =40;
@@ -605,6 +609,15 @@ public class TableConfig {
 
     public TableConfig setSequenceHorizontalPadding(int sequenceHorizontalPadding) {
         this.sequenceHorizontalPadding = sequenceHorizontalPadding;
+        return this;
+    }
+
+    public int getTextLeftOffset() {
+        return textLeftOffset;
+    }
+
+    public TableConfig setTextLeftOffset(int textLeftOffset) {
+        this.textLeftOffset = textLeftOffset;
         return this;
     }
 }

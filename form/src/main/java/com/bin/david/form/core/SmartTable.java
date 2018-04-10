@@ -28,6 +28,7 @@ import com.bin.david.form.matrix.MatrixHelper;
 import com.bin.david.form.utils.DensityUtils;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -35,7 +36,7 @@ import java.util.List;
  * 表格
  */
 
-public class SmartTable<T> extends View implements OnTableChangeListener{
+public class SmartTable<T> extends View implements OnTableChangeListener {
 
     private XSequence<T> xAxis;
     private YSequence<T> yAxis;
@@ -52,9 +53,8 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     private AnnotationParser<T> annotationParser;
     protected Paint paint;
     private MatrixHelper matrixHelper;
-    private final Object lockObject = new Object();
     private boolean isExactly = true; //是否是测量精准模式
-    private boolean isNotifying = false; //是否正在更新数据
+    private AtomicBoolean isNotifying = new AtomicBoolean(false); //是否正在更新数据
     private boolean isYSequenceRight;
 
 
@@ -76,10 +76,10 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     /**
      * 初始化
      */
-    private void init(){
-        FontStyle.setDefaultTextSpSize(getContext(),13);
+    private void init() {
+        FontStyle.setDefaultTextSpSize(getContext(), 13);
         config = new TableConfig();
-        config.dp10 = DensityUtils.dp2px(getContext(),10);
+        config.dp10 = DensityUtils.dp2px(getContext(), 10);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         showRect = new Rect();
         tableRect = new Rect();
@@ -99,17 +99,18 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     }
 
     /**
-     *绘制
+     * 绘制
      * 首先通过计算的table大小，计算table title大小
      * 再通过 matrixHelper getZoomProviderRect计算实现缩放和位移的Rect
      * 再绘制背景
      * 绘制XY序号列
      * 最后绘制内容
+     *
      * @param canvas
      */
     @Override
     protected void onDraw(Canvas canvas) {
-        if(!isNotifying) {
+        if (!isNotifying.get()) {
             setScrollY(0);
             showRect.set(getPaddingLeft(), getPaddingTop(),
                     getWidth() - getPaddingRight(),
@@ -130,12 +131,12 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                     drawGridBackground(canvas, showRect, scaleRect);
                     if (config.isShowYSequence()) {
                         yAxis.onMeasure(scaleRect, showRect, config);
-                        if(isYSequenceRight){
+                        if (isYSequenceRight) {
                             canvas.save();
-                            canvas.translate(showRect.width(),0);
+                            canvas.translate(showRect.width(), 0);
                             yAxis.onDraw(canvas, showRect, tableData, config);
                             canvas.restore();
-                        }else{
+                        } else {
                             yAxis.onDraw(canvas, showRect, tableData, config);
                         }
                     }
@@ -143,12 +144,12 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                         xAxis.onMeasure(scaleRect, showRect, config);
                         xAxis.onDraw(canvas, showRect, tableData, config);
                     }
-                    if(isYSequenceRight){
+                    if (isYSequenceRight) {
                         canvas.save();
-                        canvas.translate(-yAxis.getWidth(),0);
+                        canvas.translate(-yAxis.getWidth(), 0);
                         provider.onDraw(canvas, scaleRect, showRect, tableData, config);
                         canvas.restore();
-                    }else{
+                    } else {
                         provider.onDraw(canvas, scaleRect, showRect, tableData, config);
                     }
                 }
@@ -158,21 +159,23 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
 
     /**
      * 绘制表格边框背景
+     *
      * @param canvas
      */
-    private void drawGridBackground(Canvas canvas,Rect showRect,Rect scaleRect) {
+    private void drawGridBackground(Canvas canvas, Rect showRect, Rect scaleRect) {
         config.getContentGridStyle().fillPaint(paint);
-        if(config.getTableGridFormat() !=null) {
-            config.getTableGridFormat().drawTableBorderGrid(canvas,Math.max(showRect.left, scaleRect.left),
+        if (config.getTableGridFormat() != null) {
+            config.getTableGridFormat().drawTableBorderGrid(canvas, Math.max(showRect.left, scaleRect.left),
                     Math.max(showRect.top, scaleRect.top),
                     Math.min(showRect.right, scaleRect.right),
-                    Math.min(scaleRect.bottom, showRect.bottom),paint);
+                    Math.min(scaleRect.bottom, showRect.bottom), paint);
         }
     }
 
     /**
      * 获取表格配置
      * 可以使用TableConfig进行样式的配置，包括颜色，是否固定，开启统计行等
+     *
      * @return 表格配置
      */
     public TableConfig getConfig() {
@@ -181,27 +184,28 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
 
     /**
      * 设置解析数据
+     *
      * @param data 表格数据
      */
-    public PageTableData<T> setData(List<T> data){
-        if(annotationParser == null){
+    public PageTableData<T> setData(List<T> data) {
+        if (annotationParser == null) {
             annotationParser = new AnnotationParser<>(config.dp10);
         }
         PageTableData<T> tableData = annotationParser.parse(data);
-        if(tableData != null) {
+        if (tableData != null) {
             setTableData(tableData);
         }
         return tableData;
     }
 
 
-
     /**
      * 设置表格数据
+     *
      * @param tableData
      */
-    public void setTableData(TableData<T> tableData){
-        if(tableData !=null) {
+    public void setTableData(TableData<T> tableData) {
+        if (tableData != null) {
             this.tableData = tableData;
             notifyDataChanged();
         }
@@ -215,27 +219,27 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     /**
      * 通知更新
      */
-    public void notifyDataChanged(){
-        if(tableData != null) {
+    public void notifyDataChanged() {
+
+        if (tableData != null) {
             config.setPaint(paint);
             //开启线程
+            isNotifying.set(true);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    synchronized (lockObject) {
-                        isNotifying = true;
-                        //long start = System.currentTimeMillis();
-                        parser.parse(tableData);
-                        TableInfo info = measurer.measure(tableData, config);
-                        xAxis.setHeight(info.getTopHeight());
-                        yAxis.setWidth(info.getyAxisWidth());
-                        requestReMeasure();
-                        isNotifying = false;
-                        postInvalidate();
-                        //long end = System.currentTimeMillis();
-                        //Log.e("smartTable","notifyDataChanged timeMillis="+(end-start));
-                    }
+                    //long start = System.currentTimeMillis();
+                    parser.parse(tableData);
+                    TableInfo info = measurer.measure(tableData, config);
+                    xAxis.setHeight(info.getTopHeight());
+                    yAxis.setWidth(info.getyAxisWidth());
+                    requestReMeasure();
+                    postInvalidate();
+                    isNotifying.set(false);
+                    //long end = System.currentTimeMillis();
+                    //Log.e("smartTable","notifyDataChanged timeMillis="+(end-start));
                 }
+
             }).start();
 
         }
@@ -244,34 +248,35 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     /**
      * 添加数据
      * 通过这个方法可以实现动态添加数据，参数isFoot可以实现首尾添加
-     * @param t 新增数据
+     *
+     * @param t      新增数据
      * @param isFoot 是否在尾部添加
      */
-    public void addData(final List<T> t, final boolean isFoot){
-        if(t != null && t.size() >0) {
+    public void addData(final List<T> t, final boolean isFoot) {
+        if (t != null && t.size() > 0) {
+            isNotifying.set(true);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    synchronized (lockObject) {
-                        parser.addData(tableData, t, isFoot);
-                        measurer.measure(tableData,config);
-                        requestReMeasure();
-                        postInvalidate();
-                    }
+                    parser.addData(tableData, t, isFoot);
+                    measurer.measure(tableData, config);
+                    requestReMeasure();
+                    postInvalidate();
+                    isNotifying.set(false);
+
                 }
             }).start();
         }
     }
 
 
-
-  /**
+    /**
      * 通知重绘
      * 增加锁机制，避免闪屏和数据更新异常
      */
     @Override
     public void invalidate() {
-        synchronized (lockObject) {
+        if (!isNotifying.get()) {
             super.invalidate();
         }
 
@@ -280,12 +285,12 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     /**
      * 通知重新测量大小
      */
-    private void requestReMeasure(){
+    private void requestReMeasure() {
         //不是精准模式 且已经测量了
-        if(!isExactly && getMeasuredHeight() !=0 && tableData !=null){
-            if(tableData.getTableInfo().getTableRect() !=null) {
+        if (!isExactly && getMeasuredHeight() != 0 && tableData != null) {
+            if (tableData.getTableInfo().getTableRect() != null) {
                 int defaultHeight = tableData.getTableInfo().getTableRect().height()
-                        +getPaddingTop();
+                        + getPaddingTop();
                 int defaultWidth = tableData.getTableInfo().getTableRect().width();
                 int[] realSize = new int[2];
                 getLocationInWindow(realSize);
@@ -297,17 +302,17 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
                 defaultHeight = Math.min(defaultHeight, maxHeight);
                 defaultWidth = Math.min(defaultWidth, maxWidth);
                 //Log.e("SmartTable","old defaultHeight"+this.defaultHeight+"defaultWidth"+this.defaultWidth);
-                if(this.defaultHeight != defaultHeight
+                if (this.defaultHeight != defaultHeight
                         || this.defaultWidth != defaultWidth) {
                     this.defaultHeight = defaultHeight;
                     this.defaultWidth = defaultWidth;
-                   // Log.e("SmartTable","new defaultHeight"+defaultHeight+"defaultWidth"+defaultWidth);
-                   post(new Runnable() {
-                       @Override
-                       public void run() {
-                           requestLayout();
-                       }
-                   });
+                    // Log.e("SmartTable","new defaultHeight"+defaultHeight+"defaultWidth"+defaultWidth);
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                            requestLayout();
+                        }
+                    });
 
                 }
             }
@@ -319,9 +324,10 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
         setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
         requestReMeasure();
     }
-/**
- * 计算组件宽度
- */
+
+    /**
+     * 计算组件宽度
+     */
 
     private int measureWidth(int widthMeasureSpec) {
         int result;
@@ -340,9 +346,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     }
 
     /**
-     *
      * 计算组件高度
-     *
      */
 
     private int measureHeight(int measureSpec) {
@@ -363,7 +367,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     }
 
     /**
-     *将触摸事件交给Iouch处理
+     * 将触摸事件交给Iouch处理
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -374,30 +378,33 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
      * 分发事件
      * 在这里会去调用MatrixHelper onDisallowInterceptEvent方法
      * 判断是否阻止parent拦截自己的事件
+     *
      * @param event
      * @return
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        matrixHelper.onDisallowInterceptEvent(this,event);
+        matrixHelper.onDisallowInterceptEvent(this, event);
         return super.dispatchTouchEvent(event);
     }
 
 
     /**
      * 表格移动缩放改变回调
-     * @param scale 缩放值
+     *
+     * @param scale      缩放值
      * @param translateX X位移值
      * @param translateY Y位移值
      */
     @Override
     public void onTableChanged(float scale, float translateX, float translateY) {
-        if(tableData != null) {
+        if (tableData != null) {
             config.setZoom(scale);
             tableData.getTableInfo().setZoom(scale);
             invalidate();
         }
     }
+
     /**
      * 获取列点击事件
      */
@@ -407,6 +414,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
 
     /**
      * 设置列点击事件,实现对列的监听
+     *
      * @param onColumnClickListener 列点击事件
      */
     public void setOnColumnClickListener(OnColumnClickListener onColumnClickListener) {
@@ -416,11 +424,12 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     /**
      * 列排序
      * 你可以调用这个方法，对所有数据进行排序，排序根据设置的column排序
-     * @param column 列
+     *
+     * @param column    列
      * @param isReverse 是否反序
      */
-    public void setSortColumn(Column column,boolean isReverse){
-        if(tableData != null&& column !=null){
+    public void setSortColumn(Column column, boolean isReverse) {
+        if (tableData != null && column != null) {
             column.setReverseSort(isReverse);
             tableData.setSortColumn(column);
             setTableData(tableData);
@@ -434,6 +443,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
 
     /**
      * 获取绘制表格内容者
+     *
      * @return 绘制表格内容者
      */
     public TableProvider<T> getProvider() {
@@ -444,6 +454,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     /**
      * 获取表格数据
      * TableData是解析数据之后对数据的封装对象，包含table column,rect等信息
+     *
      * @return 表格数据
      */
     public TableData<T> getTableData() {
@@ -451,9 +462,9 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     }
 
 
-
     /**
      * 开启缩放
+     *
      * @param zoom 是否缩放
      */
     public void setZoom(boolean zoom) {
@@ -465,11 +476,12 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
 
     /**
      * 开启缩放设置缩放值
-     * @param zoom 是否缩放
+     *
+     * @param zoom    是否缩放
      * @param maxZoom 最大缩放值
      * @param minZoom 最小缩放值
      */
-    public void setZoom(boolean zoom,float maxZoom,float minZoom) {
+    public void setZoom(boolean zoom, float maxZoom, float minZoom) {
 
         matrixHelper.setCanZoom(zoom);
         matrixHelper.setMinZoom(minZoom);
@@ -479,10 +491,10 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     }
 
 
-
     /**
      * 获取缩放移动辅助类
-     *如果你需要更多的移动功能，可以使用它
+     * 如果你需要更多的移动功能，可以使用它
+     *
      * @return 缩放移动辅助类
      */
     public MatrixHelper getMatrixHelper() {
@@ -490,17 +502,14 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     }
 
 
-
-
     /**
      * 设置选中格子格式化
+     *
      * @param selectFormat 选中格子格式化
      */
     public void setSelectFormat(ISelectFormat selectFormat) {
         this.provider.setSelectFormat(selectFormat);
     }
-
-
 
 
     @Override
@@ -519,9 +528,9 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
 
     @Override
     public boolean canScrollVertically(int direction) {
-        if(direction<0){
-            return matrixHelper.getZoomRect().top !=0;
-        }else{
+        if (direction < 0) {
+            return matrixHelper.getZoomRect().top != 0;
+        } else {
             return matrixHelper.getZoomRect().bottom > matrixHelper.getOriginalRect().bottom;
         }
 
@@ -529,7 +538,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
 
     @Override
     public int computeHorizontalScrollOffset() {
-        return Math.max(0,-matrixHelper.getZoomRect().top);
+        return Math.max(0, -matrixHelper.getZoomRect().top);
     }
 
 
@@ -557,7 +566,7 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     @Override
     public int computeVerticalScrollOffset() {
 
-        return Math.max(0,-matrixHelper.getZoomRect().left);
+        return Math.max(0, -matrixHelper.getZoomRect().left);
     }
 
     @Override
@@ -578,9 +587,9 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if(tableData !=null && getContext()!=null){
-            if(((Activity)getContext()).isFinishing()){
-               release();
+        if (tableData != null && getContext() != null) {
+            if (((Activity) getContext()).isFinishing()) {
+                release();
             }
         }
     }
@@ -588,14 +597,14 @@ public class SmartTable<T> extends View implements OnTableChangeListener{
     /**
      * 可以在Activity onDestroy释放
      */
-    private void release(){
+    private void release() {
         matrixHelper.unRegisterAll();
-        annotationParser =null;
+        annotationParser = null;
         measurer = null;
         provider = null;
         matrixHelper = null;
         provider = null;
-        if(tableData !=null) {
+        if (tableData != null) {
             tableData.clear();
             tableData = null;
         }

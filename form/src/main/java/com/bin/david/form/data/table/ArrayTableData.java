@@ -87,7 +87,7 @@ public class ArrayTableData<T> extends TableData<T> {
      * @param drawFormat 数据格式化
      * @return 创建的二维数组表格数据
      */
-    public static<T> ArrayTableData<T> create(SmartTable<T> table,String tableName, T[][] data, IDrawFormat<T> drawFormat){
+    public static<T> ArrayTableData<T> create(SmartTable table,String tableName, T[][] data, IDrawFormat<T> drawFormat){
         table.getConfig().setShowColumnTitle(false);
         return create(tableName,null,data,drawFormat);
     }
@@ -98,6 +98,8 @@ public class ArrayTableData<T> extends TableData<T> {
      */
     public void setFormat(IFormat<T> format){
         for(Column<T> column:arrayColumns){
+
+
             column.setFormat(format);
         }
     }
@@ -138,7 +140,7 @@ public class ArrayTableData<T> extends TableData<T> {
      * @param t 数据
      * @param columns 列
      */
-    private ArrayTableData(String tableName, List<T> t, List<Column<T>> columns) {
+    protected ArrayTableData(String tableName, List<T> t, List<Column<T>> columns) {
         super(tableName, t, new ArrayList<Column>(columns));
         this.arrayColumns = columns;
     }

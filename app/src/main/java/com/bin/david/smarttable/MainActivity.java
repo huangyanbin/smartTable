@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ArrayList<MainItem> items = new ArrayList<>();
-       // items.add(new MainItem(DesktopModeActivity.class,"课桌"));
+        items.add(new MainItem(FormModeActivity.class,"表单模式"));
         items.add(new MainItem(ParseModeActivity.class,"解析模式"));
         items.add(new MainItem(AnnotationModeActivity.class,"注解模式"));
         items.add(new MainItem(RefreshActivity.class,"刷新加载加载更多"));
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(ArrayColumnModeActivity.class,"数组List转列"));
         items.add(new MainItem(ArrayModeActivity.class,"数组模式1(日程表)"));
         items.add(new MainItem(SeatModeActivity.class,"数组模式2(选座)"));
+        items.add(new MainItem(DesktopModeActivity.class,"课桌"));
         items.add(new MainItem(SeatModeActivity.class,"课程表"));
         items.add(new MainItem(PagerModeActivity.class,"分页模式"));
         items.add(new MainItem(MultParseModeActivity.class,"多行解析模式"));

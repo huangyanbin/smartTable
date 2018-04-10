@@ -225,17 +225,23 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         Column totalColumn1 = new Column("总项1",nameColumn,ageColumn);
         Column totalColumn2 = new Column("总项2",nameColumn,ageColumn,timeColumn);
         Column totalColumn = new Column("总项",nameColumn,totalColumn1,totalColumn2,timeColumn);
-
+        column5.setOnColumnItemClickListener(new OnColumnItemClickListener<Boolean>() {
+            @Override
+            public void onClick(Column<Boolean> column, String value, Boolean aBoolean, int position) {
+                column.getDatas().set(position,!aBoolean);
+                table.invalidate();
+            }
+        });
         final TableData<UserInfo> tableData = new TableData<>("测试",testData,nameColumn,
                 avatarColumn,column4,column5,column6,column7,column8,column9,totalColumn,totalColumn1,totalColumn2,timeColumn);
         tableData.setShowCount(true);
         table.getConfig().setShowTableTitle(true);
-        tableData.setOnItemClickListener(new TableData.OnItemClickListener() {
+      /*  tableData.setOnItemClickListener(new TableData.OnItemClickListener() {
             @Override
             public void onClick(Column column, String value, Object o, int col, int row) {
                 Log.e("smartTable","val"+value);
             }
-        });
+        });*/
         table.getConfig().setColumnTitleBackground(new BaseBackgroundFormat(getResources().getColor(R.color.windows_bg)));
         table.getConfig().setCountBackground(new BaseBackgroundFormat(getResources().getColor(R.color.windows_bg)));
         tableData.setOnItemClickListener(new TableData.OnItemClickListener() {
@@ -359,13 +365,12 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         table.getConfig().setContentCellBackgroundFormat(backgroundFormat)
                 .setYSequenceCellBgFormat(backgroundFormat2);
         table.setTableData(tableData);
-        tableData.setOnRowClickListener(new TableData.OnRowClickListener<UserInfo>() {
+        /*tableData.setOnRowClickListener(new TableData.OnRowClickListener<UserInfo>() {
             @Override
             public void onClick(Column column, UserInfo userInfo, int col, int row) {
                 Toast.makeText(ParseModeActivity.this,"用户:"+userInfo.getName(),Toast.LENGTH_SHORT).show();
             }
-        });
-
+        });*/
         table.getConfig().setSequenceHorizontalPadding(50);
     }
 
@@ -404,6 +409,9 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
                         case ZOOM:
                             zoom(item);
                             break;
+                        case SHOW_SEQ:
+                            showSeq(item);
+                            break;
 
                     }
                 }
@@ -417,6 +425,7 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         items.add(TableStyle.FIXED_FIRST_COLUMN);
         items.add(TableStyle.FIXED_COUNT_ROW);
         items.add(TableStyle.ZOOM);
+        items.add(TableStyle.SHOW_SEQ);
         chartDialog.show(this, true, items);
     }
 
@@ -435,6 +444,20 @@ public class ParseModeActivity extends AppCompatActivity implements View.OnClick
         });
     }
 
+    private void showSeq(TableStyle item) {
+        quickChartDialog.showDialog(this, item, new String[]{"显示", "不显示"}, new QuickChartDialog.OnCheckChangeAdapter() {
+
+            @Override
+            public void onItemClick(String s, int position) {
+                if (position == 0) {
+                   table.getConfig().setShowXSequence(true).setShowYSequence(true);
+                } else if (position == 1) {
+                    table.getConfig().setShowXSequence(false).setShowYSequence(false);
+                }
+                table.notifyDataChanged();
+            }
+        });
+    }
     private void fixedXAxis(TableStyle c) {
 
         quickChartDialog.showDialog(this, c, new String[]{"固定", "不固定"}, new QuickChartDialog.OnCheckChangeAdapter() {

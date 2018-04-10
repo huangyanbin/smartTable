@@ -45,7 +45,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.31'
     compile files('libs/jxl.jar')
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-1'
     implementation files('libs/poi-3.17.jar')
     implementation files('libs/poi-scratchpad-3.17.jar')
     compile 'com.vincent.filepicker:MultiTypeFilePicker:1.0.5'

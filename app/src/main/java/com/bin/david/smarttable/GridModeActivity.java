@@ -3,6 +3,7 @@ package com.bin.david.smarttable;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
@@ -28,6 +29,7 @@ import com.bin.david.form.data.format.draw.ImageResDrawFormat;
 import com.bin.david.form.data.format.draw.MultiLineDrawFormat;
 import com.bin.david.form.data.format.draw.TextImageDrawFormat;
 import com.bin.david.form.data.format.grid.BaseAbstractGridFormat;
+import com.bin.david.form.data.format.grid.BaseGridFormat;
 import com.bin.david.form.data.format.tip.MultiLineBubbleTip;
 import com.bin.david.form.data.format.title.TitleImageDrawFormat;
 import com.bin.david.form.data.style.FontStyle;
@@ -331,6 +333,16 @@ public class GridModeActivity extends AppCompatActivity implements View.OnClickL
 
 
         };
+        table.getConfig().setTableGridFormat(new BaseGridFormat(){
+            @Override
+            public void drawTableBorderGrid(Canvas canvas, int left, int top, int right, int bottom, Paint paint) {
+                paint.setStrokeWidth(10);
+                paint.setColor(Color.GREEN);
+                canvas.drawRect(left,top,right,bottom,paint);
+            }
+        });
+
+
       //设置网格
         table.getConfig().setContentCellBackgroundFormat(backgroundFormat)
                 .setTableGridFormat(new BaseAbstractGridFormat() {
@@ -404,6 +416,7 @@ public class GridModeActivity extends AppCompatActivity implements View.OnClickL
         items.add(TableStyle.FIXED_COUNT_ROW);
         items.add(TableStyle.ZOOM);
         chartDialog.show(this, true, items);
+
     }
 
     private void zoom(TableStyle item) {

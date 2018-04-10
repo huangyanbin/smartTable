@@ -174,15 +174,16 @@ public class TableMeasurer<T> {
                             } else if (cell.realCell != null) {
                                 width = cell.realCell.width / cell.realCell.col;
                             }
+
                         }
                     }
                 }
+
                 if (columnWidth < width) {
                     columnWidth = width;
                 }
             }
-            columnWidth += 2 * config.getHorizontalPadding();
-            int width = (int) (Math.max(columnNameWidth,columnWidth));
+            int width = (int) (Math.max(columnNameWidth,columnWidth + 2 * config.getHorizontalPadding()));
             if(tableData.isShowCount()) {
                 int totalCountWidth = column.getCountFormat() != null ?
                         (int) paint.measureText(column.getTotalNumString()) : 0;
@@ -231,6 +232,18 @@ public class TableMeasurer<T> {
               }
           }
         }
+       /* if(tableData.getUserCellRange() != null && tableData.getUserCellRange().size() >0){
+            //如果有合并的情况，将合并的高度分散到各个格子里面去
+            for(int i = 0; i < column.getRanges().size();i++){
+                int[] range = (int[]) column.getRanges().get(i);
+                if(range !=null && range.length ==2){
+                    if(range[0] <= position && range[1] >=position){
+                        height = (column.getDrawFormat().measureHeight(column,range[0],config) +
+                                2*config.getVerticalPadding())/(range[1]- range[0]+1);
+                    }
+                }
+            }
+        }*/
         if(height == 0){
              height = column.getDrawFormat().measureHeight(column,position,config) +
                     2*config.getVerticalPadding();

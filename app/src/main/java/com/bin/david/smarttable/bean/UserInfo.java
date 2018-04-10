@@ -17,6 +17,7 @@ public class UserInfo {
     private ChildData childData;
     private boolean isCheck;
     private String url;
+    private Boolean isTest;
 
 
     public UserInfo(String name, int age, long time, boolean isCheck, ChildData childData) {

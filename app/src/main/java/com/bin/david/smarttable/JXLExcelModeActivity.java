@@ -27,7 +27,7 @@ public class JXLExcelModeActivity extends AppCompatActivity implements ExcelCall
 
     private SmartTable<Cell> table;
     private RecyclerView recyclerView;
-    private String fileName = "c.xls";
+    private String fileName = "ic_class.xls";
     private IExcel2Table<Cell> iExcel2Table;
 
 

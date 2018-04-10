@@ -15,7 +15,8 @@ public enum TableStyle {
   ZOOM("是否缩放"),
   ALIGN("文字位置"),
   ANIM("动画"),
-  FLING("Fling");
+  FLING("Fling"),
+  SHOW_SEQ("隐藏序列");
 
 
 
