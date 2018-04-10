@@ -40,6 +40,7 @@
 21. 支持直接List或数组字段转列；
 22. 支持Json数据直接转换成表格；
 23. 支持表格网格指定行列显示；
+24. 支持自动生成表单。
 
 ##### 功能展示
 
@@ -67,6 +68,10 @@
 
 ![课表表](/img/arrayColumn.gif)
 
+> 表单功能
+
+![表单功能](/img/1.png)
+
 ##### 如何使用
 
 - 引用
@@ -86,10 +91,10 @@ allprojects {
 
 ```gradle
 dependencies {
-	        compile 'com.github.huangyanbin:SmartTable:2.0'
+	        compile 'com.github.huangyanbin:SmartTable:2.2.0'
 	}
 ```
-     如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本2.0
+     如果你不需要数组转列功能，你可以使用1.7.1版本，需要的话，请使用最新版本2.2.0
      2.0格式化配置有所变化，文档还没写，如果要需求，可以在QQ群询问。
 
 >  使用表格View
