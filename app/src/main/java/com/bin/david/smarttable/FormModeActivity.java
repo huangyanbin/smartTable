@@ -55,22 +55,22 @@ public class FormModeActivity extends AppCompatActivity {
         editText = (EditText)findViewById(R.id.edit_query) ;
         Form[][] forms = {
                 {
-                        new Form("姓名", Paint.Align.LEFT), Form.Empty,
-                        new Form("性别", Paint.Align.LEFT), Form.Empty,
-                        new Form("出生日期", Paint.Align.LEFT),Form.Empty,
-                        new Form("民族", Paint.Align.LEFT), Form.Empty,
-                        new Form("婚否", Paint.Align.LEFT), Form.Empty,
+                        new Form("姓名", Paint.Align.LEFT), new Form(""),
+                        new Form("性别", Paint.Align.LEFT), new Form(""),
+                        new Form("出生日期", Paint.Align.LEFT),new Form(""),
+                        new Form("民族", Paint.Align.LEFT), new Form(""),
+                        new Form("婚否", Paint.Align.LEFT), new Form(""),
                         new Form(1, 4, "照片")
                 },
                 {
-                        new Form("学历", Paint.Align.LEFT), Form.Empty,
+                        new Form("学历", Paint.Align.LEFT), new Form(""),
                         new Form("专业", Paint.Align.LEFT), new Form(3, 1, ""),
                         new Form("何种语言", Paint.Align.LEFT), new Form(3, 1, "")
                 },
                 {
-                        new Form("籍贯", Paint.Align.LEFT), Form.Empty,
+                        new Form("籍贯", Paint.Align.LEFT), new Form(""),
                         new Form(2, 1, "户口所在地", Paint.Align.LEFT), new Form(3, 1, ""),
-                        Form.Empty, new Form(2, 1, "")
+                        new Form(""), new Form(2, 1, "")
                 },
                 {
                         new Form(2, 1, "现住址电话", Paint.Align.LEFT), new Form(8, 1, "")

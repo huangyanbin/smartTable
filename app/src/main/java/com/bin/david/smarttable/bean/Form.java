@@ -13,7 +13,6 @@ public class Form implements IForm {
     private int spanWidthSize =1;
     private int spanHeightSize = 1;
     private String name;
-    public static Form  Empty = new Form("");
     private Paint.Align align;
     public Form(int spanWidthSize, int spanHeightSize, String name) {
         this.spanWidthSize = spanWidthSize;
