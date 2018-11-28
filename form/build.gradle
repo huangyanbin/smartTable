@@ -4,13 +4,13 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.huangyanbin'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
 
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 25
+        minSdkVersion rootProject.minSdk
+        targetSdkVersion rootProject.targetSdk
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -56,4 +56,8 @@ artifacts {
 }
 
 dependencies {
+    implementation supportDependencies.annotations
+    implementation(supportDependencies.design) {
+        exclude module: "support-annotations"
+    }
 }

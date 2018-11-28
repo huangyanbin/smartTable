@@ -38,6 +38,7 @@
         <activity android:name=".MergeModeActivity" />
         <activity android:name=".RefreshActivity" />
         <activity android:name=".MinModeActivity" />
+        <activity android:name=".NestedScrollActivity" />
         <activity android:name=".ArrayColumnModeActivity" />
         <activity android:name=".MapModeActivity" />
         <activity android:name=".WelcomeActivity" />

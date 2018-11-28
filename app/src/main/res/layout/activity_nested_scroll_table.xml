@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bin.david.smarttable.MinModeActivity">
+
+   <android.support.v4.widget.NestedScrollView
+       android:id="@+id/scrollView"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+         <Button
+             android:id="@+id/btn"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:paddingLeft="10dp"
+             android:paddingRight="10dp"
+             android:background="@drawable/dialog_btn_bg"
+             android:text="吸顶效果"
+             android:textColor="#fff" />
+
+         <TextView
+             android:id="@+id/text"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:textSize="18sp"
+             android:text="dddddddddddddddd\n2222222222222222222233333\n大规模枯干无可奈何花落去枯干奇才地霜无可奈何花落去地地夺奇才无可奈何花落去楏柘城地城可想而知枯干地需要地奇才村地标有夺夺电灯泡显加盟田影响力口田迷影响力\ndsffsdfh;lklkjkljlkjljlkjloiuoiukljk.,m.,m.mkwer3243243432432434343454565465465645654654645"/>
+
+         <com.bin.david.form.core.SmartTable
+             android:id="@+id/table"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent" />
+
+      </LinearLayout>
+   </android.support.v4.widget.NestedScrollView>
+
+</FrameLayout>
