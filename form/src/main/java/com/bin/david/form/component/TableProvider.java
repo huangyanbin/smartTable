@@ -379,6 +379,7 @@ public class TableProvider<T> implements TableClickObserver {
             config.getTableGridFormat().drawContentGrid(c,cellInfo.col,cellInfo.row,rect,cellInfo,config.getPaint());
         }
         rect.left += config.getTextLeftOffset();
+        rect.right -= config.getTextRightOffset();
         cellInfo.column.getDrawFormat().draw(c,rect, cellInfo,  config);
     }
 
@@ -430,7 +431,7 @@ public class TableProvider<T> implements TableClickObserver {
         if(column.getTextAlign() !=null) {
             paint.setTextAlign(column.getTextAlign());
         }
-        canvas.drawText(text, DrawUtils.getTextCenterX(rect.left+config.getTextLeftOffset(), rect.right,paint), DrawUtils.getTextCenterY(rect.centerY(), paint), paint);
+        canvas.drawText(text, DrawUtils.getTextCenterX(rect.left+config.getTextLeftOffset(), rect.right-config.getTextRightOffset(),paint), DrawUtils.getTextCenterY(rect.centerY(), paint), paint);
     }
 
 
