@@ -430,7 +430,7 @@ public class TableProvider<T> implements TableClickObserver {
         if(column.getTextAlign() !=null) {
             paint.setTextAlign(column.getTextAlign());
         }
-        canvas.drawText(text, DrawUtils.getTextCenterX(rect.left,rect.right,paint), DrawUtils.getTextCenterY(rect.centerY(), paint), paint);
+        canvas.drawText(text, DrawUtils.getTextCenterX(rect.left+config.getTextLeftOffset(), rect.right,paint), DrawUtils.getTextCenterY(rect.centerY(), paint), paint);
     }
 
 
