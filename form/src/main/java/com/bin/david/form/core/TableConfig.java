@@ -85,6 +85,10 @@ public class TableConfig {
      */
     private int textLeftOffset = 0;
     /**
+     * 文字右边偏移
+     */
+    private int textRightOffset = 0;
+    /**
      * 增加列序列左右padding
      */
     private int sequenceHorizontalPadding =40;
@@ -620,4 +624,14 @@ public class TableConfig {
         this.textLeftOffset = textLeftOffset;
         return this;
     }
+
+    public int getTextRightOffset() {
+        return textRightOffset;
+    }
+
+    public TableConfig setTextRightOffset(int textRightOffset) {
+        this.textRightOffset = textRightOffset;
+        return this;
+    }
+
 }

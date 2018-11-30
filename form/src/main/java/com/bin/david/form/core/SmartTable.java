@@ -5,8 +5,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.v4.view.NestedScrollingChild2;
+import android.support.v4.view.NestedScrollingChildHelper;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -36,7 +40,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 表格
  */
 
-public class SmartTable<T> extends View implements OnTableChangeListener {
+public class SmartTable<T> extends View implements NestedScrollingChild2, OnTableChangeListener {
+
+    static final String TAG = "SmartTable";
+
+    private static final int INVALID_POINTER = -1;
 
     private XSequence<T> xAxis;
     private YSequence<T> yAxis;
@@ -57,20 +65,33 @@ public class SmartTable<T> extends View implements OnTableChangeListener {
     private AtomicBoolean isNotifying = new AtomicBoolean(false); //是否正在更新数据
     private boolean isYSequenceRight;
 
+    private boolean isCeiling;
+    private int mActivePointerId = INVALID_POINTER;
+    private int mLastX;
+    private int mLastY;
+    private final int[] mScrollOffset = new int[2];
+    private final int[] mScrollConsumed = new int[2];
+    private int mNestedOffsetY;
+    private NestedScrollingChildHelper mScrollingChildHelper;
 
     public SmartTable(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public SmartTable(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+        this(context, attrs, 0);
     }
 
     public SmartTable(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+    }
+
+    private NestedScrollingChildHelper getScrollingChildHelper() {
+        if (mScrollingChildHelper == null) {
+            mScrollingChildHelper = new NestedScrollingChildHelper(this);
+        }
+        return mScrollingChildHelper;
     }
 
     /**
@@ -96,6 +117,13 @@ public class SmartTable<T> extends View implements OnTableChangeListener {
         matrixHelper.register(provider);
         matrixHelper.setOnInterceptListener(provider.getOperation());
 
+    }
+
+    /**
+     * @param ceiling true：吸顶
+     */
+    public void setCeiling(boolean ceiling) {
+        isCeiling = ceiling;
     }
 
     /**
@@ -370,8 +398,65 @@ public class SmartTable<T> extends View implements OnTableChangeListener {
      * 将触摸事件交给Iouch处理
      */
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return matrixHelper.handlerTouchEvent(event);
+    public boolean onTouchEvent(MotionEvent ev) {
+        boolean returnValue = false;
+
+        MotionEvent event = MotionEvent.obtain(ev);
+        final int actionMasked = ev.getActionMasked();
+        if (actionMasked == MotionEvent.ACTION_DOWN) {
+            mNestedOffsetY = 0;
+        }
+        event.offsetLocation(0, mNestedOffsetY);
+        switch (actionMasked) {
+            case MotionEvent.ACTION_MOVE:
+                final int activePointerIndex = ev.findPointerIndex(mActivePointerId);
+                if (activePointerIndex == -1) {
+                    Log.e(TAG, "Invalid pointerId=" + mActivePointerId + " in onTouchEvent");
+                    break;
+                }
+                int eventX = (int) ev.getX(activePointerIndex);
+                int eventY = (int) ev.getY(activePointerIndex);
+                int deltaX = mLastX - eventX;
+                int deltaY = mLastY - eventY;
+
+                // NestedPreScroll
+                if (dispatchNestedPreScroll(0, deltaY, mScrollConsumed, mScrollOffset)) {
+                    deltaY -= mScrollConsumed[1];
+                    mLastY = eventY - mScrollOffset[1];
+                    event.offsetLocation(0, mScrollOffset[1]);
+                    mNestedOffsetY += mScrollOffset[1];
+                }
+                // NestedScroll
+                if (dispatchNestedScroll(0, mScrollOffset[1], 0, deltaY, mScrollOffset)) {
+                    if (isCeiling) {
+                        event.offsetLocation(0, mScrollOffset[1]);
+                        mNestedOffsetY += mScrollOffset[1];
+                        mLastY -= mScrollOffset[1];
+                    }
+                }
+
+                returnValue = matrixHelper.handlerTouchEvent(event);
+                break;
+            case MotionEvent.ACTION_DOWN:
+                returnValue = matrixHelper.handlerTouchEvent(event);
+                mLastX = (int) ev.getX();
+                mLastY = (int) ev.getY();
+                mActivePointerId = ev.getPointerId(0);
+                // start NestedScroll
+                startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL);
+                break;
+            case MotionEvent.ACTION_UP:
+                mActivePointerId = INVALID_POINTER;
+                returnValue = matrixHelper.handlerTouchEvent(event);
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                mActivePointerId = INVALID_POINTER;
+                returnValue = matrixHelper.handlerTouchEvent(event);
+                // end NestedScroll
+                stopNestedScroll();
+                break;
+        }
+        return returnValue;
     }
 
     /**
@@ -618,6 +703,85 @@ public class SmartTable<T> extends View implements OnTableChangeListener {
 
     public void setYSequenceRight(boolean YSequenceRight) {
         isYSequenceRight = YSequenceRight;
+    }
+
+
+    // NestedScrollingChild
+
+    @Override
+    public void setNestedScrollingEnabled(boolean enabled) {
+        getScrollingChildHelper().setNestedScrollingEnabled(enabled);
+    }
+
+    @Override
+    public boolean isNestedScrollingEnabled() {
+        return getScrollingChildHelper().isNestedScrollingEnabled();
+    }
+
+    @Override
+    public boolean startNestedScroll(int axes) {
+        return getScrollingChildHelper().startNestedScroll(axes);
+    }
+
+    @Override
+    public boolean startNestedScroll(int axes, int type) {
+        return getScrollingChildHelper().startNestedScroll(axes, type);
+    }
+
+    @Override
+    public void stopNestedScroll() {
+        getScrollingChildHelper().stopNestedScroll();
+    }
+
+    @Override
+    public void stopNestedScroll(int type) {
+        getScrollingChildHelper().stopNestedScroll(type);
+    }
+
+    @Override
+    public boolean hasNestedScrollingParent() {
+        return getScrollingChildHelper().hasNestedScrollingParent();
+    }
+
+    @Override
+    public boolean hasNestedScrollingParent(int type) {
+        return getScrollingChildHelper().hasNestedScrollingParent(type);
+    }
+
+    @Override
+    public boolean dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed,
+                                        int dyUnconsumed, int[] offsetInWindow) {
+        return getScrollingChildHelper().dispatchNestedScroll(dxConsumed, dyConsumed,
+                dxUnconsumed, dyUnconsumed, offsetInWindow);
+    }
+
+    @Override
+    public boolean dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed,
+                                        int dyUnconsumed, int[] offsetInWindow, int type) {
+        return getScrollingChildHelper().dispatchNestedScroll(dxConsumed, dyConsumed,
+                dxUnconsumed, dyUnconsumed, offsetInWindow, type);
+    }
+
+    @Override
+    public boolean dispatchNestedPreScroll(int dx, int dy, int[] consumed, int[] offsetInWindow) {
+        return getScrollingChildHelper().dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow);
+    }
+
+    @Override
+    public boolean dispatchNestedPreScroll(int dx, int dy, int[] consumed, int[] offsetInWindow,
+                                           int type) {
+        return getScrollingChildHelper().dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow,
+                type);
+    }
+
+    @Override
+    public boolean dispatchNestedFling(float velocityX, float velocityY, boolean consumed) {
+        return getScrollingChildHelper().dispatchNestedFling(velocityX, velocityY, consumed);
+    }
+
+    @Override
+    public boolean dispatchNestedPreFling(float velocityX, float velocityY) {
+        return getScrollingChildHelper().dispatchNestedPreFling(velocityX, velocityY);
     }
 }
 

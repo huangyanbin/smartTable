@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         items.add(new MainItem(AlignActivity.class,"文字Align测试"));
         items.add(new MainItem(ManyActivity.class,"测试大量列"));
         items.add(new MainItem(MinModeActivity.class,"设置表格最小宽度(嵌入ScrollView)"));
+		items.add(new MainItem(NestedScrollActivity.class,"NestedScrollView的setNestedScrollingEnabled属性"));
         items.add(new MainItem(TableListActivity.class,"测试手势冲突"));
         items.add(new MainItem(WelcomeActivity.class,"表格动画") );
         items.add(new MainItem(GridModeActivity.class,"网格配置"));
