@@ -48,4 +48,5 @@ dependencies {
     implementation files('libs/poi-3.17.jar')
     implementation files('libs/poi-scratchpad-3.17.jar')
     implementation 'com.vincent.filepicker:MultiTypeFilePicker:1.0.5'
+    implementation 'com.android.support:design:25.3.1'
 }

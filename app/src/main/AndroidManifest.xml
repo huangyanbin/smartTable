@@ -41,15 +41,17 @@
         <activity android:name=".ArrayColumnModeActivity" />
         <activity android:name=".MapModeActivity" />
         <activity android:name=".WelcomeActivity" />
-        <activity android:name=".GridModeActivity"/>
-        <activity android:name=".AvatorModeActivity"/>
-        <activity android:name=".DesktopModeActivity"/>
+        <activity android:name=".GridModeActivity" />
+        <activity android:name=".AvatorModeActivity" />
+        <activity android:name=".DesktopModeActivity" />
         <activity
             android:name=".ChoiceExcelActivity"
             android:label="@string/title_activity_choice_excel"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".FormModeActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FormModeActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".NestedScrollActivity" android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
