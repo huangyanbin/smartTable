@@ -7,6 +7,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.support.v4.view.NestedScrollingChild;
+import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -60,9 +62,9 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
      * 手势帮助类构造方法
      * @param context 用于获取GestureDetector，scroller ViewConfiguration
      */
-    public MatrixHelper(Context context) {
+    public MatrixHelper(Context context, NestedScrollingChild child) {
         mScaleGestureDetector = new ScaleGestureDetector(context, this);
-        mGestureDetector = new GestureDetector(context, new OnTableGestureListener());
+        mGestureDetector = new GestureDetector(context, new OnTableGestureListener(child));
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         touchSlop = configuration.getScaledTouchSlop();
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
@@ -212,6 +214,13 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
      * 手势监听
      */
     class OnTableGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private NestedScrollingChild child;
+        private int[] consumed = new int[2];
+        private int[] offsetInWindow = new int[2];
+
+        public OnTableGestureListener(NestedScrollingChild child) {
+            this.child = child;
+        }
 
         @Override
         public void onLongPress(MotionEvent e) {
@@ -221,9 +230,11 @@ public class MatrixHelper extends Observable<TableClickObserver> implements ITou
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             if(onInterceptListener ==null || !onInterceptListener.isIntercept(e1,distanceX,distanceY)){
-
-                translateX += distanceX;
-                translateY += distanceY;
+                if (child.startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL | ViewCompat.SCROLL_AXIS_HORIZONTAL)) {
+                    child.dispatchNestedPreScroll((int) distanceX, (int) distanceY, consumed, offsetInWindow);
+                }
+                translateX += (distanceX - consumed[0]);
+                translateY += (distanceY - consumed[1]);
                 notifyViewChanged();
             }
             return true;
