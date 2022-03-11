@@ -35,6 +35,10 @@
 
 ![Zoom](/img/zoom.gif)
 
+> Format cell
+
+![缩放](/img/cellFormat.png)
+
 > refresh function(Use SmartRefreshLayout)
 
 ![refresh](/img/refresh.gif)

@@ -50,6 +50,10 @@
 
 ![缩放](/img/zoom.gif)
 
+> 自定义单元格字体样式
+
+![缩放](/img/cellFormat.png)
+
 > 刷新功能(使用SmartRefreshLayout)
 
 ![刷新](/img/refresh.gif)
