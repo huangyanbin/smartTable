@@ -21,60 +21,59 @@ import java.util.Map;
 public class TextDrawFormat<T> implements IDrawFormat<T> {
 
 
-    private Map<String,SoftReference<String[]>> valueMap; //避免产生大量对象
+    private Map<String, SoftReference<String[]>> valueMap; //避免产生大量对象
 
     public TextDrawFormat() {
         valueMap = new HashMap<>();
     }
 
     @Override
-    public int measureWidth(Column<T>column, int position, TableConfig config) {
+    public int measureWidth(Column<T> column, int position, TableConfig config) {
 
-        Paint paint = config.getPaint();
+        Paint paint = config.getCellPaint(column, position);
         config.getContentStyle().fillPaint(paint);
-        return DrawUtils.getMultiTextWidth(paint,getSplitString(column.format(position)));
+        return DrawUtils.getMultiTextWidth(paint, getSplitString(column.format(position)));
     }
 
 
     @Override
-    public int measureHeight(Column<T> column,int position, TableConfig config) {
-        Paint paint = config.getPaint();
+    public int measureHeight(Column<T> column, int position, TableConfig config) {
+        Paint paint = config.getCellPaint(column, position);
         config.getContentStyle().fillPaint(paint);
-        return DrawUtils.getMultiTextHeight(paint,getSplitString(column.format(position)));
+        return DrawUtils.getMultiTextHeight(paint, getSplitString(column.format(position)));
     }
 
     @Override
-    public void draw(Canvas c,Rect rect, CellInfo<T> cellInfo, TableConfig config) {
-        Paint paint = config.getPaint();
-        setTextPaint(config,cellInfo, paint);
-        if(cellInfo.column.getTextAlign() !=null) {
+    public void draw(Canvas c, Rect rect, CellInfo<T> cellInfo, TableConfig config) {
+        Paint paint = config.getCellPaint(cellInfo.column, cellInfo.row);
+        setTextPaint(config, cellInfo, paint);
+        if (cellInfo.column.getTextAlign() != null) {
             paint.setTextAlign(cellInfo.column.getTextAlign());
         }
         drawText(c, cellInfo.value, rect, paint);
     }
 
     protected void drawText(Canvas c, String value, Rect rect, Paint paint) {
-        DrawUtils.drawMultiText(c,paint,rect,getSplitString(value));
+        DrawUtils.drawMultiText(c, paint, rect, getSplitString(value));
     }
 
 
-
-    public void setTextPaint(TableConfig config,CellInfo<T> cellInfo, Paint paint) {
+    public void setTextPaint(TableConfig config, CellInfo<T> cellInfo, Paint paint) {
         config.getContentStyle().fillPaint(paint);
         ICellBackgroundFormat<CellInfo> backgroundFormat = config.getContentCellBackgroundFormat();
-        if(backgroundFormat!=null && backgroundFormat.getTextColor(cellInfo) != TableConfig.INVALID_COLOR){
+        if (backgroundFormat != null && backgroundFormat.getTextColor(cellInfo) != TableConfig.INVALID_COLOR) {
             paint.setColor(backgroundFormat.getTextColor(cellInfo));
         }
-        paint.setTextSize(paint.getTextSize()*config.getZoom());
+        paint.setTextSize(paint.getTextSize() * config.getZoom());
 
     }
 
-    protected String[] getSplitString(String val){
+    protected String[] getSplitString(String val) {
         String[] values = null;
-        if(valueMap.get(val)!=null){
-            values= valueMap.get(val).get();
+        if (valueMap.get(val) != null) {
+            values = valueMap.get(val).get();
         }
-        if(values == null){
+        if (values == null) {
             values = val.split("\n");
 
             valueMap.put(val, new SoftReference<>(values));

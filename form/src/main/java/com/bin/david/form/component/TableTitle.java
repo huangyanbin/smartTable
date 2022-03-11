@@ -23,7 +23,7 @@ public class TableTitle implements ITableTitle {
 
     @Override
     public void onDraw(Canvas canvas, Rect showRect, String tableName, TableConfig config){
-        Paint paint = config.getPaint();
+        Paint paint = config.getTitlePaint(tableName);
         config.getTableTitleStyle().fillPaint(paint);
         Rect rect = getRect();
         int startX = rect.centerX();

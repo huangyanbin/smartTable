@@ -34,7 +34,7 @@ public class TitleDrawFormat implements ITitleDrawFormat {
 
     @Override
     public void draw(Canvas c, Column column, Rect rect, TableConfig config) {
-        Paint paint = config.getPaint();
+        Paint paint = config.getTitlePaint(column.getColumnName());
         boolean isDrawBg =drawBackground(c,column,rect,config);
         config.getColumnTitleStyle().fillPaint(paint);
         ICellBackgroundFormat<Column> backgroundFormat = config.getColumnCellBackgroundFormat();
