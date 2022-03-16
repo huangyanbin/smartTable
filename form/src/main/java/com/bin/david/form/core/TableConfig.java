@@ -1,6 +1,7 @@
 package com.bin.david.form.core;
 
 import android.graphics.Paint;
+import android.graphics.Typeface;
 
 import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
@@ -13,6 +14,10 @@ import com.bin.david.form.data.format.draw.LeftTopDrawFormat;
 import com.bin.david.form.data.format.grid.SimpleGridFormat;
 import com.bin.david.form.data.style.FontStyle;
 import com.bin.david.form.data.style.LineStyle;
+import com.bin.david.form.utils.DensityUtils;
+
+import java.lang.reflect.Type;
+import java.util.Set;
 
 /**
  * Created by huang on 2017/11/1.
@@ -79,7 +84,7 @@ public class TableConfig {
     /**
      * 增加列序列上下padding
      */
-    private int sequenceVerticalPadding =10;
+    private int sequenceVerticalPadding = 10;
     /**
      * 文字左边偏移
      */
@@ -87,20 +92,20 @@ public class TableConfig {
     /**
      * 增加列序列左右padding
      */
-    private int sequenceHorizontalPadding =40;
+    private int sequenceHorizontalPadding = 40;
 
     /**
      * 增加列标题上下padding
      */
-    private int columnTitleVerticalPadding =10;
+    private int columnTitleVerticalPadding = 10;
     /**
      * 增加列标题左右padding
      */
-    private int columnTitleHorizontalPadding =40;
+    private int columnTitleHorizontalPadding = 40;
     /**
      * 左右padding(为了表格的美观，暂只支持统一的padding)
      */
-    private int horizontalPadding= 40;
+    private int horizontalPadding = 40;
 
     /**
      * 组标题背景
@@ -115,9 +120,7 @@ public class TableConfig {
      */
     private IBackgroundFormat countBackground;
     /**
-     *
      * 左侧序号列背景
-     *
      */
     private IBackgroundFormat YSequenceBackground;
     /**
@@ -129,7 +132,6 @@ public class TableConfig {
      * 网格格式化
      */
     private IGridFormat tableGridFormat = new SimpleGridFormat();
-
 
 
     /**
@@ -170,22 +172,18 @@ public class TableConfig {
     private ICellBackgroundFormat<Column> countBgCellFormat;
     /**
      * 是否固定左侧
-     *
      */
     private boolean fixedYSequence = false;
     /**
      * 固定顶部
-     *
      */
     private boolean fixedXSequence = false;
     /**
      * 固定标题
-     *
      */
     private boolean fixedTitle = true;
     /**
      * 固定第一列 （作废）
-     *
      */
     private boolean fixedFirstColumn = true;
     /**
@@ -202,8 +200,7 @@ public class TableConfig {
     private LeftTopDrawFormat leftTopDrawFormat;
 
 
-
-    private int minTableWidth =-1;
+    private int minTableWidth = -1;
     /**
      * 画笔
      */
@@ -211,10 +208,30 @@ public class TableConfig {
     /**
      * 缩放值
      */
-    private  float zoom = 1;
+    private float zoom = 1;
+    /**
+     * 需要加粗的标题（文本内容）
+     */
+    private Set<String> boldTitlesSet;
+
+    public Set<String> getBoldTitlesSet() {
+        return boldTitlesSet;
+    }
+
+    /**
+     * 设置需要加粗的标题集合
+     * 如果需要列表的标题加粗，则把标题的文本添加到此集合即可
+     *
+     * @param boldTitlesSet
+     * @return
+     */
+    public TableConfig setBoldTitlesSet(Set<String> boldTitlesSet) {
+        this.boldTitlesSet = boldTitlesSet;
+        return this;
+    }
 
     public FontStyle getContentStyle() {
-        if(contentStyle == null){
+        if (contentStyle == null) {
             return defaultFontStyle;
         }
         return contentStyle;
@@ -226,7 +243,7 @@ public class TableConfig {
     }
 
     public FontStyle getYSequenceStyle() {
-        if(YSequenceStyle == null){
+        if (YSequenceStyle == null) {
             return defaultFontStyle;
         }
         return YSequenceStyle;
@@ -238,7 +255,7 @@ public class TableConfig {
     }
 
     public FontStyle getXSequenceStyle() {
-        if(XSequenceStyle == null){
+        if (XSequenceStyle == null) {
             return defaultFontStyle;
         }
         return XSequenceStyle;
@@ -250,7 +267,7 @@ public class TableConfig {
     }
 
     public FontStyle getColumnTitleStyle() {
-        if(columnTitleStyle == null){
+        if (columnTitleStyle == null) {
             return defaultFontStyle;
         }
         return columnTitleStyle;
@@ -283,25 +300,61 @@ public class TableConfig {
         return paint;
     }
 
+    /**
+     * 根据标题内容获取每个标题单元格的字体样式
+     *
+     * @param tableName
+     * @return
+     */
+    public Paint getTitlePaint(String tableName) {
+        if (null == boldTitlesSet || !boldTitlesSet.contains(tableName)) {
+            return paint;
+        }
+        Paint titlePaint = new Paint(paint);
+        titlePaint.setTypeface(Typeface.DEFAULT_BOLD);
+        return titlePaint;
+    }
+
+    /**
+     * 获取每个单元格的数据绘制paint
+     *
+     * @param column
+     * @param position
+     * @param <T>
+     * @return
+     */
+    public <T> Paint getCellPaint(Column<T> column, int position) {
+        T t = column.getDatas().get(position);
+        if (t instanceof ITableCellFormatData) {
+
+            if (((ITableCellFormatData) t).isBold()) {
+                Paint cellPaint = new Paint(paint);
+                cellPaint.setTypeface(Typeface.DEFAULT_BOLD);
+                return cellPaint;
+            }
+        }
+        return new Paint(paint);
+    }
+
     public void setPaint(Paint paint) {
         this.paint = paint;
     }
 
     public LineStyle getContentGridStyle() {
-        if(contentGridStyle == null){
+        if (contentGridStyle == null) {
             return defaultGridStyle;
         }
         return contentGridStyle;
     }
 
     public LineStyle getColumnTitleGridStyle() {
-        if(columnTitleGridStyle == null){
+        if (columnTitleGridStyle == null) {
             return defaultGridStyle;
         }
         return columnTitleGridStyle;
     }
 
-    public  TableConfig setColumnTitleGridStyle(LineStyle columnTitleGridStyle) {
+    public TableConfig setColumnTitleGridStyle(LineStyle columnTitleGridStyle) {
         this.columnTitleGridStyle = columnTitleGridStyle;
         return this;
     }
@@ -338,8 +391,10 @@ public class TableConfig {
         return fixedFirstColumn;
     }
 
-    /**你可以使用Column.setFixed(boolean isFixed) 来固定任何一列
+    /**
+     * 你可以使用Column.setFixed(boolean isFixed) 来固定任何一列
      * 此方法作废
+     *
      * @param fixedFirstColumn
      * @return
      */
@@ -350,12 +405,11 @@ public class TableConfig {
     }
 
     public FontStyle getCountStyle() {
-        if(contentStyle == null){
+        if (contentStyle == null) {
             return defaultFontStyle;
         }
         return countStyle;
     }
-
 
 
     public TableConfig setCountStyle(FontStyle countStyle) {
@@ -369,7 +423,6 @@ public class TableConfig {
     }
 
 
-
     public boolean isFixedCountRow() {
         return fixedCountRow;
     }
@@ -380,7 +433,7 @@ public class TableConfig {
     }
 
     public FontStyle getTableTitleStyle() {
-        if(tableTitleStyle == null){
+        if (tableTitleStyle == null) {
             return defaultFontStyle;
         }
         return tableTitleStyle;
@@ -508,7 +561,7 @@ public class TableConfig {
     }
 
     public LineStyle getSequenceGridStyle() {
-        if(SequenceGridStyle == null){
+        if (SequenceGridStyle == null) {
             return defaultGridStyle;
         }
         return SequenceGridStyle;
@@ -518,7 +571,6 @@ public class TableConfig {
         SequenceGridStyle = sequenceGridStyle;
         return this;
     }
-
 
 
     public TableConfig setMinTableWidth(int minTableWidth) {

@@ -15,6 +15,9 @@
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".CellFormatActivity"
+            android:exported="false" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,15 +44,16 @@
         <activity android:name=".ArrayColumnModeActivity" />
         <activity android:name=".MapModeActivity" />
         <activity android:name=".WelcomeActivity" />
-        <activity android:name=".GridModeActivity"/>
-        <activity android:name=".AvatorModeActivity"/>
-        <activity android:name=".DesktopModeActivity"/>
+        <activity android:name=".GridModeActivity" />
+        <activity android:name=".AvatorModeActivity" />
+        <activity android:name=".DesktopModeActivity" />
         <activity
             android:name=".ChoiceExcelActivity"
             android:label="@string/title_activity_choice_excel"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".FormModeActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FormModeActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>
